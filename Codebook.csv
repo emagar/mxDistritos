@@ -1,0 +1,46 @@
+Codebook,,,,,
+Estados,edon,Clave cartografía,Partido,Federal/Local,
+Aguascalientes,1,19,Tribunal,Tribunal,
+Baja California,2,32,PAN,L,Local
+Baja California Sur,3,33,PRI,L,Local
+Campeche,4,34,PRD,L,Local
+Coahuila,5,35,PT,L,Local
+Colima,6,36,PVEM,L,Local
+Chiapas,7,37,MC,L,Local
+Chihuahua,8,38,PANAL,L,Local
+Distrito Federal,9,39,MORENA,L,Local
+Durango,10,40,PH,L,Local
+Guanajuato,11,41,PES,L,Local
+Guerrero,12,42,PAN,N,Nacional
+Hidalgo,13,43,PRI,N,Nacional
+Jalisco,14,44,PRD,N,Nacional
+México,15,45,PT,N,Nacional
+Michoacán,16,46,PVEM,N,Nacional
+Morelos,17,47,MC,N,Nacional
+Nayarit,18,48,PANAL,N,Nacional
+Nuevo León,19,49,MORENA,N,Nacional
+Oaxaca,20,50,PH,N,Nacional
+Puebla,21,51,PES,N,Nacional
+Querétaro,22,100,E1,Escenario 1,Nacional
+Quintana Roo,23,101,IEE,IEE,Instituto Electoral Estatal
+San Luis Potosí,24,102,PAN,IEE,Instituto Electoral Estatal
+Sinaloa,25,103,PRI,IEE,Instituto Electoral Estatal
+Sonora,26,104,PRD,IEE,Instituto Electoral Estatal
+Tabasco,27,105,PT,IEE,Instituto Electoral Estatal
+Tamaulipas,28,106,PVEM,IEE,Instituto Electoral Estatal
+Tlaxcala,29,107,MC,IEE,Instituto Electoral Estatal
+Veracruz,30,108,PANAL,IEE,Instituto Electoral Estatal
+Yucatán,31,109,MORENA,IEE,Instituto Electoral Estatal
+Zacatecas,32,110,PH,IEE,Instituto Electoral Estatal
+,,111,PES,IEE,Instituto Electoral Estatal
+,,112,CEV,CEV,Comisión Estatal de Vigilancia 
+,,157,E2 o E3,Escenario 2 o 3,
+,,,,,
+Escenarios definitivos,,,,,
+CDMX Escenario 3 criterio 8 (33),escenario3_c8,dis77.9.157.x,,,
+MOR JGE,escenario3_jge,dis79.17.157.x,,,
+GUE Escenario 3 criterio 8,escenario3_c8,dis53.12.157,,,
+HGO CG,escenario3_cg,dis15.13.157,,,
+OAX Tribunal,escenario3_tribunal,dis13.20.19,,,
+SON CG,escenario3_cg,dis49.26.157.x,,,
+,,,,,
