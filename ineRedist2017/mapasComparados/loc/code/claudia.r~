@@ -96,9 +96,5 @@ write.csv(tla, file = "tla19Loc.csv", row.names = FALSE) # Zabel: usa éste para
 rm(mic1,mic2,mic22,tab1,tab2,tab22,tla1,tla2,tla22,tmp) # limpieza
 ls()
 
-# zabel:
-# 1. no fusionaste cabalmente las secciones. Intenta usar el comando merge de stata o de R.
-# 2. pareciera que usaste el reporte de eleccion de 2012 para reconstruir el mapa seccion-distrito anterior. Busca por favor un resultado de 2015 y repite la fusión de tus datos. Estoy seguro de que caerá mucho el número de secciones faltantes. 
-# 3. Prepara el código para obtener el índice s de cox y katz. 
 
 
