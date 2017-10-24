@@ -24,7 +24,7 @@ for (i in 1:16){
     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
 }
 
-dsi <- d[duplicated(d$disn17)==FALSE, c("disn2017","father14","dsi")]
+dsi <- d[duplicated(d$disn17)==FALSE, c("disn17","father14","dsi")]
 dsi <- dsi[order(dsi$disn17),]
 dsi$cab2017 <- c("Acuña", "Piedras Negras", "Sabinas", "San Pedro", "Monclova", "Frontera", "Matamoros", "Torreón", "Torreón", "Torreón", "Torreón", "Ramos Arizpe", "Saltillo", "Saltillo", "Saltillo", "Saltillo")
 dsi <- dsi[order(dsi$dsi),]
