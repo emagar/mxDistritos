@@ -29,9 +29,7 @@ dsi <- dsi[order(dsi$disn2017),]
 dsi$cab2017 <- c("Acuña", "Piedras Negras", "Sabinas", "San Pedro", "Monclova", "Frontera", "Matamoros", "Torreón", "Torreón", "Torreón", "Torreón", "Ramos Arizpe", "Saltillo", "Saltillo", "Saltillo", "Saltillo")
 dsi <- dsi[order(dsi$dsi),]
 
-write.csv(dsi, file = ""
-
-          getwd()
+write.csv(dsi, file = "simIndex/dist_coa.csv", row.names = FALSE)
 
 # dsi seen from parent perspective
 # new district's "father" and district similarity index, cf. Cox & Katz

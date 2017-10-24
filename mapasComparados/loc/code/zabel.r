@@ -1,7 +1,17 @@
 rm(list = ls())
 
-dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/ineRedist2017/mapasComparados/loc"
+dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc"
+# dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc"
 setwd(dd)
+
+# si los encuentra, lee datos de disco 
+tmp <- dir()
+sel <- grep(pattern = "(mic|tab|tla1.)Loc.csv", x = tmp)
+if (length(sel)>0) {
+    mic <- read.csv(file = tmp[sel[1]], stringsAsFactors = FALSE);
+    tab <- read.csv(file = tmp[sel[2]], stringsAsFactors = FALSE);
+    tla <- read.csv(file = tmp[sel[3]], stringsAsFactors = FALSE);
+}
 
 # Estos son los archivos que circuló Zabel
 mic2 <- read.csv("fuenteAlumnos/michoacan.redis.csv", stringsAsFactors = FALSE)
@@ -9,9 +19,9 @@ tab2 <- read.csv("fuenteAlumnos/tabasco.redis.csv", stringsAsFactors = FALSE)
 tla2 <- read.csv("fuenteAlumnos/tlaxcala.redis.csv", stringsAsFactors = FALSE)
 
 # Estos son los archivos originales
-mic1 <- read.csv("../../fuenteDeJson/loc/micLoc.csv", stringsAsFactors = FALSE)
-tab1 <- read.csv("../../fuenteDeJson/loc/tabLoc.csv", stringsAsFactors = FALSE)
-tla1 <- read.csv("../../fuenteDeJson/loc/tla19Loc.csv", stringsAsFactors = FALSE)
+mic1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/micLoc.csv", stringsAsFactors = FALSE)
+tab1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tabLoc.csv", stringsAsFactors = FALSE)
+tla1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tla19Loc.csv", stringsAsFactors = FALSE)
 
 head(mic2)
 dim(mic2)
@@ -91,7 +101,7 @@ dim(tla22)
 
 head(tla)
 
-write.csv(tla, file = "tla19Loc.csv", row.names = FALSE) # Zabel: usa éste para sacar el insice s de cox y katz
+write.csv(tla, file = "tlaLoc.csv", row.names = FALSE) # Zabel: usa éste para sacar el insice s de cox y katz
 
 rm(mic1,mic2,mic22,tab1,tab2,tab22,tla1,tla2,tla22,tmp) # limpieza
 ls()
@@ -100,5 +110,23 @@ ls()
 # 1. no fusionaste cabalmente las secciones. Intenta usar el comando merge de stata o de R.
 # 2. pareciera que usaste el reporte de eleccion de 2012 para reconstruir el mapa seccion-distrito anterior. Busca por favor un resultado de 2015 y repite la fusión de tus datos. Estoy seguro de que caerá mucho el número de secciones faltantes. 
 # 3. Prepara el código para obtener el índice s de cox y katz. 
+
+
+
+
+
+# d15
+file <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tla15Loc.csv"
+tla15 <- read.csv(file = file, stringsAsFactors = FALSE)
+#
+tla15 <- tla15[, c("seccion","munn","escenario3")]
+colnames(tla15) <- c("seccion","munn","disn2018.15")
+tla15$munn <- NULL
+#
+tla <- merge(x= tla, y = tla15, by = "seccion", all = TRUE)
+colnames(tla) <- c("seccion", "edon", "munn", "disn2018.19", "distrito12", "disn2018")
+head(tla)
+#
+write.csv(tla, file = "tlaLoc.csv", row.names = FALSE)
 
 

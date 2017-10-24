@@ -1,6 +1,7 @@
 rm(list = ls())
 
-dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/ineRedist2017/mapasComparados/loc"
+dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc"
+# dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc"
 setwd(dd)
 
 # Estos son los archivos que circuló claudia
@@ -9,9 +10,9 @@ hgo2 <- read.csv("fuenteAlumnos/Hidalgo13y17.csv", stringsAsFactors = FALSE)
 jal2 <- read.csv("fuenteAlumnos/Jalisco12y17.csv", stringsAsFactors = FALSE)
 
 # Estos son los archivos originales
-mex1 <- read.csv("../../fuenteDeJson/loc/mexLoc.csv", stringsAsFactors = FALSE)
-hgo1 <- read.csv("../../fuenteDeJson/loc/hgoLoc.csv", stringsAsFactors = FALSE)
-jal1 <- read.csv("../../fuenteDeJson/loc/jalLoc.csv", stringsAsFactors = FALSE)
+mex1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/mexLoc.csv", stringsAsFactors = FALSE)
+hgo1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/hgoLoc.csv", stringsAsFactors = FALSE)
+jal1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/jalLoc.csv", stringsAsFactors = FALSE)
 
 head(mex2)
 dim(mex2)
