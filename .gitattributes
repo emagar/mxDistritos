@@ -1,0 +1,2 @@
+equivSecc/ filter=lfs diff=lfs merge=lfs -text
+redisProcess/ineJsonFuente2017/ filter=lfs diff=lfs merge=lfs -text
