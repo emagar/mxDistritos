@@ -93,8 +93,9 @@ ver <- merge(x = ver1, y = ver2, by = "seccion", all = TRUE)
 # verifica integridad del merge de Daniel
 table(ver$disn2018==ver$dist_new)
 
-# daniel: algo salió mal en tu merge, revisa
-
+##############################################
+# daniel: algo salió mal en tu merge, revisa #
+##############################################
 #ver$dist_new <- NULL
 
 dim(ver)
@@ -103,7 +104,7 @@ dim(ver2)
 
 head(ver)
 
-write.csv(ver, file = "verLoc.csv", row.names = FALSE) # Daniel: usa éste para sacar el insice s de cox y katz
+#write.csv(ver, file = "verLoc.csv", row.names = FALSE) # Daniel: usa éste para sacar el insice s de cox y katz
 
 
 # prepara/exporta dsi
