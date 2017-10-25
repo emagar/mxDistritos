@@ -5,9 +5,27 @@ setwd(dd)
 
 #u <- url("http://ericmagar.com/data/redistrict/subnat/coa/coaDisn14toDisn17.csv")
 #d <- read.csv(file = u, stringsAsFactors = FALSE)
-d <- read.csv(file = "coaLoc.csv", stringsAsFactors = FALSE)
+## d <- read.csv(file = "fuenteAlumnos/eric.coaLoc.csv", stringsAsFactors = FALSE)
+## colnames(d) <- c("seccion","munn","mun","disn2014","disn2017")
+## head(d)
+## # add 2008 and 2011 maps
+## d08 <- read.csv(file = "fuenteAlumnos/coa2008dlca.csv", stringsAsFactors = FALSE)
+## d11 <- read.csv(file = "fuenteAlumnos/coa2011dlca.csv", stringsAsFactors = FALSE)
+## d08 <- d08[, c("mun","disn","seccion","lisnom")]
+## d11 <- d11[, c("mun","disn","seccion")]
+## colnames(d08) <- c("mun","disn2008","seccion","lisnom08")
+## colnames(d11) <- c("mun","disn2011","seccion")
+## d08 <- d08[duplicated(d08$seccion)==FALSE,]
+## d11 <- d11[duplicated(d11$seccion)==FALSE,]
 
-head(d)
+## d <- merge(x = d, y = d08, by = "seccion", all = TRUE)
+## d <- merge(x = d, y = d11, by = "seccion", all = TRUE)
+    
+## head(d)
+
+## write.csv(d, file = "coaLoc.csv", row.names = FALSE) # Daniel: u
+
+d <- read.csv(file = "coaLoc.csv", stringsAsFactors = FALSE)
 
 # dsi seen from offspring perspective
 # new district's "father" and district similarity index, cf. Cox & Katz
