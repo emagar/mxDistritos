@@ -15,7 +15,7 @@ d$father14 <- NA
 d$dsi <- 0
 for (i in 1:16){
     #i <- 16 # debug
-    sel.n <- which(d$disn2017==i)                  # secciones in new district
+    sel.n <- which(d$disn17==i)                  # secciones in new district
     tmp <- table(d$disn14[sel.n])
     target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
     d$father14[sel.n] <- target
@@ -24,8 +24,8 @@ for (i in 1:16){
     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
 }
 
-dsi <- d[duplicated(d$disn2017)==FALSE, c("disn2017","father14","dsi")]
-dsi <- dsi[order(dsi$disn2017),]
+dsi <- d[duplicated(d$disn17)==FALSE, c("disn17","father14","dsi")]
+dsi <- dsi[order(dsi$disn17),]
 dsi$cab2017 <- c("Acuña", "Piedras Negras", "Sabinas", "San Pedro", "Monclova", "Frontera", "Matamoros", "Torreón", "Torreón", "Torreón", "Torreón", "Ramos Arizpe", "Saltillo", "Saltillo", "Saltillo", "Saltillo")
 dsi <- dsi[order(dsi$dsi),]
 
@@ -33,15 +33,15 @@ write.csv(dsi, file = "simIndex/dist_coa.csv", row.names = FALSE)
 
 # dsi seen from parent perspective
 # new district's "father" and district similarity index, cf. Cox & Katz
-d$son2017 <- NA
+d$son17 <- NA
 d$dsi <- 0
 for (i in 1:16){
     #i <- 16 # debug
     sel.o <- which(d$disn14==i)                  # secciones in original district
-    tmp <- table(d$disn2017[sel.o])
+    tmp <- table(d$disn17[sel.o])
     target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
     d$son2017[sel.o] <- target
-    sel.s <- which(d$disn2017==target) # secciones in son district
+    sel.s <- which(d$disn17==target) # secciones in son district
     sel.c <- intersect(sel.o, sel.s) # secciones common to original and son districts
     d$dsi[sel.o] <- round( length(sel.c) / (length(sel.o) + length(sel.s) - length(sel.c)) , 3 )
 }
