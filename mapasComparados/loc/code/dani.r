@@ -88,6 +88,7 @@ colnames(ver2)
 head(ver1)
 head(ver2)
 # Daniel: algo sigue mal en /fuenteAlumnos/dani.ver_dsi.csv, la seccion=1 está en dist_new=12 pero en disn2018=1...
+#lo checo 
 ver2$father <- ver2$dsi <- NULL
 #colnames(ver2) <- c("seccion","disn2012") # daniel: investiga el año electoral inaugural del mapa abandonado para nombrarlo correctamente --> contestó que el año es 2007
 #ver2 <- ver2[,c("seccion","disn2012")]
