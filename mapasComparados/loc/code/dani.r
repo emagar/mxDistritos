@@ -85,7 +85,7 @@ colnames(ver1) <- c("edon","seccion","munn","disn2018")
 # cambia nombres en datos de Daniel
 colnames(ver2)
 ver2$father <- ver2$dsi <- NULL
-#colnames(ver2) <- c("seccion","disn2012") # daniel: investiga el año electoral inaugural del mapa abandonado para nombrarlo correctamente
+#colnames(ver2) <- c("seccion","disn2012") # daniel: investiga el año electoral inaugural del mapa abandonado para nombrarlo correctamente --> contestó que el año es 2007
 #ver2 <- ver2[,c("seccion","disn2012")]
 
 # fusiona
