@@ -22,21 +22,34 @@ setwd(dd)
 ## ## d <- merge(x = d, y = d11, by = "seccion", all = TRUE)
 ## ##    
 ## head(d)
-## ###########################################################################################
-## # don't rewrite coaLoc.csv, version in disk has edits to take mun names fro three columns #
-## ###########################################################################################
-## ## write.csv(d, file = "coaLoc.csv", row.names = FALSE)
-
-
-## # fix secciones missing in some map but not others
-## ## READ HISTORICAL MAP
-## d <- read.csv(file = "coaLoc.csv", stringsAsFactors = FALSE)
-## ## 2011 map not needed, is same as 2014, will drop it
-## sel <- which(is.na(d$disn2014)==TRUE); d$disn2014[sel] <- d$disn2011[sel] # first fill NAs with 2011 info
-## d$disn2011 <- NULL
+## # fill missing mun and munn
+## sel <- which(is.na(d$munn))
+## d$mun.x[sel] <- d$mun.y[sel]
+## sel <- which(is.na(d$mun.y))
+## d$mun.y[sel] <- d$mun.x[sel]
+## # fix missin munn by hand
+## sel <- which(is.na(d$munn))
+## d.ss <- d[sel,] # subset
+## d.ss$munn[grep("Acuña", d.ss$mun.x)] <- 2
+## d.ss$munn[grep("Castaños", d.ss$mun.x)] <- 6
+## d.ss$munn[grep("Cuatrociénegas", d.ss$mun.x)] <- 7
+## d.ss$munn[grep("Nava", d.ss$mun.x)] <- 22
+## d.ss$munn[grep("Ocampo", d.ss$mun.x)] <- 23
+## d.ss$munn[grep("Piedras Negras", d.ss$mun.x)] <- 25
+## d.ss$munn[grep("Saltillo", d.ss$mun.x)] <- 30
+## d.ss$munn[grep("Sierra Mojada", d.ss$mun.x)] <- 34
+## d.ss$munn[grep("Torreón", d.ss$mun.x)] <- 35
+## d[sel,] <- d.ss   # return subset
+## # drop redundant cols
+## d$mun.x <- d$mun.y; d$mun.y <- NULL
+## colnames(d)[which(colnames(d)=="mun.x")] <- "mun"
+## # rename maps
 ## colnames(d)[which(colnames(d)=="disn2014")] <- "disn2011" # districts created in 2011
 ## colnames(d)[which(colnames(d)=="disn2008")] <- "disn2005" # districts used in 2005, when created unknown
-## #
+## d <- d[, c("seccion","munn","mun","disn2005","disn2011","disn2017","lisnom08")] # re-order columns
+## head(d)
+## # fix secciones missing in some map but not others
+## ## 2011 map not needed, will not read it bc is same as 2014
 ## #which(is.na(d$munn)==TRUE) # none
 ## for (i in 1:max(d$munn)){
 ##     #i <- 2 # debug
