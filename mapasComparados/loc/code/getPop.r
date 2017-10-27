@@ -22,6 +22,7 @@ get2005 <- function(edon=NA){
                         munn    =tmp[,grep("MUNICIPIO", colnames(tmp))],
                         seccion =tmp[,grep("SECCION", colnames(tmp))],  
                         ptot    =tmp[,grep("POB_TOT", colnames(tmp))])
+    pob05 <- pob05[order(pob05$seccion),]
     return(pob05)
 }    
 
@@ -38,15 +39,13 @@ get2010 <- function(edon=NA){
                         disn=tmp[,c("DISTRITO")],
                         seccion=tmp[,c("CLAVEGEO")],
                         ptot=tmp[,c("POBTOT")],
-#                        p18=tmp[,c("P_18YMAS")])
+                        p18=tmp[,c("P_18YMAS")])
     pob10$munn <- as.integer(pob10$seccion/100000) - as.integer(pob10$seccion/100000000)*1000
-    pob10$seccion <- pob10$seccion - as.integer(pob10$seccion/10000)*10000
-    if (edon==7) pob10 <- pob10[which(duplicated(pob10$seccion)==FALSE),] # por alguna razón los datos de chiapas vienen duplicados
+    pob10$seccion <- pob10$seccion - as.integer(pob10$seccion/10000)*10000;
+    if (edon==7) pob10 <- pob10[which(duplicated(pob10$seccion)==FALSE),]; # por alguna razón los datos de chiapas vienen duplicados
+    pob10 <- pob10[order(pob10$seccion),]
     return(pob10)
 }
-
-tmp <- get2010(3)
-head(tmp)
 
 ## ## poblacion del censo 2000
 ## c00 <- c("/home/eric/Dropbox/data/mapas/seccionesIfe/2000popThatIFEused/secciones.dat.ife.csv")

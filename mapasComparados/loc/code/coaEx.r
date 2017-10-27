@@ -73,10 +73,18 @@ setwd(dd)
 ## #
 ## write.csv(d, file = "coaLoc.csv", row.names = FALSE)
 
+## get functions to include population
+source(paste(dd, "code/getPop.r", sep = ""))
+
 ## READ HISTORICAL MAP
 d <- read.csv(file = "coaLoc.csv", stringsAsFactors = FALSE)
 
+pob05 <- get2005(edon=5)
+pob10 <- get2010(edon=5)
+
 head(d)
+head(pob05)
+head(pob10)
 
 # dsi seen from offspring perspective
 # new district's "father" and district similarity index, cf. Cox & Katz
