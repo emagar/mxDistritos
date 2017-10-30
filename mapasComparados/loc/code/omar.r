@@ -132,8 +132,7 @@ mor1 <- mor1[,c("edon","seccion","munn","escenario3")]
 colnames(mor1) <- c("edon","seccion","munn","disn2018")
 
 # cambia nombres en datos de Omar
-head(mor2) # Omar: pareciera ue usaste la elección 2012 para  
-table(mor2$X_merge)
+head(mor2)
 mor2$X_merge <- NULL
 colnames(mor2) <- c("disn2017","seccion","disn2012") # omar: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
 
@@ -146,9 +145,9 @@ dim(mor2)
 
 head(mor)
 
+table(mor$disn2017, mor$disn2018) # omar: mismo problema que arriba, revisa plis
+
 #write.csv(mor, file = "morLoc.csv", row.names = FALSE) # Omar: cuando quede, usa éste archivo para sacar el insice s de cox y katz
-
-
 
 
 rm(cua1,cua2,col1,col2,mor1,mor2) # limpieza

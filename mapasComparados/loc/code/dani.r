@@ -46,7 +46,7 @@ dim(bcs2)
 
 head(bcs)
 
-write.csv(bcs, file = "bcsLoc.csv", row.names = FALSE) # Daniel: usa éste para sacar el insice s de cox y katz
+#write.csv(bcs, file = "bcsLoc.csv", row.names = FALSE) # Daniel: usa éste para sacar el insice s de cox y katz
 
 
 # dgo
@@ -73,7 +73,7 @@ dim(dgo2)
 
 head(dgo)
 
-write.csv(dgo, file = "dgoLoc.csv", row.names = FALSE) # Daniel: usa éste para sacar el insice s de cox y katz
+#write.csv(dgo, file = "dgoLoc.csv", row.names = FALSE) # Daniel: usa éste para sacar el insice s de cox y katz
 
 
 
@@ -87,7 +87,7 @@ ver1 <- ver1[order(ver1$seccion),]
 colnames(ver2)
 head(ver1)
 head(ver2)
-# Daniel: algo sigue mal en /fuenteAlumnos/dani.ver_dsi.csv, la seccion=1 está en dist_new=12 pero en disn2018=1...
+# Daniel: algo sigue mal en /fuenteAlumnos/dani.ver_dsi.csv, la seccion=1 está en dist_new=12 pero tiene que ser =1 (como disn2018)...
 #lo checo 
 ver2$father <- ver2$dsi <- NULL
 #colnames(ver2) <- c("seccion","disn2012") # daniel: investiga el año electoral inaugural del mapa abandonado para nombrarlo correctamente --> contestó que el año es 2007
@@ -97,10 +97,9 @@ ver2$father <- ver2$dsi <- NULL
 ver <- merge(x = ver1, y = ver2, by = "seccion", all = TRUE)
 # verifica integridad del merge de Daniel
 table(ver$disn2018==ver$dist_new)
-
-##############################################
-# daniel: algo salió mal en tu merge, revisa #
-##############################################
+##############################################################################
+# daniel: algo salió mal en tu merge, revisa -- aquí todos deberían ser TRUE #
+##############################################################################
 #ver$dist_new <- NULL
 
 dim(ver)

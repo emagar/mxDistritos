@@ -97,8 +97,4 @@ head(nl)
 rm(gua1,gua2,gue1,gue2,nl1,nl2) # limpieza
 ls()
 
-# victor:
-# 1. reporta/investiga los años electorales que puse arriba.
-# 2. corrige el proceso de fusión
-# 3. Prepara el código para obtener el índice s de cox y katz. 
 

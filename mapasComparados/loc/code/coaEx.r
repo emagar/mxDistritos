@@ -82,27 +82,40 @@ d <- read.csv(file = "coaLoc.csv", stringsAsFactors = FALSE)
 pob05 <- get2005(edon=5)
 pob10 <- get2010(edon=5)
 
-head(d)
 head(pob05)
 head(pob10)
+head(d)
 
 # dsi seen from offspring perspective
 # new district's "father" and district similarity index, cf. Cox & Katz
-d$father14 <- NA
+son    <- d$disn2017
+father <- d$disn2011
+N <- max(son, na.rm = TRUE)
+d$father <- NA
 d$dsi <- 0
-for (i in 1:16){
-    #i <- 16 # debug
-    sel.n <- which(d$disn17==i)                  # secciones in new district
-    tmp <- table(d$disn14[sel.n])
-    target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
-    d$father14[sel.n] <- target
-    sel.f <- which(d$disn14==target) # secciones in father district
+for (i in 1:N){
+    #i <- 1 # debug
+    sel.n <- which(son==i)                  # secciones in new district
+    tmp <- table(father[sel.n])
+    target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+    d$father[sel.n] <- target
+    sel.f <- which(father==target) # secciones in father district
     sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
 }
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
 
-dsi <- d[duplicated(d$disn17)==FALSE, c("disn17","father14","dsi")]
-dsi <- dsi[order(dsi$disn17),]
+dsi <- d[duplicated(son)==FALSE,]
+dsi$seccion <- dsi$mun <- dsi$munn <- NULL
+head(dsi)
+dsi <- dsi[order(dsi$disn2017),]
 dsi$cab2017 <- c("Acuña", "Piedras Negras", "Sabinas", "San Pedro", "Monclova", "Frontera", "Matamoros", "Torreón", "Torreón", "Torreón", "Torreón", "Ramos Arizpe", "Saltillo", "Saltillo", "Saltillo", "Saltillo")
 dsi <- dsi[order(dsi$dsi),]
 

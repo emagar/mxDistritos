@@ -25,7 +25,7 @@ colnames(sin1) <- c("edon","seccion","munn","disn2018")
 # cambia nombres en datos de Ruben
 head(sin2)
 #sin2$distrito17 <- NULL
-colnames(sin2) <- c("seccion","d2017","disn2006") # ruben: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
+colnames(sin2) <- c("seccion","disn2017","disn2006") # ruben: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
 
 # fusiona
 sin <- merge(x = sin1, y = sin2, by = "seccion", all = TRUE)
@@ -51,7 +51,7 @@ colnames(yuc1) <- c("edon","seccion","munn","disn2018")
 # cambia nombres en datos de Ruben
 head(yuc2)
 #yuc2$distrito17 <- NULL
-colnames(yuc2) <- c("seccion","d2017","disn2006") # ruben: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
+colnames(yuc2) <- c("seccion","disn2017","disn2006") # ruben: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
 
 # fusiona
 yuc <- merge(x = yuc1, y = yuc2, by = "seccion", all = TRUE)
