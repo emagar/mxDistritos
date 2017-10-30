@@ -1,16 +1,16 @@
 rm(list = ls())
 
-dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc"
+dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/"
 # dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc"
 setwd(dd)
 
 # si los encuentra, lee datos de disco 
 tmp <- dir()
-sel <- grep(pattern = "(que|zac)Loc.csv", x = tmp)
+sel <- grep(pattern = "(que|san|zac)Loc.csv", x = tmp)
 if (length(sel)>0) {
     mic <- read.csv(file = tmp[sel[1]], stringsAsFactors = FALSE);
     zac <- read.csv(file = tmp[sel[2]], stringsAsFactors = FALSE);
-    tla <- read.csv(file = tmp[sel[3]], stringsAsFactors = FALSE);
+#    san <- read.csv(file = tmp[sel[3]], stringsAsFactors = FALSE);
 }
 
 # Estos son los archivos que circuló
@@ -37,19 +37,20 @@ rm(que21)
 
 # fusiona siguientes dos columnas
 que22 <- que2[,c("Sección_12","Dtto_12")]
-que22 <- que22[is.na(que22$Sección_12)==FALSE,] # quita NAs
+colnames(que22) <- c("seccion","disn2012")
+que22 <- que22[is.na(que22$seccion)==FALSE,] # quita NAs
 
-que <- merge(x= que1, y = que22, by.x = "seccion", by.y = "Sección_12", all = TRUE)
+que <- merge(x= que1, y = que22, by = "seccion", all = TRUE)
 
 dim(que)
 dim(que1)
 dim(que22)
 
-que$Dtto_12 <- as.numeric(as.roman(que$Dtto_12)) # quita numero romano
+que$disn2012 <- as.numeric(as.roman(que$disn2012)) # quita numero romano
 
 head(que)
 
-write.csv(que, file = "queLoc.csv", row.names = FALSE) # Veronica: usa éste para sacar el insice s de cox y katz
+#write.csv(que, file = "queLoc.csv", row.names = FALSE) # Veronica: usa éste para sacar el insice s de cox y katz
 
 # zacatecas
 colnames(zac1)
@@ -65,15 +66,16 @@ rm(zac21)
 
 # fusiona siguientes dos columnas
 zac22 <- zac2[,c("Sección_13","Dtto_13")]
-zac22 <- zac22[is.na(zac22$Sección_13)==FALSE,] # quita NAs
+colnames(zac22) <- c("seccion","disn2013")
+zac22 <- zac22[is.na(zac22$seccion)==FALSE,] # quita NAs
 
-zac <- merge(x= zac1, y = zac22, by.x = "seccion", by.y = "Sección_13", all = TRUE)
+zac <- merge(x= zac1, y = zac22, by = "seccion", all = TRUE)
 
 dim(zac)
 dim(zac1)
 dim(zac22)
 
-zac$Dtto_13 <- as.numeric(as.roman(zac$Dtto_13)) # quita numero romano
+zac$disn2013 <- as.numeric(as.roman(zac$disn2013)) # quita numero romano
 
 head(zac)
 
@@ -82,10 +84,115 @@ write.csv(zac, file = "zacLoc.csv", row.names = FALSE) # Zabel: usa éste para s
 rm(que1,que2,que22,zac1,zac2,zac22,tmp) # limpieza
 ls()
 
-# Verónica:
-# 1. no fusionaste cabalmente las secciones. Intenta usar el comando merge de stata o de R.
-# 2. pareciera que usaste el reporte de eleccion de 2012/13 para reconstruir el mapa seccion-distrito anterior. Busca por favor un resultado de 2015/16 y repite la fusión de tus datos. Estoy seguro de que caerá mucho el número de secciones faltantes. 
-# 3. Prepara el código para obtener el índice s de cox y katz. 
+
+
+
+## get functions to include population
+source(paste(dd, "code/getPop.r", sep = ""))
+
+## READ HISTORICAL MAPS
+## zac
+d <- read.csv(file = "zacLoc.csv", stringsAsFactors = FALSE)
+
+pob05 <- get2005(edon=32)
+pob10 <- get2010(edon=32)
+
+head(pob05)
+head(pob10)
+head(d)
+
+# dsi seen from offspring perspective
+# new district's "father" and district similarity index, cf. Cox & Katz
+son    <- d$disn2018
+father <- d$disn2013
+N <- max(son, na.rm = TRUE)
+d$father <- NA
+d$dsi <- 0
+for (i in 1:N){
+    #i <- 3 # debug
+    sel.n <- which(son==i)                  # secciones in new district
+    tmp <- table(father[sel.n])
+    target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
+    d$father[sel.n] <- target
+    sel.f <- which(father==target) # secciones in father district
+    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+}
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all = TRUE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all = TRUE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+
+# export districts object
+dsi <- d[duplicated(son)==FALSE,]
+dsi$seccion <- dsi$munn <- NULL
+dsi$disn2013 <- NULL
+
+dsi <- dsi[order(dsi$dsi),]
+
+head(dsi)
+
+write.csv(dsi, file = "simIndex/dist_zac.csv", row.names = FALSE)
+
+summary(dsi$dsi)
+
+
+
+## READ HISTORICAL MAPS
+## que
+d <- read.csv(file = "queLoc.csv", stringsAsFactors = FALSE)
+
+pob05 <- get2005(edon=22)
+pob10 <- get2010(edon=22)
+
+head(pob05)
+head(pob10)
+head(d)
+
+# dsi seen from offspring perspective
+# new district's "father" and district similarity index, cf. Cox & Katz
+son    <- d$disn2018
+father <- d$disn2012
+N <- max(son, na.rm = TRUE)
+d$father <- NA
+d$dsi <- 0
+for (i in 1:N){
+    #i <- 1 # debug
+    #i <- i+1; i # debug
+    sel.n <- which(son==i)                  # secciones in new district
+    tmp <- table(father[sel.n])
+    target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # first match in case of tie 
+    d$father[sel.n] <- target
+    sel.f <- which(father==target) # secciones in father district
+    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+}
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all = TRUE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all = TRUE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+
+# export districts object
+dsi <- d[duplicated(son)==FALSE,]
+dsi$seccion <- dsi$munn <- NULL
+dsi$disn2012 <- NULL
+
+dsi <- dsi[order(dsi$dsi),]
+
+head(dsi)
+
+write.csv(dsi, file = "simIndex/dist_que.csv", row.names = FALSE)
+
+summary(dsi$dsi)
+
 
 
 
