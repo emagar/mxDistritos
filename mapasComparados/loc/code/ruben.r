@@ -36,7 +36,7 @@ dim(sin2)
 
 head(sin)
 
-# rubén: algo está mal, la columns disn2018 tiene que ser idéntica a la tuya (que he llamado d2017). Revisa por favor.
+# rubén: algo está mal, la columnas disn2018 tendría que ser idéntica a la tuya (que he llamado d2017). Revisa por favor.
 
 #write.csv(sin, file = "sinLoc.csv", row.names = FALSE) # Ruben: cuando quede, usa éste archivo para sacar el insice s de cox y katz
 

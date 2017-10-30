@@ -28,9 +28,9 @@ colnames(cua1) <- c("edon","seccion","munn","disn2018")
 
 # cambia nombres en datos de Omar
 head(cua2)
-table(cua2$X_merge)
-cua2$X_merge <- NULL
-colnames(cua2) <- c("disn2016","seccion","disn2014") # omar: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
+table(cua2$merge)
+cua2$merge <- NULL
+colnames(cua2) <- c("disn2015","seccion","disn2013") # omar: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
 
 # fusiona
 cua <- merge(x = cua1, y = cua2, by = "seccion", all = TRUE)
@@ -40,7 +40,59 @@ dim(cua1)
 dim(cua2)
 
 head(cua)
+table(cua$disn2015, cua$disn2018) # checa esto Omar: aunque hay correspondencia 1-a-1 entre los mapas 2018 (que saqué de la fuente) y el nuevo que mandaste (2015), los números de distrito se alteraron---el distrito 1 se convirtió en el 11, el 2 en el 20, el 3 en el 1...: 
 
+> table(cua$disn2015, cua$disn2018) # (output de R)
+    
+       1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
+  1    0   0 193   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  2    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  69   0   0
+  3    0   0   0   0   0   0   0   0   0   0   0   0   0 151   0   0   0   0
+  4    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  5    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  6    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 153
+  7    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  8    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  9    0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  85   0
+  10   0   0   0   0   0   0   0   0   0   0   0   0   0   0 181   0   0   0
+  11 161   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  12   0   0   0   0   0   0   0   0  99   0   0   0   0   0   0   0   0   0
+  13   0   0   0 259   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  14   0   0   0   0   0   0 126   0   0   0   0   0   0   0   0   0   0   0
+  15   0   0   0   0   0   0   0   0   0   0   0 132   0   0   0   0   0   0
+  16   0   0   0   0   0   0   0   0   0   0 179   0   0   0   0   0   0   0
+  17   0   0   0   0   0   0   0   0   0   0   0   0 127   0   0   0   0   0
+  18   0   0   0   0   0   0   0   0   0 115   0   0   0   0   0   0   0   0
+  19   0   0   0   0   0   0   0 127   0   0   0   0   0   0   0   0   0   0
+  20   0 156   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+  21   0   0   0   0 216   0   0   0   0   0   0   0   0   0   0   0   0   0
+  22   0   0   0   0   0 140   0   0   0   0   0   0   0   0   0   0   0   0
+    
+      19  20  21  22
+  1    0   0   0   0
+  2    0   0   0   0
+  3    0   0   0   0
+  4    0   0 221   0
+  5    0  88   0   0
+  6    0   0   0   0
+  7    0   0   0 121
+  8  107   0   0   0
+  9    0   0   0   0
+  10   0   0   0   0
+  11   0   0   0   0
+  12   0   0   0   0
+  13   0   0   0   0
+  14   0   0   0   0
+  15   0   0   0   0
+  16   0   0   0   0
+  17   0   0   0   0
+  18   0   0   0   0
+  19   0   0   0   0
+  20   0   0   0   0
+  21   0   0   0   0
+  22   0   0   0   0
+
+# Esto se arregla fácil, pero me hace dudar de la relación con distritos 2013 que también mandaste... revisa por favor
 
 #write.csv(cua, file = "cuaLoc.csv", row.names = FALSE) # Omar: cuando quede, usa éste archivo para sacar el insice s de cox y katz
 
@@ -67,6 +119,7 @@ dim(col2)
 
 head(col)
 
+table(col$disn2016, col$disn2018) # omar: mismo problema que arriba, revisa plis
 
 #write.csv(col, file = "colLoc.csv", row.names = FALSE) # Omar: cuando quede, usa éste archivo para sacar el insice s de cox y katz
 

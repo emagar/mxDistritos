@@ -93,5 +93,5 @@ ls()
 # 1. pareciera que usaste el reporte de eleccion de 2012 o 2013 para reconstruir el mapa seccion-distrito anterior. Busca por favor un resultado de 2015 para mex y jal y repite la fusión de tus datos. Estoy seguro de que caerá mucho el número de secciones faltantes. 
 # 2. En el caso de Hidalgo, verifica si hubo elección posterior a 2013 con map antiguo. Quizás puedas hacer lo mismo que en 1.
 # 3. Prepara el código para obtener el índice s de cox y katz. 
-*Estoy por hacerlo*
+# *Estoy por hacerlo*
 
