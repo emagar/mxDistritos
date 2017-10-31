@@ -1,33 +1,34 @@
 edon,edo,mapaLoc,listo,nota,mail
-1,ags,humberto,error,,revisa
-2,bc,mario,,,sube/manda todo
-3,bcs,daniel,listo,equipo análisis,ok
-4,cam,eric,sólo falta pop,coordina,ok
-5,coa,eric,sólo falta pop,coordina,ok
-6,col,omar,error,,"revisa /code/omar.r lineas 122, hay error"
-7,cps,humberto,,,sube/manda
-8,cua,omar,error,,"revisa /code/omar.r lineas 43-95, hay error"
 9,df,chema,,,sube/manda todo
-10,dgo,daniel,listo,equipo análisis,ok
-11,gua,victor,error,,"revisa /code/victor.r linea 40, hay error"
-12,gue,victor,error,,"revisa /code/victor.r linea 65, hay error"
+28,tam,chema,,,sube/manda todo
 13,hgo,claudia,listo,equipo análisis,sube código stata
 14,jal,claudia,listo,equipo análisis,sube código stata
 15,mex,claudia,listo,equipo análisis,sube código stata
-16,mic,zabel,listo,equipo reporte,harás reporte
-17,mor,omar,error,,"revisa /code/omar.r lineas 148, hay error"
+3,bcs,daniel,listo,equipo análisis,ok
+10,dgo,daniel,listo,equipo análisis,ok
+30,ver,daniel,error,equipo análisis,"revisa /code/dani.r linea 90 y 101, hay error"
+4,cam,eric,sólo falta pop,coordina,ok
+5,coa,eric,sólo falta pop,coordina,ok
 18,nay,fernanda,,,yo hago nay
-19,nl,victor,error,,"revisa /code/victor.r linea 90, hay error"
+1,ags,humberto,error,,revisa
+7,cps,humberto,,,sube/manda
 20,oax,humberto,,,sube/manda
+2,bc,mario,,,sube/manda todo
+23,qui,mario,,,sube/manda
+26,son,moises,,equipo análisis,sube/manda
+6,col,omar,error,,"revisa /code/omar.r lineas 122, hay error"
+8,cua,omar,error,,"revisa /code/omar.r lineas 43-95, hay error"
+17,mor,omar,error,,"revisa /code/omar.r lineas 148, hay error"
+25,sin,ruben,error,equipo análisis,"revisa /code/ruben.r linea 39, hay error"
+31,yuc,ruben,error,equipo análisis,"revisa /code/ruben.r linea 65, hay error"
 21,pue,santiago,,,sube/manda
 22,que,veronica,listo,equipo reporte,como zabel
-23,qui,mario,,,sube/manda
 24,san,veronica,,equipo reporte,sube/manda
-25,sin,ruben,error,equipo análisis,"revisa /code/ruben.r linea 39, hay error"
-26,son,moises,,equipo análisis,sube/manda
-27,tab,zabel,listo,equipo reporte,harás reporte
-28,tam,chema,,,sube/manda
-29,tla,zabel,listo,equipo reporte,harás reporte
-30,ver,daniel,error,equipo análisis,"revisa /code/dani.r linea 90 y 101, hay error"
-31,yuc,ruben,error,equipo análisis,"revisa /code/ruben.r linea 65, hay error"
 32,zac,veronica,listo,equipo reporte,como zabel
+11,gua,victor,error,,"revisa /code/victor.r linea 40, hay error"
+12,gue,victor,error,,"revisa /code/victor.r linea 65, hay error"
+19,nl,victor,error,,"revisa /code/victor.r linea 90, hay error"
+16,mic,zabel,listo,equipo reporte,harás reporte
+27,tab,zabel,listo,equipo reporte,harás reporte
+29,tla,zabel,listo,equipo reporte,harás reporte
+.,.,julio,,,quiero avance sustancial o …
