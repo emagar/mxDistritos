@@ -7,7 +7,7 @@ setwd(dd)
 # Estos son los archivos que circuló daniel
 bcs2 <- read.csv("fuenteAlumnos/dani.bcs_dsi.csv", stringsAsFactors = FALSE)
 dgo2 <- read.csv("fuenteAlumnos/dani.dgo_dsi.csv", stringsAsFactors = FALSE)
-ver2 <- read.csv("fuenteAlumnos/dani.ver_dsi.csv", stringsAsFactors = FALSE)
+ver2 <- read.csv("fuenteAlumnos/dani.ver.csv", stringsAsFactors = FALSE)
 
 # duplica para exportar dsi
 bcs3 <- bcs2
@@ -89,7 +89,7 @@ head(ver1)
 head(ver2)
 # Daniel: algo sigue mal en /fuenteAlumnos/dani.ver_dsi.csv, la seccion=1 está en dist_new=12 pero tiene que ser =1 (como disn2018)...
 #lo checo 
-ver2$father <- ver2$dsi <- NULL
+#ver2$father <- ver2$dsi <- NULL
 #colnames(ver2) <- c("seccion","disn2012") # daniel: investiga el año electoral inaugural del mapa abandonado para nombrarlo correctamente --> contestó que el año es 2007
 #ver2 <- ver2[,c("seccion","disn2012")]
 
@@ -108,7 +108,7 @@ dim(ver2)
 
 head(ver)
 
-#write.csv(ver, file = "verLoc.csv", row.names = FALSE) # Daniel: usa éste para sacar el insice s de cox y katz
+write.csv(ver, file = "verLoc.csv", row.names = FALSE) # Daniel: usa éste para sacar el insice s de cox y katz
 
 
 # prepara/exporta dsi
