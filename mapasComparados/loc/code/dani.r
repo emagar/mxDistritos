@@ -87,20 +87,18 @@ ver1 <- ver1[order(ver1$seccion),]
 colnames(ver2)
 head(ver1)
 head(ver2)
-# Daniel: algo sigue mal en /fuenteAlumnos/dani.ver_dsi.csv, la seccion=1 está en dist_new=12 pero tiene que ser =1 (como disn2018)...
-#lo checo 
-#ver2$father <- ver2$dsi <- NULL
-#colnames(ver2) <- c("seccion","disn2012") # daniel: investiga el año electoral inaugural del mapa abandonado para nombrarlo correctamente --> contestó que el año es 2007
-#ver2 <- ver2[,c("seccion","disn2012")]
+colnames(ver2) <- c("dist_new","seccion","disn2007")
+ver2 <- ver2[order(ver2$seccion),]
 
 # fusiona
 ver <- merge(x = ver1, y = ver2, by = "seccion", all = TRUE)
 # verifica integridad del merge de Daniel
-table(ver$disn2018==ver$dist_new)
-##############################################################################
-# daniel: algo salió mal en tu merge, revisa -- aquí todos deberían ser TRUE #
-##############################################################################
-#ver$dist_new <- NULL
+table(ver$disn2018==ver$dist_new, useNA = "ifany")
+###############################
+# daniel: parece que ya quedó #
+###############################
+ver$dist_new <- NULL
+
 
 dim(ver)
 dim(ver1)
@@ -122,6 +120,39 @@ colnames(dgo3) <- c("disn2018","father","dsi")
 
 write.csv(bcs3, file = "simIndex/dist_bcs.csv", row.names = FALSE)
 write.csv(dgo3, file = "simIndex/dist_dgo.csv", row.names = FALSE)
+
+d <- read.csv(file = "verLoc.csv", stringsAsFactors = FALSE)
+son    <- d$disn2018
+father <- d$disn2007
+N <- max(son, na.rm = TRUE)
+d$father <- NA
+d$dsi <- 0
+for (i in 1:N){
+    #i <- 1 # debug
+    sel.n <- which(son==i)                  # secciones in new district
+    tmp <- table(father[sel.n])
+    target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+    d$father[sel.n] <- target
+    sel.f <- which(father==target) # secciones in father district
+    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+}
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+
+dsi <- d[duplicated(son)==FALSE,]
+dsi$seccion <- dsi$munn <- dsi$disn2007 <- NULL
+head(dsi)
+dsi <- dsi[order(dsi$dsi),]
+
+write.csv(dsi, file = "simIndex/dist_ver.csv", row.names = FALSE)
+
 
 
 rm(dgo1,dgo2,ver1,ver2,bcs1,bcs2) # limpieza
