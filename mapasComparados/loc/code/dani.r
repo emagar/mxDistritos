@@ -121,6 +121,7 @@ colnames(dgo3) <- c("disn2018","father","dsi")
 write.csv(bcs3, file = "simIndex/dist_bcs.csv", row.names = FALSE)
 write.csv(dgo3, file = "simIndex/dist_dgo.csv", row.names = FALSE)
 
+# compute ver's dsi
 d <- read.csv(file = "verLoc.csv", stringsAsFactors = FALSE)
 son    <- d$disn2018
 father <- d$disn2007
@@ -155,7 +156,5 @@ write.csv(dsi, file = "simIndex/dist_ver.csv", row.names = FALSE)
 
 
 
-rm(dgo1,dgo2,ver1,ver2,bcs1,bcs2) # limpieza
-ls()
 
 
