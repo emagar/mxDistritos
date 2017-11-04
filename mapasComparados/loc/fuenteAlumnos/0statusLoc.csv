@@ -21,7 +21,7 @@ edon,edo,mapaLoc,listo,nota,mail
 17,mor,omar,error,,"revisa /code/omar.r lineas 148, hay error"
 25,sin,ruben,error,equipo análisis,"revisa /code/ruben.r linea 39, hay error"
 31,yuc,ruben,error,equipo análisis,"revisa /code/ruben.r linea 65, hay error"
-21,pue,santiago,,,sube/manda
+21,pue,santiago,error,,"revisa /code/santiago.r linea 62, hay error"
 22,que,veronica,listo,equipo reporte,como zabel
 24,san,veronica,,equipo reporte,sube/manda
 32,zac,veronica,listo,equipo reporte,como zabel
