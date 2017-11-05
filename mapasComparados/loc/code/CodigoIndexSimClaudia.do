@@ -30,6 +30,9 @@ bysort dis4015100: egen max = max(c)
 bysort dis4015100: egen nuevo = count(seccion)
 bysort Distrito12: egen padre = count(seccion)
 
+* [eric 5nov2017] por qué llenas esta variable manualmente? *
+* Hay un modo de automatizarlo en stata como lo he hecho en R, el reto es encontrarlo. *
+* Compara simIndex/dist_hgo.csv (mío) con simIndex/Hidalgo17.csv, no salen igual. *
 gen padre1 = .
 replace padre1 = 130 if dis4015100 == 1
 replace padre1 = 91 if dis4015100 == 2
