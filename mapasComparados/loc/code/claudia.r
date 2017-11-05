@@ -89,6 +89,148 @@ write.csv(jal, file = "jalLoc.csv", row.names = FALSE) # Claudia: usa éste para
 rm(hgo1,hgo2,jal1,jal2,mex1,mex2) # limpieza
 ls()
 
+
+# calcula dsi
+## get functions to include population
+source(paste(dd, "code/getPop.r", sep = ""))
+# hidalgo
+d <- read.csv(file = "hgoLoc.csv", stringsAsFactors = FALSE)
+
+pob05 <- get2005(edon=5)
+pob10 <- get2010(edon=5)
+
+head(pob05)
+head(pob10)
+head(d)
+
+# dsi seen from offspring perspective
+# new district's "father" and district similarity index, cf. Cox & Katz
+son    <- d$disn2018
+father <- d$disn2013
+N <- max(son, na.rm = TRUE)
+d$father <- NA
+d$dsi <- 0
+for (i in 1:N){
+    #i <- 1 # debug
+    sel.n <- which(son==i)                  # secciones in new district
+    tmp <- table(father[sel.n])
+    target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+    d$father[sel.n] <- target
+    sel.f <- which(father==target) # secciones in father district
+    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+}
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+
+dsi <- d[duplicated(son)==FALSE,]
+dsi$seccion <- dsi$munn <- dsi$disn2013 <- NULL
+head(dsi)
+dsi <- dsi[order(dsi$disn2018),]
+dsi <- dsi[order(dsi$dsi),]
+
+write.csv(dsi, file = "simIndex/dist_hgo.csv", row.names = FALSE)
+
+
+# jalisco
+d <- read.csv(file = "jalLoc.csv", stringsAsFactors = FALSE)
+
+pob05 <- get2005(edon=5)
+pob10 <- get2010(edon=5)
+
+head(pob05)
+head(pob10)
+head(d)
+
+# dsi seen from offspring perspective
+# new district's "father" and district similarity index, cf. Cox & Katz
+son    <- d$disn2018
+father <- d$disn2012
+N <- max(son, na.rm = TRUE)
+d$father <- NA
+d$dsi <- 0
+for (i in 1:N){
+    #i <- 1 # debug
+    sel.n <- which(son==i)                  # secciones in new district
+    tmp <- table(father[sel.n])
+    target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+    d$father[sel.n] <- target
+    sel.f <- which(father==target) # secciones in father district
+    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+}
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+
+dsi <- d[duplicated(son)==FALSE,]
+dsi$seccion <- dsi$munn <- dsi$disn2012 <- NULL
+head(dsi)
+dsi <- dsi[order(dsi$disn2018),]
+dsi <- dsi[order(dsi$dsi),]
+
+write.csv(dsi, file = "simIndex/dist_jal.csv", row.names = FALSE)
+
+
+# mexico
+d <- read.csv(file = "mexLoc.csv", stringsAsFactors = FALSE)
+
+pob05 <- get2005(edon=5)
+pob10 <- get2010(edon=5)
+
+head(pob05)
+head(pob10)
+head(d)
+
+# dsi seen from offspring perspective
+# new district's "father" and district similarity index, cf. Cox & Katz
+son    <- d$disn2018
+father <- d$disn2012
+N <- max(son, na.rm = TRUE)
+d$father <- NA
+d$dsi <- 0
+for (i in 1:N){
+    #i <- 1 # debug
+    sel.n <- which(son==i)                  # secciones in new district
+    tmp <- table(father[sel.n])
+    target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+    d$father[sel.n] <- target
+    sel.f <- which(father==target) # secciones in father district
+    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+}
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+
+dsi <- d[duplicated(son)==FALSE,]
+dsi$seccion <- dsi$munn <- dsi$disn2012 <- NULL
+head(dsi)
+dsi <- dsi[order(dsi$disn2018),]
+dsi <- dsi[order(dsi$dsi),]
+
+write.csv(dsi, file = "simIndex/dist_mex.csv", row.names = FALSE)
+
+
+
+
+
 # claudia:
 # 1. pareciera que usaste el reporte de eleccion de 2012 o 2013 para reconstruir el mapa seccion-distrito anterior. Busca por favor un resultado de 2015 para mex y jal y repite la fusión de tus datos. Estoy seguro de que caerá mucho el número de secciones faltantes. 
 # 2. En el caso de Hidalgo, verifica si hubo elección posterior a 2013 con map antiguo. Quizás puedas hacer lo mismo que en 1.
