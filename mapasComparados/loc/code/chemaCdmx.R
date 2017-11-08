@@ -16,8 +16,10 @@ require (tidyverse)
 require (dplyr)
 
 # Establezco directorios
-inp <- "/Users/josemariamacedo/Desktop/ITAM/8vo semestre/Seminario D/INP"
-out <- "/Users/josemariamacedo/Desktop/ITAM/8vo semestre/Seminario D/OUT"
+#inp <- "/Users/josemariamacedo/Desktop/ITAM/8vo semestre/Seminario D/INP"
+#out <- "/Users/josemariamacedo/Desktop/ITAM/8vo semestre/Seminario D/OUT"
+inp <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/fuenteAlumnos/"
+out <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/"
 
 # Abrir bases de datos
 dist15 <- read_xls(paste(inp,"bdxsecc.xls", sep = "/"))

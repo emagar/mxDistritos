@@ -36,11 +36,22 @@ dim(gua1)
 dim(gua2)
 
 head(gua)
+table(gua$munn.x==gua$munn.y)
+table(gua$disnViejo, gua$distritonuevo)
 
 # Víctor: hay algo mal, tu distritonuevo no coincide con la columna disn2018. Tampoco los munn. Verifica por favor.
 
 #write.csv(gua, file = "guaLoc.csv", row.names = FALSE) # Victor: cuando quede, usa éste archivo para sacar el insice s de cox y katz
 
+# contestó
+Hola profesor, 
+estuve revisando individualmente los datos de los tres estados y parece ser que el distrito nuevo no corresponde a la columna de su archivo porque los distritos tienen diferente numeración. Sin embargo las secciones están correctas.
+Mis distritos nuevos los obtuve de los pdf del portal del INE que llaman "descriptivo de la distritación local 2016" por lo que supuse que era el oficial actualizado; algunos números de municipios no coinciden pero esos si podrían ser mi problema ya que los obtuve de algunos catálogos posiblemebte desactualizados. Podría renombrar los distritos para que sean iguales en ambas columnas usando los datos que usted obtuvo,es buena idea?
+Con lo anterior los datos estarían listos.
+Saludos,
+Victor Tamayo
+--
+Resp: La probabilidad de que el problema que describes ocurra en tus tres estados es ínfima dado que no ha ocurrido con nadie más. Debes estar haciendo algo mal. Revisa por favor.
 
 
 # guerrero
