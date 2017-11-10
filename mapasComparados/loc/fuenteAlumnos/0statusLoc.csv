@@ -8,8 +8,8 @@ edon,edo,mapaLoc,listo,nota,mail,sent,seccRoster
 6,col,omar,error,,"revisa /code/omar.r lineas 122, hay error",ok,
 7,cps,humberto,,,sube/manda,,
 8,cua,omar,error,,"revisa /code/omar.r lineas 43-95, hay error",ok,
-9,df,chema,,,"falta revisar incongruencia de sus y mis números de distrito 2018, lo demás ok",,
-10,dgo,daniel,listo,equipo análisis,ok,ok,
+9,df,chema,,,"falta revisar incongruencia de sus y mis números de distrito 2018, lo demás ok",,match
+10,dgo,daniel,listo,equipo análisis,falta año mapa old,ok,match
 11,gua,victor,error,,"revisa /code/victor.r linea 40, hay error",ok,
 12,gue,victor,error,,"revisa /code/victor.r linea 65, hay error",ok,
 13,hgo,claudia,listo,equipo análisis,sube código stata,ok,
