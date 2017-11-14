@@ -71,7 +71,26 @@ setwd(dd)
 ## }
 ## rm(sel.ss, d.ss, tmp)
 ## #
-## write.csv(d, file = "coaLoc.csv", row.names = FALSE)
+## write.csv(d, file = "fuenteAlumnos/coaLoc.csv", row.names = FALSE)
+
+## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+d <- read.csv(file = "fuenteAlumnos/coaLoc.csv", stringsAsFactors = FALSE)
+
+# handy function to rename one data.frame's column
+rename.col <- function(old=NA, new=NA, what=NA){
+    old <- old; new <- new; what <- what;
+    colnames(what)[which(colnames(what)==old)] <- new
+    return(what)
+}
+d <- rename.col(old="disn2005", new="disloc2005", what=d)
+d <- rename.col(old="disn2011", new="disloc2011", what=d)
+d <- rename.col(old="disn2017", new="disloc2017", what=d)
+#
+# ---> NOTE:                                                                         <--- #
+# ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+# ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+
+write.csv(eq, file = "coaLoc.csv", row.names = FALSE)
 
 ## READ HISTORICAL MAP
 d <- read.csv(file = "coaLoc.csv", stringsAsFactors = FALSE)
