@@ -1,7 +1,13 @@
-## READ HISTORICAL MAPS (MISSING SECCIONES POSSIBLE)
-d <- read.csv(file = "fuenteAlumnos/bcsLoc.csv", stringsAsFactors = FALSE)
-d <- read.csv(file = "fuenteAlumnos/dgoLoc.csv", stringsAsFactors = FALSE)
-d <- read.csv(file = "fuenteAlumnos/verLoc.csv", stringsAsFactors = FALSE)
+colnames(tmp)
+tmp$seccion
+is.na(tmp$orig.dest)
+sel <- which(eq$edon==21 & eq$seccion==2659)
+is.na(eq$orig.dest[sel])
+
+# cam
+## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+d <- read.csv(file = "fuenteAlumnos/camLoc.csv", stringsAsFactors = FALSE)
+head(d) # dist_old year needed
 
 # handy function to rename one data.frame's column
 rename.col <- function(old=NA, new=NA, what=NA){
@@ -9,14 +15,11 @@ rename.col <- function(old=NA, new=NA, what=NA){
     colnames(what)[which(colnames(what)==old)] <- new
     return(what)
 }
-d <- rename.col(old="disn2005", new="disloc2005", what=d)
-d <- rename.col(old="disn2011", new="disloc2011", what=d)
-d <- rename.col(old="disn2017", new="disloc2017", what=d)
+d <- rename.col(old="disn2012", new="disloc2012", what=d)
+d <- rename.col(old="disn2018", new="disloc2018", what=d)
 #
+# ---> NOTE:                                                                         <--- #
+# ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+# ---> will generate new eq object with full map (incl. state and federal districts) <--- #
 
-# open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors
-# will generate new eq object with full map (incl. state and federal districts)
-# export
-write.csv(eq, file = "bcsLoc.csv", row.names = FALSE)
-write.csv(eq, file = "dgoLoc.csv", row.names = FALSE)
-write.csv(eq, file = "verLoc.csv", row.names = FALSE)
+write.csv(eq, file = "camLoc.csv", row.names = FALSE)

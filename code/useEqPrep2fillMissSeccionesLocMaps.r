@@ -5,7 +5,7 @@
 ######################################################
 
 ## MERGE TO tablaEquivalenciaSeccional TO GET FED MAP AND FILL MISSING SECCIONES
-edon <- 4 # set a state number 1:32
+edon <- 21 # set a state number 1:32
 edo <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")
 message("Working with ", edon, "=", edo[edon], sep = "")
 
