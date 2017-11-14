@@ -5,12 +5,12 @@ dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc
 setwd(dd)
 
 # Estos son los archivos que circuló chema
-df2 <- read.csv("fuenteAlumnos/chema_cdmxLoc.csv", stringsAsFactors = FALSE)
-df3 <- df2 # duplica
-
-# Estos son los archivos originales
-df1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/df33Loc.csv", stringsAsFactors = FALSE)
-df40 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/df40Loc.csv", stringsAsFactors = FALSE)
+## df2 <- read.csv("fuenteAlumnos/chema_cdmxLoc.csv", stringsAsFactors = FALSE)
+## df3 <- df2 # duplica
+## 
+## # Estos son los archivos originales
+## df1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/df33Loc.csv", stringsAsFactors = FALSE)
+## df40 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/df40Loc.csv", stringsAsFactors = FALSE)
 
 
 ## # when full municipio assigned to a district, this transfers info to secciones
@@ -60,60 +60,168 @@ df40 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/df40Lo
 ## 
 ## write.csv(dat, file = "df33Loc.csv", row.names = FALSE)
 
-head(df2)
-dim(df2)
-dim(df1)
-dim(df40)
+## head(df2)
+## dim(df2)
+## dim(df1)
+## dim(df40)
+## 
+## # ciudad de mex 33 distritos
+## colnames(df1)
+## df1 <- df1[,c("edon","seccion","munn","escenario3_c8")]
+## colnames(df1) <- c("edon","seccion","munn","disn2018")
+## 
+## # cambia nombres en datos de Chema
+## head(df2)
+## df2$father15 <- df2$dsi <- df2$X <- NULL
+## colnames(df2) <- c("seccion","munn","disn2015","disn2017") # chema: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo)
+## df2$munn <- NULL
+## table(df2$disn2015==df2$disn2017)
+## 
+## # fusiona
+## df <- merge(x = df1, y = df2, by = "seccion", all = TRUE)
+## 
+## dim(df)
+## dim(df1)
+## dim(df2)
+## 
+## head(df)
+## # retoma 
+## table(df$disn2018, df$disn2017) # <-- Hay una correspondencia 1-a-1 entre el mapa de Json y los que obtuvo Chema (disn2017), pero los disn no corresponden. Esto se repite en otros estados distritados más tarde en el proceso de redistritación 2015-2016. Preguntar a cartografía qué expliquen.
+## df$disn2018 <- df$disn2017; df$disn2017 <- NULL # Me quedo con los números de Chema
+## 
+## write.csv(df, file = "fuenteAlumnos/df33Loc.csv", row.names = FALSE)
+## 
+## 
+## 
+## # mapa con 40 distritos
+## colnames(df40)
+## df40 <- df40[,c("edon","seccion","munn","escenario3")]
+## colnames(df40) <- c("edon","seccion","munn","disn2018")
+## 
+## # cambia nombres en datos de Chema
+## head(df2)
+## df2$disn2017 <- NULL
+## 
+## # fusiona
+## df <- merge(x = df40, y = df2, by = "seccion", all = TRUE)
+## 
+## dim(df)
+## dim(df40)
+## dim(df2)
+## head(df)
+## 
+## write.csv(df, file = "fuenteAlumnos/df40Loc.csv", row.names = FALSE) 
 
-# ciudad de mex 33 distritos
-colnames(df1)
-df1 <- df1[,c("edon","seccion","munn","escenario3_c8")]
-colnames(df1) <- c("edon","seccion","munn","disn2018")
-
-# cambia nombres en datos de Chema
-head(df2)
-df2$father15 <- df2$dsi <- df2$X <- NULL
-colnames(df2) <- c("seccion","munn","disn2015","disn2017") # chema: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo)
-df2$munn <- NULL
-table(df2$disn2015==df2$disn2017)
-
-# fusiona
-df <- merge(x = df1, y = df2, by = "seccion", all = TRUE)
-
-dim(df)
-dim(df1)
-dim(df2)
-
-head(df)
-table(df$disn2018, df$disn2017) # <-- Chema: aunque hay una correspondencia 1-a-1 entre el mapa que obtuve de los Json del INE y los que has subido (disn2017), los números no corresponden. Investiga plis qué está pasando.
-table(df$disn2018, df$disn2015) # se ve ok
-
-write.csv(df, file = "df33Loc.csv", row.names = FALSE) # Chema: dfndo quede, usa éste archivo para sacar el insice s de cox y katz
-
-# mapa con 40 distritos
-colnames(df40)
-df40 <- df40[,c("edon","seccion","munn","escenario3")]
-colnames(df40) <- c("edon","seccion","munn","disn2018")
-
-# cambia nombres en datos de Chema
-head(df2)
-df2$disn2017 <- NULL
-
-# fusiona
-df <- merge(x = df40, y = df2, by = "seccion", all = TRUE)
-
-dim(df)
-dim(df40)
-dim(df2)
-head(df)
-
-write.csv(df, file = "df40Loc.csv", row.names = FALSE) # Chema: dfndo quede, usa éste archivo para sacar el insice s de cox y katz
 
 
+## ## prepare dsi
+## ## READ HISTORICAL MAP
+## d <- read.csv(file = "fuenteAlumnos/df33Loc.csv", stringsAsFactors = FALSE)
+## 
+## # dsi seen from offspring perspective
+## # new district's "father" and district similarity index, cf. Cox & Katz
+## son    <- d$disn2018
+## father <- d$disn2015
+## N <- max(son, na.rm = TRUE)
+## d$father <- NA
+## d$dsi <- 0
+## for (i in 1:N){
+##     #i <- 1 # debug
+##     sel.n <- which(son==i)                  # secciones in new district
+##     tmp <- table(father[sel.n])
+##     target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+##     d$father[sel.n] <- target
+##     sel.f <- which(father==target) # secciones in father district
+##     sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+##     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+## }
+## 
+## dsi <- d[duplicated(son)==FALSE,]
+## dsi$seccion <- dsi$munn <- NULL
+## dsi$disn2015 <- NULL
+## head(dsi)
+## dsi <- dsi[order(dsi$dsi),]
+## 
+## write.csv(dsi, file = "simIndex/dist_df33.csv", row.names = FALSE)
+## 
+## 
+## ## prepare dsi
+## ## READ HISTORICAL MAP
+## d <- read.csv(file = "fuenteAlumnos/df40Loc.csv", stringsAsFactors = FALSE)
+## # dsi seen from offspring perspective
+## # new district's "father" and district similarity index, cf. Cox & Katz
+## son    <- d$disn2018
+## father <- d$disn2015
+## N <- max(son, na.rm = TRUE)
+## d$father <- NA
+## d$dsi <- 0
+## for (i in 1:N){
+##     #i <- 1 # debug
+##     sel.n <- which(son==i)                  # secciones in new district
+##     tmp <- table(father[sel.n])
+##     target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+##     d$father[sel.n] <- target
+##     sel.f <- which(father==target) # secciones in father district
+##     sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+##     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+## }
+## 
+## dsi <- d[duplicated(son)==FALSE,]
+## dsi$seccion <- dsi$munn <- NULL
+## dsi$disn2015 <- NULL
+## head(dsi)
+## dsi <- dsi[order(dsi$dsi),]
+## 
+## write.csv(dsi, file = "simIndex/dist_df40.csv", row.names = FALSE)
 
-## prepare dsi
-## READ HISTORICAL MAP
-d <- read.csv(file = "df33Loc.csv", stringsAsFactors = FALSE)
+
+
+# df33
+## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+d <- read.csv(file = "fuenteAlumnos/df33Loc.csv", stringsAsFactors = FALSE)
+head(d) # dist_old year needed
+
+# handy function to rename one data.frame's column
+rename.col <- function(old=NA, new=NA, what=NA){
+    old <- old; new <- new; what <- what;
+    colnames(what)[which(colnames(what)==old)] <- new
+    return(what)
+}
+d <- rename.col(old="disn2015", new="disloc2015", what=d)
+d <- rename.col(old="disn2018", new="disloc2018", what=d)
+#
+# ---> NOTE:                                                                         <--- #
+# ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+# ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+
+write.csv(eq, file = "df33Loc.csv", row.names = FALSE)
+
+
+# df40
+## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+d <- read.csv(file = "fuenteAlumnos/df40Loc.csv", stringsAsFactors = FALSE)
+head(d) # dist_old year needed
+
+# handy function to rename one data.frame's column
+rename.col <- function(old=NA, new=NA, what=NA){
+    old <- old; new <- new; what <- what;
+    colnames(what)[which(colnames(what)==old)] <- new
+    return(what)
+}
+d <- rename.col(old="disn2015", new="disloc2015", what=d)
+d <- rename.col(old="disn2018", new="disloc2018", what=d)
+#
+# ---> NOTE:                                                                         <--- #
+# ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+# ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+
+write.csv(eq, file = "df40Loc.csv", row.names = FALSE)
+
+
+
+
+
+
 
 ## get functions to include population
 source(paste(dd, "code/getPop.r", sep = ""))
@@ -124,24 +232,6 @@ head(pob05)
 head(pob10)
 head(d)
 
-# dsi seen from offspring perspective
-# new district's "father" and district similarity index, cf. Cox & Katz
-son    <- d$disn2018
-father <- d$disn2015
-N <- max(son, na.rm = TRUE)
-d$father <- NA
-d$dsi <- 0
-for (i in 1:N){
-    #i <- 1 # debug
-    sel.n <- which(son==i)                  # secciones in new district
-    tmp <- table(father[sel.n])
-    target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
-    d$father[sel.n] <- target
-    sel.f <- which(father==target) # secciones in father district
-    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
-    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
-}
-
 # add 2005 pop
 d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
 d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
@@ -151,16 +241,15 @@ d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE,
 d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
 d$ptot <- NULL
 
-dsi <- d[duplicated(son)==FALSE,]
-dsi$seccion <- dsi$munn <- NULL
-dsi$disn2015 <- dsi$disn2017 <- NULL
-head(dsi)
-dsi <- dsi[order(dsi$dsi),]
 
-write.csv(dsi, file = "simIndex/dist_df.csv", row.names = FALSE)
 
-df3 <- df3[duplicated(df3$distrito2017)==FALSE,] # lo que circuló chema
-df3 <- df3[order(df3$dsi), c("distrito2017","father15","dsi")]
-df3
-dsi # chema: tu cómputo se ve bien, salvo por incogruencia con mis números de distrito.
+
+
+
+
+
+
+
+
+
 

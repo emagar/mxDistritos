@@ -1,34 +1,36 @@
-edon,edo,mapaLoc,listo,nota,mail,sent,seccRoster
-0,0,julio,,,quiero avance sustancial o …,,
-1,ags,humberto,error,,revisa,,
-2,bc,mario,,,sube/manda todo,,
-3,bcs,daniel,listo,equipo análisis,ok,ok,match
-4,cam,eric,sólo falta pop,coordina,ok,ok,match
-5,coa,eric,sólo falta pop,coordina,ok,ok,match
-6,col,omar,error,,"revisa /code/omar.r lineas 122, hay error",ok,
-7,cps,humberto,,,sube/manda,,
-8,cua,omar,error,,"revisa /code/omar.r lineas 43-95, hay error",ok,
+edon,edo,mapaLoc,listo,nota,mail,newMail,seccRoster
 9,df,chema,,,"falta revisar incongruencia de sus y mis números de distrito 2018, lo demás ok",,match
-10,dgo,daniel,listo,equipo análisis,falta año mapa old,ok,match
-11,gua,victor,error,,"revisa /code/victor.r linea 40, hay error",ok,
-12,gue,victor,error,,"revisa /code/victor.r linea 65, hay error",ok,
-13,hgo,claudia,listo,equipo análisis,sube código stata,ok,
-14,jal,claudia,listo,equipo análisis,sube código stata,ok,
-15,mex,claudia,listo,equipo análisis,sube código stata,ok,
-16,mic,zabel,listo,equipo reporte,harás reporte,ok,
-17,mor,omar,error,,"revisa /code/omar.r lineas 148, hay error",ok,
+28,tam,chema,,,sube/manda todo,,
+13,hgo,claudia,listo,equipo análisis,sube código stata,,
+14,jal,claudia,listo,equipo análisis,sube código stata,,
+15,mex,claudia,listo,equipo análisis,sube código stata,,
+3,bcs,daniel,listo,equipo análisis,ok,listo,match
+10,dgo,daniel,listo,equipo análisis,falta año mapa old,listo,match
+30,ver,daniel,listo,equipo análisis,ok,listo,
+4,cam,eric,sólo falta pop,coordina,ok,,match
+5,coa,eric,sólo falta pop,coordina,ok,listo,match
 18,nay,fernanda,,,yo hago nay,,
-19,nl,victor,error,,"revisa /code/victor.r linea 90, hay error",ok,
+1,ags,humberto,error,,revisa,,
+7,cps,humberto,,,sube/manda,,
 20,oax,humberto,,,sube/manda,,
+0,0,julio,,,quiero avance sustancial o …,,
+2,bc,mario,,,sube/manda todo,,
+23,qui,mario,,,sube/manda,,
+26,son,moises,,equipo análisis,sube/manda,listo,
+6,col,omar,error,,"revisa /code/omar.r lineas 122, hay error",,
+8,cua,omar,error,,"revisa /code/omar.r lineas 43-95, hay error",,
+17,mor,omar,error,,"revisa /code/omar.r lineas 148, hay error",,
+25,sin,ruben,error,equipo análisis,"revisa /code/ruben.r linea 39, hay error",listo,
+31,yuc,ruben,error,equipo análisis,"revisa /code/ruben.r linea 65, hay error",listo,
 21,pue,santiago,error,,"revisa /code/santiago.r linea 62, hay error",,
 22,que,veronica,listo,equipo reporte,como zabel,,
-23,qui,mario,,,sube/manda,,
 24,san,veronica,,equipo reporte,sube/manda,,
-25,sin,ruben,error,equipo análisis,"revisa /code/ruben.r linea 39, hay error",ok,
-26,son,moises,,equipo análisis,sube/manda,,
-27,tab,zabel,listo,equipo reporte,harás reporte,ok,
-28,tam,chema,,,sube/manda todo,,
-29,tla,zabel,listo,equipo reporte,harás reporte,ok,
-30,ver,daniel,listo,equipo análisis,ok,ok,
-31,yuc,ruben,error,equipo análisis,"revisa /code/ruben.r linea 65, hay error",ok,
 32,zac,veronica,listo,equipo reporte,como zabel,,
+11,gua,victor,error,,"revisa /code/victor.r linea 40, hay error",,
+12,gue,victor,error,,"revisa /code/victor.r linea 65, hay error",,
+19,nl,victor,error,,"revisa /code/victor.r linea 90, hay error",,
+16,mic,zabel,listo,equipo reporte,harás reporte,,
+27,tab,zabel,listo,equipo reporte,harás reporte,,
+29,tla,zabel,listo,equipo reporte,harás reporte,,
+0,0,dalia,,,,,
+0,0,ceci,,,,,
