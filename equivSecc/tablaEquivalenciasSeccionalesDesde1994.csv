@@ -38510,10 +38510,10 @@ ord,edon,edo,seccion,munn,dis1994,dis1997,dis2000,dis2003,dis2006,dis2009,dis201
 38509,16,mic,2697,89,0,0,0,0,0,0,0,0,2,2,Reseccionamiento 2014,new,from,1976,2014,green,
 38510,16,mic,2698,89,0,0,0,0,0,0,0,0,2,2,Reseccionamiento 2014,new,from,1976,2014,green,
 38511,16,mic,2699,89,0,0,0,0,0,0,0,0,2,2,Reseccionamiento 2014,new,from,1976,2014,green,
-38512,16,mic,2700,89,0,0,0,0,0,0,0,0,8,2,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,,gray,
-38513,16,mic,2701,89,0,0,0,0,0,0,0,0,8,2,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,,gray,
-38514,16,mic,2702,54,0,0,0,0,0,0,0,0,2,8,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,,gray,
-38515,16,mic,2703,54,0,0,0,0,0,0,0,0,2,10,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,,gray,
+38512,16,mic,2700,89,0,0,0,0,0,0,0,0,8,2,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,2014,gray,del mapa 2018 federal que nos pasó Martha Zertuche
+38513,16,mic,2701,89,0,0,0,0,0,0,0,0,8,2,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,2014,gray,del mapa 2018 federal que nos pasó Martha Zertuche
+38514,16,mic,2702,54,0,0,0,0,0,0,0,0,2,8,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,2014,gray,del mapa 2018 federal que nos pasó Martha Zertuche
+38515,16,mic,2703,54,0,0,0,0,0,0,0,0,2,10,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,2014,gray,del mapa 2018 federal que nos pasó Martha Zertuche
 38516,17,mor,1,1,4,4,4,4,4,4,4,2,4,4,,,,,,,
 38517,17,mor,2,1,4,4,4,4,4,4,4,2,4,4,,,,,,,
 38518,17,mor,3,1,4,4,4,4,4,4,4,2,4,4,,,,,,,
@@ -46969,7 +46969,7 @@ ord,edon,edo,seccion,munn,dis1994,dis1997,dis2000,dis2003,dis2006,dis2009,dis201
 46968,21,pue,1413,115,11,6,6,6,6,6,6,1,6,6,,,,,,,
 46969,21,pue,1414,115,11,6,6,6,6,6,6,1,6,6,,,,,,,
 46970,21,pue,1415,115,11,6,6,6,6,6,6,1,6,6,,,,,,,
-46971,21,pue,1416,115,11,6,6,6,6,6,6,1,6,6,,,,,,,
+46971,21,pue,1416,115,11,6,6,6,6,6,6,1,6,6,,split,to,"1416,2550",2005,yellow,sólo parte 1416 para crear 2550
 46972,21,pue,1417,115,11,6,6,6,6,6,6,1,6,6,,,,,,,
 46973,21,pue,1418,115,11,6,6,6,6,6,6,1,6,6,,,,,,,
 46974,21,pue,1419,115,11,6,6,6,6,6,6,1,6,6,,,,,,,
@@ -48212,11 +48212,11 @@ ord,edon,edo,seccion,munn,dis1994,dis1997,dis2000,dis2003,dis2006,dis2009,dis201
 48211,21,pue,2656,115,0,0,0,0,0,0,0,0,11,11,Reseccionamiento 2014,new,from,1250,2014,green,
 48212,21,pue,2657,115,0,0,0,0,0,0,0,0,11,11,Reseccionamiento 2014,new,from,1250,2014,green,
 48213,21,pue,2658,115,0,0,0,0,0,0,0,0,11,11,Reseccionamiento 2014,new,from,1250,2014,green,
-48214,21,pue,2659,120,0,0,0,0,0,0,0,0,11,10,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,,gray,
-48215,21,pue,2660,120,0,0,0,0,0,0,0,0,11,10,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,,gray,
-48216,21,pue,2661,120,0,0,0,0,0,0,0,0,11,10,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,,gray,
-48217,21,pue,2662,120,0,0,0,0,0,0,0,0,11,10,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,,gray,
-48218,21,pue,2663,115,0,0,0,0,0,0,0,0,10,9,aparecieron en el mapa 2018 federal que nos pasó Martha Zertuche,new,from,,,gray,
+48214,21,pue,2659,120,0,0,0,0,0,0,0,0,11,10,,new,from,,2014,gray,del mapa 2018 federal que nos pasó Martha Zertuche
+48215,21,pue,2660,120,0,0,0,0,0,0,0,0,11,10,,new,from,,2014,gray,del mapa 2018 federal que nos pasó Martha Zertuche
+48216,21,pue,2661,120,0,0,0,0,0,0,0,0,11,10,,new,from,,2014,gray,del mapa 2018 federal que nos pasó Martha Zertuche
+48217,21,pue,2662,120,0,0,0,0,0,0,0,0,11,10,,new,from,,2014,gray,del mapa 2018 federal que nos pasó Martha Zertuche
+48218,21,pue,2663,115,0,0,0,0,0,0,0,0,10,9,,new,from,,2014,gray,del mapa 2018 federal que nos pasó Martha Zertuche
 48219,22,que,1,1,2,2,2,2,2,2,2,2,2,5,,,,,,,
 48220,22,que,2,1,2,2,2,2,2,2,2,2,2,5,,,,,,,
 48221,22,que,3,1,2,2,2,2,2,2,2,2,2,5,,,,,,,
