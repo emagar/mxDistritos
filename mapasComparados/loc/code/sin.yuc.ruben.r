@@ -35,8 +35,10 @@ dim(sin1)
 dim(sin2)
 
 head(sin)
-
-# rubén: algo está mal, la columnas disn2018 tendría que ser idéntica a la tuya (que he llamado d2017). Revisa por favor.
+table(sin$disn2006, useNA = "ifany")
+table(sin$disn2017, useNA = "ifany")
+table(sin$disn2018, useNA = "ifany")
+# rubén: algo está mal, faltan distrito en 2017 y 2018
 
 #write.csv(sin, file = "sinLoc.csv", row.names = FALSE) # Ruben: cuando quede, usa éste archivo para sacar el insice s de cox y katz
 
@@ -60,8 +62,12 @@ dim(yuc)
 dim(yuc1)
 dim(yuc2)
 
-head(yuc)
 
+
+head(yuc)
+table(yuc$disn2006, useNA = "ifany")
+table(yuc$disn2017, useNA = "ifany")
+table(yuc$disn2018, useNA = "ifany")
 # rubén: algo está mal, mismo problema
 
 #write.csv(yuc, file = "yucLoc.csv", row.names = FALSE) # Ruben: cuando quede, usa éste archivo para sacar el insice s de cox y katz

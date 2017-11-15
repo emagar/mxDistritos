@@ -1,9 +1,3 @@
-colnames(tmp)
-tmp$seccion
-is.na(tmp$orig.dest)
-sel <- which(eq$edon==21 & eq$seccion==2659)
-is.na(eq$orig.dest[sel])
-
 # cam
 ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
 d <- read.csv(file = "fuenteAlumnos/camLoc.csv", stringsAsFactors = FALSE)
