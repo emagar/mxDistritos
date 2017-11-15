@@ -1,9 +1,9 @@
 edon,edo,mapaLoc,listo,nota,status,newMail,locMap ok,dsi ok
-9,df,chema,,,proyecto: reducción df mor tla,listo,ok,
+9,df,chema,,,proyecto: reducción df mor tla,listo,ok,ok
 28,tam,chema,,,proyecto: reducción df mor tla,listo,espero mapa,
-13,hgo,claudia,listo,equipo análisis,,listo,,
-14,jal,claudia,listo,equipo análisis,,listo,,
-15,mex,claudia,listo,equipo análisis,,listo,,
+13,hgo,claudia,listo,equipo análisis,,listo,ok,ok
+14,jal,claudia,listo,equipo análisis,,listo,ok,ok
+15,mex,claudia,listo,equipo análisis,,listo,ok,ok
 3,bcs,daniel,listo,equipo análisis,,listo,,
 10,dgo,daniel,listo,equipo análisis,,listo,,
 30,ver,daniel,listo,equipo análisis,,listo,ok,
@@ -11,8 +11,8 @@ edon,edo,mapaLoc,listo,nota,status,newMail,locMap ok,dsi ok
 5,coa,eric,listo,coordina,ok,listo,ok,
 18,nay,eric,reasignar: daniel,,,listo,,
 1,ags,humberto,reasignar: daniel,,,listo,,
-7,cps,humberto,reasignar: claudia,,,listo,,
-20,oax,humberto,reasignar: claudia,,,listo,,
+7,cps,humberto,reasignar: claudia,,,listo,ok,ok
+20,oax,humberto,reasignar: claudia,,,listo,ok,ok
 0,0,julio,,,mandará resultados,listo,,
 2,bc,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,listo,,
 23,qui,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,listo,,
@@ -31,7 +31,7 @@ edon,edo,mapaLoc,listo,nota,status,newMail,locMap ok,dsi ok
 19,nl,victor,error,,con Dalia Ceci,,,
 16,mic,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,listo,,
 27,tab,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,listo,,
-29,tla,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,listo,,
+29,tla,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,listo,ok,ok
 0,0,dalia,,,proyecto: alcaldes ambiciosos,listo,,
 0,0,ceci,,,proyecto: alcaldes ambiciosos,listo,,
 0,0,fernanda,,,,listo,,
