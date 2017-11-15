@@ -130,13 +130,108 @@ setwd(dd)
 ## write.csv(tla, file = "tla15Loc.csv", row.names = FALSE) # Zabel: usa éste para sacar el insice s de cox y katz
 
 
+## ## tla 15
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/tla15Loc.csv", stringsAsFactors = FALSE)
+## head(d) # dist_old year needed
+## 
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2012", new="disloc2012", what=d)
+## d <- rename.col(old="disn2018", new="disloc2018", what=d)
+## #
+## # ---> NOTE:                                                                         <--- #
+## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+## 
+## write.csv(eq, file = "tla15Loc.csv", row.names = FALSE)
+## 
+## 
+## 
+## # 
+## 
+## # tla d19
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/tla19Loc.csv", stringsAsFactors = FALSE)
+## head(d) # dist_old year needed
+## 
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2012", new="disloc2012", what=d)
+## d <- rename.col(old="disn2018", new="disloc2018", what=d)
+## #
+## # ---> NOTE:                                                                         <--- #
+## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+## 
+## write.csv(eq, file = "tla19Loc.csv", row.names = FALSE)
+
+
+# DSI
+d <- read.csv(file = "tla15Loc.csv", stringsAsFactors = FALSE)
+head(d)
+# dsi seen from offspring perspective
+# new district's "father" and district similarity index, cf. Cox & Katz
+son    <- d$disloc2018
+father <- d$disloc2012
+N <- max(son)
+d$father <- NA
+d$dsi <- 0
+for (i in 1:N){
+    #i <- 3 # debug
+    sel.n <- which(son==i)                  # secciones in new district
+    tmp <- table(father[sel.n])
+    target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
+    d$father[sel.n] <- target
+    sel.f <- which(father==target) # secciones in father district
+    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+}
+# export districts object
+dsi <- d[duplicated(son)==FALSE,]
+head(dsi)
+dsi <- dsi[,c("edon","disloc2018","father","dsi")]
+dsi <- dsi[order(dsi$dsi),]
+write.csv(dsi, file = "simIndex/dist_tla15.csv", row.names = FALSE)
+
+# d19
+d <- read.csv(file = "tla19Loc.csv", stringsAsFactors = FALSE)
+head(d)
+# dsi seen from offspring perspective
+# new district's "father" and district similarity index, cf. Cox & Katz
+son    <- d$disloc2018
+father <- d$disloc2012
+N <- max(son)
+d$father <- NA
+d$dsi <- 0
+for (i in 1:N){
+    #i <- 3 # debug
+    sel.n <- which(son==i)                  # secciones in new district
+    tmp <- table(father[sel.n])
+    target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
+    d$father[sel.n] <- target
+    sel.f <- which(father==target) # secciones in father district
+    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+}
+# export districts object
+dsi <- d[duplicated(son)==FALSE,]
+head(dsi)
+dsi <- dsi[,c("edon","disloc2018","father","dsi")]
+dsi <- dsi[order(dsi$dsi),]
+write.csv(dsi, file = "simIndex/dist_tla19.csv", row.names = FALSE)
+
 
 ## get functions to include population
 source(paste(dd, "code/getPop.r", sep = ""))
-
-## READ HISTORICAL MAPS
-## tlaxcala
-d <- read.csv(file = "tla15Loc.csv", stringsAsFactors = FALSE)
 
 pob05 <- get2005(edon=29)
 pob10 <- get2010(edon=29)
@@ -145,23 +240,12 @@ head(d)
 head(pob05)
 head(pob10)
 
-# dsi seen from offspring perspective
-# new district's "father" and district similarity index, cf. Cox & Katz
-son    <- d$disn2018
-father <- d$disn2012
-N <- max(son)
-d$father <- NA
-d$dsi <- 0
-for (i in 1:N){
-    #i <- 3 # debug
-    sel.n <- which(son==i)                  # secciones in new district
-    tmp <- table(father[sel.n])
-    target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
-    d$father[sel.n] <- target
-    sel.f <- which(father==target) # secciones in father district
-    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
-    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
-}
+
+## READ HISTORICAL MAPS
+## tlaxcala
+d <- read.csv(file = "tla15Loc.csv", stringsAsFactors = FALSE)
+
+
 # add 2005 pop
 d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all = TRUE)
 d$pob05 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
@@ -171,74 +255,6 @@ d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all = TRUE)
 d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
 d$ptot <- NULL
 
-# export districts object
-dsi <- d[duplicated(son)==FALSE,]
-dsi$seccion <- dsi$munn <- NULL
-dsi$disn2012 <- NULL
-
-dsi <- dsi[order(dsi$dsi),]
-
-head(dsi)
-
-write.csv(dsi, file = "simIndex/dist_tla15.csv", row.names = FALSE)
-
-summary(dsi$dsi)
-
-
-# d19
-d <- read.csv(file = "tla19Loc.csv", stringsAsFactors = FALSE)
-
-# dsi seen from offspring perspective
-# new district's "father" and district similarity index, cf. Cox & Katz
-son    <- d$disn2018
-father <- d$disn2012
-N <- max(son)
-d$father <- NA
-d$dsi <- 0
-for (i in 1:N){
-    #i <- 3 # debug
-    sel.n <- which(son==i)                  # secciones in new district
-    tmp <- table(father[sel.n])
-    target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
-    d$father[sel.n] <- target
-    sel.f <- which(father==target) # secciones in father district
-    sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
-    d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
-}
-# add 2005 pop
-d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all = TRUE)
-d$pob05 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
-d$ptot <- NULL
-# add 2010 pop
-d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all = TRUE)
-d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
-d$ptot <- NULL
-
-# export districts object
-dsi <- d[duplicated(son)==FALSE,]
-dsi$seccion <- dsi$munn <- NULL
-dsi$disn2012 <- NULL
-
-dsi <- dsi[order(dsi$dsi),]
-
-head(dsi)
-
-write.csv(dsi, file = "simIndex/dist_tla19.csv", row.names = FALSE)
-
-summary(dsi$dsi)
-
-
-## tla15 <- read.csv(file = file, stringsAsFactors = FALSE)
-## #
-## tla15 <- tla15[, c("seccion","munn","escenario3")]
-## colnames(tla15) <- c("seccion","munn","disn2018.15")
-## tla15$munn <- NULL
-## #
-## tla <- merge(x= tla, y = tla15, by = "seccion", all = TRUE)
-## colnames(tla) <- c("seccion", "edon", "munn", "disn2018.19", "distrito12", "disn2018")
-## head(tla)
-## #
-## write.csv(tla, file = "tlaLoc.csv", row.names = FALSE)
 
 
 ## tabasco

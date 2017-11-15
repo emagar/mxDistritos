@@ -55,7 +55,7 @@ if (length(select)>0){
     #
     eq[select,] <- tmp # paste back to dataset
 }
-#
+
 ##########################################################################
 # Fill what districts split secciones would have belonged to afterwards ##
 # Note: picks info from first of the new secciones only. If the new     ##
@@ -86,7 +86,7 @@ if (length(select)>0){
     }
     eq[tmp2$send.to,] <- tmp3 # paste back to dataset
 }
-#
+
 #############################################################################
 ## Fills which district merged secciones would have belonged to afterwards ##
 #############################################################################
