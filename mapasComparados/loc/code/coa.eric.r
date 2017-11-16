@@ -73,41 +73,38 @@ setwd(dd)
 ## #
 ## write.csv(d, file = "fuenteAlumnos/coaLoc.csv", row.names = FALSE)
 
-## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
-d <- read.csv(file = "fuenteAlumnos/coaLoc.csv", stringsAsFactors = FALSE)
 
-# handy function to rename one data.frame's column
-rename.col <- function(old=NA, new=NA, what=NA){
-    old <- old; new <- new; what <- what;
-    colnames(what)[which(colnames(what)==old)] <- new
-    return(what)
-}
-d <- rename.col(old="disn2005", new="disloc2005", what=d)
-d <- rename.col(old="disn2011", new="disloc2011", what=d)
-d <- rename.col(old="disn2017", new="disloc2017", what=d)
-#
-# ---> NOTE:                                                                         <--- #
-# ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
-# ---> will generate new eq object with full map (incl. state and federal districts) <--- #
 
-write.csv(eq, file = "coaLoc.csv", row.names = FALSE)
 
-## READ HISTORICAL MAP
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/coaLoc.csv", stringsAsFactors = FALSE)
+## 
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2005", new="disloc2005", what=d)
+## d <- rename.col(old="disn2011", new="disloc2011", what=d)
+## d <- rename.col(old="disn2017", new="disloc2017", what=d)
+## #
+## # ---> NOTE:                                                                         <--- #
+## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+## 
+## write.csv(eq, file = "coaLoc.csv", row.names = FALSE)
+
+
+
+## READ HISTORICAL MAPS
 d <- read.csv(file = "coaLoc.csv", stringsAsFactors = FALSE)
-
-## get functions to include population
-source(paste(dd, "code/getPop.r", sep = ""))
-pob05 <- get2005(edon=5)
-pob10 <- get2010(edon=5)
-
-head(pob05)
-head(pob10)
 head(d)
 
 # dsi seen from offspring perspective
 # new district's "father" and district similarity index, cf. Cox & Katz
-son    <- d$disn2017
-father <- d$disn2011
+son    <- d$disloc2017
+father <- d$disloc2011
 N <- max(son, na.rm = TRUE)
 d$father <- NA
 d$dsi <- 0
@@ -121,19 +118,12 @@ for (i in 1:N){
     sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
 }
-# add 2005 pop
-d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
-d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
-d$ptot <- NULL
-# add 2010 pop
-d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
-d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
-d$ptot <- NULL
+
 
 dsi <- d[duplicated(son)==FALSE,]
-dsi$seccion <- dsi$mun <- dsi$munn <- NULL
+dsi <- dsi[,c("edon","disloc2017","father","dsi")]
 head(dsi)
-dsi <- dsi[order(dsi$disn2017),]
+dsi <- dsi[order(dsi$disloc2017),]
 dsi$cab2017 <- c("Acuña", "Piedras Negras", "Sabinas", "San Pedro", "Monclova", "Frontera", "Matamoros", "Torreón", "Torreón", "Torreón", "Torreón", "Ramos Arizpe", "Saltillo", "Saltillo", "Saltillo", "Saltillo")
 dsi <- dsi[order(dsi$dsi),]
 
@@ -159,10 +149,32 @@ dsi <- dsi[order(dsi$disn14),]
 dsi$cab14 <- c("Saltillo", "Saltillo", "Saltillo", "Saltillo", "Ramos Arizpe", "Torreón", "Torreón", "Torreón", "Torreón", "San Pedro", "Frontera", "Monclova", "Múzquiz", "Sabinas", "Acuña", "Piedras Negras")
 dsi <- dsi[order(dsi$dsi),]
 
-
-
-
 summary(dsi$dsi)
+
+
+
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+
+
+
+
+
+## get functions to include population
+source(paste(dd, "code/getPop.r", sep = ""))
+pob05 <- get2005(edon=5)
+pob10 <- get2010(edon=5)
+
+head(pob05)
+head(pob10)
+head(d)
+
 
 
 
