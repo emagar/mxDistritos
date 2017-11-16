@@ -21,57 +21,57 @@ dim(cua1)
 
 
 
-# chihuahua
-colnames(cua1)
-cua1 <- cua1[,c("edon","seccion","munn","escenario3")]
-colnames(cua1) <- c("edon","seccion","munn","disn2018")
-
-# cambia nombres en datos de Omar
-head(cua2)
-table(cua2$merge)
-cua2$merge <- NULL
-colnames(cua2) <- c("disn2015","seccion","disn2013") # omar: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
-
-# fusiona
-cua <- merge(x = cua1, y = cua2, by = "seccion", all = TRUE)
-
-dim(cua)
-dim(cua1)
-dim(cua2)
-
-head(cua)
-table(cua$disn2015, cua$disn2018) # disn mismatch, me quedo con el núm de omar
-cua$disn2018 <- cua$disn2015; cua$disn2015 <- NULL
-
-write.csv(cua, file = "fuenteAlumnos/cuaLoc.csv", row.names = FALSE) 
-
-
+## # chihuahua
+## colnames(cua1)
+## cua1 <- cua1[,c("edon","seccion","munn","escenario3")]
+## colnames(cua1) <- c("edon","seccion","munn","disn2018")
+## 
+## # cambia nombres en datos de Omar
+## head(cua2)
+## table(cua2$merge)
+## cua2$merge <- NULL
+## colnames(cua2) <- c("disn2015","seccion","disn2013") # omar: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
+## 
+## # fusiona
+## cua <- merge(x = cua1, y = cua2, by = "seccion", all = TRUE)
+## 
+## dim(cua)
+## dim(cua1)
+## dim(cua2)
+## 
+## head(cua)
+## table(cua$disn2015, cua$disn2018) # disn mismatch, me quedo con el núm de omar
+## cua$disn2018 <- cua$disn2015; cua$disn2015 <- NULL
+## 
+## write.csv(cua, file = "fuenteAlumnos/cuaLoc.csv", row.names = FALSE) 
 
 
-# colima
-colnames(col1)
-col1 <- col1[,c("edon","seccion","munn","escenario3")]
-colnames(col1) <- c("edon","seccion","munn","disn2018")
 
-# cambia nombres en datos de Omar
-head(col2)
-table(col2$X_merge)
-col2$X_merge <- NULL
-colnames(col2) <- c("disn2016","seccion","disn2014") # omar: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
 
-# fusiona
-col <- merge(x = col1, y = col2, by = "seccion", all = TRUE)
-
-dim(col)
-dim(col1)
-dim(col2)
-
-head(col)
-
-table(col$disn2016, col$disn2018) # disn mismatch, me quedo con el núm de omar
-col$disn2018 <- col$disn2016; col$disn2016 <- NULL
-
-write.csv(col, file = "fuenteAlumnos/colLoc.csv", row.names = FALSE)
+## # colima
+## colnames(col1)
+## col1 <- col1[,c("edon","seccion","munn","escenario3")]
+## colnames(col1) <- c("edon","seccion","munn","disn2018")
+## 
+## # cambia nombres en datos de Omar
+## head(col2)
+## table(col2$X_merge)
+## col2$X_merge <- NULL
+## colnames(col2) <- c("disn2016","seccion","disn2014") # omar: investiga el año electoral inaugural del mapa abandonado (será el nombre definitivo) 
+## 
+## # fusiona
+## col <- merge(x = col1, y = col2, by = "seccion", all = TRUE)
+## 
+## dim(col)
+## dim(col1)
+## dim(col2)
+## 
+## head(col)
+## 
+## table(col$disn2016, col$disn2018) # disn mismatch, me quedo con el núm de omar
+## col$disn2018 <- col$disn2016; col$disn2016 <- NULL
+## 
+## write.csv(col, file = "fuenteAlumnos/colLoc.csv", row.names = FALSE)
 
 
 
@@ -101,11 +101,45 @@ cua$disn2018 <- cua$disn2017; cua$disn2017 <- NULL
 #write.csv(mor, file = "fuenteAlumnos/mor12Loc.csv", row.names = FALSE)
 
 
-rm(cua1,cua2,col1,col2,mor1,mor2) # limpieza
-ls()
 
-# omar:
-# 1. reporta/investiga los años electorales que puse arriba.
-# 2. corrige el proceso de fusión
-# 3. Prepara el código para obtener el índice s de cox y katz. 
+
+## # cua
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/cuaLoc.csv", stringsAsFactors = FALSE)
+## head(d) 
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2013", new="disloc2013", what=d)
+## d <- rename.col(old="disn2018", new="disloc2018", what=d)
+## #
+## # ---> NOTE:                                                                         <--- #
+## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+## 
+## write.csv(eq, file = "cuaLoc.csv", row.names = FALSE)
+
+
+## # col
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/colLoc.csv", stringsAsFactors = FALSE)
+## head(d) # dist_old year needed
+## 
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2014", new="disloc2014", what=d)
+## d <- rename.col(old="disn2018", new="disloc2018", what=d)
+## #
+## # ---> NOTE:                                                                         <--- #
+## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+## 
+## write.csv(eq, file = "colLoc.csv", row.names = FALSE)
 
