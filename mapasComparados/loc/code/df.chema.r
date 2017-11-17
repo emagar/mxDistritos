@@ -118,7 +118,8 @@ setwd(dd)
 ## # df33
 ## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
 ## d <- read.csv(file = "fuenteAlumnos/df33Loc.csv", stringsAsFactors = FALSE)
-## head(d) # dist_old year needed
+## head(d) 
+## colnames(d) <- c("seccion","edon","munn","disn2018","disn2012") # correct map years
 ## 
 ## # handy function to rename one data.frame's column
 ## rename.col <- function(old=NA, new=NA, what=NA){
@@ -126,7 +127,7 @@ setwd(dd)
 ##     colnames(what)[which(colnames(what)==old)] <- new
 ##     return(what)
 ## }
-## d <- rename.col(old="disn2015", new="disloc2015", what=d)
+## d <- rename.col(old="disn2012", new="disloc2012", what=d)
 ## d <- rename.col(old="disn2018", new="disloc2018", what=d)
 ## #
 ## # ---> NOTE:                                                                         <--- #
@@ -140,6 +141,7 @@ setwd(dd)
 ## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
 ## d <- read.csv(file = "fuenteAlumnos/df40Loc.csv", stringsAsFactors = FALSE)
 ## head(d) # dist_old year needed
+## colnames(d) <- c("seccion","edon","munn","disn2018","disn2012") # correct map years
 ## 
 ## # handy function to rename one data.frame's column
 ## rename.col <- function(old=NA, new=NA, what=NA){
@@ -147,7 +149,7 @@ setwd(dd)
 ##     colnames(what)[which(colnames(what)==old)] <- new
 ##     return(what)
 ## }
-## d <- rename.col(old="disn2015", new="disloc2015", what=d)
+## d <- rename.col(old="disn2012", new="disloc2012", what=d)
 ## d <- rename.col(old="disn2018", new="disloc2018", what=d)
 ## #
 ## # ---> NOTE:                                                                         <--- #
@@ -166,7 +168,7 @@ setwd(dd)
 ## # dsi seen from offspring perspective
 ## # new district's "father" and district similarity index, cf. Cox & Katz
 ## son    <- d$disloc2018
-## father <- d$disloc2015
+## father <- d$disloc2012
 ## N <- max(son, na.rm = TRUE)
 ## d$father <- NA
 ## d$dsi <- 0
@@ -195,7 +197,7 @@ setwd(dd)
 ## # dsi seen from offspring perspective
 ## # new district's "father" and district similarity index, cf. Cox & Katz
 ## son    <- d$disloc2018
-## father <- d$disloc2015
+## father <- d$disloc2012
 ## N <- max(son, na.rm = TRUE)
 ## d$father <- NA
 ## d$dsi <- 0
