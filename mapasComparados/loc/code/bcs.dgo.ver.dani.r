@@ -105,7 +105,7 @@ setwd(dd)
 ## 
 ## head(ver)
 ## 
-## write.csv(ver, file = "verLoc.csv", row.names = FALSE) # Daniel: usa éste para sacar el insice s de cox y katz
+## write.csv(ver, file = "verLoc.csv", row.names = FALSE)
 ## 
 ## 
 ## # prepara/exporta dsi
@@ -153,58 +153,11 @@ setwd(dd)
 ## 
 ## write.csv(dsi, file = "simIndex/dist_ver.csv", row.names = FALSE)
 
-## bcs
-## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
-d <- read.csv(file = "fuenteAlumnos/bcsLoc.csv", stringsAsFactors = FALSE)
-head(d) # dist_old year needed
-
-# handy function to rename one data.frame's column
-rename.col <- function(old=NA, new=NA, what=NA){
-    old <- old; new <- new; what <- what;
-    colnames(what)[which(colnames(what)==old)] <- new
-    return(what)
-}
-d <- rename.col(old="disn2005", new="disloc2005", what=d)
-d <- rename.col(old="disn2011", new="disloc2011", what=d)
-d <- rename.col(old="disn2018", new="disloc2017", what=d)
-#
-
-###################################################################################
-## NOTE:                                                                         ##
-## open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   ##
-## will generate new eq object with full map (incl. state and federal districts) ##
-###################################################################################
-
-write.csv(eq, file = "bcsLoc.csv", row.names = FALSE)
-
-# dgo
-## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
-d <- read.csv(file = "fuenteAlumnos/dgoLoc.csv", stringsAsFactors = FALSE)
-head(d) # dist_old year needed
-
-# handy function to rename one data.frame's column
-rename.col <- function(old=NA, new=NA, what=NA){
-    old <- old; new <- new; what <- what;
-    colnames(what)[which(colnames(what)==old)] <- new
-    return(what)
-}
-d <- rename.col(old="disn2005", new="disloc2005", what=d)
-d <- rename.col(old="disn2011", new="disloc2011", what=d)
-d <- rename.col(old="disn2017", new="disloc2017", what=d)
-#
-
-###################################################################################
-## NOTE:                                                                         ##
-## open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   ##
-## will generate new eq object with full map (incl. state and federal districts) ##
-###################################################################################
-
-write.csv(eq, file = "dgoLoc.csv", row.names = FALSE)
-
-## ## ver
+## ## bcs
 ## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
-## d <- read.csv(file = "fuenteAlumnos/verLoc.csv", stringsAsFactors = FALSE)
+## d <- read.csv(file = "fuenteAlumnos/bcsLoc.csv", stringsAsFactors = FALSE)
 ## head(d) # dist_old year needed
+## colnames(d) <- c("seccion","edon","munn","disn2018","disn2011") # correct maps years
 ## 
 ## # handy function to rename one data.frame's column
 ## rename.col <- function(old=NA, new=NA, what=NA){
@@ -212,7 +165,7 @@ write.csv(eq, file = "dgoLoc.csv", row.names = FALSE)
 ##     colnames(what)[which(colnames(what)==old)] <- new
 ##     return(what)
 ## }
-## d <- rename.col(old="disn2007", new="disloc2007", what=d)
+## d <- rename.col(old="disn2011", new="disloc2011", what=d)
 ## d <- rename.col(old="disn2018", new="disloc2018", what=d)
 ## #
 ## 
@@ -222,7 +175,119 @@ write.csv(eq, file = "dgoLoc.csv", row.names = FALSE)
 ## ## will generate new eq object with full map (incl. state and federal districts) ##
 ## ###################################################################################
 ## 
+## write.csv(eq, file = "bcsLoc.csv", row.names = FALSE)
+
+
+## # dgo
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/dgoLoc.csv", stringsAsFactors = FALSE)
+## head(d) # dist_old year needed
+## colnames(d) <- c("seccion","edon","munn","disn2016","disn2010") # correct map years
+## 
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2010", new="disloc2010", what=d)
+## d <- rename.col(old="disn2016", new="disloc2016", what=d)
+## #
+## 
+## ###################################################################################
+## ## NOTE:                                                                         ##
+## ## open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   ##
+## ## will generate new eq object with full map (incl. state and federal districts) ##
+## ###################################################################################
+## 
+## write.csv(eq, file = "dgoLoc.csv", row.names = FALSE)
+
+
+
+
+## ## ver
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/verLoc.csv", stringsAsFactors = FALSE)
+## head(d) #
+## colnames(d) <- c("seccion","edon","munn","disn2016","disn2007") # correct map years
+## 
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2007", new="disloc2007", what=d)
+## d <- rename.col(old="disn2016", new="disloc2016", what=d)
+## #
+## 
+## ###################################################################################
+## ## NOTE:                                                                         ##
+## ## open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   ##
+## ## will generate new eq object with full map (incl. state and federal districts) ##
+## ###################################################################################
+## 
 ## write.csv(eq, file = "verLoc.csv", row.names = FALSE)
+
+
+
+## ## prepare dsi
+## ## READ HISTORICAL MAP
+## d <- read.csv(file = "bcsLoc.csv", stringsAsFactors = FALSE)
+## head(d)
+## # dsi seen from offspring perspective
+## # new district's "father" and district similarity index, cf. Cox & Katz
+## son    <- d$disloc2018
+## father <- d$disloc2011
+## N <- max(son, na.rm = TRUE)
+## d$father <- NA
+## d$dsi <- 0
+## for (i in 1:N){
+##     #i <- 1 # debug
+##     sel.n <- which(son==i)                  # secciones in new district
+##     tmp <- table(father[sel.n])
+##     target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+##     d$father[sel.n] <- target
+##     sel.f <- which(father==target) # secciones in father district
+##     sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+##     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+## }
+## dsi <- d[duplicated(son)==FALSE,]
+## head(dsi)
+## dsi <- dsi[,c("edon","disloc2018","father","dsi")]
+## dsi <- dsi[order(dsi$dsi),]
+## 
+## write.csv(dsi, file = "simIndex/dist_bcs.csv", row.names = FALSE)
+
+
+
+## ## prepare dsi
+## ## READ HISTORICAL MAP
+## d <- read.csv(file = "dgoLoc.csv", stringsAsFactors = FALSE)
+## head(d)
+## # dsi seen from offspring perspective
+## # new district's "father" and district similarity index, cf. Cox & Katz
+## son    <- d$disloc2016
+## father <- d$disloc2010
+## N <- max(son, na.rm = TRUE)
+## d$father <- NA
+## d$dsi <- 0
+## for (i in 1:N){
+##     #i <- 1 # debug
+##     sel.n <- which(son==i)                  # secciones in new district
+##     tmp <- table(father[sel.n])
+##     target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+##     d$father[sel.n] <- target
+##     sel.f <- which(father==target) # secciones in father district
+##     sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+##     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+## }
+## dsi <- d[duplicated(son)==FALSE,]
+## head(dsi)
+## dsi <- dsi[,c("edon","disloc2016","father","dsi")]
+## dsi <- dsi[order(dsi$dsi),]
+## 
+## write.csv(dsi, file = "simIndex/dist_dgo.csv", row.names = FALSE)
 
 
 

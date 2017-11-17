@@ -122,8 +122,5 @@ if (length(select)>0){
     tmp$pick.from <- NULL
     eq[select,] <- tmp # paste back to dataset
 }
-
-rm(i,y,cols,sel,sel2,yrs,select,tmp,tmp2,tmp3) # housecleaning
-rm(target.yrs) # housecleaning
 #
 # END EQ PREP
