@@ -66,6 +66,7 @@ setwd(dd)
 ## dim(df40)
 ## 
 ## # ciudad de mex 33 distritos
+## OJO: SE USO CRITERIO 8, REGISTRADO 
 ## colnames(df1)
 ## df1 <- df1[,c("edon","seccion","munn","escenario3_c8")]
 ## colnames(df1) <- c("edon","seccion","munn","disn2018")

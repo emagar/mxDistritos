@@ -55,6 +55,7 @@ Resp: La probabilidad de que el problema que describes ocurra en tus tres estado
 
 
 # guerrero
+OJO: SE USO CRITERIO 8, NO CREO HABERLO REGISTRADO
 colnames(gue1)
 gue1 <- gue1[,c("edon","seccion","munn","escenario3_c8")]
 colnames(gue1) <- c("edon","seccion","munn","disn2018")

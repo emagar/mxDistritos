@@ -48,5 +48,3 @@ head(dsi)
 dsi <- dsi[order(dsi$dsi),]
 
 write.csv(dsi, file = "simIndex/dist_df33.csv", row.names = FALSE)
-
-
