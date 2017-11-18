@@ -3,12 +3,20 @@ rm(list = ls())
 dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/"
 setwd(dd)
 
-## ## PREPARES HISTORICAL MAP
-## ## u <- url("http://ericmagar.com/data/redistrict/subnat/coa/coaDisn14toDisn17.csv")
-## ## d <- read.csv(file = u, stringsAsFactors = FALSE)
+## PREPARES HISTORICAL MAP
+## u <- url("http://ericmagar.com/data/redistrict/subnat/coa/coaDisn14toDisn17.csv")
+## d <- read.csv(file = u, stringsAsFactors = FALSE)
+## d <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/coaLoc.csv", stringsAsFactors = FALSE)
+## d <- d[,c("edon","seccion","munn","escenario3","criterio8","cab")]
+## table(d$escenario3, d$criterio8) # OJO: SE USO CRITERIO 8; distritos idénticos a json, disn mismatch. ¿Quizás sólo cambiaron las cabeceras? ¿Por qué renumerías via criterio 8 sin cambio de límites?
+## d$escenario3 <- NULL # conservo disn que obtuve en http://cartografia.ife.org.mx//descargas/distritacion2017/local/05/D05.pdf
+## colnames(d) <- c("edon","seccion","munn","disn2017","cab")
+## head(d)
+## 
+## # this has final disn and 2014 map
 ## d <- read.csv(file = "fuenteAlumnos/eric.coaLoc.csv", stringsAsFactors = FALSE)
 ## colnames(d) <- c("seccion","munn","mun","disn2014","disn2017")
-## head(d)
+## 
 ## # add 2008 and 2011 maps
 ## d08 <- read.csv(file = "fuenteAlumnos/coa2008dlca.csv", stringsAsFactors = FALSE)
 ## ## d11 <- read.csv(file = "fuenteAlumnos/coa2011dlca.csv", stringsAsFactors = FALSE)

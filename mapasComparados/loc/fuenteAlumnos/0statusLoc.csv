@@ -1,41 +1,41 @@
-edon,edo,mapaLoc,listo,nota,status,,newMail,locMap ok,dsi ok,yrMapNew,yrMapOld
-9,df,chema,,,proyecto: reducción df mor tla,,listo,ok,ok,ok,ok
-28,tam,chema,,,proyecto: reducción df mor tla,líder,listo,espero mapa,,,
-13,hgo,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,,
-14,jal,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,,
-15,mex,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,,
-3,bcs,daniel,listo,equipo análisis,dsi,líder,listo,ok,ok,ok,ok
-10,dgo,daniel,listo,equipo análisis,dsi,,listo,ok,ok,ok,ok
-30,ver,daniel,listo,equipo análisis,dsi,,listo,ok,ok,ok,ok
-4,cam,eric,listo,coordina,ok,,listo,ok,ok,,
-5,coa,eric,listo,coordina,ok,,listo,ok,ok,,
-18,nay,eric,reasignar: daniel,,,,listo,espero mapa,,,
-1,ags,humberto,reasignar: daniel,,dsi,,listo,necesito año old,,,
-7,cps,humberto,reasignar: claudia,,dsi,,listo,ok,ok,,
-20,oax,humberto,reasignar: claudia,,dsi,,listo,ok,ok,,
-2,bc,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,,listo,ok,ok,ok,ok
-23,qui,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,,listo,,,,
-26,son,moises,mapeo,equipo análisis,sube/manda,líder,listo,,,,
-6,col,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,ok,ok,,
-8,cua,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,ok,ok,,
-17,mor,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,json no coincide c mapa publicado,,,
-25,sin,ruben,mapeo,equipo análisis,mapa fuenteAlumnos mal,,listo,,,,
-31,yuc,ruben,mapeo,equipo análisis,mapa fuenteAlumnos mal,,listo,,,,
-21,pue,santiago,,,mapa fuenteAlumnos mal,,listo,ok,ok,,
-22,que,veronica,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,
-24,san,veronica,reasignar: dani,equipo reporte,nuevo proyecto: origen reforma,,listo,,,,
-32,zac,veronica,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,
-11,gua,victor,error,,con Dalia Ceci,,,,,,
-12,gue,victor,error,,con Dalia Ceci,,,,,,
-19,nl,victor,error,,con Dalia Ceci,,,,,,
-16,mic,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,
-27,tab,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,
-29,tla,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,
-0,0,dalia,,,proyecto: alcaldes ambiciosos,líder,listo,,,,
-0,0,ceci,,,proyecto: alcaldes ambiciosos,,listo,,,,
-0,0,fernanda,,,proyecto: alcaldes ambiciosos,,listo,,,,
-0,0,samuel,,,,,listo,,,,
-0,0,emmanuel,,,proyecto: reducción df mor tla,,,,,,
-0,0,julio,,,mandará resultados,,listo,,,,
-,,,,,,,,,,,
-,,,,,,20dicEntrega,,,,,
+edon,edo,mapaLoc,listo,nota,status,,newMail,locMap ok,dsi ok,yrMapNew,yrMapOld,crit8
+9,df,chema,,,proyecto: reducción df mor tla,,listo,ok,ok,ok,ok,ok
+28,tam,chema,,,proyecto: reducción df mor tla,líder,listo,espero mapa,,,,
+13,hgo,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,,,
+14,jal,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,,,
+15,mex,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,,,
+3,bcs,daniel,listo,equipo análisis,dsi,líder,listo,ok,ok,ok,ok,no ok
+10,dgo,daniel,listo,equipo análisis,dsi,,listo,ok,ok,ok,ok,no ok
+30,ver,daniel,listo,equipo análisis,dsi,,listo,ok,ok,ok,ok,no ok
+4,cam,eric,listo,coordina,ok,,listo,ok,ok,,,
+5,coa,eric,listo,coordina,ok,,listo,ok,ok,ok,ok,ok
+18,nay,eric,reasignar: daniel,,,,listo,espero mapa,,,,
+1,ags,humberto,reasignar: daniel,,dsi,,listo,necesito año old,,,,
+7,cps,humberto,reasignar: claudia,,dsi,,listo,ok,ok,,,
+20,oax,humberto,reasignar: claudia,,dsi,,listo,ok,ok,,,
+2,bc,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,,listo,ok,ok,ok,ok,
+23,qui,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,,listo,,,,,
+26,son,moises,mapeo,equipo análisis,sube/manda,líder,listo,,,,,
+6,col,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,ok,ok,,,
+8,cua,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,ok,ok,,,
+17,mor,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,json no coincide c mapa publicado,,,,
+25,sin,ruben,mapeo,equipo análisis,mapa fuenteAlumnos mal,,listo,,,,,
+31,yuc,ruben,mapeo,equipo análisis,mapa fuenteAlumnos mal,,listo,,,,,check
+21,pue,santiago,,,mapa fuenteAlumnos mal,,listo,ok,ok,,,
+22,que,veronica,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,,
+24,san,veronica,reasignar: dani,equipo reporte,nuevo proyecto: origen reforma,,listo,,,,,check
+32,zac,veronica,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,,check
+11,gua,victor,error,,con Dalia Ceci,,,,,,,
+12,gue,victor,error,,con Dalia Ceci,,,,,,,
+19,nl,victor,error,,con Dalia Ceci,,,,,,,
+16,mic,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,,
+27,tab,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,,
+29,tla,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,ok,ok,ok
+0,0,dalia,,,proyecto: alcaldes ambiciosos,líder,listo,,,,,
+0,0,ceci,,,proyecto: alcaldes ambiciosos,,listo,,,,,
+0,0,fernanda,,,proyecto: alcaldes ambiciosos,,listo,,,,,
+0,0,samuel,,,,,listo,,,,,
+0,0,emmanuel,,,proyecto: reducción df mor tla,,,,,,,
+0,0,julio,,,mandará resultados,,listo,,,,,
+,,,,,,,,,,,,
+,,,,,,20dicEntrega,,,,,,
