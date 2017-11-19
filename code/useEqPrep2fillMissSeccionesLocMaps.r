@@ -5,7 +5,7 @@
 ######################################################
 
 ## MERGE TO tablaEquivalenciaSeccional TO GET FED MAP AND FILL MISSING SECCIONES
-edon <- 15 # set a state number 1:32
+edon <- 8 # set a state number 1:32
 edo <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")
 message("Working with ", edon, "=", edo[edon], sep = "")
 
@@ -38,4 +38,4 @@ eq <- rename.col(old = "disfed2003", new = "disfed1997", what = eq) # gets oldes
 eq <- rename.col(old = "disfed2015", new = "disfed2006", what = eq)
 # colnames(eq) # inspect
 
-# NO BACK TO LOCAL MAP PREP SCRIPT
+# NOW BACK TO LOCAL MAP PREP SCRIPT
