@@ -18,7 +18,7 @@ dim(bc1)
 
 ## # bc
 ## colnames(bc1)
-## bc1 <- bc1[,c("edon","seccion","munn","escenario1")]
+## bc1 <- bc1[,c("edon","seccion","munn","escenario3")]
 ## colnames(bc1) <- c("edon","seccion","munn","disn2016pre")
 ## 
 ## # verifica integridad de las primeras dos columnas de los datos de Santi

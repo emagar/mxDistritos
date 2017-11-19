@@ -4,21 +4,21 @@ edon,edo,mapaLoc,listo,nota,status,,newMail,locMap ok,dsi ok,yrMapNew,yrMapOld,c
 13,hgo,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,ok,verificar,jge ok?
 14,jal,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,ok,verificar,jge ok?
 15,mex,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,ok,ok,no ok
-3,bcs,daniel,listo,equipo análisis,dsi,líder,listo,ok,ok,ok,verificar,no ok
-10,dgo,daniel,listo,equipo análisis,dsi,,listo,ok,ok,ok,verificar,no ok
+3,bcs,daniel,listo,equipo análisis,dsi,líder,listo,ok,ok,ok,ok,no ok
+10,dgo,daniel,listo,equipo análisis,dsi,,listo,ok,ok,ok,ok,no ok
 30,ver,daniel,listo,equipo análisis,dsi,,listo,ok,ok,ok,ok,no ok
 4,cam,eric,listo,coordina,ok,,listo,ok,ok,ok,verificar,no ok
 5,coa,eric,listo,coordina,ok,,listo,ok,ok,ok,ok,sí ok
 18,nay,daniel,reasignar: daniel,,,,listo,espero mapa,,,,
-1,ags,humberto,reasignar: daniel,,dsi,,listo,necesito año old,,,,
+1,ags,humberto,reasignar: daniel,,dsi,,listo,necesito año old,ok,ok,verificar,no ok
 7,cps,humberto,reasignar: claudia,,dsi,,listo,ok,ok,ok,verificar,no ok
 20,oax,humberto,reasignar: claudia,,dsi,,listo,ok,ok,ok,verificar,no ok
 2,bc,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,,listo,ok,ok,ok,verificar,no ok
 23,qui,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,,listo,,,,,
 26,son,moises,mapeo,equipo análisis,sube/manda,líder,listo,,,,,
 6,col,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,ok,ok,,,
-8,cua,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,ok,ok,,,
-17,mor,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,json no coincide c mapa publicado,,,,
+8,cua,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,ok,ok,ok,verificar,no ok
+17,mor,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,json no coincide c mapa publicado,ok,ok,verificar,no ok
 25,sin,ruben,mapeo,equipo análisis,mapa fuenteAlumnos mal,,listo,,,,,
 31,yuc,ruben,mapeo,equipo análisis,mapa fuenteAlumnos mal,,listo,,,,,sí check
 21,pue,santiago,,,mapa fuenteAlumnos mal,,listo,ok,ok,,,
