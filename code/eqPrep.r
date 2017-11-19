@@ -44,7 +44,7 @@ if (length(select)>0){
         cols <- cols[which(yrs<=target.yrs[y])]
         sel2 <- which(tmp$when==target.yrs[y])
         for (i in 1:length(cols)){
-                                        #i <- 3 # debug
+            #i <- 3 # debug
             if (Mode(eq[tmp$pick.from[sel2], cols[i]])==0) next # skip if no info (accounts for reseccionamientos same yr but /before/ state election, eg. coa2005)
             tmp[sel2, cols[i]] <- eq[tmp$pick.from[sel2], cols[i]]
         }
@@ -90,7 +90,8 @@ if (length(select)>0){
 #############################################################################
 ## Fills which district merged secciones would have belonged to afterwards ##
 #############################################################################
-select <- which(eq$action=="merged" & eq$fr.to=="to" & is.na(eq$orig.dest)==FALSE & eq$when<2014) # new secciones that have info
+#select <- which(eq$action=="merged" & eq$fr.to=="to" & is.na(eq$orig.dest)==FALSE & eq$when<2014) # why did I restrict to <2014?
+select <- which(eq$action=="merged" & eq$fr.to=="to" & is.na(eq$orig.dest)==FALSE) # new secciones that have info
 if (length(select)>0){
     tmp <- eq[select,]
     #
