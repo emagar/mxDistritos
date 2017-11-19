@@ -4,12 +4,6 @@ dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc
 # dd <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc"
 setwd(dd)
 
-tmp <- dir()
-sel <- grep(pattern = "(bc|qui)Loc.csv", x = tmp)
-if (length(sel)>0) {
-    bc <- read.csv(file = tmp[sel[1]], stringsAsFactors = FALSE);    qui <- read.csv(file = tmp[sel[2]], stringsAsFactors = FALSE);
-}
-
 # Estos son los archivos que circuló Santi
 bc2 <- read.csv("fuenteAlumnos/MapaBajaCaliforniaCorregido.csv", stringsAsFactors = FALSE)
 qui2 <- read.csv("fuenteAlumnos/quiasco.redis.csv", stringsAsFactors = FALSE)
@@ -24,13 +18,13 @@ dim(bc1)
 
 ## # bc
 ## colnames(bc1)
-## bc1 <- bc1[,c("edon","seccion","munn","escenario3")]
+## bc1 <- bc1[,c("edon","seccion","munn","escenario1")]
 ## colnames(bc1) <- c("edon","seccion","munn","disn2016pre")
 ## 
 ## # verifica integridad de las primeras dos columnas de los datos de Santi
 ## colnames(bc2)
+## colnames(bc2) <- c("edon", "seccion","disn2016","disn2013","munn","cab")
 ## bc2$edon <- NULL; bc2$munn <- NULL
-## colnames(bc2) <- c("seccion","disn2016","disn2013","munn","cab")
 ## bc <- merge(x= bc1, y = bc2, by = "seccion", all = TRUE)
 ## 
 ## dim(bc)
@@ -38,7 +32,7 @@ dim(bc1)
 ## dim(bc2)
 ## 
 ## head(bc)
-## table(bc$disn2016pre, bc$disn2016) # números de Santi son los buenos
+## table(bc$disn2016pre, bc$disn2016) # números de Santi son los que reporta ine
 ## bc$disn2016pre <- NULL
 ## 
 ## write.csv(bc, file = "fuenteAlumnos/bcLoc.csv", row.names = FALSE) 
@@ -115,4 +109,6 @@ write.csv(qui, file = "fuenteAlumnos/quiLoc.csv", row.names = FALSE)
 ## dsi <- dsi[order(dsi$dsi),]
 ## 
 ## write.csv(dsi, file = "simIndex/dist_bc.csv", row.names = FALSE)
+
+
 
