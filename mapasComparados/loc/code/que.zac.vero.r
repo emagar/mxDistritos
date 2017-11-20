@@ -109,6 +109,9 @@ dim(que1)
 ## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
 ## d <- read.csv(file = "fuenteAlumnos/zacLoc.csv", stringsAsFactors = FALSE)
 ## head(d) # dist_old year needed
+## table(d$disn2018, d$crit8) # again, criterio 8 only changes disn (taken from http://cartografia.ife.org.mx//descargas/distritacion2017/local/32/D32.pdf)
+## d$disn2018 <- d$crit8
+## d$crit8 <- NULL
 ## 
 ## # handy function to rename one data.frame's column
 ## rename.col <- function(old=NA, new=NA, what=NA){
@@ -117,7 +120,7 @@ dim(que1)
 ##     return(what)
 ## }
 ## d <- rename.col(old="disn2013", new="disloc2013", what=d)
-## d <- rename.col(old="disn2018", new="disloc2018", what=d)
+## d <- rename.col(old="disn2018", new="disloc2016", what=d) # new map in 2016
 ## #
 ## # ---> NOTE:                                                                         <--- #
 ## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
@@ -150,8 +153,8 @@ dim(que1)
 ## }
 ## dsi <- d[duplicated(son)==FALSE,]
 ## dsi <- dsi[,c("edon","disloc2018","father","dsi")]
-## head(dsi)
 ## dsi <- dsi[order(dsi$dsi),]
+## head(dsi)
 ## 
 ## write.csv(dsi, file = "simIndex/dist_que.csv", row.names = FALSE)
 
@@ -163,7 +166,7 @@ dim(que1)
 ## head(d)
 ## # dsi seen from offspring perspective
 ## # new district's "father" and district similarity index, cf. Cox & Katz
-## son    <- d$disloc2018
+## son    <- d$disloc2016
 ## father <- d$disloc2013
 ## N <- max(son, na.rm = TRUE)
 ## d$father <- NA
@@ -178,10 +181,12 @@ dim(que1)
 ##     sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
 ##     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
 ## }
+## #dsi <- d # debug
 ## dsi <- d[duplicated(son)==FALSE,]
-## dsi <- dsi[,c("edon","disloc2018","father","dsi")]
-## head(dsi)
+## dsi <- dsi[,c("edon","disloc2016","father","dsi")]
 ## dsi <- dsi[order(dsi$dsi),]
+## head(dsi)
 ## 
 ## write.csv(dsi, file = "simIndex/dist_zac.csv", row.names = FALSE)
+
 
