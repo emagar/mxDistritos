@@ -1,41 +1,37 @@
-edon,edo,mapaLoc,listo,nota,status,,newMail,locMap ok,dsi ok,yrMapNew,yrMapOld,crit8
-9,df,chema,,,proyecto: reducción df mor tla,,listo,ok,ok,ok,ok,sí ok
-28,tam,chema,,,proyecto: reducción df mor tla,líder,listo,espero mapa,,,,
-13,hgo,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,ok,verificar,jge ok?
-14,jal,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,ok,verificar,jge ok?
-15,mex,claudia,listo,equipo análisis,proyecto: reducción df mor tla,,listo,ok,ok,ok,ok,no ok
-3,bcs,daniel,listo,equipo análisis,dsi,líder,listo,ok,ok,ok,ok,no ok
-10,dgo,daniel,listo,equipo análisis,dsi,,listo,ok,ok,ok,ok,no ok
-30,ver,daniel,listo,equipo análisis,dsi,,listo,ok,ok,ok,ok,no ok
-4,cam,eric,listo,coordina,ok,,listo,ok,ok,ok,verificar,no ok
-5,coa,eric,listo,coordina,ok,,listo,ok,ok,ok,ok,sí ok
-18,nay,daniel,reasignar: daniel,,,,listo,espero mapa,,,,
-1,ags,humberto,reasignar: daniel,,dsi,,listo,necesito año old,ok,ok,verificar,no ok
-7,cps,humberto,reasignar: claudia,,dsi,,listo,ok,ok,ok,verificar,no ok
-20,oax,humberto,reasignar: claudia,,dsi,,listo,ok,ok,ok,verificar,no ok
-2,bc,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,,listo,ok,ok,ok,verificar,no ok
-23,qui,mario,Reasignar: Santiago,,proyecto: alcaldes ambiciosos,,listo,,,,,
-26,son,moises,mapeo,equipo análisis,sube/manda,líder,listo,,,,,
-6,col,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,ok,ok,,,
-8,cua,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,ok,ok,ok,verificar,no ok
-17,mor,omar,reasignar: eric,,proyecto: alcaldes ambiciosos,,listo,json no coincide c mapa publicado,ok,ok,verificar,no ok
-25,sin,ruben,mapeo,equipo análisis,mapa fuenteAlumnos mal,,listo,,,,,
-31,yuc,ruben,mapeo,equipo análisis,mapa fuenteAlumnos mal,,listo,,,,,sí check
-21,pue,santiago,,,mapa fuenteAlumnos mal,,listo,ok,ok,,,
-22,que,veronica,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,ok,verificar,no ok
-24,san,veronica,reasignar: dani,equipo reporte,nuevo proyecto: origen reforma,,listo,,,,,sí check
-32,zac,veronica,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,ok,verificar,ok
-11,gua,victor,error,,con Dalia Ceci,,,,,,,
-12,gue,victor,error,,con Dalia Ceci,,,,,,,
-19,nl,victor,error,,con Dalia Ceci,,,,,,,
-16,mic,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,,
-27,tab,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,,,
-29,tla,zabel,listo,equipo reporte,nuevo proyecto: origen reforma,,listo,ok,ok,ok,ok,sí ok
-0,0,dalia,,,proyecto: alcaldes ambiciosos,líder,listo,,,,,
-0,0,ceci,,,proyecto: alcaldes ambiciosos,,listo,,,,,
-0,0,fernanda,,,proyecto: alcaldes ambiciosos,,listo,,,,,
-0,0,samuel,,,,,listo,,,,,
-0,0,emmanuel,,,proyecto: reducción df mor tla,,,,,,,
-0,0,julio,,,mandará resultados,,listo,,,,,
-,,,,,,,,,,,,
-,,,,,,20dicEntrega,,,,,,
+edon,edo,quien1,quien2,tengoFuentes,dsi ok,yrMapNew,yrMapOld,crit8,focus
+1,ags,humberto,eric,ok,ok,ok,verificar,no ok,
+2,bc,mario,santi,ok,ok,ok,verificar,no ok,
+3,bcs,daniel,daniel,ok,ok,ok,ok,no ok,
+4,cam,eric,eric,ok,ok,ok,verificar,no ok,
+5,coa,eric,eric,ok,ok,ok,ok,sí ok,← reelegió
+6,col,omar,,ok,ok,ok,verificar,derfe ok,← redistritó antes q INE
+7,cps,humberto,claudia,ok,ok,ok,verificar,no ok,
+8,cua,omar,eric,ok,ok,ok,verificar,no ok,
+9,df33,chema,eric,ok,ok,ok,ok,sí ok,← redujo SMDs
+9,df40,chema,eric,ok,ok,ok,ok,sí ok,← redujo SMDs
+10,dgo,daniel,daniel,ok,ok,ok,ok,no ok,
+11,gua,victor,,error,,,,,
+12,gue,victor,,error,,,,,
+13,hgo,claudia,listo,ok,ok,ok,verificar,jge ok?,
+14,jal,claudia,claudia,ok,ok,ok,verificar,jge ok?,
+15,mex,claudia,claudia,ok,ok,ok,ok,no ok,
+16,mic,zabel,,ok,ok,,,,
+17,mor12,omar,eric,ok,ok,ok,verificar,no ok,← redujo SMDs
+17,mor18,omar,,ok,ok,ok,verificar,no ok,← redujo SMDs
+18,nay,daniel,daniel,,,,,,← demarcaciones
+19,nl,victor,,,,,,,
+20,oax,humberto,claudia,ok,ok,ok,verificar,no ok,
+20,oaxTrife,0,eric,ok,ok,ok,verificar,no ok,
+21,pue,santiago,,ok,ok,,,,
+22,que,veronica,,ok,ok,ok,verificar,no ok,
+23,qui,mario,santi,,,,,,
+24,san,veronica,daniel,,,,,sí check,
+25,sin,ruben,,,,,,,
+26,son,moises,,,,,,,
+27,tab,zabel,,ok,ok,,,,
+28,tam,chema,,,,,,,
+29,tla15,zabel,eric,ok,ok,ok,ok,sí ok,← redujo SMDs
+29,tla19,zabel,eric,ok,ok,ok,ok,sí ok,← redujo SMDs
+30,ver,daniel,daniel,ok,ok,ok,ok,no ok,
+31,yuc,ruben,,,,,,sí check,
+32,zac,veronica,eric,ok,ok,ok,verificar,ok,
