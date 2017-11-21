@@ -1,0 +1,85 @@
+Codebook,,,
+edo,edon,Escenario3,
+Aguascalientes,1,dis6.1.100,
+Baja California,2,dis6.2.100,
+Baja California Sur,3,dis40.3.100,
+Campeche,4,dis49.4.157,
+Coahuila,5,dis32.5.100,
+Colima,6,dis40.6.100,
+Chiapas,7,dis56.7.157,
+Chihuahua,8,dis23.8.100,
+Distrito Federal 40,9,,
+Distrito Federal 33,9,dis77.9.157.x,
+Durango,10,dis6.10.100,
+Guanajuato,11,dis53.11.157,
+Guerrero,12,dis53.12.157,
+Hidalgo,13,dis15.13.157,
+Jalisco,14,dis56.14.157,
+México,15,dis40.15.100,
+Michoacán,16,dis53.16.157,
+Morelos 18,17,,
+Morelos 12,17,dis79.17.157.x,
+Nayarit,18,dis33.18.100,
+Nuevo León,19,dis40.19.100,
+Oaxaca,20,dis13.20.19,
+Puebla,21,dis28.21.100,
+Querétaro,22,dis56.22.157,
+Quintana Roo,23,dis29.23.100,
+San Luis Potosí,24,dis49.24.157,
+Sinaloa,25,dis9.25.100,
+Sonora,26,dis49.26.157.x,
+Tabasco,27,dis49.27.157,
+Tamaulipas,28,dis6.28.100,
+Tlaxcala 19,29,,
+Tlaxcala 15,29,dis22.29.100,
+Veracruz,30,dis8.30.100,
+Yucatán,31,dis49.31.157,
+Zacatecas,32,dis6.32.100,
+,,,
+,,,
+,,,
+,,,
+Escenarios definitivos,,,
+CDMX Escenario 3 criterio 8 (33),escenario3_c8,dis77.9.157.x,
+MOR JGE,escenario3_jge,dis79.17.157.x,
+GUE Escenario 3 criterio 8,escenario3_c8,dis53.12.157,
+HGO CG,escenario3_cg,dis15.13.157,
+OAX Tribunal,escenario3_tribunal,dis13.20.19,
+SON CG,escenario3_cg,dis49.26.157.x,
+,,,
+Clave cartografía,Partido,Federal/Local,
+19,Tribunal,Tribunal,
+32,PAN,CLV,Local
+33,PRI,CLV,Local
+34,PRD,CLV,Local
+35,PT,CLV,Local
+36,PVEM,CLV,Local
+37,MC,CLV,Local
+38,PANAL,CLV,Local
+39,MORENA,CLV,Local
+40,PH,CLV,Local
+41,PES,CLV,Local
+42,PAN,CNV,Nacional
+43,PRI,CNV,Nacional
+44,PRD,CNV,Nacional
+45,PT,CNV,Nacional
+46,PVEM,CNV,Nacional
+47,MC,CNV,Nacional
+48,PANAL,CNV,Nacional
+49,MORENA,CNV,Nacional
+50,PH,CNV,Nacional
+51,PES,CNV,Nacional
+100,E1,Escenario1,Nacional
+101,IEE,IEE,Instituto Electoral Estatal
+102,PAN,IEE,Instituto Electoral Estatal
+103,PRI,IEE,Instituto Electoral Estatal
+104,PRD,IEE,Instituto Electoral Estatal
+105,PT,IEE,Instituto Electoral Estatal
+106,PVEM,IEE,Instituto Electoral Estatal
+107,MC,IEE,Instituto Electoral Estatal
+108,PANAL,IEE,Instituto Electoral Estatal
+109,MORENA,IEE,Instituto Electoral Estatal
+110,PH,IEE,Instituto Electoral Estatal
+111,PES,IEE,Instituto Electoral Estatal
+112,CEV,CEV,Comisión Estatal de Vigilancia 
+157,E2 o E3,escenario2 o escenario3,

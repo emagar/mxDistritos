@@ -1,0 +1,26 @@
+# fix secciones missing in some map but not others
+#which(is.na(d$munn)==TRUE)
+for (i in 1:max(d$munn)){
+    i <- 2 # debug
+    sel <- which(d$munn==i)
+    d.ss <- d[sel,] # subset
+    sel.ss <- which(is.na(d.ss$disn2005)==TRUE | is.na(d.ss$disn2011)==TRUE | is.na(d.ss$disn2017)==TRUE) # secciones missing in one+ maps
+    if (length(sel.ss)==0) next # skip if no NAs
+    # 2005
+    tmp <- unique(d.ss$disn2005[!is.na(d.ss$disn2005)]) # municipios in district other than NAs
+    if (length(tmp)==1) {d.ss$disn2005 <- tmp} # skip if municipio split in several districts else replace NAs with single value
+    # 2011
+    tmp <- unique(d.ss$disn2011[!is.na(d.ss$disn2011)]) # municipios in district other than NAs
+    if (length(tmp)==1) {d.ss$disn2011 <- tmp} # skip if municipio split in several districts else replace NAs with single value
+    # 2017
+    tmp <- unique(d.ss$disn2017[!is.na(d.ss$disn2017)]) # municipios in district other than NAs
+    if (length(tmp)==1) {d.ss$disn2017 <- tmp} # skip if municipio split in several districts else replace NAs with single value
+    #
+    d[sel,] <- d.ss # return subset
+}
+
+
+apply(d.ss[,c("disn2005","disn2011","disn2017")] , 2, function(x)unique(x[!is.na(x)])) # identifica valores unicos en cada columna de distritos
+
+
+write.csv(d, file = "coaLoc2.csv", row.names = FALSE)
