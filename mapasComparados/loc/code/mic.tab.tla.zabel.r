@@ -12,16 +12,16 @@ setwd(dd)
 ##     tla <- read.csv(file = tmp[sel[3]], stringsAsFactors = FALSE);
 ## }
 
-## # Estos son los archivos que circuló Zabel
-## mic2 <- read.csv("fuenteAlumnos/michoacan.redis.csv", stringsAsFactors = FALSE)
-## tab2 <- read.csv("fuenteAlumnos/tabasco.redis.csv", stringsAsFactors = FALSE)
-## tla2 <- read.csv("fuenteAlumnos/tlaxcala.redis.csv", stringsAsFactors = FALSE)
-## 
-## # Estos son los archivos originales
-## mic1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/micLoc.csv", stringsAsFactors = FALSE)
-## tab1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tabLoc.csv", stringsAsFactors = FALSE)
-## tla19 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tla19Loc.csv", stringsAsFactors = FALSE)
-## tla15 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tla15Loc.csv", stringsAsFactors = FALSE)
+# Estos son los archivos que circuló Zabel
+mic2 <- read.csv("fuenteAlumnos/michoacan.redis.csv", stringsAsFactors = FALSE)
+tab2 <- read.csv("fuenteAlumnos/tabasco.redis.csv", stringsAsFactors = FALSE)
+tla2 <- read.csv("fuenteAlumnos/tlaxcala.redis.csv", stringsAsFactors = FALSE)
+
+# Estos son los archivos originales
+mic1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/micLoc.csv", stringsAsFactors = FALSE)
+tab1 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tabLoc.csv", stringsAsFactors = FALSE)
+tla19 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tla19Loc.csv", stringsAsFactors = FALSE)
+tla15 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tla15Loc.csv", stringsAsFactors = FALSE)
 ## 
 ## head(mic2)
 ## dim(mic2)
@@ -96,7 +96,7 @@ setwd(dd)
 ## 
 ## # verifica integridad de las primeras dos columnas de los datos de zabel
 ## colnames(tla2)
-## max(tla2$distrito17)
+## max(tla2$distrito12) # problemo!!
 ## tla21 <- tla2[,c("seccion17","distrito17")]
 ## tmp <- merge(x= tla15, y = tla21, by.x = "seccion", by.y = "seccion17", all = TRUE)
 ## nrow(tmp)==nrow(tla21) # must be TRUE
@@ -116,7 +116,7 @@ setwd(dd)
 ## 
 ## head(tla)
 ## 
-## write.csv(tla, file = "fuenteAlumnos/tla19Loc.csv", row.names = FALSE) # Zabel: usa éste para sacar el insice s de cox y katz
+## write.csv(tla, file = "fuenteAlumnos/tla19Loc.csv", row.names = FALSE)
 
 ## # version 15 distritos
 ## tla <- merge(x= tla15, y = tla22, by.x = "seccion", by.y = "seccion12", all = TRUE)
@@ -129,7 +129,7 @@ setwd(dd)
 ## table(tla$disn2016pre, tla$disn2016) # OJO: SE USO CRITERIO 8; distritos idénticos a json, disn mismatch. ¿Quizás sólo cambiaron las cabeceras? ¿Por qué renumerías via criterio 8?
 ## tla$disn2016pre <- NULL # conserva el disn de http://cartografia.ife.org.mx//descargas/distritacion2017/local/29/D29.pdf (que debería ser el del criterio 8)
 ## 
-## write.csv(tla, file = "fuenteAlumnos/tla15Loc.csv", row.names = FALSE) # Zabel: usa éste para sacar el insice s de cox y katz
+## write.csv(tla, file = "fuenteAlumnos/tla15Loc.csv", row.names = FALSE)
 
 
 ## ## tla 15
@@ -172,6 +172,7 @@ setwd(dd)
 ## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
 ## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
 ## 
+## max(eq$disloc2016)
 ## write.csv(eq, file = "tla19Loc.csv", row.names = FALSE)
 
 
