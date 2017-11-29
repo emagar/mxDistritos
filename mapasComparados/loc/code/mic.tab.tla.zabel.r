@@ -177,24 +177,24 @@ tla15 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tla15
 
 
 
-## # mic
-## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
-## d <- read.csv(file = "fuenteAlumnos/micLoc.csv", stringsAsFactors = FALSE)
-## head(d) 
-## # handy function to rename one data.frame's column
-## rename.col <- function(old=NA, new=NA, what=NA){
-##     old <- old; new <- new; what <- what;
-##     colnames(what)[which(colnames(what)==old)] <- new
-##     return(what)
-## }
-## d <- rename.col(old="disn2012", new="disloc2012", what=d)
-## d <- rename.col(old="disn2018", new="disloc2018", what=d)
-## #
-## # ---> NOTE:                                                                         <--- #
-## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
-## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
-## 
-## write.csv(eq, file = "micLoc.csv", row.names = FALSE)
+# mic
+## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+d <- read.csv(file = "fuenteAlumnos/micLoc.csv", stringsAsFactors = FALSE)
+head(d) 
+# handy function to rename one data.frame's column
+rename.col <- function(old=NA, new=NA, what=NA){
+    old <- old; new <- new; what <- what;
+    colnames(what)[which(colnames(what)==old)] <- new
+    return(what)
+}
+d <- rename.col(old="disn2012", new="disloc2012", what=d)
+d <- rename.col(old="disn2018", new="disloc2018", what=d)
+#
+# ---> NOTE:                                                                         <--- #
+# ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+# ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+
+write.csv(eq, file = "micLoc.csv", row.names = FALSE)
 
 
 
