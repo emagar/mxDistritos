@@ -88,100 +88,109 @@ tla15 <- read.csv("../../redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tla15
 ## 
 ## write.csv(tab, file = "tabLoc.csv", row.names = FALSE) # Zabel: usa éste para sacar el insice s de cox y katz
 
-# tlaxcala
-colnames(tla19)
-tla19 <- tla19[,c("edon","seccion","munn","escenario3")]
-colnames(tla19) <- c("edon","seccion","munn","disn2016") # OJO: MAPA NUEVO ES disn2016
-colnames(tla15)
-tla15 <- tla15[,c("edon","seccion","munn","escenario3","criterio8","cab")]
-colnames(tla15) <- c("edon","seccion","munn","disn2016pre","disn2016","cab") # Se usó criterio 8
+## # tlaxcala
+## colnames(tla19)
+## tla19 <- tla19[,c("edon","seccion","munn","escenario3")]
+## colnames(tla19) <- c("edon","seccion","munn","disn2016") # OJO: MAPA NUEVO ES disn2016
+## colnames(tla15)
+## tla15 <- tla15[,c("edon","seccion","munn","escenario3","criterio8","cab")]
+## colnames(tla15) <- c("edon","seccion","munn","disn2016pre","disn2016","cab") # Se usó criterio 8
 
-# verifica integridad de las primeras dos columnas de los datos de zabel
-colnames(tla2)
-max(tla2$distrito12) # problemo!!
-tla21 <- tla2[,c("seccion17","distrito17")]
-tmp <- merge(x= tla15, y = tla21, by.x = "seccion", by.y = "seccion17", all = TRUE)
-nrow(tmp)==nrow(tla21) # must be TRUE
-rm(tla21)
+## # verifica integridad de las primeras dos columnas de los datos de zabel
+## colnames(tla2)
+## max(tla2$distrito12) # problemo!!
+## tla21 <- tla2[,c("seccion17","distrito17")]
+## tmp <- merge(x= tla15, y = tla21, by.x = "seccion", by.y = "seccion17", all = TRUE)
+## nrow(tmp)==nrow(tla21) # must be TRUE
+## rm(tla21)
 
-# fusiona siguientes dos columnas
-tla22 <- tla2[,c("seccion12","distrito12")]
-colnames(tla22) <- c("seccion12","disn2012")
-tla22 <- tla22[is.na(tla22$seccion12)==FALSE,] # quita NAs
+## # fusiona siguientes dos columnas
+## tla22 <- tla2[,c("seccion12","distrito12")]
+## colnames(tla22) <- c("seccion12","disn2012")
+## tla22 <- tla22[is.na(tla22$seccion12)==FALSE,] # quita NAs
 
-# version 19 distritos
-tla <- merge(x= tla19, y = tla22, by.x = "seccion", by.y = "seccion12", all = TRUE)
+## # version 19 distritos
+## tla <- merge(x= tla19, y = tla22, by.x = "seccion", by.y = "seccion12", all = TRUE)
 
-dim(tla)
-dim(tla19)
-dim(tla22)
+## dim(tla)
+## dim(tla19)
+## dim(tla22)
 
-# preguntar a julio qué son sus columnas disloc2012 y disloc2015
-colnames(tla3)
-colnames(tla)
-tmp <- merge(x = tla, y = tla3[,c("seccion","disloc2012","disloc2015")], all = TRUE)
-table(tmp$disn2012==tmp$disloc2012)
-table(tmp$disn2016==tmp$disloc2015)
-head(tmp)
+## # preguntar a julio qué son sus columnas disloc2012 y disloc2015
+## dim(tla3)
+## colnames(tla3)
+## tla3$disn2013 <- tla3$disloc2015 # map used in 2013
+## tla3 <- tla3[,c("seccion","disn2013")]
+## tla <- merge(x = tla, y = tla3, all = TRUE)
+## head(tla)
 
-write.csv(tla, file = "fuenteAlumnos/tla19Loc.csv", row.names = FALSE)
+## table(tla$disn2013, tla$disn2016)
+## table(tla$disn2012) # wrong: drop
+## tla$disn2012 <- NULL
+## head(tla)
 
-# version 15 distritos
-tla <- merge(x= tla15, y = tla22, by.x = "seccion", by.y = "seccion12", all = TRUE)
+## write.csv(tla, file = "fuenteAlumnos/tla19Loc.csv", row.names = FALSE)
 
-dim(tla)
-dim(tla19)
-dim(tla22)
+## # version 15 distritos
+## tla <- merge(x= tla15, y = tla22, by.x = "seccion", by.y = "seccion12", all = TRUE)
 
-head(tla)
-table(tla$disn2016pre, tla$disn2016) # OJO: SE USO CRITERIO 8; distritos idénticos a json, disn mismatch. ¿Quizás sólo cambiaron las cabeceras? ¿Por qué renumerías via criterio 8?
-tla$disn2016pre <- NULL # conserva el disn de http://cartografia.ife.org.mx//descargas/distritacion2017/local/29/D29.pdf (que debería ser el del criterio 8)
+## dim(tla)
+## dim(tla19)
+## dim(tla22)
 
-write.csv(tla, file = "fuenteAlumnos/tla15Loc.csv", row.names = FALSE)
+## head(tla)
+## table(tla$disn2016pre, tla$disn2016) # OJO: SE USO CRITERIO 8
+## tla$disn2016pre <- NULL # conserva el disn de http://cartografia.ife.org.mx//descargas/distritacion2017/local/29/D29.pdf (que debería ser el del criterio 8)
 
+## tla <- merge(x = tla, y = tla3, by = "seccion", all = TRUE)
+## tla$disn2012 <- NULL
+## colnames(tla)
 
-## tla 15
-## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
-d <- read.csv(file = "fuenteAlumnos/tla15Loc.csv", stringsAsFactors = FALSE)
-head(d) # dist_old year needed
-
-# handy function to rename one data.frame's column
-rename.col <- function(old=NA, new=NA, what=NA){
-    old <- old; new <- new; what <- what;
-    colnames(what)[which(colnames(what)==old)] <- new
-    return(what)
-}
-d <- rename.col(old="disn2012", new="disloc2012", what=d)
-d <- rename.col(old="disn2016", new="disloc2016", what=d)
-#
-# ---> NOTE:                                                                         <--- #
-# ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
-# ---> will generate new eq object with full map (incl. state and federal districts) <--- #
-
-write.csv(eq, file = "tla15Loc.csv", row.names = FALSE)
+## write.csv(tla, file = "fuenteAlumnos/tla15Loc.csv", row.names = FALSE)
 
 
+## ## tla 15
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/tla15Loc.csv", stringsAsFactors = FALSE)
+## head(d) # dist_old year needed
 
-# tla d19
-## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
-d <- read.csv(file = "fuenteAlumnos/tla19Loc.csv", stringsAsFactors = FALSE)
-head(d) # dist_old year needed
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2013", new="disloc2013", what=d)
+## d <- rename.col(old="disn2016", new="disloc2016", what=d)
+## #
+## # ---> NOTE:                                                                         <--- #
+## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
 
-# handy function to rename one data.frame's column
-rename.col <- function(old=NA, new=NA, what=NA){
-    old <- old; new <- new; what <- what;
-    colnames(what)[which(colnames(what)==old)] <- new
-    return(what)
-}
-d <- rename.col(old="disn2012", new="disloc2012", what=d)
-d <- rename.col(old="disn2016", new="disloc2016", what=d)
-#
-# ---> NOTE:                                                                         <--- #
-# ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
-# ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+## write.csv(eq, file = "tla15Loc.csv", row.names = FALSE)
 
-max(eq$disloc2016)
-write.csv(eq, file = "tla19Loc.csv", row.names = FALSE)
+
+
+## # tla d19
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/tla19Loc.csv", stringsAsFactors = FALSE)
+## head(d) # dist_old year needed
+
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2013", new="disloc2013", what=d)
+## d <- rename.col(old="disn2016", new="disloc2016", what=d)
+## #
+## # ---> NOTE:                                                                         <--- #
+## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+
+## max(eq$disloc2016)
+## write.csv(eq, file = "tla19Loc.csv", row.names = FALSE)
 
 
 
@@ -235,7 +244,7 @@ write.csv(eq, file = "micLoc.csv", row.names = FALSE)
 ## # dsi seen from offspring perspective
 ## # new district's "father" and district similarity index, cf. Cox & Katz
 ## son    <- d$disloc2016
-## father <- d$disloc2012
+## father <- d$disloc2013
 ## N <- max(son)
 ## d$father <- NA
 ## d$dsi <- 0
@@ -262,7 +271,7 @@ write.csv(eq, file = "micLoc.csv", row.names = FALSE)
 ## # dsi seen from offspring perspective
 ## # new district's "father" and district similarity index, cf. Cox & Katz
 ## son    <- d$disloc2016
-## father <- d$disloc2012
+## father <- d$disloc2013
 ## N <- max(son)
 ## d$father <- NA
 ## d$dsi <- 0
