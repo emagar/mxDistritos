@@ -1,8 +1,8 @@
-"seccion","edon","munn","disn2016","cab","disn2012"
-1,29,1,8,"contla",2
-2,29,1,8,"contla",2
-3,29,1,8,"contla",2
-4,29,1,8,"contla",2
+"seccion","edon","munn","disn2016","cab","disn2013"
+1,29,1,8,"contla",3
+2,29,1,8,"contla",3
+3,29,1,8,"contla",3
+4,29,1,8,"contla",3
 5,29,2,8,"contla",2
 6,29,2,8,"contla",2
 7,29,2,8,"contla",2
@@ -10,429 +10,429 @@
 9,29,2,8,"contla",2
 10,29,2,8,"contla",2
 11,29,2,8,"contla",2
-12,29,3,4,"apizaco",1
-13,29,3,4,"apizaco",1
-14,29,3,4,"apizaco",1
-15,29,3,4,"apizaco",1
-16,29,3,4,"apizaco",1
-17,29,3,4,"apizaco",1
-18,29,3,4,"apizaco",1
-19,29,3,4,"apizaco",1
-20,29,3,4,"apizaco",1
-21,29,3,4,"apizaco",1
-22,29,3,4,"apizaco",1
-23,29,3,4,"apizaco",1
-24,29,3,4,"apizaco",1
-25,29,3,4,"apizaco",1
-26,29,3,4,"apizaco",1
-27,29,3,4,"apizaco",1
-28,29,3,4,"apizaco",1
-29,29,3,4,"apizaco",1
-30,29,3,4,"apizaco",1
-31,29,3,4,"apizaco",1
-32,29,3,4,"apizaco",1
-33,29,3,4,"apizaco",1
-34,29,3,4,"apizaco",1
-35,29,3,4,"apizaco",1
-36,29,3,4,"apizaco",1
-37,29,3,4,"apizaco",1
-38,29,3,5,"yauhquemehcan",1
-39,29,3,4,"apizaco",1
-40,29,3,4,"apizaco",1
-41,29,3,4,"apizaco",1
-42,29,3,4,"apizaco",1
-43,29,3,4,"apizaco",1
-44,29,3,4,"apizaco",1
-45,29,3,4,"apizaco",1
-46,29,3,4,"apizaco",1
-47,29,3,4,"apizaco",1
-48,29,3,4,"apizaco",1
-49,29,4,2,"tlaxco",1
-50,29,4,2,"tlaxco",1
-51,29,4,2,"tlaxco",1
-52,29,4,2,"tlaxco",1
-53,29,4,2,"tlaxco",1
-54,29,4,2,"tlaxco",1
-55,29,4,2,"tlaxco",1
-56,29,4,2,"tlaxco",1
-57,29,4,2,"tlaxco",1
-58,29,34,2,"tlaxco",1
-59,29,5,11,"huamantla",1
-60,29,5,11,"huamantla",1
-61,29,5,11,"huamantla",1
-62,29,5,11,"huamantla",1
-63,29,5,11,"huamantla",1
-64,29,5,11,"huamantla",1
-65,29,5,11,"huamantla",1
-66,29,5,11,"huamantla",1
-67,29,5,11,"huamantla",1
-68,29,5,11,"huamantla",1
-69,29,5,11,"huamantla",1
-70,29,5,11,"huamantla",1
-71,29,5,11,"huamantla",1
-72,29,5,11,"huamantla",1
-73,29,5,11,"huamantla",1
-74,29,5,11,"huamantla",1
-75,29,5,11,"huamantla",1
-76,29,5,11,"huamantla",1
-77,29,5,11,"huamantla",1
-78,29,6,1,"san antonio calpulalpan",3
-79,29,6,1,"san antonio calpulalpan",3
-80,29,6,1,"san antonio calpulalpan",3
-81,29,6,1,"san antonio calpulalpan",3
-82,29,6,1,"san antonio calpulalpan",3
-83,29,6,1,"san antonio calpulalpan",3
-84,29,6,1,"san antonio calpulalpan",3
-85,29,6,1,"san antonio calpulalpan",3
-86,29,6,1,"san antonio calpulalpan",3
-87,29,6,1,"san antonio calpulalpan",3
-88,29,6,1,"san antonio calpulalpan",3
-89,29,6,1,"san antonio calpulalpan",3
-90,29,6,1,"san antonio calpulalpan",3
-91,29,6,1,"san antonio calpulalpan",3
-92,29,6,1,"san antonio calpulalpan",3
-93,29,6,1,"san antonio calpulalpan",3
-94,29,6,1,"san antonio calpulalpan",3
-95,29,6,1,"san antonio calpulalpan",3
-96,29,6,1,"san antonio calpulalpan",3
-97,29,6,1,"san antonio calpulalpan",3
-98,29,6,1,"san antonio calpulalpan",3
-99,29,6,1,"san antonio calpulalpan",3
-100,29,7,11,"huamantla",1
-101,29,7,11,"huamantla",1
-102,29,7,11,"huamantla",1
-103,29,7,11,"huamantla",1
-104,29,7,11,"huamantla",1
-105,29,7,11,"huamantla",1
-106,29,7,11,"huamantla",1
-107,29,8,11,"huamantla",1
-108,29,8,11,"huamantla",1
-109,29,8,11,"huamantla",1
-110,29,8,11,"huamantla",1
-111,29,8,11,"huamantla",1
-112,29,8,11,"huamantla",1
-113,29,8,11,"huamantla",1
-114,29,8,11,"huamantla",1
-115,29,8,11,"huamantla",1
-116,29,8,11,"huamantla",1
-117,29,9,3,"xalostoc",1
-118,29,9,3,"xalostoc",1
-119,29,9,3,"xalostoc",1
-120,29,9,3,"xalostoc",1
-121,29,9,3,"xalostoc",1
-122,29,10,9,"chiautempan",2
-123,29,10,9,"chiautempan",2
-124,29,10,9,"chiautempan",2
-125,29,10,9,"chiautempan",2
-126,29,10,9,"chiautempan",2
-127,29,10,9,"chiautempan",2
-128,29,10,9,"chiautempan",2
-129,29,10,9,"chiautempan",2
-130,29,10,9,"chiautempan",2
-131,29,10,9,"chiautempan",2
-132,29,10,9,"chiautempan",2
-133,29,10,9,"chiautempan",2
-134,29,10,9,"chiautempan",2
-135,29,10,9,"chiautempan",2
-136,29,10,9,"chiautempan",2
-137,29,10,9,"chiautempan",2
-138,29,10,9,"chiautempan",2
-139,29,10,9,"chiautempan",2
-140,29,10,9,"chiautempan",2
-141,29,10,9,"chiautempan",2
-142,29,10,9,"chiautempan",2
-143,29,10,9,"chiautempan",2
-144,29,10,9,"chiautempan",2
-145,29,10,9,"chiautempan",2
-146,29,10,9,"chiautempan",2
-147,29,10,9,"chiautempan",2
-148,29,10,9,"chiautempan",2
-149,29,10,9,"chiautempan",2
-150,29,52,9,"chiautempan",2
-151,29,52,9,"chiautempan",2
-152,29,52,9,"chiautempan",2
-153,29,52,9,"chiautempan",2
-154,29,52,9,"chiautempan",2
-155,29,52,9,"chiautempan",2
-156,29,10,9,"chiautempan",2
-157,29,10,9,"chiautempan",2
-158,29,51,12,"teolocholco",2
-159,29,51,12,"teolocholco",2
-160,29,51,12,"teolocholco",2
-161,29,11,5,"yauhquemehcan",1
-162,29,11,5,"yauhquemehcan",1
-163,29,11,5,"yauhquemehcan",1
-164,29,11,5,"yauhquemehcan",1
-165,29,12,5,"yauhquemehcan",3
-166,29,12,5,"yauhquemehcan",3
-167,29,12,5,"yauhquemehcan",3
-168,29,12,5,"yauhquemehcan",3
-169,29,12,5,"yauhquemehcan",3
-170,29,12,5,"yauhquemehcan",3
-171,29,12,5,"yauhquemehcan",3
-172,29,12,5,"yauhquemehcan",3
-173,29,12,5,"yauhquemehcan",3
-174,29,12,5,"yauhquemehcan",3
-175,29,12,5,"yauhquemehcan",3
-176,29,12,5,"yauhquemehcan",3
-177,29,12,5,"yauhquemehcan",3
-178,29,13,10,"huamantla",1
-179,29,13,10,"huamantla",1
-180,29,13,11,"huamantla",1
-181,29,13,10,"huamantla",1
-182,29,13,10,"huamantla",1
-183,29,13,10,"huamantla",1
-184,29,13,10,"huamantla",1
-185,29,13,10,"huamantla",1
-186,29,13,10,"huamantla",1
-187,29,13,10,"huamantla",1
-188,29,13,11,"huamantla",1
-189,29,13,10,"huamantla",1
-190,29,13,10,"huamantla",1
-191,29,13,10,"huamantla",1
-192,29,13,10,"huamantla",1
-193,29,13,10,"huamantla",1
-194,29,13,10,"huamantla",1
-195,29,13,10,"huamantla",1
-196,29,13,11,"huamantla",1
-197,29,13,11,"huamantla",1
-198,29,13,11,"huamantla",1
-199,29,13,11,"huamantla",1
-200,29,13,11,"huamantla",1
-201,29,13,11,"huamantla",1
-202,29,13,11,"huamantla",1
-203,29,13,11,"huamantla",1
-204,29,13,11,"huamantla",1
-205,29,13,10,"huamantla",1
-206,29,13,10,"huamantla",1
-207,29,13,10,"huamantla",1
-208,29,13,10,"huamantla",1
-209,29,13,10,"huamantla",1
-210,29,13,10,"huamantla",1
-211,29,13,10,"huamantla",1
-212,29,13,11,"huamantla",1
-213,29,13,10,"huamantla",1
-214,29,13,10,"huamantla",1
-215,29,13,10,"huamantla",1
-216,29,13,10,"huamantla",1
-217,29,13,10,"huamantla",1
-218,29,13,10,"huamantla",1
-219,29,13,10,"huamantla",1
-220,29,14,5,"yauhquemehcan",3
-221,29,14,5,"yauhquemehcan",3
-222,29,14,5,"yauhquemehcan",3
-223,29,14,5,"yauhquemehcan",3
-224,29,14,5,"yauhquemehcan",3
-225,29,14,5,"yauhquemehcan",3
-226,29,14,5,"yauhquemehcan",3
-227,29,14,5,"yauhquemehcan",3
-228,29,14,5,"yauhquemehcan",3
-229,29,14,5,"yauhquemehcan",3
-230,29,14,5,"yauhquemehcan",3
-231,29,14,5,"yauhquemehcan",3
-232,29,15,6,"ixtacuixtla",3
-233,29,15,6,"ixtacuixtla",3
-234,29,15,6,"ixtacuixtla",3
-235,29,15,6,"ixtacuixtla",3
-236,29,15,6,"ixtacuixtla",3
-237,29,15,6,"ixtacuixtla",3
-238,29,15,6,"ixtacuixtla",3
-239,29,15,6,"ixtacuixtla",3
-240,29,15,6,"ixtacuixtla",3
-241,29,15,6,"ixtacuixtla",3
-242,29,15,6,"ixtacuixtla",3
-243,29,15,6,"ixtacuixtla",3
-244,29,15,6,"ixtacuixtla",3
-245,29,15,6,"ixtacuixtla",3
-246,29,15,6,"ixtacuixtla",3
-247,29,15,6,"ixtacuixtla",3
-248,29,15,6,"ixtacuixtla",3
-249,29,15,6,"ixtacuixtla",3
-250,29,15,6,"ixtacuixtla",3
-251,29,15,6,"ixtacuixtla",3
-252,29,15,6,"ixtacuixtla",3
-253,29,15,6,"ixtacuixtla",3
-254,29,58,14,"nativitas",3
-255,29,58,14,"nativitas",3
-256,29,15,6,"ixtacuixtla",3
-257,29,15,6,"ixtacuixtla",3
-258,29,15,6,"ixtacuixtla",3
-259,29,16,10,"huamantla",1
-260,29,16,10,"huamantla",1
-261,29,16,10,"huamantla",1
-262,29,16,10,"huamantla",1
-263,29,17,12,"teolocholco",3
-264,29,17,12,"teolocholco",3
-265,29,17,12,"teolocholco",3
-266,29,17,12,"teolocholco",3
-267,29,18,8,"contla",2
-268,29,18,8,"contla",2
-269,29,18,8,"contla",2
-270,29,18,8,"contla",2
-271,29,18,8,"contla",2
-272,29,18,8,"contla",2
-273,29,18,8,"contla",2
-274,29,18,8,"contla",2
-275,29,18,8,"contla",2
-276,29,18,8,"contla",2
-277,29,18,8,"contla",2
-278,29,18,8,"contla",2
-279,29,18,8,"contla",2
-280,29,18,8,"contla",2
-281,29,18,8,"contla",2
-282,29,18,8,"contla",2
-283,29,18,8,"contla",2
-284,29,19,14,"nativitas",3
-285,29,19,14,"nativitas",3
-286,29,19,14,"nativitas",3
-287,29,19,14,"nativitas",3
-288,29,19,14,"nativitas",3
-289,29,19,14,"nativitas",3
-290,29,19,14,"nativitas",3
-291,29,19,14,"nativitas",3
-292,29,20,1,"san antonio calpulalpan",3
-293,29,20,1,"san antonio calpulalpan",3
-294,29,20,1,"san antonio calpulalpan",3
-295,29,60,1,"san antonio calpulalpan",3
-296,29,60,1,"san antonio calpulalpan",3
-297,29,20,1,"san antonio calpulalpan",3
-298,29,20,1,"san antonio calpulalpan",3
-299,29,21,1,"san antonio calpulalpan",3
-300,29,21,1,"san antonio calpulalpan",3
-301,29,21,1,"san antonio calpulalpan",3
-302,29,21,1,"san antonio calpulalpan",3
-303,29,21,1,"san antonio calpulalpan",3
-304,29,21,1,"san antonio calpulalpan",3
-305,29,21,1,"san antonio calpulalpan",3
-306,29,21,1,"san antonio calpulalpan",3
-307,29,21,1,"san antonio calpulalpan",3
-308,29,21,1,"san antonio calpulalpan",3
-309,29,22,12,"teolocholco",2
-310,29,22,12,"teolocholco",2
-311,29,22,12,"teolocholco",2
-312,29,22,12,"teolocholco",2
-313,29,46,12,"teolocholco",3
-314,29,46,12,"teolocholco",3
-315,29,46,12,"teolocholco",3
-316,29,45,14,"nativitas",3
-317,29,45,14,"nativitas",3
-318,29,23,14,"nativitas",3
-319,29,23,14,"nativitas",3
-320,29,23,14,"nativitas",3
-321,29,23,14,"nativitas",3
-322,29,23,14,"nativitas",3
-323,29,23,14,"nativitas",3
-324,29,23,14,"nativitas",3
-325,29,23,14,"nativitas",3
-326,29,23,14,"nativitas",3
-327,29,23,14,"nativitas",3
-328,29,23,14,"nativitas",3
-329,29,23,14,"nativitas",3
-330,29,23,14,"nativitas",3
-331,29,23,14,"nativitas",3
-332,29,24,6,"ixtacuixtla",3
-333,29,24,6,"ixtacuixtla",3
-334,29,24,6,"ixtacuixtla",3
-335,29,24,6,"ixtacuixtla",3
-336,29,24,6,"ixtacuixtla",3
-337,29,24,6,"ixtacuixtla",3
-338,29,24,6,"ixtacuixtla",3
-339,29,24,6,"ixtacuixtla",3
-340,29,24,6,"ixtacuixtla",3
-341,29,24,6,"ixtacuixtla",3
-342,29,24,6,"ixtacuixtla",3
-343,29,24,6,"ixtacuixtla",3
-344,29,24,6,"ixtacuixtla",3
-345,29,24,6,"ixtacuixtla",3
-346,29,24,6,"ixtacuixtla",3
-347,29,24,6,"ixtacuixtla",3
-348,29,25,15,"san pablo del monte",2
-349,29,25,15,"san pablo del monte",2
-350,29,25,15,"san pablo del monte",2
-351,29,25,15,"san pablo del monte",2
-352,29,25,15,"san pablo del monte",2
-353,29,25,15,"san pablo del monte",2
-354,29,25,15,"san pablo del monte",2
-355,29,25,15,"san pablo del monte",2
-356,29,25,15,"san pablo del monte",2
-357,29,25,15,"san pablo del monte",2
-358,29,25,15,"san pablo del monte",2
-359,29,25,15,"san pablo del monte",2
-360,29,25,15,"san pablo del monte",2
-361,29,25,15,"san pablo del monte",2
-362,29,25,15,"san pablo del monte",2
-363,29,25,15,"san pablo del monte",2
-364,29,25,15,"san pablo del monte",2
-365,29,26,8,"contla",2
-366,29,26,8,"contla",2
-367,29,26,8,"contla",2
-368,29,26,8,"contla",2
-369,29,26,8,"contla",2
-370,29,26,8,"contla",2
-371,29,26,8,"contla",2
-372,29,27,15,"san pablo del monte",3
-373,29,27,15,"san pablo del monte",3
-374,29,27,15,"san pablo del monte",3
-375,29,27,15,"san pablo del monte",3
-376,29,27,15,"san pablo del monte",3
-377,29,27,15,"san pablo del monte",3
-378,29,28,12,"teolocholco",2
-379,29,28,12,"teolocholco",2
-380,29,28,12,"teolocholco",2
-381,29,28,12,"teolocholco",2
-382,29,28,12,"teolocholco",2
-383,29,28,12,"teolocholco",2
-384,29,28,12,"teolocholco",2
-385,29,28,12,"teolocholco",2
-386,29,28,12,"teolocholco",2
-387,29,29,13,"zacatelco",2
-388,29,29,13,"zacatelco",2
-389,29,29,13,"zacatelco",2
-390,29,29,13,"zacatelco",2
-391,29,49,12,"teolocholco",2
-392,29,49,12,"teolocholco",2
-393,29,29,13,"zacatelco",2
-394,29,29,13,"zacatelco",2
-395,29,47,14,"nativitas",3
-396,29,47,14,"nativitas",3
-397,29,29,13,"zacatelco",2
-398,29,30,3,"xalostoc",1
-399,29,30,3,"xalostoc",1
-400,29,54,3,"xalostoc",1
-401,29,54,3,"xalostoc",1
-402,29,55,3,"xalostoc",1
-403,29,30,3,"xalostoc",1
-404,29,30,3,"xalostoc",1
-405,29,30,3,"xalostoc",1
-406,29,30,3,"xalostoc",1
-407,29,30,3,"xalostoc",1
-408,29,30,3,"xalostoc",1
-409,29,31,2,"tlaxco",1
-410,29,31,2,"tlaxco",1
-411,29,31,2,"tlaxco",1
-412,29,31,2,"tlaxco",1
-413,29,31,2,"tlaxco",1
-414,29,31,2,"tlaxco",1
-415,29,31,2,"tlaxco",1
-416,29,31,2,"tlaxco",1
-417,29,31,2,"tlaxco",1
-418,29,31,2,"tlaxco",1
-419,29,31,2,"tlaxco",1
-420,29,31,2,"tlaxco",1
-421,29,31,2,"tlaxco",1
-422,29,31,2,"tlaxco",1
-423,29,31,2,"tlaxco",1
-424,29,32,14,"nativitas",3
-425,29,32,14,"nativitas",3
-426,29,32,14,"nativitas",3
-427,29,32,14,"nativitas",3
-428,29,32,14,"nativitas",3
-429,29,53,14,"nativitas",3
-430,29,53,14,"nativitas",3
-431,29,32,14,"nativitas",3
-432,29,56,14,"nativitas",3
-433,29,56,14,"nativitas",3
-434,29,32,14,"nativitas",3
+12,29,3,4,"apizaco",15
+13,29,3,4,"apizaco",16
+14,29,3,4,"apizaco",16
+15,29,3,4,"apizaco",16
+16,29,3,4,"apizaco",15
+17,29,3,4,"apizaco",15
+18,29,3,4,"apizaco",15
+19,29,3,4,"apizaco",16
+20,29,3,4,"apizaco",16
+21,29,3,4,"apizaco",16
+22,29,3,4,"apizaco",16
+23,29,3,4,"apizaco",15
+24,29,3,4,"apizaco",15
+25,29,3,4,"apizaco",15
+26,29,3,4,"apizaco",15
+27,29,3,4,"apizaco",15
+28,29,3,4,"apizaco",16
+29,29,3,4,"apizaco",16
+30,29,3,4,"apizaco",16
+31,29,3,4,"apizaco",16
+32,29,3,4,"apizaco",16
+33,29,3,4,"apizaco",15
+34,29,3,4,"apizaco",15
+35,29,3,4,"apizaco",15
+36,29,3,4,"apizaco",15
+37,29,3,4,"apizaco",15
+38,29,3,5,"yauhquemehcan",15
+39,29,3,4,"apizaco",16
+40,29,3,4,"apizaco",16
+41,29,3,4,"apizaco",16
+42,29,3,4,"apizaco",15
+43,29,3,4,"apizaco",15
+44,29,3,4,"apizaco",15
+45,29,3,4,"apizaco",15
+46,29,3,4,"apizaco",16
+47,29,3,4,"apizaco",16
+48,29,3,4,"apizaco",15
+49,29,4,2,"tlaxco",12
+50,29,4,2,"tlaxco",12
+51,29,4,2,"tlaxco",12
+52,29,4,2,"tlaxco",12
+53,29,4,2,"tlaxco",12
+54,29,4,2,"tlaxco",12
+55,29,4,2,"tlaxco",12
+56,29,4,2,"tlaxco",12
+57,29,4,2,"tlaxco",12
+58,29,34,2,"tlaxco",14
+59,29,5,11,"huamantla",17
+60,29,5,11,"huamantla",17
+61,29,5,11,"huamantla",17
+62,29,5,11,"huamantla",17
+63,29,5,11,"huamantla",17
+64,29,5,11,"huamantla",17
+65,29,5,11,"huamantla",17
+66,29,5,11,"huamantla",17
+67,29,5,11,"huamantla",17
+68,29,5,11,"huamantla",17
+69,29,5,11,"huamantla",17
+70,29,5,11,"huamantla",17
+71,29,5,11,"huamantla",17
+72,29,5,11,"huamantla",17
+73,29,5,11,"huamantla",17
+74,29,5,11,"huamantla",17
+75,29,5,11,"huamantla",17
+76,29,5,11,"huamantla",17
+77,29,5,11,"huamantla",17
+78,29,6,1,"san antonio calpulalpan",13
+79,29,6,1,"san antonio calpulalpan",13
+80,29,6,1,"san antonio calpulalpan",13
+81,29,6,1,"san antonio calpulalpan",13
+82,29,6,1,"san antonio calpulalpan",13
+83,29,6,1,"san antonio calpulalpan",13
+84,29,6,1,"san antonio calpulalpan",13
+85,29,6,1,"san antonio calpulalpan",13
+86,29,6,1,"san antonio calpulalpan",13
+87,29,6,1,"san antonio calpulalpan",13
+88,29,6,1,"san antonio calpulalpan",13
+89,29,6,1,"san antonio calpulalpan",13
+90,29,6,1,"san antonio calpulalpan",13
+91,29,6,1,"san antonio calpulalpan",13
+92,29,6,1,"san antonio calpulalpan",13
+93,29,6,1,"san antonio calpulalpan",13
+94,29,6,1,"san antonio calpulalpan",13
+95,29,6,1,"san antonio calpulalpan",13
+96,29,6,1,"san antonio calpulalpan",13
+97,29,6,1,"san antonio calpulalpan",13
+98,29,6,1,"san antonio calpulalpan",13
+99,29,6,1,"san antonio calpulalpan",13
+100,29,7,11,"huamantla",19
+101,29,7,11,"huamantla",19
+102,29,7,11,"huamantla",19
+103,29,7,11,"huamantla",19
+104,29,7,11,"huamantla",19
+105,29,7,11,"huamantla",19
+106,29,7,11,"huamantla",19
+107,29,8,11,"huamantla",19
+108,29,8,11,"huamantla",19
+109,29,8,11,"huamantla",19
+110,29,8,11,"huamantla",19
+111,29,8,11,"huamantla",19
+112,29,8,11,"huamantla",19
+113,29,8,11,"huamantla",19
+114,29,8,11,"huamantla",19
+115,29,8,11,"huamantla",19
+116,29,8,11,"huamantla",19
+117,29,9,3,"xalostoc",16
+118,29,9,3,"xalostoc",16
+119,29,9,3,"xalostoc",16
+120,29,9,3,"xalostoc",16
+121,29,9,3,"xalostoc",16
+122,29,10,9,"chiautempan",4
+123,29,10,9,"chiautempan",4
+124,29,10,9,"chiautempan",4
+125,29,10,9,"chiautempan",4
+126,29,10,9,"chiautempan",4
+127,29,10,9,"chiautempan",4
+128,29,10,9,"chiautempan",4
+129,29,10,9,"chiautempan",4
+130,29,10,9,"chiautempan",4
+131,29,10,9,"chiautempan",4
+132,29,10,9,"chiautempan",4
+133,29,10,9,"chiautempan",4
+134,29,10,9,"chiautempan",4
+135,29,10,9,"chiautempan",4
+136,29,10,9,"chiautempan",4
+137,29,10,9,"chiautempan",4
+138,29,10,9,"chiautempan",4
+139,29,10,9,"chiautempan",4
+140,29,10,9,"chiautempan",4
+141,29,10,9,"chiautempan",4
+142,29,10,9,"chiautempan",4
+143,29,10,9,"chiautempan",4
+144,29,10,9,"chiautempan",4
+145,29,10,9,"chiautempan",5
+146,29,10,9,"chiautempan",5
+147,29,10,9,"chiautempan",5
+148,29,10,9,"chiautempan",5
+149,29,10,9,"chiautempan",4
+150,29,52,9,"chiautempan",5
+151,29,52,9,"chiautempan",5
+152,29,52,9,"chiautempan",5
+153,29,52,9,"chiautempan",5
+154,29,52,9,"chiautempan",5
+155,29,52,9,"chiautempan",5
+156,29,10,9,"chiautempan",4
+157,29,10,9,"chiautempan",4
+158,29,51,12,"teolocholco",5
+159,29,51,12,"teolocholco",5
+160,29,51,12,"teolocholco",5
+161,29,11,5,"yauhquemehcan",12
+162,29,11,5,"yauhquemehcan",12
+163,29,11,5,"yauhquemehcan",12
+164,29,11,5,"yauhquemehcan",12
+165,29,12,5,"yauhquemehcan",12
+166,29,12,5,"yauhquemehcan",12
+167,29,12,5,"yauhquemehcan",12
+168,29,12,5,"yauhquemehcan",12
+169,29,12,5,"yauhquemehcan",12
+170,29,12,5,"yauhquemehcan",12
+171,29,12,5,"yauhquemehcan",12
+172,29,12,5,"yauhquemehcan",12
+173,29,12,5,"yauhquemehcan",12
+174,29,12,5,"yauhquemehcan",12
+175,29,12,5,"yauhquemehcan",12
+176,29,12,5,"yauhquemehcan",12
+177,29,12,5,"yauhquemehcan",12
+178,29,13,10,"huamantla",18
+179,29,13,10,"huamantla",18
+180,29,13,11,"huamantla",19
+181,29,13,10,"huamantla",18
+182,29,13,10,"huamantla",18
+183,29,13,10,"huamantla",18
+184,29,13,10,"huamantla",18
+185,29,13,10,"huamantla",18
+186,29,13,10,"huamantla",18
+187,29,13,10,"huamantla",18
+188,29,13,11,"huamantla",18
+189,29,13,10,"huamantla",18
+190,29,13,10,"huamantla",18
+191,29,13,10,"huamantla",18
+192,29,13,10,"huamantla",18
+193,29,13,10,"huamantla",18
+194,29,13,10,"huamantla",18
+195,29,13,10,"huamantla",18
+196,29,13,11,"huamantla",18
+197,29,13,11,"huamantla",19
+198,29,13,11,"huamantla",19
+199,29,13,11,"huamantla",18
+200,29,13,11,"huamantla",18
+201,29,13,11,"huamantla",19
+202,29,13,11,"huamantla",19
+203,29,13,11,"huamantla",19
+204,29,13,11,"huamantla",19
+205,29,13,10,"huamantla",18
+206,29,13,10,"huamantla",18
+207,29,13,10,"huamantla",18
+208,29,13,10,"huamantla",18
+209,29,13,10,"huamantla",18
+210,29,13,10,"huamantla",18
+211,29,13,10,"huamantla",18
+212,29,13,11,"huamantla",19
+213,29,13,10,"huamantla",19
+214,29,13,10,"huamantla",19
+215,29,13,10,"huamantla",18
+216,29,13,10,"huamantla",18
+217,29,13,10,"huamantla",18
+218,29,13,10,"huamantla",18
+219,29,13,10,"huamantla",18
+220,29,14,5,"yauhquemehcan",12
+221,29,14,5,"yauhquemehcan",12
+222,29,14,5,"yauhquemehcan",12
+223,29,14,5,"yauhquemehcan",12
+224,29,14,5,"yauhquemehcan",12
+225,29,14,5,"yauhquemehcan",12
+226,29,14,5,"yauhquemehcan",12
+227,29,14,5,"yauhquemehcan",12
+228,29,14,5,"yauhquemehcan",12
+229,29,14,5,"yauhquemehcan",12
+230,29,14,5,"yauhquemehcan",12
+231,29,14,5,"yauhquemehcan",12
+232,29,15,6,"ixtacuixtla",11
+233,29,15,6,"ixtacuixtla",11
+234,29,15,6,"ixtacuixtla",11
+235,29,15,6,"ixtacuixtla",11
+236,29,15,6,"ixtacuixtla",11
+237,29,15,6,"ixtacuixtla",11
+238,29,15,6,"ixtacuixtla",11
+239,29,15,6,"ixtacuixtla",11
+240,29,15,6,"ixtacuixtla",11
+241,29,15,6,"ixtacuixtla",11
+242,29,15,6,"ixtacuixtla",11
+243,29,15,6,"ixtacuixtla",11
+244,29,15,6,"ixtacuixtla",11
+245,29,15,6,"ixtacuixtla",11
+246,29,15,6,"ixtacuixtla",11
+247,29,15,6,"ixtacuixtla",11
+248,29,15,6,"ixtacuixtla",11
+249,29,15,6,"ixtacuixtla",11
+250,29,15,6,"ixtacuixtla",11
+251,29,15,6,"ixtacuixtla",11
+252,29,15,6,"ixtacuixtla",11
+253,29,15,6,"ixtacuixtla",11
+254,29,58,14,"nativitas",10
+255,29,58,14,"nativitas",10
+256,29,15,6,"ixtacuixtla",11
+257,29,15,6,"ixtacuixtla",11
+258,29,15,6,"ixtacuixtla",11
+259,29,16,10,"huamantla",19
+260,29,16,10,"huamantla",19
+261,29,16,10,"huamantla",19
+262,29,16,10,"huamantla",19
+263,29,17,12,"teolocholco",7
+264,29,17,12,"teolocholco",7
+265,29,17,12,"teolocholco",7
+266,29,17,12,"teolocholco",7
+267,29,18,8,"contla",3
+268,29,18,8,"contla",3
+269,29,18,8,"contla",3
+270,29,18,8,"contla",3
+271,29,18,8,"contla",3
+272,29,18,8,"contla",3
+273,29,18,8,"contla",3
+274,29,18,8,"contla",3
+275,29,18,8,"contla",3
+276,29,18,8,"contla",3
+277,29,18,8,"contla",3
+278,29,18,8,"contla",3
+279,29,18,8,"contla",3
+280,29,18,8,"contla",3
+281,29,18,8,"contla",3
+282,29,18,8,"contla",3
+283,29,18,8,"contla",3
+284,29,19,14,"nativitas",10
+285,29,19,14,"nativitas",10
+286,29,19,14,"nativitas",10
+287,29,19,14,"nativitas",10
+288,29,19,14,"nativitas",10
+289,29,19,14,"nativitas",10
+290,29,19,14,"nativitas",10
+291,29,19,14,"nativitas",10
+292,29,20,1,"san antonio calpulalpan",12
+293,29,20,1,"san antonio calpulalpan",12
+294,29,20,1,"san antonio calpulalpan",12
+295,29,60,1,"san antonio calpulalpan",12
+296,29,60,1,"san antonio calpulalpan",12
+297,29,20,1,"san antonio calpulalpan",12
+298,29,20,1,"san antonio calpulalpan",12
+299,29,21,1,"san antonio calpulalpan",13
+300,29,21,1,"san antonio calpulalpan",13
+301,29,21,1,"san antonio calpulalpan",13
+302,29,21,1,"san antonio calpulalpan",13
+303,29,21,1,"san antonio calpulalpan",13
+304,29,21,1,"san antonio calpulalpan",13
+305,29,21,1,"san antonio calpulalpan",13
+306,29,21,1,"san antonio calpulalpan",13
+307,29,21,1,"san antonio calpulalpan",13
+308,29,21,1,"san antonio calpulalpan",13
+309,29,22,12,"teolocholco",9
+310,29,22,12,"teolocholco",9
+311,29,22,12,"teolocholco",9
+312,29,22,12,"teolocholco",9
+313,29,46,12,"teolocholco",9
+314,29,46,12,"teolocholco",9
+315,29,46,12,"teolocholco",9
+316,29,45,14,"nativitas",10
+317,29,45,14,"nativitas",10
+318,29,23,14,"nativitas",10
+319,29,23,14,"nativitas",10
+320,29,23,14,"nativitas",10
+321,29,23,14,"nativitas",10
+322,29,23,14,"nativitas",10
+323,29,23,14,"nativitas",10
+324,29,23,14,"nativitas",10
+325,29,23,14,"nativitas",10
+326,29,23,14,"nativitas",10
+327,29,23,14,"nativitas",10
+328,29,23,14,"nativitas",10
+329,29,23,14,"nativitas",10
+330,29,23,14,"nativitas",10
+331,29,23,14,"nativitas",10
+332,29,24,6,"ixtacuixtla",11
+333,29,24,6,"ixtacuixtla",11
+334,29,24,6,"ixtacuixtla",11
+335,29,24,6,"ixtacuixtla",11
+336,29,24,6,"ixtacuixtla",11
+337,29,24,6,"ixtacuixtla",11
+338,29,24,6,"ixtacuixtla",11
+339,29,24,6,"ixtacuixtla",11
+340,29,24,6,"ixtacuixtla",11
+341,29,24,6,"ixtacuixtla",11
+342,29,24,6,"ixtacuixtla",11
+343,29,24,6,"ixtacuixtla",11
+344,29,24,6,"ixtacuixtla",11
+345,29,24,6,"ixtacuixtla",11
+346,29,24,6,"ixtacuixtla",11
+347,29,24,6,"ixtacuixtla",11
+348,29,25,15,"san pablo del monte",7
+349,29,25,15,"san pablo del monte",7
+350,29,25,15,"san pablo del monte",6
+351,29,25,15,"san pablo del monte",6
+352,29,25,15,"san pablo del monte",6
+353,29,25,15,"san pablo del monte",6
+354,29,25,15,"san pablo del monte",6
+355,29,25,15,"san pablo del monte",6
+356,29,25,15,"san pablo del monte",6
+357,29,25,15,"san pablo del monte",6
+358,29,25,15,"san pablo del monte",6
+359,29,25,15,"san pablo del monte",6
+360,29,25,15,"san pablo del monte",6
+361,29,25,15,"san pablo del monte",6
+362,29,25,15,"san pablo del monte",6
+363,29,25,15,"san pablo del monte",6
+364,29,25,15,"san pablo del monte",6
+365,29,26,8,"contla",3
+366,29,26,8,"contla",3
+367,29,26,8,"contla",3
+368,29,26,8,"contla",3
+369,29,26,8,"contla",3
+370,29,26,8,"contla",3
+371,29,26,8,"contla",3
+372,29,27,15,"san pablo del monte",7
+373,29,27,15,"san pablo del monte",7
+374,29,27,15,"san pablo del monte",7
+375,29,27,15,"san pablo del monte",7
+376,29,27,15,"san pablo del monte",7
+377,29,27,15,"san pablo del monte",7
+378,29,28,12,"teolocholco",5
+379,29,28,12,"teolocholco",5
+380,29,28,12,"teolocholco",5
+381,29,28,12,"teolocholco",5
+382,29,28,12,"teolocholco",5
+383,29,28,12,"teolocholco",5
+384,29,28,12,"teolocholco",5
+385,29,28,12,"teolocholco",5
+386,29,28,12,"teolocholco",5
+387,29,29,13,"zacatelco",9
+388,29,29,13,"zacatelco",9
+389,29,29,13,"zacatelco",9
+390,29,29,13,"zacatelco",9
+391,29,49,12,"teolocholco",9
+392,29,49,12,"teolocholco",9
+393,29,29,13,"zacatelco",9
+394,29,29,13,"zacatelco",9
+395,29,47,14,"nativitas",9
+396,29,47,14,"nativitas",9
+397,29,29,13,"zacatelco",9
+398,29,30,3,"xalostoc",17
+399,29,30,3,"xalostoc",17
+400,29,54,3,"xalostoc",17
+401,29,54,3,"xalostoc",17
+402,29,55,3,"xalostoc",17
+403,29,30,3,"xalostoc",17
+404,29,30,3,"xalostoc",17
+405,29,30,3,"xalostoc",17
+406,29,30,3,"xalostoc",17
+407,29,30,3,"xalostoc",17
+408,29,30,3,"xalostoc",17
+409,29,31,2,"tlaxco",14
+410,29,31,2,"tlaxco",14
+411,29,31,2,"tlaxco",14
+412,29,31,2,"tlaxco",14
+413,29,31,2,"tlaxco",14
+414,29,31,2,"tlaxco",14
+415,29,31,2,"tlaxco",14
+416,29,31,2,"tlaxco",14
+417,29,31,2,"tlaxco",14
+418,29,31,2,"tlaxco",14
+419,29,31,2,"tlaxco",14
+420,29,31,2,"tlaxco",14
+421,29,31,2,"tlaxco",14
+422,29,31,2,"tlaxco",14
+423,29,31,2,"tlaxco",14
+424,29,32,14,"nativitas",9
+425,29,32,14,"nativitas",9
+426,29,32,14,"nativitas",9
+427,29,32,14,"nativitas",9
+428,29,32,14,"nativitas",9
+429,29,53,14,"nativitas",10
+430,29,53,14,"nativitas",10
+431,29,32,14,"nativitas",9
+432,29,56,14,"nativitas",9
+433,29,56,14,"nativitas",9
+434,29,32,14,"nativitas",9
 435,29,33,7,"tlaxcala",2
 436,29,33,7,"tlaxcala",2
 437,29,33,7,"tlaxcala",2
@@ -440,72 +440,72 @@
 439,29,33,7,"tlaxcala",2
 440,29,33,7,"tlaxcala",2
 441,29,33,7,"tlaxcala",2
-442,29,33,7,"tlaxcala",2
+442,29,33,7,"tlaxcala",1
 443,29,33,7,"tlaxcala",2
 444,29,33,7,"tlaxcala",2
 445,29,33,7,"tlaxcala",2
-446,29,33,7,"tlaxcala",2
-447,29,33,7,"tlaxcala",2
+446,29,33,7,"tlaxcala",1
+447,29,33,7,"tlaxcala",1
 448,29,33,7,"tlaxcala",2
-449,29,33,7,"tlaxcala",2
-450,29,33,7,"tlaxcala",2
-451,29,33,7,"tlaxcala",2
-452,29,33,7,"tlaxcala",2
-453,29,33,7,"tlaxcala",2
-454,29,33,7,"tlaxcala",2
-455,29,33,7,"tlaxcala",2
-456,29,33,7,"tlaxcala",2
-457,29,33,7,"tlaxcala",2
-458,29,33,7,"tlaxcala",2
-459,29,33,7,"tlaxcala",2
-460,29,33,7,"tlaxcala",2
-461,29,33,7,"tlaxcala",2
+449,29,33,7,"tlaxcala",1
+450,29,33,7,"tlaxcala",1
+451,29,33,7,"tlaxcala",1
+452,29,33,7,"tlaxcala",1
+453,29,33,7,"tlaxcala",1
+454,29,33,7,"tlaxcala",1
+455,29,33,7,"tlaxcala",1
+456,29,33,7,"tlaxcala",1
+457,29,33,7,"tlaxcala",1
+458,29,33,7,"tlaxcala",1
+459,29,33,7,"tlaxcala",1
+460,29,33,7,"tlaxcala",1
+461,29,33,7,"tlaxcala",1
 462,29,33,7,"tlaxcala",2
-463,29,33,7,"tlaxcala",2
-464,29,33,7,"tlaxcala",2
-465,29,33,7,"tlaxcala",2
-466,29,33,7,"tlaxcala",2
-467,29,33,7,"tlaxcala",2
-468,29,33,7,"tlaxcala",2
-469,29,33,7,"tlaxcala",2
-470,29,34,2,"tlaxco",1
-471,29,34,2,"tlaxco",1
-472,29,34,2,"tlaxco",1
-473,29,34,2,"tlaxco",1
-474,29,34,2,"tlaxco",1
-475,29,34,2,"tlaxco",1
-476,29,34,2,"tlaxco",1
-477,29,34,2,"tlaxco",1
-478,29,34,2,"tlaxco",1
-479,29,34,2,"tlaxco",1
-480,29,34,2,"tlaxco",1
-481,29,34,2,"tlaxco",1
-482,29,34,2,"tlaxco",1
-483,29,34,2,"tlaxco",1
-484,29,34,2,"tlaxco",1
-485,29,34,2,"tlaxco",1
-486,29,34,2,"tlaxco",1
-487,29,34,2,"tlaxco",1
-488,29,34,2,"tlaxco",1
-489,29,34,2,"tlaxco",1
-490,29,34,2,"tlaxco",1
-491,29,34,2,"tlaxco",1
-492,29,34,2,"tlaxco",1
-493,29,34,2,"tlaxco",1
-494,29,34,2,"tlaxco",1
-495,29,34,2,"tlaxco",1
-496,29,34,2,"tlaxco",1
-497,29,34,2,"tlaxco",1
-498,29,34,2,"tlaxco",1
-499,29,34,2,"tlaxco",1
-500,29,34,2,"tlaxco",1
-501,29,34,2,"tlaxco",1
-502,29,34,2,"tlaxco",1
-503,29,34,2,"tlaxco",1
-504,29,34,2,"tlaxco",1
-505,29,35,3,"xalostoc",1
-506,29,35,3,"xalostoc",1
-507,29,35,3,"xalostoc",1
+463,29,33,7,"tlaxcala",1
+464,29,33,7,"tlaxcala",1
+465,29,33,7,"tlaxcala",1
+466,29,33,7,"tlaxcala",1
+467,29,33,7,"tlaxcala",1
+468,29,33,7,"tlaxcala",1
+469,29,33,7,"tlaxcala",1
+470,29,34,2,"tlaxco",14
+471,29,34,2,"tlaxco",14
+472,29,34,2,"tlaxco",14
+473,29,34,2,"tlaxco",14
+474,29,34,2,"tlaxco",14
+475,29,34,2,"tlaxco",14
+476,29,34,2,"tlaxco",14
+477,29,34,2,"tlaxco",14
+478,29,34,2,"tlaxco",14
+479,29,34,2,"tlaxco",14
+480,29,34,2,"tlaxco",14
+481,29,34,2,"tlaxco",14
+482,29,34,2,"tlaxco",14
+483,29,34,2,"tlaxco",14
+484,29,34,2,"tlaxco",14
+485,29,34,2,"tlaxco",14
+486,29,34,2,"tlaxco",14
+487,29,34,2,"tlaxco",14
+488,29,34,2,"tlaxco",14
+489,29,34,2,"tlaxco",14
+490,29,34,2,"tlaxco",17
+491,29,34,2,"tlaxco",14
+492,29,34,2,"tlaxco",14
+493,29,34,2,"tlaxco",14
+494,29,34,2,"tlaxco",14
+495,29,34,2,"tlaxco",14
+496,29,34,2,"tlaxco",14
+497,29,34,2,"tlaxco",17
+498,29,34,2,"tlaxco",17
+499,29,34,2,"tlaxco",14
+500,29,34,2,"tlaxco",14
+501,29,34,2,"tlaxco",14
+502,29,34,2,"tlaxco",14
+503,29,34,2,"tlaxco",17
+504,29,34,2,"tlaxco",17
+505,29,35,3,"xalostoc",17
+506,29,35,3,"xalostoc",17
+507,29,35,3,"xalostoc",17
 508,29,36,6,"ixtacuixtla",2
 509,29,36,6,"ixtacuixtla",2
 510,29,36,6,"ixtacuixtla",2
@@ -518,92 +518,92 @@
 517,29,36,6,"ixtacuixtla",2
 518,29,36,6,"ixtacuixtla",2
 519,29,36,6,"ixtacuixtla",2
-520,29,37,10,"huamantla",1
-521,29,37,10,"huamantla",1
-522,29,37,10,"huamantla",1
-523,29,37,10,"huamantla",1
-524,29,37,10,"huamantla",1
-525,29,37,10,"huamantla",1
-526,29,37,10,"huamantla",1
-527,29,38,3,"xalostoc",1
-528,29,38,3,"xalostoc",1
-529,29,38,3,"xalostoc",1
-530,29,38,3,"xalostoc",1
-531,29,50,3,"xalostoc",1
-532,29,50,3,"xalostoc",1
-533,29,50,3,"xalostoc",1
-534,29,50,3,"xalostoc",1
-535,29,50,3,"xalostoc",1
-536,29,38,3,"xalostoc",1
-537,29,38,3,"xalostoc",1
-538,29,39,3,"xalostoc",1
-539,29,39,3,"xalostoc",1
-540,29,39,3,"xalostoc",1
-541,29,39,3,"xalostoc",1
-542,29,39,3,"xalostoc",1
-543,29,39,3,"xalostoc",1
-544,29,39,3,"xalostoc",1
-545,29,39,3,"xalostoc",1
-546,29,39,3,"xalostoc",1
-547,29,40,5,"yauhquemehcan",3
-548,29,40,5,"yauhquemehcan",3
-549,29,40,5,"yauhquemehcan",3
-550,29,40,5,"yauhquemehcan",3
-551,29,57,5,"yauhquemehcan",3
-552,29,57,5,"yauhquemehcan",3
-553,29,40,5,"yauhquemehcan",3
-554,29,40,5,"yauhquemehcan",3
-555,29,40,5,"yauhquemehcan",3
-556,29,40,5,"yauhquemehcan",3
-557,29,40,5,"yauhquemehcan",3
-558,29,41,12,"teolocholco",3
-559,29,41,12,"teolocholco",3
-560,29,41,12,"teolocholco",3
-561,29,41,12,"teolocholco",3
-562,29,41,12,"teolocholco",3
-563,29,41,12,"teolocholco",3
-564,29,41,12,"teolocholco",3
-565,29,41,12,"teolocholco",3
-566,29,41,12,"teolocholco",3
-567,29,41,12,"teolocholco",3
-568,29,41,12,"teolocholco",3
-569,29,41,12,"teolocholco",3
-570,29,42,13,"zacatelco",3
-571,29,42,13,"zacatelco",3
-572,29,42,13,"zacatelco",3
-573,29,42,13,"zacatelco",3
-574,29,42,13,"zacatelco",3
-575,29,43,5,"yauhquemehcan",1
-576,29,43,5,"yauhquemehcan",1
-577,29,43,5,"yauhquemehcan",1
-578,29,43,5,"yauhquemehcan",1
-579,29,43,5,"yauhquemehcan",1
-580,29,43,5,"yauhquemehcan",1
-581,29,43,5,"yauhquemehcan",1
-582,29,43,5,"yauhquemehcan",1
-583,29,43,5,"yauhquemehcan",1
-584,29,43,5,"yauhquemehcan",1
-585,29,43,5,"yauhquemehcan",1
-586,29,59,13,"zacatelco",3
-587,29,59,13,"zacatelco",3
-588,29,44,13,"zacatelco",3
-589,29,44,13,"zacatelco",3
-590,29,44,13,"zacatelco",3
-591,29,44,13,"zacatelco",3
-592,29,44,13,"zacatelco",3
-593,29,44,13,"zacatelco",3
-594,29,44,13,"zacatelco",3
-595,29,44,13,"zacatelco",3
-596,29,44,13,"zacatelco",3
-597,29,44,13,"zacatelco",3
-598,29,44,13,"zacatelco",3
-599,29,44,13,"zacatelco",3
-600,29,44,13,"zacatelco",3
-601,29,44,13,"zacatelco",3
-602,29,48,13,"zacatelco",3
-603,29,48,13,"zacatelco",3
-604,29,48,13,"zacatelco",3
-605,29,48,13,"zacatelco",3
-606,29,55,3,"xalostoc",1
-607,29,54,3,"xalostoc",1
-608,29,54,3,"xalostoc",1
+520,29,37,10,"huamantla",19
+521,29,37,10,"huamantla",19
+522,29,37,10,"huamantla",19
+523,29,37,10,"huamantla",19
+524,29,37,10,"huamantla",19
+525,29,37,10,"huamantla",19
+526,29,37,10,"huamantla",19
+527,29,38,3,"xalostoc",16
+528,29,38,3,"xalostoc",16
+529,29,38,3,"xalostoc",16
+530,29,38,3,"xalostoc",16
+531,29,50,3,"xalostoc",16
+532,29,50,3,"xalostoc",16
+533,29,50,3,"xalostoc",16
+534,29,50,3,"xalostoc",16
+535,29,50,3,"xalostoc",16
+536,29,38,3,"xalostoc",16
+537,29,38,3,"xalostoc",16
+538,29,39,3,"xalostoc",17
+539,29,39,3,"xalostoc",17
+540,29,39,3,"xalostoc",17
+541,29,39,3,"xalostoc",17
+542,29,39,3,"xalostoc",17
+543,29,39,3,"xalostoc",17
+544,29,39,3,"xalostoc",17
+545,29,39,3,"xalostoc",17
+546,29,39,3,"xalostoc",17
+547,29,40,5,"yauhquemehcan",12
+548,29,40,5,"yauhquemehcan",12
+549,29,40,5,"yauhquemehcan",12
+550,29,40,5,"yauhquemehcan",12
+551,29,57,5,"yauhquemehcan",12
+552,29,57,5,"yauhquemehcan",12
+553,29,40,5,"yauhquemehcan",12
+554,29,40,5,"yauhquemehcan",12
+555,29,40,5,"yauhquemehcan",12
+556,29,40,5,"yauhquemehcan",12
+557,29,40,5,"yauhquemehcan",12
+558,29,41,12,"teolocholco",7
+559,29,41,12,"teolocholco",7
+560,29,41,12,"teolocholco",7
+561,29,41,12,"teolocholco",7
+562,29,41,12,"teolocholco",7
+563,29,41,12,"teolocholco",7
+564,29,41,12,"teolocholco",7
+565,29,41,12,"teolocholco",7
+566,29,41,12,"teolocholco",7
+567,29,41,12,"teolocholco",7
+568,29,41,12,"teolocholco",7
+569,29,41,12,"teolocholco",7
+570,29,42,13,"zacatelco",8
+571,29,42,13,"zacatelco",8
+572,29,42,13,"zacatelco",8
+573,29,42,13,"zacatelco",8
+574,29,42,13,"zacatelco",8
+575,29,43,5,"yauhquemehcan",15
+576,29,43,5,"yauhquemehcan",15
+577,29,43,5,"yauhquemehcan",15
+578,29,43,5,"yauhquemehcan",15
+579,29,43,5,"yauhquemehcan",15
+580,29,43,5,"yauhquemehcan",15
+581,29,43,5,"yauhquemehcan",15
+582,29,43,5,"yauhquemehcan",15
+583,29,43,5,"yauhquemehcan",15
+584,29,43,5,"yauhquemehcan",15
+585,29,43,5,"yauhquemehcan",15
+586,29,59,13,"zacatelco",8
+587,29,59,13,"zacatelco",8
+588,29,44,13,"zacatelco",8
+589,29,44,13,"zacatelco",8
+590,29,44,13,"zacatelco",8
+591,29,44,13,"zacatelco",8
+592,29,44,13,"zacatelco",8
+593,29,44,13,"zacatelco",8
+594,29,44,13,"zacatelco",8
+595,29,44,13,"zacatelco",8
+596,29,44,13,"zacatelco",8
+597,29,44,13,"zacatelco",8
+598,29,44,13,"zacatelco",8
+599,29,44,13,"zacatelco",8
+600,29,44,13,"zacatelco",8
+601,29,44,13,"zacatelco",8
+602,29,48,13,"zacatelco",9
+603,29,48,13,"zacatelco",9
+604,29,48,13,"zacatelco",9
+605,29,48,13,"zacatelco",9
+606,29,55,3,"xalostoc",17
+607,29,54,3,"xalostoc",17
+608,29,54,3,"xalostoc",17
