@@ -1,0 +1,2794 @@
+seccion,munn,mun,edon,edo,disfed1979,disfed1997,disfed2006,disfed2018,disloc2005,disloc2015,disloc2018
+303,1,Acapulco De Juárez,12,gue,7,9,9,9,26,0,0
+516,7,Arcelia,12,gue,8,1,1,1,20,0,0
+526,7,Arcelia,12,gue,8,1,1,1,20,0,0
+558,8,Atenango Del Río,12,gue,10,4,6,2,21,0,0
+635,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,0,0
+648,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,0,0
+757,81,Marquelia,12,gue,6,8,8,8,24,0,0
+984,22,Coyuca De Catalán,12,gue,3,1,1,1,7,0,0
+1073,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,0,0
+1078,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,0,0
+1272,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,0,0
+1321,30,Eduardo Neri,12,gue,3,4,6,7,15,0,0
+1343,31,Florencio Villareal,12,gue,6,8,8,8,14,0,0
+1368,32,General Canuto A. Neri,12,gue,8,2,2,1,10,0,0
+1378,32,General Canuto A. Neri,12,gue,8,2,2,1,10,0,0
+1400,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,0,0
+1779,45,Mochitlán,12,gue,1,6,7,6,2,0,0
+1782,45,Mochitlán,12,gue,1,6,7,6,2,0,0
+1853,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,0,0
+1891,49,Petatlán,12,gue,9,3,3,3,12,0,0
+1919,49,Petatlán,12,gue,9,3,3,3,12,0,0
+1923,49,Petatlán,12,gue,9,3,3,3,12,0,0
+2081,54,San Marcos,12,gue,6,8,8,8,18,0,0
+2126,55,San Miguel Totolapan,12,gue,3,1,1,1,20,0,0
+2282,58,Tecpan De Galeana,12,gue,9,3,3,3,4,0,0
+2351,59,Teloloapan,12,gue,2,2,2,1,8,0,0
+2357,59,Teloloapan,12,gue,2,2,2,1,8,0,0
+2395,59,Teloloapan,12,gue,2,2,2,1,8,0,0
+2498,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,0,0
+2539,65,Tlalchapa,12,gue,8,1,1,1,23,0,0
+2677,71,Xochihuehuetlán,12,gue,10,5,6,5,22,0,0
+2704,76,Acatepec,12,gue,5,6,5,6,11,0,0
+2742,74,Zirándaro,12,gue,3,1,1,1,7,0,0
+2743,74,Zirándaro,12,gue,3,1,1,1,7,0,0
+2745,74,Zirándaro,12,gue,3,1,1,1,7,0,0
+2747,74,Zirándaro,12,gue,3,1,0,0,7,0,0
+2750,74,Zirándaro,12,gue,3,1,0,0,7,0,0
+2778,76,Acatepec,12,gue,0,6,5,6,11,0,0
+2779,76,Acatepec,12,gue,0,6,5,6,11,0,0
+2780,76,Acatepec,12,gue,0,6,5,6,11,0,0
+2781,76,Acatepec,12,gue,0,6,5,6,11,0,0
+2782,76,Acatepec,12,gue,0,6,5,6,11,0,0
+1204,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1205,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1206,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1209,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,1,1
+1210,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,1,1
+1211,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1212,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1213,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1214,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1215,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1216,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1217,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,1,1
+1219,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,1,1
+1220,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1221,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1222,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1223,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1224,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1225,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1226,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,1,1
+1231,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,1,1
+1232,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1233,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1234,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1235,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1236,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1237,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1238,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1252,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1259,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1260,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1264,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1265,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1266,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1273,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1274,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1275,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1276,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1277,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1282,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1283,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1284,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1292,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1293,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1294,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1298,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1253,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,1,1
+1207,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1208,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1218,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1227,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1228,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1229,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1230,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1239,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1240,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1241,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1242,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1243,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1244,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1245,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1246,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1247,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1248,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1249,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1250,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1251,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1254,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1255,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1256,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1257,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1258,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1261,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1262,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1263,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1267,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1268,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1269,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1270,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1271,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1278,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1279,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1280,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1281,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1285,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1286,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1287,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1288,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1289,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1290,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1291,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1295,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1296,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1297,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1299,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1300,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1301,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1302,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1303,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1304,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1305,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1306,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,1,2,2
+1307,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+1308,29,Chilpancingo de los Bravo,12,gue,1,7,7,7,15,2,2
+40,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+56,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+57,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+58,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+59,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+60,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+61,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+62,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+63,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+76,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+77,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+78,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+79,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+80,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+81,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+84,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+95,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+97,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+198,1,Acapulco De Juárez,12,gue,7,10,4,4,26,3,3
+216,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+217,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+218,1,Acapulco De Juárez,12,gue,7,10,4,4,26,3,3
+219,1,Acapulco De Juárez,12,gue,7,10,4,4,26,3,3
+220,1,Acapulco De Juárez,12,gue,7,10,4,4,26,3,3
+237,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+238,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+239,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+240,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+241,1,Acapulco De Juárez,12,gue,7,10,4,4,26,3,3
+242,1,Acapulco De Juárez,12,gue,7,10,4,4,26,3,3
+243,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+244,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+248,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+249,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+250,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+253,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+254,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+255,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+256,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+257,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+258,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+259,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+260,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+261,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+262,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+263,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+268,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+269,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+270,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+271,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+272,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+273,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+274,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+275,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+276,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+277,1,Acapulco De Juárez,12,gue,7,10,4,4,17,3,3
+278,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+279,1,Acapulco De Juárez,12,gue,7,9,9,4,26,3,3
+285,1,Acapulco De Juárez,12,gue,7,9,9,4,26,3,3
+286,1,Acapulco De Juárez,12,gue,7,9,9,4,26,3,3
+287,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+288,1,Acapulco De Juárez,12,gue,7,9,9,4,26,3,3
+289,1,Acapulco De Juárez,12,gue,7,9,9,4,26,3,3
+298,1,Acapulco De Juárez,12,gue,7,9,9,9,26,3,3
+299,1,Acapulco De Juárez,12,gue,7,9,9,9,26,3,3
+300,1,Acapulco De Juárez,12,gue,7,9,9,9,26,3,3
+302,1,Acapulco De Juárez,12,gue,7,9,9,9,26,3,3
+304,1,Acapulco De Juárez,12,gue,7,9,9,9,26,3,3
+383,1,Acapulco De Juárez,12,gue,7,10,9,4,26,3,3
+96,1,Acapulco De Juárez,12,gue,4,10,4,4,17,3,3
+14,1,Acapulco De Juárez,12,gue,4,10,4,4,16,4,4
+15,1,Acapulco De Juárez,12,gue,4,10,4,4,16,4,4
+16,1,Acapulco De Juárez,12,gue,4,10,4,4,16,4,4
+17,1,Acapulco De Juárez,12,gue,4,10,4,4,16,4,4
+18,1,Acapulco De Juárez,12,gue,4,10,4,4,16,4,4
+19,1,Acapulco De Juárez,12,gue,4,10,4,4,16,4,4
+20,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+21,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+22,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+23,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+26,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+27,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+28,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+29,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+30,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+31,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+32,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+33,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+34,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+35,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+36,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+37,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+38,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+39,1,Acapulco De Juárez,12,gue,4,10,4,4,17,4,4
+41,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+42,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+43,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+44,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+45,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+46,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+47,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+48,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+49,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+50,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+51,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+52,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+53,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+54,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+55,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+64,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+65,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+66,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+67,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+68,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+69,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+70,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+71,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+72,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+73,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+74,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+75,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+82,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+83,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+85,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+86,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+87,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+88,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+89,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+90,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+91,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+92,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+93,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+94,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+98,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+99,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+100,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+101,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+102,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+103,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+104,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+105,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+106,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+107,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+108,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+109,1,Acapulco De Juárez,12,gue,4,10,4,4,5,4,4
+193,1,Acapulco De Juárez,12,gue,7,10,4,4,17,4,4
+194,1,Acapulco De Juárez,12,gue,7,10,4,4,17,4,4
+231,1,Acapulco De Juárez,12,gue,7,10,4,4,17,4,4
+232,1,Acapulco De Juárez,12,gue,7,10,4,4,17,4,4
+24,1,Acapulco De Juárez,12,gue,4,10,4,4,17,5,5
+25,1,Acapulco De Juárez,12,gue,4,10,4,4,17,5,5
+111,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+121,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+122,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+127,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+128,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+129,1,Acapulco De Juárez,12,gue,7,9,9,4,13,5,5
+130,1,Acapulco De Juárez,12,gue,7,9,9,4,13,5,5
+131,1,Acapulco De Juárez,12,gue,7,9,9,4,13,5,5
+139,1,Acapulco De Juárez,12,gue,7,9,9,4,13,5,5
+140,1,Acapulco De Juárez,12,gue,7,9,9,4,13,5,5
+141,1,Acapulco De Juárez,12,gue,7,9,9,4,13,5,5
+142,1,Acapulco De Juárez,12,gue,7,9,9,4,13,5,5
+143,1,Acapulco De Juárez,12,gue,7,9,4,4,26,5,5
+144,1,Acapulco De Juárez,12,gue,7,9,4,4,26,5,5
+145,1,Acapulco De Juárez,12,gue,7,9,9,4,26,5,5
+146,1,Acapulco De Juárez,12,gue,7,9,9,4,26,5,5
+147,1,Acapulco De Juárez,12,gue,7,9,9,4,13,5,5
+148,1,Acapulco De Juárez,12,gue,7,9,9,4,13,5,5
+162,1,Acapulco De Juárez,12,gue,7,9,9,4,26,5,5
+163,1,Acapulco De Juárez,12,gue,7,9,4,4,26,5,5
+164,1,Acapulco De Juárez,12,gue,7,9,4,4,26,5,5
+165,1,Acapulco De Juárez,12,gue,7,9,4,4,26,5,5
+169,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+170,1,Acapulco De Juárez,12,gue,7,9,4,4,26,5,5
+171,1,Acapulco De Juárez,12,gue,7,9,4,4,26,5,5
+191,1,Acapulco De Juárez,12,gue,7,9,4,4,26,5,5
+192,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+195,1,Acapulco De Juárez,12,gue,7,10,4,4,26,5,5
+196,1,Acapulco De Juárez,12,gue,7,10,4,4,26,5,5
+197,1,Acapulco De Juárez,12,gue,7,9,4,4,26,5,5
+221,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+222,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+223,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+224,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+225,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+226,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+227,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+228,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+229,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+230,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+233,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+234,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+235,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+236,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+251,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+252,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+333,1,Acapulco De Juárez,12,gue,7,9,4,4,17,5,5
+334,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+337,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+338,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+343,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+344,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+345,1,Acapulco De Juárez,12,gue,7,9,4,4,17,5,5
+346,1,Acapulco De Juárez,12,gue,7,9,4,4,17,5,5
+347,1,Acapulco De Juárez,12,gue,7,9,4,4,13,5,5
+353,1,Acapulco De Juárez,12,gue,7,10,4,4,17,5,5
+149,1,Acapulco De Juárez,12,gue,7,9,9,9,13,6,6
+150,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+157,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+158,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+159,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+160,1,Acapulco De Juárez,12,gue,7,9,9,9,26,6,6
+161,1,Acapulco De Juárez,12,gue,7,9,9,9,26,6,6
+172,1,Acapulco De Juárez,12,gue,7,9,9,9,26,6,6
+173,1,Acapulco De Juárez,12,gue,7,9,9,9,26,6,6
+174,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+175,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+176,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+177,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+178,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+179,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+180,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+181,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+182,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+183,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+184,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+185,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+186,1,Acapulco De Juárez,12,gue,7,9,9,9,26,6,6
+187,1,Acapulco De Juárez,12,gue,7,9,4,9,26,6,6
+188,1,Acapulco De Juárez,12,gue,7,9,4,9,26,6,6
+189,1,Acapulco De Juárez,12,gue,7,9,4,9,26,6,6
+190,1,Acapulco De Juárez,12,gue,7,9,4,9,26,6,6
+199,1,Acapulco De Juárez,12,gue,7,9,4,9,26,6,6
+200,1,Acapulco De Juárez,12,gue,7,9,4,9,26,6,6
+201,1,Acapulco De Juárez,12,gue,7,9,9,9,26,6,6
+202,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+203,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+204,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+205,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+206,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+207,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+208,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+209,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+210,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+211,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+212,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+213,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+214,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+215,1,Acapulco De Juárez,12,gue,7,10,9,9,26,6,6
+245,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+246,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+247,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+264,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+265,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+266,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+267,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+280,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+281,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+354,1,Acapulco De Juárez,12,gue,7,9,9,9,28,6,6
+282,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+283,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+284,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+290,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+291,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+292,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+293,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+294,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+295,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+296,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+297,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+301,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+305,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+306,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+307,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+308,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+309,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+310,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+311,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+312,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+355,1,Acapulco De Juárez,12,gue,7,9,9,9,28,7,7
+362,1,Acapulco De Juárez,12,gue,7,9,9,9,28,7,7
+363,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+367,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+368,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+369,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+370,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+371,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+372,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+373,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+374,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+375,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+376,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+377,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+378,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+379,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+380,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+381,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+382,1,Acapulco De Juárez,12,gue,7,9,9,9,18,7,7
+1,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+2,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+3,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+4,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+5,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+6,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+7,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+8,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+9,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+10,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+11,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+12,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+13,1,Acapulco De Juárez,12,gue,4,10,4,4,16,8,8
+110,1,Acapulco De Juárez,12,gue,7,10,4,4,16,8,8
+123,1,Acapulco De Juárez,12,gue,7,10,4,4,16,8,8
+124,1,Acapulco De Juárez,12,gue,7,10,4,4,16,8,8
+125,1,Acapulco De Juárez,12,gue,7,10,4,4,16,8,8
+126,1,Acapulco De Juárez,12,gue,7,10,4,4,16,8,8
+166,1,Acapulco De Juárez,12,gue,7,10,4,4,16,8,8
+167,1,Acapulco De Juárez,12,gue,7,10,4,4,16,8,8
+168,1,Acapulco De Juárez,12,gue,7,10,4,4,16,8,8
+883,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+884,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+885,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+886,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+887,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+888,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+889,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+890,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+891,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+892,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+893,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+894,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+895,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+896,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+897,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+898,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+899,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+900,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+901,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+902,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+903,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+904,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+905,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+906,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+907,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+908,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+909,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+910,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+911,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+912,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+913,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+914,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+915,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+916,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+917,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+918,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+919,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+920,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+921,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+922,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+923,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+924,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+925,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+926,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+927,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+928,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+929,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+930,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+931,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+932,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+933,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+934,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+935,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+936,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+937,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+939,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+940,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+941,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+942,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+938,21,Coyuca De Benítez,12,gue,1,7,7,3,16,8,8
+112,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+113,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+114,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+115,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+116,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+117,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+118,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+119,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+120,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+132,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+133,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+134,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+135,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+136,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+137,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+138,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+151,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+152,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+153,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+154,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+155,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+156,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+313,1,Acapulco De Juárez,12,gue,7,9,4,9,17,9,9
+314,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+315,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+316,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+317,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+318,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+319,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+320,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+321,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+322,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+323,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+324,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+325,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+326,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+327,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+328,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+329,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+330,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+331,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+332,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+335,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+336,1,Acapulco De Juárez,12,gue,7,9,4,9,13,9,9
+339,1,Acapulco De Juárez,12,gue,7,9,9,9,13,9,9
+340,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+341,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+342,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+348,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+349,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+350,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+351,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+352,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+356,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+357,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+358,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+359,1,Acapulco De Juárez,12,gue,7,9,9,9,18,9,9
+360,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+361,1,Acapulco De Juárez,12,gue,7,9,9,9,28,9,9
+364,1,Acapulco De Juárez,12,gue,7,9,9,9,18,9,9
+365,1,Acapulco De Juárez,12,gue,7,9,9,9,18,9,9
+366,1,Acapulco De Juárez,12,gue,7,9,9,9,18,9,9
+596,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+597,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+598,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+599,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+600,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+602,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+603,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+604,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+605,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+606,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+607,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+608,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+609,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+610,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+611,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+612,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+613,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+614,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+615,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+616,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+619,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+620,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+621,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+622,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+623,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+624,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+626,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+627,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+628,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+630,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+631,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+632,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+633,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+634,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+636,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+637,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+638,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+639,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+640,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+641,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+642,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+644,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+645,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+646,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+647,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+649,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+650,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+651,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+652,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+653,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+654,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+655,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+656,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+657,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+658,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+659,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+660,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+661,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+662,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+663,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+664,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+665,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+666,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+667,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+668,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+669,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+670,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+763,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+764,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+765,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+766,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+767,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+768,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+769,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+770,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+771,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+772,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+773,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+774,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+775,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+776,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+777,14,Benito Juárez,12,gue,9,3,3,3,4,10,10
+2262,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2263,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2264,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2265,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2266,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2267,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2268,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2269,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2270,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2271,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2272,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2273,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2274,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2280,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2283,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2285,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2297,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2298,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2299,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2300,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2310,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2314,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2316,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2317,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2318,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2319,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2320,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2321,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2322,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2323,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2324,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2325,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2326,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2327,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2328,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2329,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+2330,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+601,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+617,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+618,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+625,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+629,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+643,11,Atoyac De Álvarez,12,gue,9,3,3,3,4,10,10
+2315,58,Tecpan De Galeana,12,gue,9,3,3,3,4,10,10
+1602,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1603,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1611,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1612,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1613,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1614,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1615,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1616,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1626,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1627,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1628,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1629,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1631,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1634,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1637,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1642,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1643,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1645,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1646,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1647,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1648,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1649,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1650,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1651,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1652,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1653,39,zihuatanejo de azueta,12,gue,9,3,3,3,12,11,11
+1875,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1876,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1877,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1878,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1879,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1880,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1881,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1882,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1883,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1884,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1885,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1886,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1887,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1888,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1889,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1890,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1892,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1893,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1894,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1895,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1896,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1897,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1898,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1900,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1901,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1902,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1903,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1906,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1907,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1908,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1909,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1910,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1911,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1912,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1913,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1914,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1915,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1916,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1917,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1918,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1920,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1921,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1922,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1924,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1925,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1926,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1927,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1928,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1929,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1930,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1931,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1932,49,Petatlán,12,gue,9,3,3,3,12,11,11
+2275,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2276,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2277,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2278,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2279,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2281,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2284,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2286,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2287,49,Petatlán,12,gue,9,3,3,3,12,11,11
+2288,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2289,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2290,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2291,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2292,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2293,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2294,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2295,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2296,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2301,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2302,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2303,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2304,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2305,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2306,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2307,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2308,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2309,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2311,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2312,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+2313,58,Tecpan De Galeana,12,gue,9,3,3,3,4,11,11
+1899,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1904,49,Petatlán,12,gue,9,3,3,3,12,11,11
+1905,49,Petatlán,12,gue,9,3,3,3,12,11,11
+814,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,8,12
+789,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+790,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+791,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+792,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+793,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+794,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+795,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+796,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+797,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+798,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+799,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+800,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+801,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+802,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+803,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+804,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+805,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+806,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+807,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+808,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+809,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+810,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+811,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+812,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+813,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+815,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+817,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+818,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+819,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+1589,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1590,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1591,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1592,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1593,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1594,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1595,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1596,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1597,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1598,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1599,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1600,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1601,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1604,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1605,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1606,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1607,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1608,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1609,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1610,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1617,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1618,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1619,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1620,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1621,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1622,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1624,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1625,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1630,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1632,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1633,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1635,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1636,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1638,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1639,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1640,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1641,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1644,39,José Azueta,12,gue,9,3,3,3,12,12,12
+2622,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2623,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2624,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2625,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2626,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2627,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2628,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2629,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2630,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2631,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2632,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2633,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2634,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2635,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2636,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2637,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2638,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2639,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2640,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2641,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2642,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2643,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2644,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2645,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2646,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2647,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2648,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2649,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2650,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2651,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2652,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2653,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+2654,69,La Unión De I. Montes De Oca,12,gue,9,3,3,3,12,12,12
+816,16,Coahuayutla De J. M. Izazaga,12,gue,3,3,3,3,12,12,12
+1623,39,José Azueta,12,gue,9,3,3,3,12,12,12
+1654,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1655,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1656,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1657,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1658,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1659,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1660,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1661,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1662,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1663,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1664,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1665,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1666,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1667,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1668,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1669,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1670,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1671,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1672,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1673,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1674,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1675,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+1676,40,Juan R. Escudero,12,gue,1,7,8,8,13,13,13
+2041,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2042,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2043,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2044,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2045,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2046,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2047,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2048,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2049,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2050,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2052,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2053,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2054,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2055,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2056,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2057,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2058,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2059,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2060,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2061,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2062,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2063,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2064,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2065,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2066,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2067,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2068,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2069,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2070,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2071,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2072,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2073,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2074,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2075,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2076,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2077,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2078,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2079,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2080,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2083,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2084,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2086,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2087,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2088,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2089,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2090,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2091,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2223,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2224,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2225,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2226,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2227,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2228,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2229,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2230,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2231,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2232,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2233,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2234,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2235,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2236,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2237,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2238,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2239,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2240,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2241,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2242,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2243,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2244,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2245,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2246,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2247,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2248,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2249,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2250,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2251,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2252,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2253,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2254,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2255,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2256,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2257,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2258,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2259,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2260,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2261,57,Tecoanapa,12,gue,6,7,8,8,14,13,13
+2784,40,Juan R. Escudero,12,gue,0,0,8,8,13,13,13
+2051,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2082,54,San Marcos,12,gue,6,8,8,8,18,13,13
+2085,54,San Marcos,12,gue,6,8,8,8,18,13,13
+671,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+672,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+673,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+674,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+675,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+676,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+677,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+678,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+679,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+680,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+681,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+682,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+683,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+684,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+685,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+686,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+687,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+688,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+689,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+690,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+691,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+692,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+693,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+694,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+695,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+696,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+697,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+698,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+699,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+700,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+701,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+702,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+703,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+704,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+705,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+706,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+707,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+708,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+709,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+710,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+711,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+712,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+713,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+714,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+715,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+716,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+717,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+718,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+719,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+720,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+721,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+722,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+723,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+724,12,Ayutla De Los Libres,12,gue,6,8,8,8,14,14,14
+844,18,Copala,12,gue,6,8,8,8,24,14,14
+845,18,Copala,12,gue,6,8,8,8,24,14,14
+846,18,Copala,12,gue,6,8,8,8,24,14,14
+847,18,Copala,12,gue,6,8,8,8,24,14,14
+848,18,Copala,12,gue,6,8,8,8,24,14,14
+849,18,Copala,12,gue,6,8,8,8,24,14,14
+850,18,Copala,12,gue,6,8,8,8,24,14,14
+851,18,Copala,12,gue,6,8,8,8,24,14,14
+852,18,Copala,12,gue,6,8,8,8,24,14,14
+853,18,Copala,12,gue,6,8,8,8,24,14,14
+854,18,Copala,12,gue,6,8,8,8,24,14,14
+855,18,Copala,12,gue,6,8,8,8,24,14,14
+856,18,Copala,12,gue,6,8,8,8,24,14,14
+857,18,Copala,12,gue,6,8,8,8,24,14,14
+1037,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1038,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1039,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1040,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1041,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1042,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1043,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1044,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1045,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1046,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1047,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1048,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1049,25,Cuautepec,12,gue,5,8,8,8,14,14,14
+1339,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1340,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1341,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1342,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1344,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1345,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1346,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1347,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1348,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1349,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1350,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1351,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1352,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1353,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1354,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1355,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1356,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+1357,31,Florencio Villareal,12,gue,6,8,8,8,14,14,14
+2723,12,Ayutla De Los Libres,12,gue,5,6,5,8,14,14,14
+725,13,Azoyú,12,gue,6,8,8,8,24,15,15
+726,13,Azoyú,12,gue,6,8,8,8,24,15,15
+727,13,Azoyú,12,gue,6,8,8,8,24,15,15
+728,13,Azoyú,12,gue,6,8,8,8,24,15,15
+729,13,Azoyú,12,gue,6,8,8,8,24,15,15
+730,13,Azoyú,12,gue,6,8,8,8,24,15,15
+731,13,Azoyú,12,gue,6,8,8,8,24,15,15
+732,80,Marquelia,12,gue,6,8,8,8,24,15,15
+733,13,Azoyú,12,gue,6,8,8,8,24,15,15
+734,13,Azoyú,12,gue,6,8,8,8,24,15,15
+735,80,Marquelia,12,gue,6,8,8,8,24,15,15
+736,13,Azoyú,12,gue,6,8,8,8,24,15,15
+737,13,Azoyú,12,gue,6,8,8,8,24,15,15
+738,13,Azoyú,12,gue,6,8,8,8,24,15,15
+739,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+740,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+741,13,Azoyú,12,gue,6,8,8,8,24,15,15
+742,13,Azoyú,12,gue,6,8,8,8,24,15,15
+743,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+744,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+745,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+746,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+747,80,Marquelia,12,gue,6,8,8,8,24,15,15
+748,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+749,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+750,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+751,13,Azoyú,12,gue,6,8,8,8,24,15,15
+752,80,Marquelia,12,gue,6,8,8,8,24,15,15
+753,80,Marquelia,12,gue,6,8,8,8,24,15,15
+754,80,Marquelia,12,gue,6,8,8,8,24,15,15
+755,80,Marquelia,12,gue,6,8,8,8,24,15,15
+756,80,Marquelia,12,gue,6,8,8,8,24,15,15
+758,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+759,80,Marquelia,12,gue,6,8,8,8,24,15,15
+760,13,Azoyú,12,gue,6,8,8,8,24,15,15
+761,13,Azoyú,12,gue,6,8,8,8,24,15,15
+762,80,Marquelia,12,gue,6,8,8,8,24,15,15
+1001,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1002,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1003,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1004,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1005,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1006,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1007,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1008,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1009,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1010,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1011,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1012,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1013,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1014,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1015,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1016,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1017,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1018,80,Marquelia,12,gue,6,8,8,8,24,15,15
+1019,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1020,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1021,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1022,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1023,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1024,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1025,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1026,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1027,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1028,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1029,23,Cuajinicuilapa,12,gue,6,8,8,8,6,15,15
+1565,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1566,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1567,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1568,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1569,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1570,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1571,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1572,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1573,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1574,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1575,37,Igualapa,12,gue,5,8,5,5,24,15,15
+1763,37,Igualapa,12,gue,5,5,5,5,24,15,15
+2015,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2016,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2017,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2018,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2021,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2022,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2023,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2024,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2025,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2026,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2027,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2028,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2029,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2030,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2031,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2032,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2033,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2034,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2035,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2036,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2037,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2038,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2039,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2040,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,15
+2792,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+2793,81,Juchitán ,12,gue,6,8,8,8,24,15,15
+1762,44,Metlatónoc,12,gue,5,5,5,5,27,28,15
+1809,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1810,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1811,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1812,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1813,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1814,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1815,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1816,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1817,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1818,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1819,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1820,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1821,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1822,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1823,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1824,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1825,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1826,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1827,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1828,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1829,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1830,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1831,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1832,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1833,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1834,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1835,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1836,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1837,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1838,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1839,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1840,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1841,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1842,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1843,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1844,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1845,47,Ometepec,12,gue,6,8,8,8,6,16,16
+1846,47,Ometepec,12,gue,6,8,8,8,6,16,16
+2509,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2510,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2511,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2512,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2513,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2514,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2515,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2516,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2517,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2518,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2519,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2520,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2521,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2522,63,Tlacoachistlahuaca,12,gue,5,8,5,5,6,16,16
+2678,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2679,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2680,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2681,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2682,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2683,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2684,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2685,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2686,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2687,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2688,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2689,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2690,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2691,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+2692,72,Xochistlahuaca,12,gue,5,8,5,5,6,16,16
+411,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+412,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+413,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+414,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+415,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+416,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+417,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+418,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+419,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+420,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+421,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+422,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+423,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+424,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+425,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+426,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+427,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+428,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+429,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+430,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+431,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+432,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+433,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+434,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+435,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+436,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+437,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+438,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+439,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+440,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+441,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+442,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+443,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+444,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+445,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+446,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+447,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+448,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+449,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+450,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+453,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+454,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+455,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+943,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+944,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+945,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+946,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+947,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+949,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+950,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+951,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+952,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+953,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+954,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+955,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+956,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+957,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+958,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+959,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+960,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+961,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+962,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+963,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+964,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+965,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+966,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+967,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+968,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+969,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+970,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+971,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+972,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+973,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+974,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+975,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+976,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+977,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+978,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+979,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+980,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+981,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+982,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+983,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+985,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+986,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+987,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+988,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+989,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+990,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+991,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+992,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+993,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+994,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+995,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+996,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+997,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+998,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+999,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+1000,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+2092,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2093,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2094,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2095,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2096,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2097,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2098,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2099,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2100,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2101,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2102,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2103,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2104,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2105,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2106,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2107,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2108,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2109,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2110,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2111,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2113,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2114,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2115,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2116,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2117,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2118,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2119,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2120,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2121,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2123,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2124,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2125,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2127,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2128,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2129,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2130,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2131,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2132,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2133,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2725,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2726,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2727,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2728,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2729,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2730,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2731,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2732,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2733,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2734,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2735,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2736,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2737,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2738,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2739,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2740,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2741,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2744,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2746,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2748,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2749,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+2751,74,Zirándaro,12,gue,3,1,1,1,7,17,17
+451,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+452,3,Ajuchitlán Del Progreso,12,gue,3,1,1,1,7,17,17
+948,22,Coyuca De Catalán,12,gue,3,1,1,1,7,17,17
+2112,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+2122,55,San Miguel Totolapan,12,gue,3,1,1,1,20,17,17
+500,7,Arcelia,12,gue,8,1,1,1,20,18,18
+501,7,Arcelia,12,gue,8,1,1,1,20,18,18
+502,7,Arcelia,12,gue,8,1,1,1,20,18,18
+503,7,Arcelia,12,gue,8,1,1,1,20,18,18
+504,7,Arcelia,12,gue,8,1,1,1,20,18,18
+505,7,Arcelia,12,gue,8,1,1,1,20,18,18
+506,7,Arcelia,12,gue,8,1,1,1,20,18,18
+507,7,Arcelia,12,gue,8,1,1,1,20,18,18
+508,7,Arcelia,12,gue,8,1,1,1,20,18,18
+509,7,Arcelia,12,gue,8,1,1,1,20,18,18
+510,7,Arcelia,12,gue,8,1,1,1,20,18,18
+511,7,Arcelia,12,gue,8,1,1,1,20,18,18
+512,7,Arcelia,12,gue,8,1,1,1,20,18,18
+513,7,Arcelia,12,gue,8,1,1,1,20,18,18
+514,7,Arcelia,12,gue,8,1,1,1,20,18,18
+515,7,Arcelia,12,gue,8,1,1,1,20,18,18
+517,7,Arcelia,12,gue,8,1,1,1,20,18,18
+518,7,Arcelia,12,gue,8,1,1,1,20,18,18
+519,7,Arcelia,12,gue,8,1,1,1,20,18,18
+521,7,Arcelia,12,gue,8,1,1,1,20,18,18
+522,7,Arcelia,12,gue,8,1,1,1,20,18,18
+523,7,Arcelia,12,gue,8,1,1,1,20,18,18
+524,7,Arcelia,12,gue,8,1,1,1,20,18,18
+527,7,Arcelia,12,gue,8,1,1,1,20,18,18
+528,7,Arcelia,12,gue,8,1,1,1,20,18,18
+529,7,Arcelia,12,gue,8,1,1,1,20,18,18
+530,7,Arcelia,12,gue,8,1,1,1,20,18,18
+531,7,Arcelia,12,gue,8,1,1,1,20,18,18
+532,7,Arcelia,12,gue,8,1,1,1,20,18,18
+533,7,Arcelia,12,gue,8,1,1,1,20,18,18
+534,7,Arcelia,12,gue,8,1,1,1,20,18,18
+535,7,Arcelia,12,gue,8,1,1,1,20,18,18
+537,7,Arcelia,12,gue,8,1,1,1,20,18,18
+538,7,Arcelia,12,gue,8,1,1,1,20,18,18
+539,7,Arcelia,12,gue,8,1,1,1,20,18,18
+540,7,Arcelia,12,gue,8,1,1,1,20,18,18
+541,7,Arcelia,12,gue,8,1,1,1,20,18,18
+542,7,Arcelia,12,gue,8,1,1,1,20,18,18
+544,7,Arcelia,12,gue,8,1,1,1,20,18,18
+546,7,Arcelia,12,gue,8,1,1,1,20,18,18
+547,7,Arcelia,12,gue,8,1,1,1,20,18,18
+548,7,Arcelia,12,gue,8,1,1,1,20,18,18
+549,7,Arcelia,12,gue,8,1,1,1,20,18,18
+550,7,Arcelia,12,gue,8,1,1,1,20,18,18
+551,7,Arcelia,12,gue,8,1,1,1,20,18,18
+552,7,Arcelia,12,gue,8,1,1,1,20,18,18
+1067,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1068,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1069,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1070,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1071,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1072,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1074,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1075,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1076,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1077,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1079,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1080,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1081,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1082,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1083,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1084,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1086,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1087,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1088,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1089,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1090,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1091,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1092,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1093,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1094,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1095,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1096,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1097,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1098,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1099,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1100,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1101,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1102,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1103,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1104,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1105,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1106,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1107,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1108,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1109,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1110,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1111,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1950,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1951,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1952,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1953,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1954,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1955,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1956,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1957,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1958,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1959,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1960,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1961,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1963,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1964,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1965,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1966,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1967,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1968,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1969,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1970,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1971,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+1972,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+2533,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2534,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2535,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2536,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2537,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2540,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2541,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2542,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2543,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2544,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2545,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2546,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2547,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2548,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2549,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2550,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2551,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2553,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2600,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2601,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2602,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2603,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2604,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2605,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2606,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2607,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2608,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2609,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2610,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2611,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2612,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2613,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2614,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2615,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2616,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2617,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2618,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2619,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2620,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+2621,68,Tlapehuala,12,gue,8,1,1,1,20,18,18
+520,7,Arcelia,12,gue,8,1,1,1,20,18,18
+525,7,Arcelia,12,gue,8,1,1,1,20,18,18
+536,7,Arcelia,12,gue,8,1,1,1,20,18,18
+543,7,Arcelia,12,gue,8,1,1,1,20,18,18
+545,7,Arcelia,12,gue,8,1,1,1,20,18,18
+1085,27,Cutzamala De Pinzón,12,gue,8,1,1,1,23,18,18
+1962,51,Pungarabato,12,gue,3,1,1,1,23,18,18
+2538,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+2552,65,Tlalchapa,12,gue,8,1,1,1,23,18,18
+1309,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1310,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1311,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1312,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1313,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1314,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1315,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1316,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1317,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1318,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1319,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1320,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1322,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1323,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1324,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1325,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1326,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1327,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1328,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1329,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1330,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1331,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1332,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1333,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1334,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1335,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1336,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1337,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1338,30,Eduardo Neri,12,gue,3,4,6,7,15,19,19
+1382,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1383,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1384,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1386,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1387,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1388,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1389,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1390,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1393,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1394,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1395,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1396,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1397,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1398,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1401,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1402,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1403,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1404,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1405,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1406,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1407,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1408,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1409,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1410,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1411,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1412,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1413,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1414,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1415,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1416,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1417,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1418,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1419,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1420,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1421,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1422,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1423,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1424,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1425,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1426,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1427,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1428,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1429,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1430,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1431,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1677,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1678,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1679,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1680,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1681,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1682,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1683,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1684,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1685,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1686,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1687,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1688,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1689,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1690,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1691,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1692,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1693,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1694,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1695,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1696,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1697,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1698,41,Leonardo Bravo,12,gue,3,7,1,7,1,19,19
+1385,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1391,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1392,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+1399,33,General Heliodoro Castillo,12,gue,3,4,1,7,8,19,19
+479,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+480,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+481,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+482,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+483,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+484,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+486,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+488,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+489,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+490,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+491,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+492,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+493,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+494,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+495,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+496,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+498,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+820,17,Cocula,12,gue,2,2,2,1,9,20,20
+821,17,Cocula,12,gue,2,2,2,1,9,20,20
+822,17,Cocula,12,gue,2,2,2,1,9,20,20
+823,17,Cocula,12,gue,2,2,2,1,9,20,20
+824,17,Cocula,12,gue,2,2,2,1,9,20,20
+825,17,Cocula,12,gue,2,2,2,1,9,20,20
+826,17,Cocula,12,gue,2,2,2,1,9,20,20
+827,17,Cocula,12,gue,2,2,2,1,9,20,20
+828,17,Cocula,12,gue,2,2,2,1,9,20,20
+829,17,Cocula,12,gue,2,2,2,1,9,20,20
+830,17,Cocula,12,gue,2,2,2,1,9,20,20
+831,17,Cocula,12,gue,2,2,2,1,9,20,20
+832,17,Cocula,12,gue,2,2,2,1,9,20,20
+833,17,Cocula,12,gue,2,2,2,1,9,20,20
+834,17,Cocula,12,gue,2,2,2,1,9,20,20
+835,17,Cocula,12,gue,2,2,2,1,9,20,20
+836,17,Cocula,12,gue,2,2,2,1,9,20,20
+837,17,Cocula,12,gue,2,2,2,1,9,20,20
+838,17,Cocula,12,gue,2,2,2,1,9,20,20
+839,17,Cocula,12,gue,2,2,2,1,9,20,20
+840,17,Cocula,12,gue,2,2,2,1,9,20,20
+841,17,Cocula,12,gue,2,2,2,1,9,20,20
+842,17,Cocula,12,gue,2,2,2,1,9,20,20
+843,17,Cocula,12,gue,2,2,2,1,9,20,20
+1050,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1051,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1052,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1053,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1054,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1055,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1056,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1057,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1058,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1059,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1060,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1061,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1062,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1063,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1064,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1065,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1358,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1359,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1361,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1362,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1364,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1367,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1369,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1370,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1372,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1374,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1375,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1376,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1377,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1379,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1380,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1576,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1577,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1578,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1579,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1580,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1582,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1583,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1584,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1585,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1586,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1587,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1588,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1847,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1848,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1849,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1850,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1851,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1852,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1855,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1856,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1857,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1859,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1860,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1861,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1862,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1864,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1866,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1867,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1869,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1870,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1871,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1872,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1873,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1874,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+2331,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2332,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2333,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2334,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2335,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2336,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2337,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2338,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2339,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2340,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2341,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2342,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2343,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2344,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2345,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2347,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2348,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2352,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2353,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2354,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2355,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2356,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2358,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2359,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2361,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2362,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2363,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2364,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2365,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2366,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2368,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2369,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2370,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2371,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2372,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2373,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2374,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2375,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2376,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2377,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2379,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2380,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2381,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2382,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2383,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2384,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2385,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2386,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2387,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2388,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2389,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2390,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2391,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2392,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2393,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2394,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2396,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2397,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2398,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2399,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2400,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2401,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2402,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2403,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2404,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2405,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2406,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2407,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2408,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2409,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2411,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2412,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2413,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2414,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2415,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2416,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2418,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2419,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+485,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+487,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+497,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+499,6,Apaxtla De Castrejón,12,gue,3,2,1,1,8,20,20
+1066,26,Cuétzala Del Progreso,12,gue,2,2,2,1,8,20,20
+1360,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1363,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1365,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1366,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1371,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1373,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1381,32,General Canuto A. Neri,12,gue,8,2,2,1,10,20,20
+1581,38,Ixcateopan De Cuahutémoc,12,gue,8,2,2,1,10,20,20
+1854,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1858,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1863,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1865,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+1868,48,Pedro Ascencio Alquisiras,12,gue,8,2,2,1,10,20,20
+2346,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2349,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2350,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2360,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2367,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2378,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2410,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+2417,59,Teloloapan,12,gue,2,2,2,1,8,20,20
+1933,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1934,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1935,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1936,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1937,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1938,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1939,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1940,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1941,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1942,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1944,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1945,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1946,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1947,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1948,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+1949,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+2134,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2135,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2136,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2137,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2138,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2139,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2140,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2141,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2142,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2143,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2144,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2145,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2146,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2147,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2148,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2149,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2150,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2151,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2152,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2153,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2154,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2155,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2156,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2157,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2158,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2159,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2160,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2161,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2162,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2163,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2164,56,Taxco De Alarcón,12,gue,8,2,2,2,19,21,21
+2165,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2166,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2167,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2168,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2169,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2170,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2173,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2174,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2175,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2176,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2177,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2178,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2179,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2180,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2181,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2182,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2183,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2184,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2185,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2186,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2187,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2188,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2189,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2190,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2191,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2192,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2193,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2194,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2195,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2196,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2197,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2198,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2199,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2200,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2201,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2202,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2203,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2204,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2205,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2206,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2207,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2208,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2209,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2210,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2211,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2212,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2213,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2214,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2215,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2216,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2217,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2218,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2219,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2220,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2221,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2222,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2451,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2452,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2453,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2454,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2455,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2456,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2457,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2458,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2460,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2461,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2463,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2464,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2466,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2468,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2469,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2471,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2472,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2473,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2474,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2475,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2476,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2477,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2478,61,Tetipac,12,gue,8,2,2,2,10,21,21
+1943,50,Pilcaya,12,gue,8,2,2,2,10,21,21
+2171,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2172,56,Taxco De Alarcón,12,gue,8,2,2,2,10,21,21
+2459,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2462,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2465,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2467,61,Tetipac,12,gue,8,2,2,2,10,21,21
+2470,61,Tetipac,12,gue,8,2,2,2,10,21,21
+1480,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1481,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1482,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1483,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1484,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1485,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1486,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1487,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1488,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1489,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1490,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1491,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1492,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1493,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1494,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1495,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1496,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1497,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1498,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1499,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1500,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1501,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1502,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1503,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1504,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1505,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1506,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1507,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1508,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1509,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1510,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1511,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1512,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1513,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1514,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1515,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1516,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1517,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1518,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1519,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1520,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1521,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1522,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1523,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1524,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1525,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1526,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1527,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1528,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1529,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1530,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1531,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1532,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1533,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1534,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1535,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1536,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1537,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1538,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1539,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1540,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1541,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1542,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1544,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1546,36,Iguala De La Independencia,12,gue,2,4,2,2,21,22,22
+1548,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1549,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1550,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1551,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1553,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+1556,36,Iguala De La Independencia,12,gue,2,4,2,2,9,22,22
+553,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+554,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+555,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+556,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+557,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+559,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+560,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+561,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+562,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+563,8,Atenango Del Río,12,gue,10,4,6,2,21,23,23
+778,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+779,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+780,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+781,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+782,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+783,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+784,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+785,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+786,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+787,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+788,15,Buenavista De Cuéllar,12,gue,2,2,6,2,19,23,23
+858,19,Copalillo,12,gue,10,4,6,2,21,23,23
+859,19,Copalillo,12,gue,10,4,6,2,21,23,23
+860,19,Copalillo,12,gue,10,4,6,2,21,23,23
+861,19,Copalillo,12,gue,10,4,6,2,21,23,23
+862,19,Copalillo,12,gue,10,4,6,2,21,23,23
+863,19,Copalillo,12,gue,10,4,6,2,21,23,23
+864,19,Copalillo,12,gue,10,4,6,2,21,23,23
+865,19,Copalillo,12,gue,10,4,6,2,21,23,23
+866,19,Copalillo,12,gue,10,4,6,2,21,23,23
+867,19,Copalillo,12,gue,10,4,6,2,21,23,23
+1444,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1445,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1446,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1447,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1448,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1449,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1450,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1451,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1452,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1453,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1454,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1455,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1456,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1457,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1458,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1459,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1460,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1461,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1462,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1463,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1464,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1465,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1466,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1467,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1468,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1469,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1470,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1471,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1472,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1473,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1474,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1475,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1476,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1477,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1478,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1479,35,Huitzuco De Los Figueroa,12,gue,10,4,6,2,21,23,23
+1543,36,Iguala De La Independencia,12,gue,2,4,2,2,21,23,23
+1545,36,Iguala De La Independencia,12,gue,2,4,2,2,21,23,23
+1547,36,Iguala De La Independencia,12,gue,2,4,2,2,21,23,23
+1552,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1554,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1555,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1557,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1558,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1559,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1560,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1561,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1562,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1563,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+1564,36,Iguala De La Independencia,12,gue,2,4,2,2,9,23,23
+2420,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2421,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2422,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2423,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2424,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2425,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2426,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2427,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2428,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2429,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2430,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2431,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2432,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2433,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2434,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2435,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2436,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2437,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2438,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2439,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2440,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2441,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2442,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2443,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2444,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2445,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2446,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2447,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2448,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2449,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+2450,60,Tepecoacuilco De Trujano,12,gue,2,4,6,2,9,23,23
+1719,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1720,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1721,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1722,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1723,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1724,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1725,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1726,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1727,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1728,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1729,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1730,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1731,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1732,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1733,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1734,43,Martir De Cuilapan,12,gue,10,6,6,6,2,24,24
+1764,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1765,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1766,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1767,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1768,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1769,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1770,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1771,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1772,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1773,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1774,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1775,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1776,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1777,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1780,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1973,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1974,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1975,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1976,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1977,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1978,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1979,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1980,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1981,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1982,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1983,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1984,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1985,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1986,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1988,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1989,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1990,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1991,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1993,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1994,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1995,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1996,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1997,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1998,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1999,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2000,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2001,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2002,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2003,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2004,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2005,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2006,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2007,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2008,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2009,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2010,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2011,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2012,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2013,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2014,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+2479,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2480,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2481,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2482,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2483,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2484,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2485,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2486,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2487,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2488,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2489,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2490,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2491,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2492,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2493,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2494,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2495,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2496,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2497,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2499,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2500,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2501,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2502,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2503,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2504,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2505,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2506,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2507,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2508,62,Tixtla De Guerrero,12,gue,1,6,7,6,2,24,24
+2752,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2753,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2754,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2755,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2756,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2757,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2758,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2759,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2760,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2761,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2762,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2763,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2764,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2765,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2766,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2767,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2768,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2769,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2770,75,Zitlala,12,gue,10,6,6,6,3,24,24
+2771,75,Zitlala,12,gue,10,6,6,6,3,24,24
+1778,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1781,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1783,45,Mochitlán,12,gue,1,6,7,6,2,24,24
+1987,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1992,52,Quechultenango,12,gue,1,6,7,6,2,24,24
+1112,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1113,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1114,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1115,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1116,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1117,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1118,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1119,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1120,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1121,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1122,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1123,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1124,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1125,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1126,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1127,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1128,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1129,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1130,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1131,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1132,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1133,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1134,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1135,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1136,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1137,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1138,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1139,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1140,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1141,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1142,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1143,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1144,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1145,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1146,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1147,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1148,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1149,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1150,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1151,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1152,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1153,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1154,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1155,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1156,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1157,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1158,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1159,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1160,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1161,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1162,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1163,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1164,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1165,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1166,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1167,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1168,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1169,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1170,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1171,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1172,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1173,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1174,28,Chilapa De Álvarez,12,gue,10,6,6,6,25,25,25
+1175,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1176,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1177,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1178,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1179,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1180,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1181,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1182,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1183,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1184,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1186,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1187,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1188,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1189,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1193,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1194,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1197,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1200,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1201,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1202,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1203,28,Chilapa De Álvarez,12,gue,10,6,6,6,3,25,25
+1185,77,José Joaquín De Herrera,12,gue,10,6,5,6,3,26,25
+1190,77,José Joaquín De Herrera,12,gue,10,6,5,6,3,26,25
+1191,77,José Joaquín De Herrera,12,gue,10,6,5,6,3,26,25
+1192,77,José Joaquín De Herrera,12,gue,10,6,5,6,3,26,25
+1195,77,José Joaquín De Herrera,12,gue,10,6,5,6,3,26,25
+1196,77,José Joaquín De Herrera,12,gue,10,6,5,6,3,26,25
+1198,77,José Joaquín De Herrera,12,gue,10,6,5,6,3,26,25
+1199,77,José Joaquín De Herrera,12,gue,10,6,5,6,3,26,25
+2783,77,José Joaquín De Herrera,12,gue,0,0,5,6,3,26,25
+2785,28,Chilapa De Álvarez,12,gue,0,0,6,6,3,25,25
+384,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+385,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+386,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+387,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+388,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+389,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+390,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+391,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+392,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+393,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+394,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+395,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+396,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+397,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+398,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+399,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+400,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+401,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+402,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+403,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+404,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+405,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+406,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+407,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+408,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+409,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+573,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+575,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+576,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+577,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+578,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+579,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+580,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+581,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+582,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+583,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+584,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+585,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+586,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+587,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+588,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+589,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+590,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+591,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+592,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+593,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+594,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+595,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+868,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+869,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+870,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+871,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+872,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+873,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+874,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+875,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+876,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+877,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+878,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+879,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+880,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+881,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+882,20,Copanatoyac,12,gue,5,5,5,6,11,26,26
+2523,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2524,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2525,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2526,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2527,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2528,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2529,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2530,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2531,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2532,64,Tlacoapa,12,gue,5,5,5,6,11,26,26
+2693,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2694,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2695,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2696,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2697,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2698,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2699,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2700,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2701,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2702,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2703,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2705,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2706,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2707,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2708,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2709,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2710,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2711,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2712,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2713,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2715,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2716,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2717,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2718,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2719,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2720,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2721,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2724,76,Acatepec,12,gue,5,6,5,6,11,26,26
+2772,76,Acatepec,12,gue,0,6,5,6,11,26,26
+2773,76,Acatepec,12,gue,0,6,5,6,11,26,26
+2774,76,Acatepec,12,gue,0,6,5,6,11,26,26
+2775,76,Acatepec,12,gue,0,6,5,6,11,26,26
+2776,76,Acatepec,12,gue,0,6,5,6,11,26,26
+2777,76,Acatepec,12,gue,0,6,5,6,11,26,26
+2786,76,Acatepec,12,gue,0,0,5,6,11,26,26
+410,2,Ahuacuotzingo,12,gue,10,6,6,6,25,26,26
+574,10,Atlixtac,12,gue,5,6,5,6,3,26,26
+2714,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+2722,73,Zapotitlán Tablas,12,gue,5,6,5,6,11,26,26
+474,5,Alpoyeca,12,gue,5,5,5,5,22,27,27
+475,5,Alpoyeca,12,gue,5,5,5,5,22,27,27
+476,5,Alpoyeca,12,gue,5,5,5,5,22,27,27
+477,5,Alpoyeca,12,gue,5,5,5,5,22,27,27
+478,5,Alpoyeca,12,gue,5,5,5,5,22,27,27
+1030,24,Cualac,12,gue,10,5,6,5,22,27,27
+1031,24,Cualac,12,gue,10,5,6,5,22,27,27
+1032,24,Cualac,12,gue,10,5,6,5,22,27,27
+1033,24,Cualac,12,gue,10,5,6,5,22,27,27
+1034,24,Cualac,12,gue,10,5,6,5,22,27,27
+1035,24,Cualac,12,gue,10,5,6,5,22,27,27
+1036,24,Cualac,12,gue,10,5,6,5,22,27,27
+1432,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1433,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1434,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1435,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1436,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1437,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1438,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1439,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1440,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1441,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1442,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1443,34,Huamuxtitlán,12,gue,10,5,6,5,22,27,27
+1784,46,Olinala,12,gue,10,5,6,5,25,27,27
+1785,46,Olinala,12,gue,10,5,6,5,25,27,27
+1786,46,Olinala,12,gue,10,5,6,5,25,27,27
+1787,46,Olinala,12,gue,10,5,6,5,25,27,27
+1788,46,Olinala,12,gue,10,5,6,5,25,27,27
+1789,46,Olinala,12,gue,10,5,6,5,25,27,27
+1790,46,Olinala,12,gue,10,5,6,5,25,27,27
+1791,46,Olinala,12,gue,10,5,6,5,25,27,27
+1792,46,Olinala,12,gue,10,5,6,5,25,27,27
+1793,46,Olinala,12,gue,10,5,6,5,25,27,27
+1794,46,Olinala,12,gue,10,5,6,5,25,27,27
+1795,46,Olinala,12,gue,10,5,6,5,25,27,27
+1796,46,Olinala,12,gue,10,5,6,5,25,27,27
+1797,46,Olinala,12,gue,10,5,6,5,25,27,27
+1798,46,Olinala,12,gue,10,5,6,5,25,27,27
+1799,46,Olinala,12,gue,10,5,6,5,25,27,27
+1800,46,Olinala,12,gue,10,5,6,5,25,27,27
+1801,46,Olinala,12,gue,10,5,6,5,25,27,27
+1802,46,Olinala,12,gue,10,5,6,5,25,27,27
+1803,46,Olinala,12,gue,10,5,6,5,25,27,27
+1804,46,Olinala,12,gue,10,5,6,5,25,27,27
+1805,46,Olinala,12,gue,10,5,6,5,25,27,27
+1806,46,Olinala,12,gue,10,5,6,5,25,27,27
+1807,46,Olinala,12,gue,10,5,6,5,25,27,27
+1808,46,Olinala,12,gue,10,5,6,5,25,27,27
+2554,66,Tlalixtaquilla De Maldonado,12,gue,5,5,5,5,22,27,27
+2555,66,Tlalixtaquilla De Maldonado,12,gue,5,5,5,5,22,27,27
+2556,66,Tlalixtaquilla De Maldonado,12,gue,5,5,5,5,22,27,27
+2557,66,Tlalixtaquilla De Maldonado,12,gue,5,5,5,5,22,27,27
+2558,66,Tlalixtaquilla De Maldonado,12,gue,5,5,5,5,22,27,27
+2559,66,Tlalixtaquilla De Maldonado,12,gue,5,5,5,5,22,27,27
+2560,66,Tlalixtaquilla De Maldonado,12,gue,5,5,5,5,22,27,27
+2561,66,Tlalixtaquilla De Maldonado,12,gue,5,5,5,5,22,27,27
+2562,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2563,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2565,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,27
+2566,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,27
+2567,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,27
+2568,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,27
+2569,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,27
+2570,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,27
+2571,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,27
+2572,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,27
+2573,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2574,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2575,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2576,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2577,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2578,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2579,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2580,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2583,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2584,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2585,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2586,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2587,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2588,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2589,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2590,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,27
+2592,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,27
+2669,71,Xochihuehuetlán,12,gue,10,5,6,5,22,27,27
+2670,71,Xochihuehuetlán,12,gue,10,5,6,5,22,27,27
+2671,71,Xochihuehuetlán,12,gue,10,5,6,5,22,27,27
+2672,71,Xochihuehuetlán,12,gue,10,5,6,5,22,27,27
+2673,71,Xochihuehuetlán,12,gue,10,5,6,5,22,27,27
+2674,71,Xochihuehuetlán,12,gue,10,5,6,5,22,27,27
+2675,71,Xochihuehuetlán,12,gue,10,5,6,5,22,27,27
+2676,71,Xochihuehuetlán,12,gue,10,5,6,5,22,27,27
+2020,53,San Luís Acatlán,12,gue,5,8,5,5,24,15,28
+2564,67,Tlapa De Comonfort,12,gue,5,5,5,5,11,27,28
+2582,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,27,28
+456,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+457,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+458,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+459,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+460,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+461,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+462,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+463,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+464,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+465,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+466,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+467,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+468,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+469,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+470,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+471,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+472,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+473,4,Alcozauca De Guerrero,12,gue,5,5,5,5,22,28,28
+564,9,Atlamajalcingo Del Monte,12,gue,5,5,5,5,27,28,28
+565,9,Atlamajalcingo Del Monte,12,gue,5,5,5,5,27,28,28
+566,9,Atlamajalcingo Del Monte,12,gue,5,5,5,5,27,28,28
+567,9,Atlamajalcingo Del Monte,12,gue,5,5,5,5,27,28,28
+568,9,Atlamajalcingo Del Monte,12,gue,5,5,5,5,27,28,28
+569,9,Atlamajalcingo Del Monte,12,gue,5,5,5,5,27,28,28
+570,9,Atlamajalcingo Del Monte,12,gue,5,5,5,5,27,28,28
+571,9,Atlamajalcingo Del Monte,12,gue,5,5,5,5,27,28,28
+572,9,Atlamajalcingo Del Monte,12,gue,5,5,5,5,27,28,28
+1699,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1700,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1701,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1702,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1703,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1704,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1705,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1706,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1707,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1708,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1709,78,Iliatenco,12,gue,5,5,5,5,11,28,28
+1710,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1711,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1712,78,Iliatenco,12,gue,5,5,5,5,11,28,28
+1713,78,Iliatenco,12,gue,5,5,5,5,11,28,28
+1714,78,Iliatenco,12,gue,5,5,5,5,11,28,28
+1715,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1716,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1717,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1718,42,Malinaltepec,12,gue,5,5,5,5,11,28,28
+1735,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1736,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1737,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1738,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1739,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1740,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1741,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1742,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1743,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1744,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1745,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1746,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1747,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1748,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1749,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1750,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1751,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1752,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1753,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1754,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1755,44,Metlatónoc,12,gue,5,5,5,5,27,28,28
+1756,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1757,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1758,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1759,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1760,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+1761,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+2019,78,Iliatenco,12,gue,5,8,5,5,11,28,28
+2593,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,28,28
+2594,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,28,28
+2595,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,28,28
+2596,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,28,28
+2597,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,28,28
+2598,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,28,28
+2599,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,28,28
+2655,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2656,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2657,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2658,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2659,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2660,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2661,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2662,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2663,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2664,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2665,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2666,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2667,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2668,70,Xalpatláhuac,12,gue,5,5,5,5,27,28,28
+2787,78,Iliatenco,12,gue,0,0,5,5,11,28,28
+2788,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+2789,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+2790,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+2791,79,Cochoapa El Grande,12,gue,5,5,5,5,27,28,28
+2581,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,28,28
+2591,67,Tlapa De Comonfort,12,gue,5,5,5,5,27,28,28
