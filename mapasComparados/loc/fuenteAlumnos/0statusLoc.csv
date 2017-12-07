@@ -10,8 +10,8 @@ edon,edo,quien1,quien2,tengoFuentes,disn ok,dsi ok,yrMapNew,yrMapOld,crit8,shp,f
 9,df33,chema,eric,ok,,ok,ok,ok,sí ok,,← redujo SMDs
 9,df40,chema,eric,ok,,ok,ok,ok,sí ok,,← redujo SMDs
 10,dgo,daniel,daniel,ok,,ok,ok,ok,no ok,,
-11,gua,victor,,error,,,,,,,
-12,gue,victor,,error,,,,,,,
+11,gua,victor,sloppy,ok,ok,ok,ok,verificar,no ok,,
+12,gue,victor,eric,ok,ok,check,ok,verificar,no ok,,
 13,hgo,claudia,listo,ok,,ok,ok,verificar,jge ok?,,
 14,jal,claudia,claudia,ok,,ok,ok,verificar,jge ok?,,
 15,mex,claudia,claudia,ok,ok,ok,ok,ok,no ok,,← demo
@@ -19,13 +19,13 @@ edon,edo,quien1,quien2,tengoFuentes,disn ok,dsi ok,yrMapNew,yrMapOld,crit8,shp,f
 17,mor12,omar,eric,ok,,ok,ok,verificar,no ok,tengo,← redujo SMDs
 17,mor18,omar,eric,ok,,ok,ok,verificar,no ok,tengo,← redujo SMDs
 18,nay,daniel,eric,ok,,ok,ok,verificar,no ok,tengo,← demarcaciones
-19,nl,victor,,,,,,,,,
-20,oax,humberto,claudia,ok,,ok,ok,verificar,no ok,,
-20,oaxTrife,0,eric,ok,,ok,ok,verificar,no ok,,
+19,nl,victor,,ok,ok,ok,ok,verificar,no ok,,
+20,oax,humberto,claudia,ok,,?,ok,verificar,no ok,,
+20,oaxTrife,0,eric,ok,,?,ok,verificar,no ok,,
 21,pue,santiago,,ok,,ok,,,,,
 22,que,veronica,,ok,,ok,ok,verificar,no ok,,
 23,qui,mario,santi,,,,,,,,
-24,san,veronica,daniel,ok,,,,,sí check,,
+24,san,veronica,daniel,ok,ok,ok,ok,verificar,sí ok,,
 25,sin,ruben,,,,,,,,,
 26,son,moises,,,,,,,,,
 27,tab,zabel,,ok,,ok,,,,,
