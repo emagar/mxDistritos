@@ -1,9 +1,9 @@
 edon,edo,quien1,quien2,tengoFuentes,disn ok,dsi ok,yrMapNew,yrMapOld,crit8,shp,focus
-1,ags,humberto,eric,ok,,ok,ok,verificar,no ok,,
-2,bc,mario,santi,ok,,ok,ok,verificar,no ok,,
-3,bcs,daniel,daniel,ok,,ok,ok,ok,no ok,,
+1,ags,humberto,eric,ok,,ok,ok,verificar,no ok,ok,
+2,bc,mario,santi,ok,,ok,ok,verificar,no ok,ok,
+3,bcs,daniel,daniel,ok,,ok,ok,ok,no ok,falta 2011,
 4,cam,eric,eric,ok,,ok,ok,verificar,no ok,,
-5,coa,eric,eric,ok,ok,ok,ok,ok,sí ok,tengo,← reelegió
+5,coa,eric,eric,ok,ok,ok,ok,ok,sí ok,ok,← reelegió
 6,col,omar,,ok,,ok,ok,verificar,derfe ok,tengo,← redistritó antes q INE
 7,cps,humberto,claudia,ok,,ok,ok,verificar,no ok,,
 8,cua,omar,eric,ok,,ok,ok,verificar,no ok,,
@@ -16,9 +16,9 @@ edon,edo,quien1,quien2,tengoFuentes,disn ok,dsi ok,yrMapNew,yrMapOld,crit8,shp,f
 14,jal,claudia,claudia,ok,,ok,ok,verificar,jge ok?,,
 15,mex,claudia,claudia,ok,ok,ok,ok,ok,no ok,,← demo
 16,mic,zabel,,Faltan 3 secciones,,ok,,,,,
-17,mor12,omar,eric,ok,,ok,ok,verificar,no ok,tengo,← redujo SMDs
-17,mor18,omar,eric,ok,,ok,ok,verificar,no ok,tengo,← redujo SMDs
-18,nay,daniel,eric,ok,,ok,ok,verificar,no ok,tengo,← demarcaciones
+17,mor12,omar,eric,ok,,ok,ok,verificar,no ok,ok,← redujo SMDs
+17,mor18,omar,eric,ok,,ok,ok,verificar,no ok,ok,← redujo SMDs
+18,nay,daniel,eric,ok,,ok,ok,verificar,no ok,falta demarc,← demarcaciones
 19,nl,victor,,ok,ok,ok,ok,verificar,no ok,,
 20,oax,humberto,claudia,ok,,?,ok,verificar,no ok,,
 20,oaxTrife,0,eric,ok,,?,ok,verificar,no ok,,
