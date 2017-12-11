@@ -300,3 +300,6 @@ acs-*.bib
 
 # # expex forward references with \gathertags
 # *-tags.tex
+
+# libreoffice backups
+.~lock*
