@@ -1,0 +1,24 @@
+!table
+!version 1000
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "Neutral"
+  Fields 11
+    Cve_secc Char (10) Index 1 ;
+    seccion Float ;
+    munn Float ;
+    edon Float ;
+    edo Char (6) ;
+    disfed1979 Float ;
+    disfed1997 Float ;
+    disfed2006 Float ;
+    disfed2018 Float ;
+    disloc2018 Float ;
+    disloc2011 Float ;
+begin_metadata
+"\IsReadOnly" = "FALSE"
+"\MapInfo" = ""
+"\MapInfo\TableID" = "a53c23c8-74a9-4e09-9171-b7d59aaf477c"
+"\MapInfo\ParentTableID" = "4f31f69d-7d3d-4ace-a891-75b5b8a1e4d8"
+end_metadata
