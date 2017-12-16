@@ -1,6 +1,8 @@
+# script is adapted from one in /data/elecs/MXelsCalendGovt/atlasDis/code/
+
 #source(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/code/mapPrep.r") # sólo correr si hubiera cambios en los datos
 
-## # OJO: when usin spTranform below, use line above for google earth, or next line for OSM/google maps
+## # OJO: when using spTranform in script, use line below for google earth, or next line for OSM/google maps
 #x.map <- spTransform(x.map, CRS("+proj=longlat +datum=WGS84"))
 #x.map <- spTransform(x.map, osm()) # project to osm native Mercator
 
@@ -17,10 +19,11 @@ d <- read.csv(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/
 munvot <- d
 rm(list=setdiff(ls(), "munvot")) # clean
 #
-#wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
+wd2 <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
+setwd(wd2)
+load(file="elDatForMaps.RData")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/maps/code/")
 setwd(wd)
-load(file="elDatForMaps.RData")
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
 md2 <- "../" # c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/maps/")
@@ -31,16 +34,15 @@ edon <- 18
 library(spdep); library(maptools)
 # used to determine what datum rojano data has
 library(rgdal)
+#gpclibPermit()
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 se.map <- readOGR(dsn = tmp, layer = 'SECCION')
 summary(se.map)
 # projects to a different datum with long and lat
-library(rgdal)
 se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 
 # read all state borders from rojano
 ed.map <- list()
-library(rgdal)
 tmp <- paste(md, "ags", sep = "") # archivo con mapas rojano
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
@@ -238,7 +240,6 @@ tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 mu.map <- readOGR(dsn = tmp, layer = 'MUNICIPIO')
 # projects to a different datum with long and lat
 mu.map <- spTransform(mu.map, osm()) # project to osm native Mercator
- 
 # read cabeceras municipales
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 cab <- readOGR(dsn = tmp, layer = 'CABECERA_MUNICIPAL')
@@ -304,7 +305,7 @@ cabDis <- readOGR(dsn = tmp, layer = 'VOCAL_EJECUTIVO_DISTRITAL')
 # projects to a different datum with long and lat
 cabDis <- spTransform(cabDis, osm()) # project to osm native Mercator
 #
-cabDisNames <- read.csv(paste(wd, "cabeceras2006.csv", sep = ""), stringsAsFactors = FALSE)
+cabDisNames <- read.csv(paste(wd2, "cabeceras2006.csv", sep = ""), stringsAsFactors = FALSE)
 
 # add casillas in 2012
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
@@ -318,7 +319,7 @@ tmp <- merge(x = tmp, y = se.map[,c("SECCION","disfed2006","disfed2018","disloc2
 tmp <- tmp[order(tmp$ord),]
 cas.map@data <- tmp
 #
-# drop casillas from missng secciones to avoid indeterminate subsetting
+# drop casillas from missing secciones to avoid indeterminate subsetting
 sel <- which(is.na(cas.map$disloc2017)==TRUE)
 cas.map <- cas.map[-sel,] # drop missing cases
 rm(sel)
@@ -468,100 +469,25 @@ di.map@data <- cbind(di.map@data, tmp1)
 di.map$disrri06 <- paste(di.map$DISTRITO, " (", di.map$rris2006, ")", sep="")
 di.map$disrri15 <- paste(di.map$DISTRITO, " (", di.map$rris2015, ")", sep="")
                          
-# export attributes for maps with other software
-se.map$bastion2 <- "swing"
-se.map$bastion2[se.map$nwinpan==4] <- "pan4"
-se.map$bastion2[se.map$nwinpan==5] <- "pan5"
-se.map$bastion2[se.map$nwinpan==6] <- "pan6"
-se.map$bastion2[se.map$nwinpri==4] <- "pri4"
-se.map$bastion2[se.map$nwinpri==5] <- "pri5"
-se.map$bastion2[se.map$nwinpri==6] <- "pri6"
-se.map$bastion2[se.map$nwinprd==4] <- "izq4"
-se.map$bastion2[se.map$nwinprd==5] <- "izq5"
-se.map$bastion2[se.map$nwinprd==6] <- "izq6"
-#
-# add centroids
-tmp <- coordinates(se.map)
-tmp <- data.frame(seccion=se.map$SECCION, edon=se.map$ENTIDAD, disn=se.map$disn, munn=se.map$MUNICIPIO, bastion=se.map$bastion2, ncasillas=sqrt(se.map$ncasillas), lon=tmp[,1], lat=tmp[,2], stringsAsFactors = FALSE)
-write.csv(tmp, file = paste(md, edo, "/magar.csv", sep = "") )
-tmp <- c("\"Integer\"",    "\"Integer\"",    "\"Integer\"",      "\"Integer\"",       "\"Integer\"",        "\"String\"",          "\"Integer\"",                   "\"Real\"", "\"Real\"",        "\"Integer\"",      "\"String\"")
-write(tmp, file = paste(md, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
+## # export attributes for maps with other software
+## se.map$bastion2 <- "swing"
+## se.map$bastion2[se.map$nwinpan==4] <- "pan4"
+## se.map$bastion2[se.map$nwinpan==5] <- "pan5"
+## se.map$bastion2[se.map$nwinpan==6] <- "pan6"
+## se.map$bastion2[se.map$nwinpri==4] <- "pri4"
+## se.map$bastion2[se.map$nwinpri==5] <- "pri5"
+## se.map$bastion2[se.map$nwinpri==6] <- "pri6"
+## se.map$bastion2[se.map$nwinprd==4] <- "izq4"
+## se.map$bastion2[se.map$nwinprd==5] <- "izq5"
+## se.map$bastion2[se.map$nwinprd==6] <- "izq6"
+## #
+## # add centroids
+## tmp <- coordinates(se.map)
+## tmp <- data.frame(seccion=se.map$SECCION, edon=se.map$ENTIDAD, disn=se.map$disn, munn=se.map$MUNICIPIO, bastion=se.map$bastion2, ncasillas=sqrt(se.map$ncasillas), lon=tmp[,1], lat=tmp[,2], stringsAsFactors = FALSE)
+## write.csv(tmp, file = paste(md, edo, "/magar.csv", sep = "") )
+## tmp <- c("\"Integer\"",    "\"Integer\"",    "\"Integer\"",      "\"Integer\"",       "\"Integer\"",        "\"String\"",          "\"Integer\"",                   "\"Real\"", "\"Real\"",        "\"Integer\"",      "\"String\"")
+## write(tmp, file = paste(md, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
 
-# export for google earth
-#v1
-## library(maptools)
-## gd <- paste(md2, "kml/", sep = ""); setwd(gd)
-## kmlPolygons(obj = se.map, kmlfile = "mexseccion.kml", border = "white", col = sub("#", "#FF", se.map$bastion))
-#v2
-library(plotKML)
-setwd(paste(md2, "kml/", sep = ""))
-#plotKML(se.map, filename = "mexseccion.kml", fill = col2kml(se.map$bastion), open.kml = FALSE)
-
-kml_open(file.name = paste(edo, ".kml", sep = ""), folder.name = edo, kml_open = FALSE, kml_visibility = FALSE)
-#
-# Bastiones
-tmp <- subset(se.map, bastion2 == "swing")
-kml_layer.SpatialPolygons(tmp, colour = "gray", subfolder.name = "swingSec", altitudeMode = "clampToGround", alpha = .7)
-tmp <- subset(se.map, bastion2 == "pan4")
-kml_layer.SpatialPolygons(tmp, colour = "royalblue2", subfolder.name = "corePan4", altitudeMode = "clampToGround", alpha = .7)
-tmp <- subset(se.map, bastion2 == "pan5")
-kml_layer.SpatialPolygons(tmp, colour = "royalblue3", subfolder.name = "corePan5", altitudeMode = "clampToGround", alpha = .7)
-tmp <- subset(se.map, bastion2 == "pan6")
-kml_layer.SpatialPolygons(tmp, colour = "royalblue4", subfolder.name = "corePan6", altitudeMode = "clampToGround", alpha = .7)
-tmp <- subset(se.map, bastion2 == "pri4")
-kml_layer.SpatialPolygons(tmp, colour = "red1", subfolder.name = "corePri4", altitudeMode = "clampToGround", alpha = .7)
-tmp <- subset(se.map, bastion2 == "pri5")
-kml_layer.SpatialPolygons(tmp, colour = "red2", subfolder.name = "corePri5", altitudeMode = "clampToGround", alpha = .7)
-tmp <- subset(se.map, bastion2 == "pri6")
-kml_layer.SpatialPolygons(tmp, colour = "red3", subfolder.name = "corePri6", altitudeMode = "clampToGround", alpha = .7)
-tmp <- subset(se.map, bastion2 == "izq4")
-kml_layer.SpatialPolygons(tmp, colour = "gold1", subfolder.name = "coreLeft4", altitudeMode = "clampToGround", alpha = .7)
-tmp <- subset(se.map, bastion2 == "izq5")
-kml_layer.SpatialPolygons(tmp, colour = "gold2", subfolder.name = "coreLeft5", altitudeMode = "clampToGround", alpha = .7)
-tmp <- subset(se.map, bastion2 == "izq6")
-kml_layer.SpatialPolygons(tmp, colour = "gold3", subfolder.name = "coreLeft6", altitudeMode = "clampToGround", alpha = .7)
-#
-# Estado
-tmp <- as(ed.map$nay, "SpatialLinesDataFrame") # coerce polygons to lines 
-kml_layer.SpatialLines(tmp, colour = "hotpink", width = 2.5, subfolder.name = "stateLimit", altitudeMode = "clampToGround")
-#
-# Distritos federales 2006
-tmp <- as(di.map, "SpatialLinesDataFrame") # coerce polygons to lines 
-kml_layer.SpatialLines(tmp, colour = "white", width = 2, subfolder.name = "fedDist2006map", altitudeMode = "clampToGround")
-tmp <- SpatialPointsDataFrame(coords=coordinates(di.map), data = di.map@data, proj4string = CRS("+proj=longlat +datum=WGS84"))
-kml_layer.SpatialPoints(tmp, LabelScale = .75, extrude = TRUE, labels = disrri06, subfolder.name = "fedDistRRI@2006", altitudeMode = "clampToGround")
-kml_layer.SpatialPoints(tmp, LabelScale = .75, extrude = TRUE, labels = disrri15, subfolder.name = "fedDistRRI@2015", altitudeMode = "clampToGround")
-#
-# Municipios
-tmp <- as(mu.map, "SpatialLinesDataFrame") # coerce polygons to lines
-kml_layer.SpatialLines(tmp, colour = "springgreen", width = 1, subfolder.name = "municLimit", altitudeMode = "clampToGround")
-tmp <- SpatialPointsDataFrame(coords=coordinates(mu.map), data = mu.map@data, proj4string = CRS("+proj=longlat +datum=WGS84"))
-kml_layer.SpatialPoints(tmp, shape = "", labels = mun, subfolder.name = "municNames", altitudeMode = "clampToGround", LabelScale = .5)
-#
-# Lista nominal 2015
-shape = "http://maps.google.com/mapfiles/kml/pal2/icon18.png"
-tmp <- SpatialPointsDataFrame(coords=coordinates(se.map), data = se.map@data, proj4string = CRS("+proj=longlat +datum=WGS84"))
-tmp$ln15k <- round(tmp$ln15/1000, 1) # lista nominal in thousands for labels
-tmp$sqrtln15 <- sqrt(tmp$ln15) # lista nominal sq root
-#kml_layer.SpatialPoints(tmp, shape = shape, labels = ln15k, colour = ln15, colour_scale = SAGA_pal$SG_COLORS_WHITE_GREEN, extrude = TRUE, altitude = ln15, altitudeMode = "relativeToGround", subfolder.name = "barras") 
-kml_layer.SpatialPoints(tmp, shape = shape, labels = "", colour = "green", size = sqrtln15, alpha = .33, altitudeMode = "clampToGround", subfolder.name = "listaNominal@2015") 
-kml_layer.SpatialPoints(tmp, shape = "", labels = ln15k, colour = "white", altitudeMode = "clampToGround", subfolder.name = "listaNominal@2015x1000") 
-#
-# añadir fch, amlo, epn
-#
-kml_close(file.name = paste(edo, ".kml", sep = ""))
-
-# display.pal(SAGA_pal[1:5]) # <- useful to pick colors
-
-# compress kml files to kmz
-md2 <- c("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/maps/")
-library(plotKML)
-setwd(paste(md2, "kml/", sep = ""))
-kml_compress("nay.kml")
-
-# print the result:
-library(XML)
-xmlRoot(xmlTreeParse("tmp.kml"))[["Document"]][1:100]
 
 
 # grafica distritos 1 por 1 
@@ -705,4 +631,84 @@ text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
 legend(x=loc[dn], legend=c("21+","11-20","6-10","3-5","2","1"), fill=rev(purples), bty="o", bg = "white", cex=.85, title = "N casillas")
 ## dev.off()
 ## }
+
+
+
+
+
+# export for google earth
+#v1
+## library(maptools)
+## gd <- paste(md2, "kml/", sep = ""); setwd(gd)
+## kmlPolygons(obj = se.map, kmlfile = "mexseccion.kml", border = "white", col = sub("#", "#FF", se.map$bastion))
+#v2
+library(plotKML)
+setwd(paste(md2, "kml/", sep = ""))
+#plotKML(se.map, filename = "mexseccion.kml", fill = col2kml(se.map$bastion), open.kml = FALSE)
+
+kml_open(file.name = paste(edo, ".kml", sep = ""), folder.name = edo, kml_open = FALSE, kml_visibility = FALSE)
+#
+# Bastiones
+tmp <- subset(se.map, bastion2 == "swing")
+kml_layer.SpatialPolygons(tmp, colour = "gray", subfolder.name = "swingSec", altitudeMode = "clampToGround", alpha = .7)
+tmp <- subset(se.map, bastion2 == "pan4")
+kml_layer.SpatialPolygons(tmp, colour = "royalblue2", subfolder.name = "corePan4", altitudeMode = "clampToGround", alpha = .7)
+tmp <- subset(se.map, bastion2 == "pan5")
+kml_layer.SpatialPolygons(tmp, colour = "royalblue3", subfolder.name = "corePan5", altitudeMode = "clampToGround", alpha = .7)
+tmp <- subset(se.map, bastion2 == "pan6")
+kml_layer.SpatialPolygons(tmp, colour = "royalblue4", subfolder.name = "corePan6", altitudeMode = "clampToGround", alpha = .7)
+tmp <- subset(se.map, bastion2 == "pri4")
+kml_layer.SpatialPolygons(tmp, colour = "red1", subfolder.name = "corePri4", altitudeMode = "clampToGround", alpha = .7)
+tmp <- subset(se.map, bastion2 == "pri5")
+kml_layer.SpatialPolygons(tmp, colour = "red2", subfolder.name = "corePri5", altitudeMode = "clampToGround", alpha = .7)
+tmp <- subset(se.map, bastion2 == "pri6")
+kml_layer.SpatialPolygons(tmp, colour = "red3", subfolder.name = "corePri6", altitudeMode = "clampToGround", alpha = .7)
+tmp <- subset(se.map, bastion2 == "izq4")
+kml_layer.SpatialPolygons(tmp, colour = "gold1", subfolder.name = "coreLeft4", altitudeMode = "clampToGround", alpha = .7)
+tmp <- subset(se.map, bastion2 == "izq5")
+kml_layer.SpatialPolygons(tmp, colour = "gold2", subfolder.name = "coreLeft5", altitudeMode = "clampToGround", alpha = .7)
+tmp <- subset(se.map, bastion2 == "izq6")
+kml_layer.SpatialPolygons(tmp, colour = "gold3", subfolder.name = "coreLeft6", altitudeMode = "clampToGround", alpha = .7)
+#
+# Estado
+tmp <- as(ed.map$nay, "SpatialLinesDataFrame") # coerce polygons to lines 
+kml_layer.SpatialLines(tmp, colour = "hotpink", width = 2.5, subfolder.name = "stateLimit", altitudeMode = "clampToGround")
+#
+# Distritos federales 2006
+tmp <- as(di.map, "SpatialLinesDataFrame") # coerce polygons to lines 
+kml_layer.SpatialLines(tmp, colour = "white", width = 2, subfolder.name = "fedDist2006map", altitudeMode = "clampToGround")
+tmp <- SpatialPointsDataFrame(coords=coordinates(di.map), data = di.map@data, proj4string = CRS("+proj=longlat +datum=WGS84"))
+kml_layer.SpatialPoints(tmp, LabelScale = .75, extrude = TRUE, labels = disrri06, subfolder.name = "fedDistRRI@2006", altitudeMode = "clampToGround")
+kml_layer.SpatialPoints(tmp, LabelScale = .75, extrude = TRUE, labels = disrri15, subfolder.name = "fedDistRRI@2015", altitudeMode = "clampToGround")
+#
+# Municipios
+tmp <- as(mu.map, "SpatialLinesDataFrame") # coerce polygons to lines
+kml_layer.SpatialLines(tmp, colour = "springgreen", width = 1, subfolder.name = "municLimit", altitudeMode = "clampToGround")
+tmp <- SpatialPointsDataFrame(coords=coordinates(mu.map), data = mu.map@data, proj4string = CRS("+proj=longlat +datum=WGS84"))
+kml_layer.SpatialPoints(tmp, shape = "", labels = mun, subfolder.name = "municNames", altitudeMode = "clampToGround", LabelScale = .5)
+#
+# Lista nominal 2015
+shape = "http://maps.google.com/mapfiles/kml/pal2/icon18.png"
+tmp <- SpatialPointsDataFrame(coords=coordinates(se.map), data = se.map@data, proj4string = CRS("+proj=longlat +datum=WGS84"))
+tmp$ln15k <- round(tmp$ln15/1000, 1) # lista nominal in thousands for labels
+tmp$sqrtln15 <- sqrt(tmp$ln15) # lista nominal sq root
+#kml_layer.SpatialPoints(tmp, shape = shape, labels = ln15k, colour = ln15, colour_scale = SAGA_pal$SG_COLORS_WHITE_GREEN, extrude = TRUE, altitude = ln15, altitudeMode = "relativeToGround", subfolder.name = "barras") 
+kml_layer.SpatialPoints(tmp, shape = shape, labels = "", colour = "green", size = sqrtln15, alpha = .33, altitudeMode = "clampToGround", subfolder.name = "listaNominal@2015") 
+kml_layer.SpatialPoints(tmp, shape = "", labels = ln15k, colour = "white", altitudeMode = "clampToGround", subfolder.name = "listaNominal@2015x1000") 
+#
+# añadir fch, amlo, epn
+#
+kml_close(file.name = paste(edo, ".kml", sep = ""))
+
+# display.pal(SAGA_pal[1:5]) # <- useful to pick colors
+
+# compress kml files to kmz
+md2 <- c("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/maps/")
+library(plotKML)
+setwd(paste(md2, "kml/", sep = ""))
+kml_compress("nay.kml")
+
+# print the result:
+library(XML)
+xmlRoot(xmlTreeParse("tmp.kml"))[["Document"]][1:100]
 

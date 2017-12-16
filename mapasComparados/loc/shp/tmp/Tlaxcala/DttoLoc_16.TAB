@@ -1,0 +1,15 @@
+!table
+!version 300
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 3
+    ENTIDAD Char (2) Index 1 ;
+    NOMBRE_ENTIDAD Char (50) ;
+    DttoLoc_nvo Char (4) Index 2 ;
+begin_metadata
+"\IsReadOnly" = "FALSE"
+"\MapInfo" = ""
+"\MapInfo\TableID" = "cb054547-de9a-4f1d-b131-09f8f02315d2"
+end_metadata

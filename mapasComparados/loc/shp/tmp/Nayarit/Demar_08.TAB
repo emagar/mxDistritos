@@ -1,0 +1,15 @@
+!table
+!version 300
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 3
+    ENTIDAD Char (2) Index 1 ;
+    NOMBRE_ENTIDAD Char (50) ;
+    Demar_2008 Char (20) ;
+begin_metadata
+"\IsReadOnly" = "FALSE"
+"\MapInfo" = ""
+"\MapInfo\TableID" = "8360afe8-3be2-4723-9a95-6e53ae382195"
+end_metadata
