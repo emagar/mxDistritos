@@ -534,18 +534,19 @@ text( x = -105.8, y = 23, labels = "SINALOA", col = "darkgray", cex = .9 )
 # get openstreetmap background
 m <- p84(dl.map[dl.map$disloc==dn,])  # subsetted map
 b <- as.data.frame(m@bbox)
-# gets 1 debree more than bbox
-#bg.tn <- openmap(c(b$max[2]+1,b$min[1]-1), c(b$min[2]-1,b$max[1]+1), type=c("stamen-toner"))
-#bg.bi <- openmap(c(b$max[2]+1,b$min[1]-1), c(b$min[2]-1,b$max[1]+1), type=c("bing"))
-#bg.to <- openmap(c(b$max[2]+1,b$min[1]-1), c(b$min[2]-1,b$max[1]+1), type=c("maptoolkit-topo"))
-bg.os <- openmap(c(b$max[2]+1,b$min[1]-1), c(b$min[2]-1,b$max[1]+1), type=c("osm"))
+# gets xx degrees more than bbox (decimal defines share of max range)
+xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+#bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+#bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+#bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
 bg <- bg.os
 #
 #png(file = paste(md2, edo, dn, "-2.png", sep = ""))
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
-plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Nayarit ", dn, "-", tmp, " (DSI = ", tmp2, ")", sep = ""))
+plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Nayarit ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
 plot(bg, add = TRUE)
 #plot(dl.map[dl.map$disloc==dn,], lwd = 5, add = TRUE) # drop
 plot(ed.map$nay, add = TRUE)
