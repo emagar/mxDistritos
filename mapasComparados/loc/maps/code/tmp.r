@@ -1,38 +1,5 @@
 dn <- 1
 
-lp <- c("bottomright", #1 
-        "bottomleft",  #2 
-        "topright",    #3 
-        "bottomleft",  #4 
-        "bottomright", #5 
-        "bottomleft",  #6 
-        "bottomright", #7 
-        "bottomleft",  #8 
-        "bottomleft",  #9 
-        "bottomright", #10
-        "bottomright", #11
-        "topleft",     #12
-        "bottomright", #13
-        "topright",    #14
-        "bottomright", #15
-        "bottomright", #16
-        "bottomright", #17
-        "bottomright", #18
-        "bottomright", #19
-        "bottomright", #20
-        "bottomright", #21
-        "bottomright", #22
-        "bottomright", #23
-        "bottomright", #24
-        "bottomright", #25
-        "bottomright", #26
-        "bottomright", #27
-        "bottomright", #28
-        "bottomright", #29
-        "bottomright", #30
-        "bottomright", #31
-        "bottomright", #32
-        "bottomright") #33
 
 
 dn <- dn + 1
