@@ -1,17 +1,32 @@
+# script is adapted from one in /data/elecs/MXelsCalendGovt/atlasDis/code/
+
 #source(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/code/mapPrep.r") # sólo correr si hubiera cambios en los datos
+
+## # OJO: when using spTranform in script, use line below for google earth, or next line for OSM/google maps
+#x.map <- spTransform(x.map, CRS("+proj=longlat +datum=WGS84"))
+#x.map <- spTransform(x.map, osm()) # project to osm native Mercator
+
+# to use osm backgrounds
+library(rJava)
+library(OpenStreetMap)
+library(rgdal)
+
 
 rm(list = ls())
 # get mun names and votes
-load("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/aymu1977-present.RData")
+#load("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/aymu1977-present.RData")
+d <- read.csv(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/aymu1977-present.csv", stringsAsFactors=FALSE)
 munvot <- d
 rm(list=setdiff(ls(), "munvot")) # clean
 #
-wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
-setwd(wd)
+wd2 <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
+setwd(wd2)
 load(file="elDatForMaps.RData")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/maps/code/")
+setwd(wd)
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
-md2 <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/maps/")
+md2 <- "../" # c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/maps/")
 edo <- "bc"
 edon <- 2
 
@@ -19,218 +34,217 @@ edon <- 2
 library(spdep); library(maptools)
 # used to determine what datum rojano data has
 library(rgdal)
+#gpclibPermit()
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 se.map <- readOGR(dsn = tmp, layer = 'SECCION')
 summary(se.map)
 # projects to a different datum with long and lat
-library(rgdal)
-se.map <- spTransform(se.map, CRS("+proj=longlat +datum=WGS84"))
+se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 
 # read all state borders from rojano
 ed.map <- list()
-library(rgdal)
 ## tmp <- paste(md, "ags", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$ags <- tmp
 #
 tmp <- paste(md, "bc", sep = "") # archivo con mapas rojano
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
-tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+tmp <- spTransform(tmp, osm())
 ed.map$bc <- tmp
 #
 tmp <- paste(md, "bcs", sep = "") # archivo con mapas rojano
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
-tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+tmp <- spTransform(tmp, osm())
 ed.map$bcs <- tmp
 #
 ## tmp <- paste(md, "cam", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$cam <- tmp
 ## #
 ## tmp <- paste(md, "coa", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$coa <- tmp
 ## #
 ## tmp <- paste(md, "col", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$col <- tmp
 ## #
 ## tmp <- paste(md, "cps", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$cps <- tmp
 ## #
 ## tmp <- paste(md, "cua", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$cua <- tmp
 ## #
 ## tmp <- paste(md, "df", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$df <- tmp
 ## #
 ## tmp <- paste(md, "dgo", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$dgo <- tmp
 ## #
 ## tmp <- paste(md, "gua", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$gua <- tmp
 ## #
 ## tmp <- paste(md, "gue", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$gue <- tmp
 ## #
 ## tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$bc <- tmp
 ## #
 ## tmp <- paste(md, "jal", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$jal <- tmp
 ## #
 ## tmp <- paste(md, "mex", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$mex <- tmp
 ## #
 ## tmp <- paste(md, "mic", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$mic <- tmp
 ## #
 ## tmp <- paste(md, "mor", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$mor <- tmp
 ## #
 ## tmp <- paste(md, "nay", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$nay <- tmp
 ## #
 ## tmp <- paste(md, "nl", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$nl <- tmp
 ## #
 ## tmp <- paste(md, "oax", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$oax <- tmp
 ## #
 ## tmp <- paste(md, "pue", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$pue <- tmp
 ## #
 ## tmp <- paste(md, "que", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$que <- tmp
 ## #
 ## tmp <- paste(md, "qui", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$qui <- tmp
 ## #
 ## tmp <- paste(md, "san", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$san <- tmp
 ## #
 ## tmp <- paste(md, "sin", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$sin <- tmp
 #
 tmp <- paste(md, "son", sep = "") # archivo con mapas rojano
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
-tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+tmp <- spTransform(tmp, osm())
 ed.map$son <- tmp
 #
 ## tmp <- paste(md, "tab", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$tab <- tmp
 ## #
 ## tmp <- paste(md, "tam", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$tam <- tmp
 ## #
 ## tmp <- paste(md, "tla", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$tla <- tmp
 ## #
 ## tmp <- paste(md, "ver", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$ver <- tmp
 ## #
 ## tmp <- paste(md, "yuc", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$yuc <- tmp
 ## #
 ## tmp <- paste(md, "zac", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, CRS("+proj=longlat +datum=WGS84"))
+## tmp <- spTransform(tmp, osm())
 ## ed.map$zac <- tmp
 
 # read municipios
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 mu.map <- readOGR(dsn = tmp, layer = 'MUNICIPIO')
 # projects to a different datum with long and lat
-mu.map <- spTransform(mu.map, CRS("+proj=longlat +datum=WGS84"))
+mu.map <- spTransform(mu.map, osm())
 # read cabeceras municipales
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 cab <- readOGR(dsn = tmp, layer = 'CABECERA_MUNICIPAL')
 # projects to a different datum with long and lat
-cab <- spTransform(cab, CRS("+proj=longlat +datum=WGS84"))
+cab <- spTransform(cab, osm())
 #cab$LOCALIDAD_.1 # names
 #
 # edit manually to shorten mun names (*need to do this outside!!!*) and plug into mu.map
@@ -240,36 +254,75 @@ cab <- spTransform(cab, CRS("+proj=longlat +datum=WGS84"))
 ## data.frame(N=mu.map$NOMBRE, M=mu.map$mun)
 mu.map$mun <- mu.map$NOMBRE
 
-# read distritos
+# read shapefiles distritos locales 2016, 2013 and demarcaciones
+tmp <- paste("/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, sep = "") # archivo con mapas locales
+dl.map <- readOGR(dsn = tmp, layer = 'disloc2016')
+colnames(dl.map@data) <- c("edon","edo","disloc")
+# projects to a different datum with long and lat
+dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
+# read disloc2005
+dl2013.map <- readOGR(dsn = tmp, layer = 'disloc2013')
+colnames(dl2013.map@data) <- c("edon","edo","disloc")
+# projects to a different datum with long and lat
+dl2013.map <- spTransform(dl2013.map, osm()) # project to osm native Mercator
+
+# add father/son info and dsi of mapLoc
+dsi <- "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/simIndex/dist_bc.csv"
+dsi <- read.csv(file = dsi, stringsAsFactors = FALSE)
+#
+#dl.map$ord <- 1:nrow(dl.map@data)
+dl.map@data <- merge(x = dl.map@data, y = dsi, by.x = "disloc", by.y = "disloc2016", all.x = TRUE, all.y = FALSE)
+rm(dsi)
+
+# read comparative district maps
 # a. from seccion2dis map, in order to export into se.map for sub-setting
-sec2dis <- read.csv("/home/eric/Dropbox/data/mapas/reseccionamiento/equivSecc/tablaEquivalenciasSeccionales1994-2010.2013.csv", stringsAsFactors = FALSE)
-sec2dis <- sec2dis[sec2dis$edon == 2,]
+#sec2dis <- read.csv("/home/eric/Dropbox/data/mapas/reseccionamiento/equivSecc/tablaEquivalenciasSeccionales1994-2010.2013.csv", stringsAsFactors = FALSE)
+#sec2dis <- sec2dis[sec2dis$edon == 18,]
+sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/bcLoc.csv", stringsAsFactors = FALSE)
 # send to seccion map
 tmp <- data.frame(SECCION = se.map$SECCION)
 tmp$orden <- 1:nrow(tmp)
 tmp <- merge(x = tmp, y = sec2dis, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
-tmp <- tmp[order(tmp$orden), c("SECCION","dis2012")]
-se.map$disn <- tmp$dis2012
+tmp <- tmp[order(tmp$orden), grep("^dis.+$", colnames(tmp))]
+#tmp <- tmp[order(tmp$orden), grep("SECCION|^dis.+$", colnames(tmp))]
+se.map@data <- cbind(se.map@data, tmp)
 rm(tmp)
 # di.map <- unionSpatialPolygons(se.map, se.map$disn) # proper way to get federal district objects... if only seccion shapefiles had no problems
 #
-# b. from rojano's distrito map, which has good-looking shapefiles
+# b. from rojano's 2006 distrito map, which has good-looking shapefiles
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 di.map <- readOGR(dsn = tmp, layer = 'DISTRITO')
 # projects to a different datum with long and lat
-di.map <- spTransform(di.map, CRS("+proj=longlat +datum=WGS84"))
+di.map <- spTransform(di.map, osm())
 # read cabeceras distritales (via vocal ejecutivo)
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 cabDis <- readOGR(dsn = tmp, layer = 'VOCAL_EJECUTIVO_DISTRITAL')
 # projects to a different datum with long and lat
-cabDis <- spTransform(cabDis, CRS("+proj=longlat +datum=WGS84"))
+cabDis <- spTransform(cabDis, osm())
 #
-cabDisNames <- read.csv(paste(wd, "cabeceras2006.csv", sep = ""), stringsAsFactors = FALSE)
+cabDisNames <- read.csv(paste(wd2, "cabeceras2006.csv", sep = ""), stringsAsFactors = FALSE)
+
+# add casillas in 2012
+tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
+cas.map <- readOGR(dsn = tmp, layer = 'CASILLA')
+# projects to a different datum with long and lat
+cas.map <- spTransform(cas.map, osm()) # project to osm native Mercator
+#
+# add districts for subsetting
+tmp <- cas.map@data; tmp$ord <- 1:nrow(tmp)
+tmp <- merge(x = tmp, y = se.map[,c("SECCION","disfed2006","disfed2018","disloc2013","disloc2016")], by = "SECCION", all.x = TRUE, all.y = FALSE)
+tmp <- tmp[order(tmp$ord),]
+cas.map@data <- tmp
+#
+# drop casillas from missing secciones to avoid indeterminate subsetting
+sel <- which(is.na(cas.map$disloc2016)==TRUE)
+if (length(sel)>0) cas.map <- cas.map[-sel,] # drop missing cases
+rm(sel)
 
 # add ncasillas in 2012 to seccion map
 tmp <- data.frame(SECCION = se.map$SECCION)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon == 2, c("seccion","e12")], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon== 2, c("seccion","e12")], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden), c("SECCION","e12")]; 
 se.map$ncasillas <- tmp$e12
 # make colors
@@ -288,7 +341,7 @@ se.map$ncascol[se.map$ncasillas>=21]                        <- purples[6]
 # add nwin to seccion map
 tmp <- data.frame(SECCION = se.map$SECCION)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = nwin[nwin$edon == 2,], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = nwin[nwin$edon==2,], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden), c("SECCION","pan","pri","prd")]
 se.map$nwinpan <- tmp$pan
 se.map$nwinpri <- tmp$pri
@@ -320,14 +373,14 @@ se.map$bastion[se.map$nwinprd==4] <- yellows[4]
 se.map$bastion[se.map$nwinprd==5] <- yellows[5]
 se.map$bastion[se.map$nwinprd==6] <- yellows[6]
 
-# add disloc
-tmp <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/disloc/bc2013.csv", stringsAsFactors = FALSE) # 2010 districts
-tmp$edon <- tmp$munn <- NULL
+# add disloc --- DONE ABOVE
+#tmp <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/disloc/bc2013.csv", stringsAsFactors = FALSE) # 2010 districts
+#tmp$edon <- tmp$munn <- NULL
 ## ojo: using bc2010 instead has small number of discrepancies btw disloc 16 and 17
-tmp <- merge(x = se.map@data, y = tmp, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+#tmp <- merge(x = se.map@data, y = tmp, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 ## table(is.na(tmp$disloc))             # verify missing
 ## tmp$SECCION[is.na(tmp$disloc)==TRUE] # verify missing
-se.map$disloc <- tmp$disloc#; se.map$cabloc <- tmp$cabloc
+#se.map$disloc <- tmp$disloc#; se.map$cabloc <- tmp$cabloc
 #
 # add seccion volat 2012-2105 = max change
 # add lisnom2015
@@ -361,7 +414,7 @@ sortBy <- function(target, By){
             function(i) as.character(unlist(t[i,])[order(unlist(-b[i,]))]))) # change to -b if decreasing wished
 }
 # 2006
-tmpv <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/elecReturns/prSeccion2006.csv", stringsAsFactors = FALSE)
+tmpv <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/elecReturns/datosBrutos/resultSecciones/prSeccion2006.csv", stringsAsFactors = FALSE)
 tmpv <- tmpv[tmpv$edon==edon,]
 tmpv$edon <- tmpv$disn <- tmpv$munn <- tmpv$id_elec <- tmpv$nr <- tmpv$nul <- tmpv$tot <- tmpv$lisnom <- NULL
 colnames(tmpv)[grep("pan$", colnames(tmpv))] <- "fch"
@@ -380,7 +433,7 @@ tmp <- merge(x = tmp, y = pres, by.x = "SECCION", by.y = "seccion", all.x = TRUE
 tmp <- tmp[order(tmp$orden),]
 #
 # 2012
-tmpv <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/elecReturns/prSeccion2012.csv", stringsAsFactors = FALSE)
+tmpv <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/elecReturns/datosBrutos/resultSecciones/prSeccion2012.csv", stringsAsFactors = FALSE)
 tmpv <- tmpv[tmpv$edon==edon,]
 tmpv$edon <- tmpv$disn <- tmpv$munn <- tmpv$urbrur <- tmpv$nr <- tmpv$nul <- tmpv$lisnom <- NULL
 tmpv$amlo <- tmpv$prd + tmpv$pt + tmpv$mc + tmpv$prdptmc + tmpv$prdpt + tmpv$prdmc + tmpv$ptmc
@@ -396,7 +449,7 @@ tmp <- merge(x = tmp, y = pres, by.x = "SECCION", by.y = "seccion", all.x = TRUE
 tmp <- tmp[order(tmp$orden),]
 #
 se.map@data <- cbind(se.map@data, tmp)
-head(se.map@data)
+colnames(se.map@data)
 rm(tmp, tmp1, tmp2, tmp3, tmpv)
 
 # add district ptot, rri proj at each election
@@ -412,24 +465,160 @@ di.map@data <- cbind(di.map@data, tmp1)
 di.map$disrri06 <- paste(di.map$DISTRITO, " (", di.map$rris2006, ")", sep="")
 di.map$disrri15 <- paste(di.map$DISTRITO, " (", di.map$rris2015, ")", sep="")
 
-# export attributes for maps with other software
-se.map$bastion2 <- "swing"
-se.map$bastion2[se.map$nwinpan==4] <- "pan4"
-se.map$bastion2[se.map$nwinpan==5] <- "pan5"
-se.map$bastion2[se.map$nwinpan==6] <- "pan6"
-se.map$bastion2[se.map$nwinpri==4] <- "pri4"
-se.map$bastion2[se.map$nwinpri==5] <- "pri5"
-se.map$bastion2[se.map$nwinpri==6] <- "pri6"
-se.map$bastion2[se.map$nwinprd==4] <- "izq4"
-se.map$bastion2[se.map$nwinprd==5] <- "izq5"
-se.map$bastion2[se.map$nwinprd==6] <- "izq6"
+## # export attributes for maps with other software
+## se.map$bastion2 <- "swing"
+## se.map$bastion2[se.map$nwinpan==4] <- "pan4"
+## se.map$bastion2[se.map$nwinpan==5] <- "pan5"
+## se.map$bastion2[se.map$nwinpan==6] <- "pan6"
+## se.map$bastion2[se.map$nwinpri==4] <- "pri4"
+## se.map$bastion2[se.map$nwinpri==5] <- "pri5"
+## se.map$bastion2[se.map$nwinpri==6] <- "pri6"
+## se.map$bastion2[se.map$nwinprd==4] <- "izq4"
+## se.map$bastion2[se.map$nwinprd==5] <- "izq5"
+## se.map$bastion2[se.map$nwinprd==6] <- "izq6"
+## #
+## # add centroids
+## tmp <- coordinates(se.map)
+## tmp <- data.frame(seccion=se.map$SECCION, edon=se.map$ENTIDAD, disn=se.map$disn, munn=se.map$MUNICIPIO, bastion=se.map$bastion2, ncasillas=sqrt(se.map$ncasillas), lon=tmp[,1], lat=tmp[,2], stringsAsFactors = FALSE)
+## write.csv(tmp, file = paste(md, edo, "/magar.csv", sep = "") )
+## tmp <- c("\"Integer\"",    "\"Integer\"",    "\"Integer\"",      "\"Integer\"",       "\"Integer\"",        "\"String\"",          "\"Integer\"",                   "\"Real\"", "\"Real\"",        "\"Integer\"",      "\"String\"")
+## write(tmp, file = paste(md, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
+
+
+
+# grafica distritos 1 por 1
+# (use 1984 long/lat for this map when mercator projection was chosen)
+p84 <- function(x = NA){
+    x <- x
+    x <- spTransform(x, CRS("+proj=longlat +datum=WGS84"))
+}
+portray <- se.map$bastion  # elegir qué reportará el mapa 2
+portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
+dn <- 15                  # elegir un distrito
+## for (dn in 1:17){
+##     print(paste("disn =", dn))
+## # plot state map with highlighted district
+#png(file = paste(md2, edo, dn, "-1.png", sep = ""))
+par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$bc), col = "white", axes = TRUE, main = "Baja California (mapa local 2016)", bg = "lightblue")
+plot(p84(ed.map$bcs), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$son), col = "white", add = TRUE, lty = 3)
+# 
+plot(p84(dl.map), add = TRUE, border = "gray")
+head(dl.map@data)
+plot(p84(dl.map[dl.map$disloc==dn,]), add = TRUE, border = "gray", col = "gray")
+# thick state border
+plot(p84(ed.map$bc), add = TRUE, lwd = 3)
+plot(p84(ed.map$bc), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.85)
 #
-# add centroids
-tmp <- coordinates(se.map)
-tmp <- data.frame(seccion=se.map$SECCION, edon=se.map$ENTIDAD, disn=se.map$disn, munn=se.map$MUNICIPIO, bastion=se.map$bastion2, ncasillas=sqrt(se.map$ncasillas), lon=tmp[,1], lat=tmp[,2], stringsAsFactors = FALSE)
-write.csv(tmp, file = paste(md, edo, "/magar.csv", sep = "") )
-tmp <- c("\"Integer\"",    "\"Integer\"",    "\"Integer\"",      "\"Integer\"",       "\"Integer\"",        "\"String\"",          "\"Integer\"",                   "\"Real\"", "\"Real\"",        "\"Integer\"",      "\"String\"")
-write(tmp, file = paste(md, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
+# add neighboring states
+text( x = -117, y = 29.5, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -60 )
+text( x = -113.2, y = 30, labels = "M A R   D E   C O R T E Z", cex = .9, col = "deepskyblue", srt = -55 )
+text( x = -113.4, y = 27.9, labels = "B.C.S.", col = "darkgray", cex = .9 )
+text( x = -113.5, y = 31.8, labels = "SONORA", col = "darkgray", cex = .9, srt = -20 )
+text( x = -116, y = 32.75, labels = "EE.UU.", col = "darkgray", cex = .9, srt = 6 )
+## dev.off()
+
+# plot same distrito only
+# need to merge disn info into mun and sec object, in order to select just those belonging to dis
+# get openstreetmap background
+m <- p84(dl.map[dl.map$disloc==dn,])  # subsetted map
+b <- as.data.frame(m@bbox)
+# gets xx degrees more than bbox (decimal defines share of max range)
+xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+#bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+#bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+#bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
+bg <- bg.os
+#
+#png(file = paste(md2, edo, dn, "-2.png", sep = ""))
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
+tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
+plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Baja California", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
+plot(bg, add = TRUE)
+plot(ed.map$bc, add = TRUE)
+library(scales) # has function alpha()
+plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color nwin
+#plot(ffcc, add = TRUE, lwd = .75)
+#
+plot(se.map[se.map$disloc2016==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$disloc2016==dn], .5)) # color nwin
+# add casillas
+points(cas.map, pch = 20, col = "white" , cex = .3)
+#points(cas.map[cas.map$disloc2017==dn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
+#
+#
+plot(ed.map$bcs, add = TRUE, lty = 1)
+plot(ed.map$son, add = TRUE, lty = 1)
+sel <- which(dl2013.map$disloc==dl.map$father[dl.map$disloc==dn])
+plot(dl2013.map[sel,], add = TRUE, lwd = 6, border = "red")
+#
+plot(dl.map[dl.map$disloc==dn,], add = TRUE, lwd = 4)
+plot(mu.map, add = TRUE, border = "green", lwd = 1)
+plot(mu.map, add = TRUE, lwd = 1, lty = 3)
+plot(ed.map$bc, add = TRUE, lwd = 3)
+plot(ed.map$bc, add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(coordinates(cab), pch = 19, col = "white", cex = .5)
+## points(coordinates(cab), pch = 1, col = "green", cex = .75)
+text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
+text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
+lp <- c("bottomright", #1 
+        "bottomleft",  #2 
+        "bottomright", #3 
+        "bottomright", #4 
+        "bottomright", #5 
+        "bottomright", #6 
+        "bottomright", #7 
+        "bottomleft",  #8 
+        "bottomright", #9 
+        "bottomleft",  #10
+        "bottomright", #11
+        "topleft",     #12
+        "bottomright", #13
+        "topright",    #14
+        "bottomright", #15
+        "topright",    #16
+        "topright")    #17
+legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
+legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
+addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+#dev.off()
+#}
+
+# plot same distrito's nCasillas
+loc <- c("topright","topright","bottomleft","topleft","bottomright",
+         "topright","bottomright","topright")
+## pdf(file = paste(md2, edo, dn, "-3.pdf", sep = ""))
+par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+tmp <- cabDisNames$cab[which(cabDisNames$edon==2 & cabDisNames$disn==dn)]
+plot(di.map[di.map$DISTRITO==dn,], axes = TRUE, main = paste("Baja California", dn, "-", tmp))
+plot(ed.map$bc, add = TRUE)
+plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray2[se.map$disn==dn]) # color nwin
+#plot(ffcc, add = TRUE, lwd = .75)
+#
+plot(ed.map$bcs, add = TRUE, lty = 1)
+plot(ed.map$son, add = TRUE, lty = 1)
+#
+plot(di.map[di.map$DISTRITO==dn,], add = TRUE, lwd = 4)
+plot(mu.map, add = TRUE, border = "green", lwd = 1)
+plot(mu.map, add = TRUE, lwd = 1, lty = 3)
+plot(ed.map$bc, add = TRUE, lwd = 3)
+plot(ed.map$bc, add = TRUE, border = "red", lty = 3, lwd = 2)
+points(coordinates(cab), pch = 19, col = "white", cex = .5)
+points(coordinates(cab), pch = 1, col = "green", cex = .75)
+text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
+text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
+legend(x=loc[dn], legend=c("21+","11-20","6-10","3-5","2","1"), fill=rev(purples), bty="o", bg = "white", cex=.85, title = "N casillas")
+## dev.off()
+## }
+
 
 # export for google earth
 #v1
@@ -506,89 +695,3 @@ kml_compress("bc.kml")
 # print the result:
 library(XML)
 xmlRoot(xmlTreeParse("tmp.kml"))[["Document"]][1:100]
-
-
-# grafica distritos 1 por 1
-portray <- se.map$bastion  # elegir qué reportará el mapa 2
-portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
-dn <- 8                  # elegir un distrito
-
-## for (dn in 1:8){
-##     print(paste("disn =", dn))
-## # plot state map with highlighted district
-## pdf(file = paste(md2, edo, dn, "-1.pdf", sep = ""))
-par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-plot(ed.map$bc, axes = TRUE, main = "Baja California (mapa 2006)")
-plot(ed.map$bcs, add = TRUE, lty = 3)
-plot(ed.map$son, add = TRUE, lty = 3)
-# 
-plot(di.map, add = TRUE, border = "gray")
-plot(di.map[di.map$DISTRITO==dn,], add = TRUE, border = "gray", col = "gray")
-# thick state border
-plot(ed.map$bc, add = TRUE, lwd = 3)
-plot(ed.map$bc, add = TRUE, border = "red", lty = 3, lwd = 2)
-## points(cabDis, pch = 3) # cabeceras distritales
-## points(cabDis)
-## points(cabDis, pch = 19, cex = .75, col = "orange")
-text(coordinates(di.map), labels=di.map$DISTRITO, cex=.85)
-# add neighboring states
-text( x = -117, y = 29.5, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -60 )
-text( x = -113.2, y = 30, labels = "M A R   D E   C O R T E Z", cex = .9, col = "deepskyblue", srt = -55 )
-text( x = -113.4, y = 27.9, labels = "B.C.S.", col = "darkgray", cex = .9 )
-text( x = -113.5, y = 31.8, labels = "SONORA", col = "darkgray", cex = .9, srt = -20 )
-text( x = -116, y = 32.75, labels = "EE.UU.", col = "darkgray", cex = .9, srt = 6 )
-## dev.off()
-
-# plot same distrito only
-# need to merge disn info into mun and sec object, in order to select just those belonging to dis
-## pdf(file = paste(md2, edo, dn, "-2.pdf", sep = ""))
-par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-tmp <- cabDisNames$cab[which(cabDisNames$edon==2 & cabDisNames$disn==dn)]
-plot(di.map[di.map$DISTRITO==dn,], axes = TRUE, main = paste("Baja California", dn, "-", tmp))
-plot(ed.map$bc, add = TRUE)
-plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray[se.map$disn==dn]) # color nwin
-#plot(ffcc, add = TRUE, lwd = .75)
-#
-plot(ed.map$bcs, add = TRUE, lty = 1)
-plot(ed.map$son, add = TRUE, lty = 1)
-#
-plot(di.map[di.map$DISTRITO==dn,], add = TRUE, lwd = 4)
-plot(mu.map, add = TRUE, border = "green", lwd = 1)
-plot(mu.map, add = TRUE, lwd = 1, lty = 3)
-plot(ed.map$bc, add = TRUE, lwd = 3)
-plot(ed.map$bc, add = TRUE, border = "red", lty = 3, lwd = 2)
-## points(coordinates(cab), pch = 19, col = "white", cex = .5)
-## points(coordinates(cab), pch = 1, col = "green", cex = .75)
-text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
-text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
-## dev.off()
-#legend(x="bottomleft", legend=rev(0:6), fill=rev(reds), bty="o", cex=.85)
-
-# plot same distrito's nCasillas
-loc <- c("topright","topright","bottomleft","topleft","bottomright",
-         "topright","bottomright","topright")
-## pdf(file = paste(md2, edo, dn, "-3.pdf", sep = ""))
-par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-tmp <- cabDisNames$cab[which(cabDisNames$edon==2 & cabDisNames$disn==dn)]
-plot(di.map[di.map$DISTRITO==dn,], axes = TRUE, main = paste("Baja California", dn, "-", tmp))
-plot(ed.map$bc, add = TRUE)
-plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray2[se.map$disn==dn]) # color nwin
-#plot(ffcc, add = TRUE, lwd = .75)
-#
-plot(ed.map$bcs, add = TRUE, lty = 1)
-plot(ed.map$son, add = TRUE, lty = 1)
-#
-plot(di.map[di.map$DISTRITO==dn,], add = TRUE, lwd = 4)
-plot(mu.map, add = TRUE, border = "green", lwd = 1)
-plot(mu.map, add = TRUE, lwd = 1, lty = 3)
-plot(ed.map$bc, add = TRUE, lwd = 3)
-plot(ed.map$bc, add = TRUE, border = "red", lty = 3, lwd = 2)
-points(coordinates(cab), pch = 19, col = "white", cex = .5)
-points(coordinates(cab), pch = 1, col = "green", cex = .75)
-text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
-text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
-legend(x=loc[dn], legend=c("21+","11-20","6-10","3-5","2","1"), fill=rev(purples), bty="o", bg = "white", cex=.85, title = "N casillas")
-## dev.off()
-## }
-
-

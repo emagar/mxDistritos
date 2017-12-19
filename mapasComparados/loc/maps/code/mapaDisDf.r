@@ -494,9 +494,9 @@ p84 <- function(x = NA){
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
 portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
 dn <- 12                  # elegir un distrito
-#for (dn in 1:33){
-#    print(paste("disn =", dn))
-# ## plot state map with highlighted district
+## for (dn in 1:33){
+##     print(paste("disn =", dn))
+## # plot state map with highlighted district
 #png(file = paste(md2, edo, dn, "-1.png", sep = ""))
 par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 plot(p84(ed.map$df), col = "white", axes = TRUE, main = "Ciudad de México (mapa local 2018)")#, bg = "lightblue")
@@ -535,7 +535,7 @@ bg <- bg.os
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
-plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Ciudad de México ", dn, "-", tmp, " (DSI = ", tmp2, ")", sep = ""))
+plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Ciudad de México ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
 plot(bg, add = TRUE)
 #plot(dl.map[dl.map$disloc==dn,], lwd = 5, add = TRUE) # drop
 plot(ed.map$df, add = TRUE)
