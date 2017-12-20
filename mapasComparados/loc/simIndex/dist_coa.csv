@@ -1,17 +1,17 @@
-"edon","disloc2017","father","dsi","cab2017"
-5,11,7,0.148,"Torreón"
-5,15,2,0.198,"Saltillo"
-5,8,9,0.283,"Torreón"
-5,6,11,0.366,"Frontera"
-5,5,12,0.403,"Monclova"
-5,4,10,0.435,"San Pedro"
-5,13,4,0.459,"Saltillo"
-5,3,13,0.55,"Sabinas"
-5,16,2,0.556,"Saltillo"
-5,7,6,0.621,"Matamoros"
-5,9,8,0.65,"Torreón"
-5,14,1,0.703,"Saltillo"
-5,10,7,0.709,"Torreón"
-5,2,16,0.779,"Piedras Negras"
-5,1,15,0.788,"Acuña"
-5,12,5,1,"Ramos Arizpe"
+edon,disloc2017,father,dsi,cab
+5,1,15,0.788,Acuña
+5,2,16,0.779,Piedras Negras
+5,3,13,0.55,Sabinas
+5,4,10,0.435,San Pedro
+5,5,12,0.403,Monclova
+5,6,11,0.366,Frontera
+5,7,6,0.621,Matamoros
+5,8,9,0.283,Torreón
+5,9,8,0.65,Torreón
+5,10,7,0.709,Torreón
+5,11,7,0.148,Torreón
+5,12,5,1,Ramos Arizpe
+5,13,4,0.459,Saltillo
+5,14,1,0.703,Saltillo
+5,15,2,0.198,Saltillo
+5,16,2,0.556,Saltillo
