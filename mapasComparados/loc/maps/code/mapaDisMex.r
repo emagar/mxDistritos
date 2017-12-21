@@ -289,20 +289,28 @@ tmp <- tmp[order(tmp$orden), grep("^dis.+$", colnames(tmp))]
 #tmp <- tmp[order(tmp$orden), grep("SECCION|^dis.+$", colnames(tmp))]
 se.map@data <- cbind(se.map@data, tmp)
 rm(tmp)
-# di.map <- unionSpatialPolygons(se.map, se.map$disn) # proper way to get federal district objects... if only seccion shapefiles had no problems
+# df2006.map <- unionSpatialPolygons(se.map, se.map$disn) # proper way to get federal district objects... if only seccion shapefiles had no problems
 #
 # b. from rojano's 2006 distrito map, which has good-looking shapefiles
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
-di.map <- readOGR(dsn = tmp, layer = 'DISTRITO')
+df2006.map <- readOGR(dsn = tmp, layer = 'DISTRITO')
 # projects to a different datum with long and lat
-di.map <- spTransform(di.map, osm())
-# read cabeceras distritales (via vocal ejecutivo)
-tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
-cabDis <- readOGR(dsn = tmp, layer = 'VOCAL_EJECUTIVO_DISTRITAL')
+df2006.map <- spTransform(df2006.map, osm())
+
+# c. from ine's 2018 distrito maps
+tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con mapas 2018
+df.map <- readOGR(dsn = tmp, layer = 'DISTRITO')
 # projects to a different datum with long and lat
-cabDis <- spTransform(cabDis, osm())
-#
-cabDisNames <- read.csv(paste(wd2, "cabeceras2006.csv", sep = ""), stringsAsFactors = FALSE)
+df.map <- spTransform(df.map, osm())
+head(df.map@data)
+
+## # read cabeceras distritales (via vocal ejecutivo)
+## tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
+## cabDis <- readOGR(dsn = tmp, layer = 'VOCAL_EJECUTIVO_DISTRITAL')
+## # projects to a different datum with long and lat
+## cabDis <- spTransform(cabDis, osm())
+## #
+## cabDisNames <- read.csv(paste(wd2, "cabeceras2006.csv", sep = ""), stringsAsFactors = FALSE)
 
 # add casillas in 2012
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
@@ -375,14 +383,6 @@ se.map$bastion[se.map$nwinprd==4] <- yellows[4]
 se.map$bastion[se.map$nwinprd==5] <- yellows[5]
 se.map$bastion[se.map$nwinprd==6] <- yellows[6]
 
-# add disloc --- DONE ABOVE
-#tmp <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/subnat/disloc/df2015.csv", stringsAsFactors = FALSE) # 2015 districts
-#tmp$edon <- tmp$munn <- NULL
-#tmp <- merge(x = se.map@data, y = tmp, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
-## table(is.na(tmp$disloc))             # verify missing
-## tmp$SECCION[is.na(tmp$disloc)==TRUE] # verify missing
-#se.map$disloc <- tmp$disloc#; se.map$cabloc <- tmp$cabloc
-#
 # add seccion volat 2012-2105 = max change
 # add lisnom2015
 tmp1 <- v12[v12$edon==edon,]
@@ -457,14 +457,14 @@ rm(tmp, tmp1, tmp2, tmp3, tmpv)
 load(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/git-repo/mex-open-map/data/votPobDis0018.RData")
 tmp <- votPobDis0018$pob.distMap2006
 tmp <- tmp[tmp$edon==edon,]
-tmp1 <- di.map@data
+tmp1 <- df2006.map@data
 tmp1$ord <- 1:nrow(tmp1)
 tmp1 <- merge(x=tmp1, y=tmp, by.x="DISTRITO", by.y="disn")
 tmp1[, grep("rri", colnames(tmp1))] <- round(tmp1[, grep("rri", colnames(tmp1))],2)
 tmp1 <- tmp1[order(tmp1$ord), grep("ptot|rri", colnames(tmp1))]
-di.map@data <- cbind(di.map@data, tmp1)
-di.map$disrri06 <- paste(di.map$DISTRITO, " (", di.map$rris2006, ")", sep="")
-di.map$disrri15 <- paste(di.map$DISTRITO, " (", di.map$rris2015, ")", sep="")
+df2006.map@data <- cbind(df2006.map@data, tmp1)
+df2006.map$disrri06 <- paste(df2006.map$DISTRITO, " (", df2006.map$rris2006, ")", sep="")
+df2006.map$disrri15 <- paste(df2006.map$DISTRITO, " (", df2006.map$rris2015, ")", sep="")
                          
 ## # export attributes for maps with other software
 ## se.map$bastion2 <- "swing"
@@ -486,7 +486,7 @@ di.map$disrri15 <- paste(di.map$DISTRITO, " (", di.map$rris2015, ")", sep="")
 ## write(tmp, file = paste(md, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
 
 
-# grafica distritos 1 por 1
+# grafica distritos locales 1 por 1
 # (use 1984 long/lat for this map when mercator projection was chosen)
 p84 <- function(x = NA){
     x <- x
@@ -494,11 +494,11 @@ p84 <- function(x = NA){
 }
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
 portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
-dn <- 2                  # elegir un distrito
-### for (dn in 1:45){
-###     print(paste("disn =", dn))
-### # plot state map with highlighted district
-### png(file = paste(md2, edo, dn, "-1.png", sep = ""))
+dn <- 23                  # elegir un distrito
+## for (dn in 1:45){
+##     print(paste("disn =", dn))
+## # plot state map with highlighted district
+#png(file = paste(md2, edo, dn, "-1.png", sep = ""))
 par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (mapa local 2018)")#, bg = "lightblue")
 #plot(p84(ed.map$df), col = "white", add = TRUE, lty = 3)
@@ -649,14 +649,14 @@ loc <- c("topright","bottomleft","topleft","bottomleft","bottomleft",
 ## pdf(file = paste(md2, edo, dn, "-3.pdf", sep = ""))
 par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 tmp <- cabDisNames$cab[which(cabDisNames$edon == edon & cabDisNames$disn==dn)]
-plot(di.map[di.map$DISTRITO==dn,], axes = TRUE, main = paste("Distrito Federal", dn, "-", tmp))
+plot(df2006.map[df2006.map$DISTRITO==dn,], axes = TRUE, main = paste("Distrito Federal", dn, "-", tmp))
 plot(ed.map$df, add = TRUE)
 plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray2[se.map$disn==dn]) # color nwin
 #plot(ffcc, add = TRUE, lwd = .75)
 #
 plot(ed.map$mor, add = TRUE, lty = 1)
 #
-plot(di.map[di.map$DISTRITO==dn,], add = TRUE, lwd = 4)
+plot(df2006.map[df2006.map$DISTRITO==dn,], add = TRUE, lwd = 4)
 plot(mu.map, add = TRUE, border = "green", lwd = 1)
 plot(mu.map, add = TRUE, lwd = 1, lty = 3)
 plot(ed.map$df, add = TRUE, lwd = 3)
@@ -709,9 +709,9 @@ tmp <- as(ed.map$df, "SpatialLinesDataFrame") # coerce polygons to lines
 kml_layer.SpatialLines(tmp, colour = "hotpink", width = 2.5, subfolder.name = "stateLimit", altitudeMode = "clampToGround")
 #
 # Distritos federales 2006
-tmp <- as(di.map, "SpatialLinesDataFrame") # coerce polygons to lines 
+tmp <- as(df2006.map, "SpatialLinesDataFrame") # coerce polygons to lines 
 kml_layer.SpatialLines(tmp, colour = "white", width = 2, subfolder.name = "fedDist2006map", altitudeMode = "clampToGround")
-tmp <- SpatialPointsDataFrame(coords=coordinates(di.map), data = di.map@data, proj4string = osm())
+tmp <- SpatialPointsDataFrame(coords=coordinates(df2006.map), data = df2006.map@data, proj4string = osm())
 kml_layer.SpatialPoints(tmp, LabelScale = .75, extrude = TRUE, labels = disrri06, subfolder.name = "fedDistRRI@2006", altitudeMode = "clampToGround")
 kml_layer.SpatialPoints(tmp, LabelScale = .75, extrude = TRUE, labels = disrri15, subfolder.name = "fedDistRRI@2015", altitudeMode = "clampToGround")
 #
