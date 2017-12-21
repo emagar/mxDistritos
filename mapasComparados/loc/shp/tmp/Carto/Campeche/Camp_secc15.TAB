@@ -1,0 +1,25 @@
+!table
+!version 300
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 13
+    ID Integer ;
+    CLAVE Char (20) Index 1 ;
+    ENTIDAD Char (2) Index 2 ;
+    NOMBRE_ENTIDAD Char (50) ;
+    DISTRITO Char (2) ;
+    MUNICIPIO Char (3) ;
+    NOMBRE_MUNICIPIO Char (60) ;
+    SECCION Integer ;
+    TIPO Smallint Index 3 ;
+    NSE Char (4) Index 4 ;
+    CONTROL Smallint ;
+    GPE Float Index 5 ;
+    DttoLoc_12 Integer ;
+begin_metadata
+"\IsReadOnly" = "FALSE"
+"\MapInfo" = ""
+"\MapInfo\TableID" = "ad19da95-e9fd-4064-8643-494fe4754bf2"
+end_metadata

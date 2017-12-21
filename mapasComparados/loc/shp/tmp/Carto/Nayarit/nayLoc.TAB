@@ -1,0 +1,22 @@
+!table
+!version 1000
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "Neutral"
+  Fields 9
+    cve_seccion Char (12) Index 1 ;
+    cve_entidad Float ;
+    seccion Float ;
+    dis2017 Float ;
+    cab Char (34) ;
+    mun Char (40) ;
+    munn Float ;
+    Demar_2008 Char (10) ;
+    Demar_14 Char (10) ;
+begin_metadata
+"\IsReadOnly" = "FALSE"
+"\MapInfo" = ""
+"\MapInfo\TableID" = "8cc72cb3-b26f-4b1e-ae46-0e383f2c68e4"
+"\MapInfo\ParentTableID" = "7de8d704-843f-4a81-bdcd-a9162ed9be41"
+end_metadata

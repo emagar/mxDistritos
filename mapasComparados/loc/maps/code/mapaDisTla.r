@@ -139,12 +139,12 @@ ed.map$mex <- tmp
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$mic <- tmp
 #
-## tmp <- paste(md, "mor", sep = "") # archivo con mapas rojano
-## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, osm())
-## ed.map$mor <- tmp
-## #
+tmp <- paste(md, "mor", sep = "") # archivo con mapas rojano
+tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+# projects to a different datum with long and lat
+tmp <- spTransform(tmp, osm())
+ed.map$mor <- tmp
+#
 ## tmp <- paste(md, "nay", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
@@ -254,7 +254,7 @@ cab <- spTransform(cab, osm())
 ## data.frame(N=mu.map$NOMBRE, M=mu.map$mun)
 mu.map$mun <- mu.map$NOMBRE
 
-# read shapefiles distritos locales 2017, 2005 and demarcaciones
+# read shapefiles distritos locales 
 tmp <- paste("/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, sep = "") # archivo con mapas locales
 dl.map <- readOGR(dsn = tmp, layer = 'disloc2016')
 colnames(dl.map@data) <- c("edon","tipo","disloc","id")
@@ -262,23 +262,23 @@ colnames(dl.map@data) <- c("edon","tipo","disloc","id")
 dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
 # read disloc2005
 dl2013.map <- readOGR(dsn = tmp, layer = 'disloc2013')
-colnames(dl2012.map@data) <- c("edon","edo","disloc")
+colnames(dl2013.map@data) <- c("edon","edo","disloc")
 # projects to a different datum with long and lat
-dl2012.map <- spTransform(dl2012.map, osm()) # project to osm native Mercator
+dl2013.map <- spTransform(dl2013.map, osm()) # project to osm native Mercator
 
 # add father/son info and dsi of mapLoc
-dsi <- "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/simIndex/dist_mor12.csv"
+dsi <- "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/simIndex/dist_tla15.csv"
 dsi <- read.csv(file = dsi, stringsAsFactors = FALSE)
 #
 #dl.map$ord <- 1:nrow(dl.map@data)
-dl.map@data <- merge(x = dl.map@data, y = dsi, by.x = "disloc", by.y = "disloc2018", all.x = TRUE, all.y = FALSE)
+dl.map@data <- merge(x = dl.map@data, y = dsi, by.x = "disloc", by.y = "disloc2016", all.x = TRUE, all.y = FALSE)
 rm(dsi)
 
 # read comparative district maps
 # a. from seccion2dis map, in order to export into se.map for sub-setting
 #sec2dis <- read.csv("/home/eric/Dropbox/data/mapas/reseccionamiento/equivSecc/tablaEquivalenciasSeccionales1994-2010.2013.csv", stringsAsFactors = FALSE)
 #sec2dis <- sec2dis[sec2dis$edon == 18,]
-sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/mor12Loc.csv", stringsAsFactors = FALSE)
+sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/tla15Loc.csv", stringsAsFactors = FALSE)
 # send to seccion map
 tmp <- data.frame(SECCION = se.map$SECCION)
 tmp$orden <- 1:nrow(tmp)
@@ -310,12 +310,12 @@ cas.map <- spTransform(cas.map, osm()) # project to osm native Mercator
 #
 # add districts for subsetting
 tmp <- cas.map@data; tmp$ord <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = se.map[,c("SECCION","disfed2006","disfed2018","disloc2012","disloc2018")], by = "SECCION", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = se.map[,c("SECCION","disfed2006","disfed2018","disloc2013","disloc2016")], by = "SECCION", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$ord),]
 cas.map@data <- tmp
 #
 # drop casillas from missing secciones to avoid indeterminate subsetting
-sel <- which(is.na(cas.map$disloc2018)==TRUE)
+sel <- which(is.na(cas.map$disloc2016)==TRUE)
 if (length(sel)>0) cas.map <- cas.map[-sel,] # drop missing cases
 rm(sel)
 
@@ -484,7 +484,7 @@ di.map$disrri15 <- paste(di.map$DISTRITO, " (", di.map$rris2015, ")", sep="")
 ## write(tmp, file = paste(md, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
 
 
-
+mu.map$mun <- gsub(pattern = "[0-9]+", replacement = "", mu.map$mun)
 # grafica distritos 1 por 1
 # (use 1984 long/lat for this map when mercator projection was chosen)
 p84 <- function(x = NA){
@@ -494,32 +494,32 @@ p84 <- function(x = NA){
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
 portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
 dn <- 1                  # elegir un distrito
-## for (dn in 1:12){
+## for (dn in 1:15){
 ##     print(paste("disn =", dn))
 ## # plot state map with highlighted district
 #png(file = paste(md2, edo, dn, "-1.png", sep = ""))
 par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-plot(p84(ed.map$mor), col = "white", axes = TRUE, main = "Morelos (mapa local 2018)")#, bg = "lightblue")
-plot(p84(ed.map$df), add = TRUE, lty = 3)
-plot(p84(ed.map$gue), add = TRUE, lty = 3)
-plot(p84(ed.map$pue), add = TRUE, lty = 3)
+plot(p84(ed.map$tla), col = "white", axes = TRUE, main = "Tlaxcala (mapa local 2016)")#, bg = "lightblue")
+plot(p84(ed.map$pue), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$mex), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$hgo), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$mor), col = "white", add = TRUE, lty = 3)
 # 
 plot(p84(dl.map), add = TRUE, border = "gray")
 plot(p84(dl.map[dl.map$disloc==dn,]), add = TRUE, border = "gray", col = "gray")
 # thick state border
-plot(p84(ed.map$mor), add = TRUE, lwd = 3)
-plot(p84(ed.map$mor), add = TRUE, border = "red", lty = 3, lwd = 2)
+plot(p84(ed.map$tla), add = TRUE, lwd = 3)
+plot(p84(ed.map$tla), add = TRUE, border = "red", lty = 3, lwd = 2)
 ## points(cabDis, pch = 3) # cabeceras distritales
 ## points(cabDis)
 ## points(cabDis, pch = 19, cex = .75, col = "orange")
 text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.85)
 #
 # add neighboring states
-text( x = -99.1, y = 19.125, labels = "CDMX", col = "darkgray", cex = .9 )
-text( x = -98.825, y = 19.075, labels = "MEXICO", col = "darkgray", cex = .9, srt = -35 )
-text( x = -99.425, y = 19, labels = "MEXICO", col = "darkgray", cex = .9, srt = 75 )
-text( x = -98.775, y = 18.385, labels = "PUEBLA", col = "darkgray", cex = .9)
-text( x = -99.4, y = 18.385, labels = "GUERRERO", col = "darkgray", cex = .9)
+text( x = -98.7, y = 19.35, labels = "MEXICO", col = "darkgray", cex = .9, srt = 90 )
+text( x = -98.5, y = 19.8, labels = "HIDALGO", col = "darkgray", cex = .9, srt = 25 )
+text( x = -98, y = 19, labels = "PUEBLA", col = "darkgray", cex = .9)
+text( x = -98.71, y = 18.925, labels = "MORELOS", col = "darkgray", cex = .9, srt = 50 )
 #dev.off()
 
 
@@ -540,10 +540,10 @@ bg <- bg.os
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
-plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Morelos ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
+plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Tlaxcala ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
 plot(bg, add = TRUE)
 #plot(dl.map[dl.map$disloc==dn,], lwd = 5, add = TRUE) # drop
-plot(ed.map$mor, add = TRUE)
+plot(ed.map$tla, add = TRUE)
 library(scales) # has function alpha()
 plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color nwin
 # plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray[se.map$disn==dn]) # color nwin -- se.map$disn is disfed
@@ -551,42 +551,44 @@ plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color
 #
 #
 #plot(ed.map$nay, add = TRUE, lty = 1, col = rgb(1,1,1, alpha = .5)) # blurs colors inside state
-plot(se.map[se.map$disloc2018==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$disloc2018==dn], .5)) # color nwin
+plot(se.map[se.map$disloc2016==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$disloc2016==dn], .5)) # color nwin
 # add casillas
 points(cas.map, pch = 20, col = "white" , cex = .3)
 #points(cas.map[cas.map$disloc2017==dn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
 #
 #
 plot(ed.map$mor, add = TRUE, lty = 1)
-plot(ed.map$df, add = TRUE, lty = 1)
 plot(ed.map$mex, add = TRUE, lty = 1)
 plot(ed.map$pue, add = TRUE, lty = 1)
-plot(ed.map$gue, add = TRUE, lty = 1)
+plot(ed.map$hgo, add = TRUE, lty = 1)
 #
-sel <- which(dl2012.map$disloc==dl.map$father[dl.map$disloc==dn])
-plot(dl2012.map[sel,], add = TRUE, lwd = 6, border = "red")
+sel <- which(dl2013.map$disloc==dl.map$father[dl.map$disloc==dn])
+plot(dl2013.map[sel,], add = TRUE, lwd = 6, border = "red")
 #
 plot(dl.map[dl.map$disloc==dn,], add = TRUE, lwd = 4)
 plot(mu.map, add = TRUE, border = "green", lwd = 1)
 plot(mu.map, add = TRUE, lwd = 1, lty = 3)
-plot(ed.map$mor, add = TRUE, lwd = 3)
-plot(ed.map$mor, add = TRUE, border = "red", lty = 3, lwd = 2)
+plot(ed.map$tla, add = TRUE, lwd = 3)
+plot(ed.map$tla, add = TRUE, border = "red", lty = 3, lwd = 2)
 ## points(coordinates(cab), pch = 19, col = "white", cex = .5)
 ## points(coordinates(cab), pch = 1, col = "green", cex = .75)
 text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
 text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
 lp <- c("bottomleft",  #1 
         "bottomleft",  #2 
-        "bottomleft",  #3 
-        "bottomleft",  #4 
+        "bottomright", #3 
+        "bottomright", #4 
         "bottomleft",  #5 
         "bottomleft",  #6 
-        "bottomleft",  #7 
-        "bottomright", #8 
+        "topleft",     #7 
+        "bottomleft",  #8 
         "bottomleft",  #9 
         "bottomleft",  #10
-        "bottomright", #11
-        "bottomright") #12
+        "bottomleft",  #11
+        "bottomright", #12
+        "bottomright", #13
+        "bottomleft",  #14
+        "topleft")     #15
 legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
 legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
 library(prettymapr)
