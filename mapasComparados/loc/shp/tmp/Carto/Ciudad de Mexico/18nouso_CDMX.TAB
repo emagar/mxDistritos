@@ -1,0 +1,16 @@
+!table
+!version 300
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 3
+    ENTIDAD Char (2) Index 1 ;
+    NOMBRE_ENTIDAD Char (50) ;
+    Dttoloc18_nouso Integer Index 2 ;
+begin_metadata
+"\IsReadOnly" = "FALSE"
+"\MapInfo" = ""
+"\MapInfo\TableID" = "5a72e681-1c24-4a21-849d-5c50112ea20c"
+"\MapInfo\ParentTableID" = "97c63eb9-4f70-479b-8ab0-a1ff2a6a52d5"
+end_metadata
