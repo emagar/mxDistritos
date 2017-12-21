@@ -322,7 +322,7 @@ rm(sel)
 # add ncasillas in 2012 to seccion map
 tmp <- data.frame(SECCION = se.map$SECCION)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon== 9, c("seccion","e12")], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon==edon, c("seccion","e12")], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden), c("SECCION","e12")]; 
 se.map$ncasillas <- tmp$e12
 # make colors
@@ -341,7 +341,7 @@ se.map$ncascol[se.map$ncasillas>=21]                        <- purples[6]
 # add nwin to seccion map
 tmp <- data.frame(SECCION = se.map$SECCION)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = nwin[nwin$edon==9,], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = nwin[nwin$edon==edon,], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden), c("SECCION","pan","pri","prd")]
 se.map$nwinpan <- tmp$pan
 se.map$nwinpri <- tmp$pri
@@ -604,7 +604,7 @@ loc <- c("topright","bottomleft","topleft","bottomleft","bottomleft",
          "bottomright","topright")
 ## pdf(file = paste(md2, edo, dn, "-3.pdf", sep = ""))
 par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-tmp <- cabDisNames$cab[which(cabDisNames$edon == 9 & cabDisNames$disn==dn)]
+tmp <- cabDisNames$cab[which(cabDisNames$edon == edon & cabDisNames$disn==dn)]
 plot(di.map[di.map$DISTRITO==dn,], axes = TRUE, main = paste("Distrito Federal", dn, "-", tmp))
 plot(ed.map$df, add = TRUE)
 plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray2[se.map$disn==dn]) # color nwin

@@ -259,7 +259,7 @@ mu.map$mun <- gsub(pattern = "[0-9]+", replacement = "", mu.map$mun) # en alguno
 tmp <- paste("/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, sep = "") # archivo con mapas locales
 dl.map <- readOGR(dsn = tmp, layer = 'disloc2018')
 colnames(dl.map@data) <- c("edon","tipo","disloc","id")
-# projects to a different datum with long and lat
+# projects to a different ./datum with long and lat
 dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
 # read disloc2005
 dl1996.map <- readOGR(dsn = tmp, layer = 'disloc1996')
@@ -267,10 +267,6 @@ colnames(dl1996.map@data) <- c("edon","disloc")
 # projects to a different datum with long and lat
 dl1996.map <- spTransform(dl1996.map, osm()) # project to osm native Mercator
 
-library(foreign)
-tmp2 <- read.dbf(paste(tmp, "disloc1996.dbf", sep=""))
-head(tmp2)
-dl.map$disloc
 
 # add father/son info and dsi of mapLoc
 dsi <- "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/simIndex/dist_mex.csv"
@@ -328,7 +324,7 @@ rm(sel)
 # add ncasillas in 2012 to seccion map
 tmp <- data.frame(SECCION = se.map$SECCION)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon== 9, c("seccion","e12")], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon==edon, c("seccion","e12")], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden), c("SECCION","e12")]; 
 se.map$ncasillas <- tmp$e12
 # make colors
@@ -347,7 +343,7 @@ se.map$ncascol[se.map$ncasillas>=21]                        <- purples[6]
 # add nwin to seccion map
 tmp <- data.frame(SECCION = se.map$SECCION)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = nwin[nwin$edon==9,], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = nwin[nwin$edon==edon,], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden), c("SECCION","pan","pri","prd")]
 se.map$nwinpan <- tmp$pan
 se.map$nwinpri <- tmp$pri
@@ -498,11 +494,11 @@ p84 <- function(x = NA){
 }
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
 portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
-dn <- 1                  # elegir un distrito
-## for (dn in 1:45){
-##     print(paste("disn =", dn))
-## # plot state map with highlighted district
-#png(file = paste(md2, edo, dn, "-1.png", sep = ""))
+dn <- 2                  # elegir un distrito
+### for (dn in 1:45){
+###     print(paste("disn =", dn))
+### # plot state map with highlighted district
+### png(file = paste(md2, edo, dn, "-1.png", sep = ""))
 par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (mapa local 2018)")#, bg = "lightblue")
 #plot(p84(ed.map$df), col = "white", add = TRUE, lty = 3)
@@ -597,44 +593,44 @@ lp <- c("bottomright", #1
         "bottomright", #5 
         "bottomright", #6 
         "bottomright", #7 
-        "bottomright",  #8 
-        "bottomright",  #9 
+        "bottomright", #8 
+        "bottomright", #9 
         "bottomleft",  #10
-        "bottomright",  #11
+        "bottomright", #11
         "bottomright", #12
         "bottomright", #13
         "bottomleft",  #14
-        "bottomleft",     #15
-        "bottomleft",     #16
-        "bottomleft",     #17
-        "bottomleft",     #18
-        "bottomright",     #19
-        "topleft",  #20
+        "bottomleft",  #15
+        "bottomleft",  #16
+        "bottomleft",  #17
+        "bottomleft",  #18
+        "bottomright", #19
+        "topleft",     #20
         "bottomleft",  #21
         "bottomright", #22
         "bottomright", #23
         "bottomleft",  #24
-        "bottomleft",     #25
-        "bottomleft",     #26
-        "bottomleft",     #27
-        "bottomleft",     #28
-        "bottomleft",     #29
+        "bottomleft",  #25
+        "bottomleft",  #26
+        "bottomleft",  #27
+        "bottomleft",  #28
+        "bottomleft",  #29
         "bottomleft",  #30
         "bottomleft",  #31
         "bottomright", #32
         "bottomright", #33
         "bottomleft",  #34
-        "bottomleft",     #35
-        "bottomleft",     #36
-        "bottomleft",     #37
-        "bottomright",     #38
-        "bottomright",     #39
+        "bottomleft",  #35
+        "bottomleft",  #36
+        "bottomleft",  #37
+        "bottomright", #38
+        "bottomright", #39
         "bottomleft",  #40
         "bottomleft",  #41
         "bottomright", #42
-        "topleft", #43
+        "topleft",     #43
         "bottomleft",  #44
-        "bottomright")     #45
+        "bottomright") #45
 legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
 legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
 library(prettymapr)
@@ -652,7 +648,7 @@ loc <- c("topright","bottomleft","topleft","bottomleft","bottomleft",
          "bottomright","topright")
 ## pdf(file = paste(md2, edo, dn, "-3.pdf", sep = ""))
 par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-tmp <- cabDisNames$cab[which(cabDisNames$edon == 9 & cabDisNames$disn==dn)]
+tmp <- cabDisNames$cab[which(cabDisNames$edon == edon & cabDisNames$disn==dn)]
 plot(di.map[di.map$DISTRITO==dn,], axes = TRUE, main = paste("Distrito Federal", dn, "-", tmp))
 plot(ed.map$df, add = TRUE)
 plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray2[se.map$disn==dn]) # color nwin
