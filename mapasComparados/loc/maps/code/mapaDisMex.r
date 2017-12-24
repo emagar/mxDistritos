@@ -236,7 +236,8 @@ ed.map$tla <- tmp
 ## ed.map$zac <- tmp
 
 # read municipios
-tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
+#tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
+tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con mapas 2018
 mu.map <- readOGR(dsn = tmp, layer = 'MUNICIPIO')
 # projects to a different datum with long and lat
 mu.map <- spTransform(mu.map, osm())
