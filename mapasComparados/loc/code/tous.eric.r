@@ -271,21 +271,21 @@ setwd(dd)
 ## write.csv(eq, file = "coaLoc.csv", row.names = FALSE)
 
 
-## ## get functions to include population
-## source(paste(dd, "code/getPop.r", sep = ""))
-## pob05 <- get2005(edon=5)
-## pob10 <- get2010(edon=5)
-## head(pob05)
-## head(pob10)
-## head(d)
-## # add 2005 pop
-## d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
-## d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
-## d$ptot <- NULL
-## # add 2010 pop
-## d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
-## d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
-## d$ptot <- NULL
+## get functions to include population
+source(paste(dd, "code/getPop.r", sep = ""))
+pob05 <- get2005(edon=5)
+pob10 <- get2010(edon=5)
+head(pob05)
+head(pob10)
+head(d)
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
 
 ## # dsi seen from offspring perspective
 ## # new district's "father" and district similarity index, cf. Cox & Katz

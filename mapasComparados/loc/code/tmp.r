@@ -1,3 +1,12 @@
+pob10 <- data.frame()
+for (i in 1:32){
+    tmp <- get2010(edon=i)
+    pob10 <- rbind(pob10, tmp)
+}
+quantile(pob10$ptot, probs=c(.01,.99))
+quantile(pob10$ptot, probs=c(.025,.975))
+x
+
 ########################################################################
 # script with functions to get 2005 and 2010 seccion-level populations #
 ########################################################################
@@ -7,6 +16,8 @@
 ## should edit pop objects to fix changed secciones... ##
 #########################################################
 #########################################################
+
+
 
 # function to get conteo 2005 pop (or other info) --- adapted from red.r
 get2005 <- function(edon=NA){
