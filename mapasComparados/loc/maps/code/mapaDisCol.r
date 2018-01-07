@@ -508,7 +508,7 @@ p84 <- function(x = NA){
 
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
 portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
-dn <- 7                  # elegir un distrito
+dn <- 1                  # elegir un distrito
 ## for (dn in 1:16){
 ##     print(paste("disn =", dn))
 ## # plot state map with highlighted district
@@ -522,13 +522,10 @@ plot(p84(ed.map$mic), col = "white", add = TRUE, lty = 3)
 #plot(p84(ed.map$zac), col = "white", add = TRUE, lty = 3)
 # 
 plot(p84(dl.map), add = TRUE, border = "gray")
-plot(p84(dl.map[dl.map$disloc==dn,]), add = TRUE, border = "gray", col = "gray")
+plot(p84(dl.map[dl.map$disloc==dn,]), add = TRUE, border = "gray", col = "hotpink")
 # thick state border
 plot(p84(ed.map$col), add = TRUE, lwd = 3)
 plot(p84(ed.map$col), add = TRUE, border = "red", lty = 3, lwd = 2)
-## points(cabDis, pch = 3) # cabeceras distritales
-## points(cabDis)
-## points(cabDis, pch = 19, cex = .75, col = "orange")
 text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.85)
 #
 # add neighboring states
@@ -553,7 +550,7 @@ xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
 bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
 bg <- bg.os
 #
-#png(file = paste(md2, edo, dn, "-2.png", sep = ""))
+#png(file = paste(md2, edo, dn, "-2.png", sep = ""),width=400,height=400,res=45)
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]

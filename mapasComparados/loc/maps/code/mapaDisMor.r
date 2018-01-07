@@ -505,7 +505,7 @@ plot(p84(ed.map$gue), add = TRUE, lty = 3)
 plot(p84(ed.map$pue), add = TRUE, lty = 3)
 # 
 plot(p84(dl.map), add = TRUE, border = "gray")
-plot(p84(dl.map[dl.map$disloc==dn,]), add = TRUE, border = "gray", col = "gray")
+plot(p84(dl.map[dl.map$disloc==dn,]), add = TRUE, border = "gray", col = "hotpink")
 # thick state border
 plot(p84(ed.map$mor), add = TRUE, lwd = 3)
 plot(p84(ed.map$mor), add = TRUE, border = "red", lty = 3, lwd = 2)
