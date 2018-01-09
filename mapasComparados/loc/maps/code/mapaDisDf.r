@@ -494,12 +494,12 @@ p84 <- function(x = NA){
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
 portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
 dn <- 12                  # elegir un distrito
-## for (dn in 1:33){
-##     print(paste("disn =", dn))
-## # plot state map with highlighted district
-#png(file = paste(md2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
-#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+for (dn in 1:33){
+    print(paste("disn =", dn))
+# plot state map with highlighted district
+png(file = paste(md2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 plot(p84(ed.map$df), col = "white", axes = TRUE, main = "Ciudad de México (mapa local 2018)")#, bg = "lightblue")
 plot(p84(ed.map$mor), add = TRUE, lty = 3)
 # 
@@ -517,7 +517,7 @@ text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.85)
 text( x = -99.2, y = 19.05, labels = "MORELOS", col = "darkgray", cex = .9 )
 text( x = -99.35, y = 19.5, labels = "MEXICO", col = "darkgray", cex = .9, srt = 45 )
 text( x = -98.95, y = 19.5, labels = "MEXICO", col = "darkgray", cex = .9, srt = -45 )
-## dev.off()
+dev.off()
 
 # plot same distrito only
 # need to merge disn info into mun and sec object, in order to select just those belonging to dis
@@ -532,7 +532,7 @@ xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
 bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
 bg <- bg.os
 #
-#png(file = paste(md2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
+png(file = paste(md2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
@@ -605,8 +605,8 @@ legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. m
 library(prettymapr)
 addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
 addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
-#dev.off()
-#}
+dev.off()
+}
 
 # plot same distrito's nCasillas
 loc <- c("topright","bottomleft","topleft","bottomleft","bottomleft",
