@@ -486,6 +486,18 @@ di.map$disrri15 <- paste(di.map$DISTRITO, " (", di.map$rris2015, ")", sep="")
 
 
 
+# shave map's bb to exclude pacific island 
+shave <- function(m = NA, p = .5, s = 0, eastwest = TRUE){ # m is map to be shaved, p the rightmost part (share) to keep, -1<s<1 a shift rightward, eastwest=FALSE makes shift northsouth
+    #m <- ed.map$col # duplicate
+    m <- m; p <- p;
+    dim <- ifelse(eastwest==TRUE, 1, 2) 
+    b <- as.data.frame(m@bbox)
+    b[dim,] <- b[dim,] - s*(b$max[dim] - b$min[dim])       # shift map rightward (bbox leftward)
+    b$min[dim] <- b$max[dim] - p*(b$max[dim] - b$min[dim]) # keeps only 100*p% of horizontal length
+    m@bbox <- as.matrix(b)
+    #ed.map$col <- m
+    return(m)
+}
 # grafica distritos 1 por 1
 # (use 1984 long/lat for this map when mercator projection was chosen)
 p84 <- function(x = NA){
@@ -498,9 +510,9 @@ dn <- 15                  # elegir un distrito
 ## for (dn in 1:17){
 ##     print(paste("disn =", dn))
 ## # plot state map with highlighted district
-## png(file = paste(md2, edo, dn, "-1.png", sep = ""))
+#png(file = paste(md2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
 par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-plot(p84(ed.map$bc), col = "white", axes = TRUE, main = "Baja California (mapa local 2016)", bg = "lightblue")
+plot(shave(p84(ed.map$bc),  p = .7), col = "white", axes = TRUE, main = "Baja California (mapa local 2016)", bg = "lightblue")
 plot(p84(ed.map$bcs), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$son), col = "white", add = TRUE, lty = 3)
 # 
@@ -527,6 +539,9 @@ text( x = -116, y = 32.75, labels = "EE.UU.", col = "darkgray", cex = .9, srt = 
 # need to merge disn info into mun and sec object, in order to select just those belonging to dis
 # get openstreetmap background
 m <- p84(dl.map[dl.map$disloc==dn,])  # subsetted map
+## m <- p84(shave(shave(dl.map[dl.map$disloc==dn,], p = .55, s = 0),
+##            p = .02, s = .14, eastwest = FALSE)
+##                ) # subsetted map for dn = 15 --- shave island
 b <- as.data.frame(m@bbox)
 # gets xx degrees more than bbox (decimal defines share of max range)
 xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
@@ -536,11 +551,13 @@ xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
 bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
 bg <- bg.os
 #
-#png(file = paste(md2, edo, dn, "-2.png", sep = ""))
+#png(file = paste(md2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
 plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Baja California ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
+## plot(shave(shave(dl.map[dl.map$disloc==dn,], p = .55, s = 0),
+##            p = .02, s = .14, eastwest = FALSE), axes = TRUE, main = paste("Baja California ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = "")) # for dn = 15
 plot(bg, add = TRUE)
 plot(ed.map$bc, add = TRUE)
 library(scales) # has function alpha()
@@ -581,7 +598,7 @@ lp <- c("bottomright", #1
         "topleft",     #12
         "bottomright", #13
         "topright",    #14
-        "bottomright", #15
+        "bottomleft", #15
         "topright",    #16
         "topright")    #17
 legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
