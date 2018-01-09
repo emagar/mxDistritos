@@ -498,7 +498,8 @@ dn <- 12                  # elegir un distrito
 ##     print(paste("disn =", dn))
 ## # plot state map with highlighted district
 #png(file = paste(md2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
-par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 plot(p84(ed.map$df), col = "white", axes = TRUE, main = "Ciudad de México (mapa local 2018)")#, bg = "lightblue")
 plot(p84(ed.map$mor), add = TRUE, lty = 3)
 # 
