@@ -511,7 +511,8 @@ dn <- 15                  # elegir un distrito
 ##     print(paste("disn =", dn))
 ## # plot state map with highlighted district
 #png(file = paste(md2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
-par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 plot(shave(p84(ed.map$bc),  p = .7), col = "white", axes = TRUE, main = "Baja California (mapa local 2016)", bg = "lightblue")
 plot(p84(ed.map$bcs), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$son), col = "white", add = TRUE, lty = 3)
