@@ -241,6 +241,7 @@ tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con mapas 2018
 mu.map <- readOGR(dsn = tmp, layer = 'MUNICIPIO')
 # projects to a different datum with long and lat
 mu.map <- spTransform(mu.map, osm())
+mu.map$mun <- mu.map$nombre # mun names
 # read cabeceras municipales
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 cab <- readOGR(dsn = tmp, layer = 'CABECERA_MUNICIPAL')
@@ -495,11 +496,11 @@ p84 <- function(x = NA){
 }
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
 portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
-dn <- 23                  # elegir un distrito
-for (dn in 1:45){
-    print(paste("disn =", dn))
-# plot state map with highlighted district
-png(file = paste(md2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
+dn <- 29                  # elegir un distrito
+## for (dn in 30:45){
+##     print(paste("disn =", dn))
+## # plot state map with highlighted district
+#png(file = paste(md2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 #par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (mapa local 2018)")#, bg = "lightblue")
@@ -532,7 +533,7 @@ text( x = -99.8, y = 18.4, labels = "GUERRERO", col = "darkgray", cex = .9 )
 text( x = -100.5, y = 19.5, labels = "MICHOACAN", col = "darkgray", cex = .9 )
 text( x = -100.55, y = 20.25, labels = "GUANAJUATO", col = "darkgray", cex = .9 )
 text( x = -100.1, y = 20.3, labels = "QUERETARO", col = "darkgray", cex = .9 )
-dev.off()
+#dev.off()
 
 # plot same distrito only
 # need to merge disn info into mun and sec object, in order to select just those belonging to dis
@@ -547,7 +548,7 @@ xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
 bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
 bg <- bg.os
 #
-png(file = paste(md2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
+#png(file = paste(md2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
@@ -638,8 +639,8 @@ legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. m
 library(prettymapr)
 addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
 addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
-dev.off()
-}
+#dev.off()
+#}
 
 # plot same distrito's nCasillas
 loc <- c("topright","bottomleft","topleft","bottomleft","bottomleft",
