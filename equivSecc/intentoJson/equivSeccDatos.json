@@ -1,0 +1,2465 @@
+# Este archivo es una réplica de equivSeccDatos.txt en formato json. El original tiene macros para lograr esto. 
+
+# Campos (los marcados con asterisco son obligatorios):
+# seccion* = identificador de la sección que sufre modificaciones --- ags|bc|bcs|cam|coa|col|cua|cps|df|dgo|gua|gue|hgo|jal|mex|mic|mor|nay|nl|oax|pue|que|qui|san|sin|son|tab|tam|tla|ver|yuc|zac-núm
+# fch*     = yyyymmdd fecha del cambio en el IFE
+# cambio*  = reseccionamiento|integracion|limite|nuevoMun
+# set*     = supersetOf|subsetOf(sección o vector de secciones también involucradas en los cambios)
+# munn    = número de municipio -- ojo: código ife, no inegi (si falta este campo se dará por sentado que el municipio no cambió)
+# obs     = observaciones (si falta este campo se dará por sentado que no aplica)
+
+##########################
+##########################
+##   RESECCIONAMIENTO   ##
+##########################
+##########################
+
+
+"BAJA" : {
+   "seccion" : "cua-1913",
+   "fch" : "20021115",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2711:2843)"
+}
+
+
+"ALTA" : {
+   "seccion" : "cua-2711:2843",
+   "fch" : "20021115",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1913)"
+}
+
+"BAJA" : {
+   "seccion" : "ags-98",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(489:513)"
+}
+
+"ALTA" : {
+   "seccion" : "ags-489:513",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(98)"
+}
+
+"BAJA" : {
+   "seccion" : "ags-166",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(514:547)"
+}
+
+"ALTA" : {
+   "seccion" : "ags-514:547",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(166)"
+}
+
+"BAJA" : {
+   "seccion" : "ags-319",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(548:593)"
+}
+
+"ALTA" : {
+   "seccion" : "ags-548:593",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(319)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1157",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1371:1387)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1371:1387",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1157)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1280",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1388:1411)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1388:1411",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1280)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1292",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1412:1452)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1412:1452",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1292)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1354",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1453:1483)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1453:1483",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1354)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1296",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1484:1525)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1484:1525",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1296)"
+}
+
+
+"BAJA" : {
+   "seccion" : "coa-1409",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1521:1547)"
+}
+
+"ALTA" : {
+   "seccion" : "coa-1521:1547",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1409)"
+}
+
+
+"BAJA" : {
+   "seccion" : "cua-907",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2844:2902)"
+}
+
+"ALTA" : {
+   "seccion" : "cua-2844:2902",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(907)"
+}
+
+"BAJA" : {
+   "seccion" : "cua-1887",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2903:2936)"
+}
+
+"ALTA" : {
+   "seccion" : "cua-2903:2936",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1887)"
+}
+
+"BAJA" : {
+   "seccion" : "gua-1822",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3006:3030)"
+}
+
+"ALTA" : {
+   "seccion" : "gua-3006:3030",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1822)"
+}
+
+"BAJA" : {
+   "seccion" : "jal-2604",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3327:3355)"
+}
+
+"ALTA" : {
+   "seccion" : "jal-3327:3355",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2604)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1141",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(5938:5953)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5938:5953",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1141)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1269",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(5954:5970)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5954:5970",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1269)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1277",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(5971:5990)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5971:5990",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1277)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1304",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(5991:6008)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5991:6008",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1304)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1322",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6009:6027)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6009:6027",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1322)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1781",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6028:6049)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6028:6049",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1781)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-2081",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6050:6064)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6050:6064",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2081)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-2096",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6065:6170)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6065:6170",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2096)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-5648",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6171:6182)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6171:6182",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(5648)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-439",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2136:2165)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2136:2165",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(439)"
+}
+
+"BAJA" : {
+   "seccion" : "que-271",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(697:733)"
+}
+
+"ALTA" : {
+   "seccion" : "que-697:733",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(271)"
+}
+
+"BAJA" : {
+   "seccion" : "que-293",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(734:759)"
+}
+
+"ALTA" : {
+   "seccion" : "que-734:759",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(293)"
+}
+
+"BAJA" : {
+   "seccion" : "son-352",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1332:1361)"
+}
+
+"ALTA" : {
+   "seccion" : "son-1332:1361",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(352)"
+}
+
+"BAJA" : {
+   "seccion" : "yuc-269",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1060:1081)"
+}
+
+"ALTA" : {
+   "seccion" : "yuc-1060:1081",
+   "fch" : "20051004",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(269)"
+}
+
+"BAJA" : {
+   "seccion" : "bcs-330",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(353:411)"
+}
+
+"ALTA" : {
+   "seccion" : "bcs-353:411",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(330)"
+}
+
+"BAJA" : {
+   "seccion" : "pue-1234",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2551:2564)"
+}
+
+"ALTA" : {
+   "seccion" : "pue-2551:2564",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1234)"
+}
+
+"BAJA" : {
+   "seccion" : "pue-1247",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2565:2582)"
+}
+
+"ALTA" : {
+   "seccion" : "pue-2565:2582",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1247)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-2",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(451:471)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-451:471",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-3",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(472:490)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-472:490",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(3)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-11",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(491:577)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-491:577",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(11)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-154",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(578:641)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-578:641",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(154)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-160",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(642:667)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-642:667",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(160)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-204",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(668:741)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-668:741",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(204)"
+}
+
+"BAJA" : {
+   "seccion" : "tam-1022",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1740:1775)"
+}
+
+"ALTA" : {
+   "seccion" : "tam-1740:1775",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1022)"
+}
+
+"BAJA" : {
+   "seccion" : "tam-1023",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1776:1791)"
+}
+
+"ALTA" : {
+   "seccion" : "tam-1776:1791",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1023)"
+}
+
+"BAJA" : {
+   "seccion" : "tam-1092",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1792:1817)"
+}
+
+"ALTA" : {
+   "seccion" : "tam-1792:1817",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1092)"
+}
+
+"BAJA" : {
+   "seccion" : "ver-816",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(4723:4745)"
+}
+
+"ALTA" : {
+   "seccion" : "ver-4723:4745",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(816)"
+}
+
+"BAJA" : {
+   "seccion" : "ver-4382",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(4746:4757)"
+}
+
+"ALTA" : {
+   "seccion" : "ver-4746:4757",
+   "fch" : "20080919",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(4382)"
+}
+
+"BAJA" : {
+   "seccion" : "bcs-301",
+   "fch" : "20100809",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(412:439)"
+}
+
+"ALTA" : {
+   "seccion" : "bcs-412:439",
+   "fch" : "20100809",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(301)"
+}
+
+"BAJA" : {
+   "seccion" : "coa-611",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1548:1567)"
+}
+
+"ALTA" : {
+   "seccion" : "coa-1548:1567",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(611)"
+}
+
+"BAJA" : {
+   "seccion" : "coa-95",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1568:1570)"
+}
+
+"ALTA" : {
+   "seccion" : "coa-1568:1570",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(95)"
+}
+
+"BAJA" : {
+   "seccion" : "coa-1411",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1571:1610)"
+}
+
+"ALTA" : {
+   "seccion" : "coa-1571:1610",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1411)"
+}
+
+"BAJA" : {
+   "seccion" : "col-163",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(337:372)"
+}
+
+"ALTA" : {
+   "seccion" : "col-337:372",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(163)"
+}
+
+"BAJA" : {
+   "seccion" : "que-112",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(764:796)"
+}
+
+"ALTA" : {
+   "seccion" : "que-764:796",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(112)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-207",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(742:774)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-742:774",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(207)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-449",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(775:810)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-775:810",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(449)"
+}
+
+"BAJA" : {
+   "seccion" : "son-33",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1362:1365)"
+}
+
+"ALTA" : {
+   "seccion" : "son-1362:1365",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(33)"
+}
+
+"BAJA" : {
+   "seccion" : "son-627",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1366:1367)"
+}
+
+"ALTA" : {
+   "seccion" : "son-1366:1367",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(627)"
+}
+
+"BAJA" : {
+   "seccion" : "son-224",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1368:1395)"
+}
+
+"ALTA" : {
+   "seccion" : "son-1368:1395",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(224)"
+}
+
+"BAJA" : {
+   "seccion" : "son-595",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1396:1407)"
+}
+
+"ALTA" : {
+   "seccion" : "son-1396:1407",
+   "fch" : "20100810",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(595)"
+}
+
+"BAJA" : {
+   "seccion" : "jal-515",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3358:3362)"
+}
+
+"ALTA" : {
+   "seccion" : "jal-3358:3362",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(515)"
+}
+
+"BAJA" : {
+   "seccion" : "jal-3032",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3363:3387)"
+}
+
+"ALTA" : {
+   "seccion" : "jal-3363:3387",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(3032)"
+}
+
+"BAJA" : {
+   "seccion" : "jal-2444",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3388:3441)"
+}
+
+"ALTA" : {
+   "seccion" : "jal-3388:3441",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2444)"
+}
+
+"BAJA" : {
+   "seccion" : "jal-2451",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3442:3470)"
+}
+
+"ALTA" : {
+   "seccion" : "jal-3442:3470",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2451)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-911",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6184:6207)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6184:6207",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(911)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1303",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6208:6232)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6208:6232",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1303)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-2129",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6233:6261)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6233:6261",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2129)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-4252",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6262:6351)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6262:6351",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(4252)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1112",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6352:6375)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6352:6375",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1112)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1113",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6376:6391)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6376:6391",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1113)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-77",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2166:2195)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2166:2195",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(77)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-129",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2196:2229)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2196:2229",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(129)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-149",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2230:2273)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2230:2273",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(149)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-351",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2274:2307)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2274:2307",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(351)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-840",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2308:2352)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2308:2352",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(840)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-850",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2353:2407)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2353:2407",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(850)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-924",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2408:2410)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2408:2410",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(924)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-1729",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2411:2415)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2411:2415",
+   "fch" : "20100813",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1729)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1278",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1526:1552)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1526:1552",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1278)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1279",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1553:1582)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1553:1582",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1279)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1281",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1583:1614)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1583:1614",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1281)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1282",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1615:1641)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1615:1641",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1282)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-692",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1642:1677)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1642:1677",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(692)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1189",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1678:1700)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1678:1700",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1189)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1226",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1701:1737)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1701:1737",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1226)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1294",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1738:1806)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1738:1806",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1294)"
+}
+
+"BAJA" : {
+   "seccion" : "coa-830",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1611:1641)"
+}
+
+"ALTA" : {
+   "seccion" : "coa-1611:1641",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(830)"
+}
+
+"BAJA" : {
+   "seccion" : "coa-992",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1642:1681)"
+}
+
+"ALTA" : {
+   "seccion" : "coa-1642:1681",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(992)"
+}
+
+"BAJA" : {
+   "seccion" : "cps-1606",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1930:1975)"
+}
+
+"ALTA" : {
+   "seccion" : "cps-1930:1975",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1606)"
+}
+
+"BAJA" : {
+   "seccion" : "cps-1403",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1976:2011)"
+}
+
+"ALTA" : {
+   "seccion" : "cps-1976:2011",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1403)"
+}
+
+"BAJA" : {
+   "seccion" : "cua-2828",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2937:3027)"
+}
+
+"ALTA" : {
+   "seccion" : "cua-2937:3027",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2828)"
+}
+
+"BAJA" : {
+   "seccion" : "cua-1752",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3028:3100)"
+}
+
+"ALTA" : {
+   "seccion" : "cua-3028:3100",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1752)"
+}
+
+"BAJA" : {
+   "seccion" : "cua-2198",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3101:3119)"
+}
+
+"ALTA" : {
+   "seccion" : "cua-3101:3119",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2198)"
+}
+
+"BAJA" : {
+   "seccion" : "dgo-777",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1392:1393)"
+}
+
+"ALTA" : {
+   "seccion" : "dgo-1392:1393",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(777)"
+}
+
+"BAJA" : {
+   "seccion" : "dgo-110",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1394:1415)"
+}
+
+"ALTA" : {
+   "seccion" : "dgo-1394:1415",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(110)"
+}
+
+"BAJA" : {
+   "seccion" : "jal-2976",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3471:3495)"
+}
+
+"ALTA" : {
+   "seccion" : "jal-3471:3495",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2976)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-2667",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6392:6393)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6392:6393",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2667)"
+}
+
+"BAJA" : {
+   "seccion" : "nay-608",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(879:881)"
+}
+
+"ALTA" : {
+   "seccion" : "nay-879:881",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(608)"
+}
+
+"BAJA" : {
+   "seccion" : "nay-609",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(882:898)"
+}
+
+"ALTA" : {
+   "seccion" : "nay-882:898",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(609)"
+}
+
+"BAJA" : {
+   "seccion" : "nay-611",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(899:910)"
+}
+
+"ALTA" : {
+   "seccion" : "nay-899:910",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(611)"
+}
+
+"BAJA" : {
+   "seccion" : "nay-633",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(911:917)"
+}
+
+"ALTA" : {
+   "seccion" : "nay-911:917",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(633)"
+}
+
+"BAJA" : {
+   "seccion" : "nay-634",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(918:922)"
+}
+
+"ALTA" : {
+   "seccion" : "nay-918:922",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(634)"
+}
+
+"BAJA" : {
+   "seccion" : "nay-711",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(923:930)"
+}
+
+"ALTA" : {
+   "seccion" : "nay-923:930",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(711)"
+}
+
+"BAJA" : {
+   "seccion" : "nay-737",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(931:944)"
+}
+
+"ALTA" : {
+   "seccion" : "nay-931:944",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(737)"
+}
+
+"BAJA" : {
+   "seccion" : "nay-758",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(945:971)"
+}
+
+"ALTA" : {
+   "seccion" : "nay-945:971",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(758)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-67",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2416:2436)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2416:2436",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(67)"
+}
+
+"BAJA" : {
+   "seccion" : "que-566",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(797:818)"
+}
+
+"ALTA" : {
+   "seccion" : "que-797:818",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(566)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-12",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(811:848)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-811:848",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(12)"
+}
+
+"BAJA" : {
+   "seccion" : "sin-2672",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3790:3815)"
+}
+
+"ALTA" : {
+   "seccion" : "sin-3790:3815",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2672)"
+}
+
+"BAJA" : {
+   "seccion" : "tam-815",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1818:1851)"
+}
+
+"ALTA" : {
+   "seccion" : "tam-1818:1851",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(815)"
+}
+
+"BAJA" : {
+   "seccion" : "tam-1077",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1852:1886)"
+}
+
+"ALTA" : {
+   "seccion" : "tam-1852:1886",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1077)"
+}
+
+"BAJA" : {
+   "seccion" : "tam-1111",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1887:1914)"
+}
+
+"ALTA" : {
+   "seccion" : "tam-1887:1914",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1111)"
+}
+
+"BAJA" : {
+   "seccion" : "ver-3675",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(4758:4761)"
+}
+
+"ALTA" : {
+   "seccion" : "ver-4758:4761",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(3675)"
+}
+
+"BAJA" : {
+   "seccion" : "ver-3698",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(4762:4765)"
+}
+
+"ALTA" : {
+   "seccion" : "ver-4762:4765",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(3698)"
+}
+
+"BAJA" : {
+   "seccion" : "ver-4229",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(4766:4821)"
+}
+
+"ALTA" : {
+   "seccion" : "ver-4766:4821",
+   "fch" : "20110928",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(4229)"
+}
+
+"BAJA" : {
+   "seccion" : "cam-229",
+   "fch" : "20121115",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(491:527)"
+}
+
+"ALTA" : {
+   "seccion" : "cam-491:527",
+   "fch" : "20121115",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(229)"
+}
+
+"BAJA" : {
+   "seccion" : "coa-9",
+   "fch" : "20121116",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1682:1710)"
+}
+
+"ALTA" : {
+   "seccion" : "coa-1682:1710",
+   "fch" : "20121116",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(9)"
+}
+
+"BAJA" : {
+   "seccion" : "hgo-739",
+   "fch" : "20121116",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1719:1749)"
+}
+
+"ALTA" : {
+   "seccion" : "hgo-1719:1749",
+   "fch" : "20121116",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(739)"
+}
+
+"BAJA" : {
+   "seccion" : "tam-1066",
+   "fch" : "20121116",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1915:1940)"
+}
+
+"ALTA" : {
+   "seccion" : "tam-1915:1940",
+   "fch" : "20121116",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1066)"
+}
+
+"BAJA" : {
+   "seccion" : "tam-995",
+   "fch" : "20121116",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1941:1978)"
+}
+
+"ALTA" : {
+   "seccion" : "tam-1941:1978",
+   "fch" : "20121116",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(995)"
+}
+
+"BAJA" : {
+   "seccion" : "cua-1941",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3120:3176)"
+}
+
+"ALTA" : {
+   "seccion" : "cua-3120:3176",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1941)"
+}
+
+"BAJA" : {
+   "seccion" : "cua-911",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3177:3214)"
+}
+
+"ALTA" : {
+   "seccion" : "cua-3177:3214",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(911)"
+}
+
+"BAJA" : {
+   "seccion" : "gua-1392",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3031:3070)"
+}
+
+"ALTA" : {
+   "seccion" : "gua-3031:3070",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1392)"
+}
+
+"BAJA" : {
+   "seccion" : "gua-1496",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3071:3101)"
+}
+
+"ALTA" : {
+   "seccion" : "gua-3071:3101",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1496)"
+}
+
+"BAJA" : {
+   "seccion" : "gua-347",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3102:3120)"
+}
+
+"ALTA" : {
+   "seccion" : "gua-3102:3120",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(347)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-1959",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6394:6432)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6394:6432",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1959)"
+}
+
+"BAJA" : {
+   "seccion" : "mex-5366",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(6433:6462)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-6433:6462",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(5366)"
+}
+
+"BAJA" : {
+   "seccion" : "que-551",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(819:855)"
+}
+
+"ALTA" : {
+   "seccion" : "que-819:855",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(551)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-17",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(849:873)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-849:873",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(17)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-205",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(874:922)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-874:922",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(205)"
+}
+
+"BAJA" : {
+   "seccion" : "qui-209",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(923:959)"
+}
+
+"ALTA" : {
+   "seccion" : "qui-923:959",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(209)"
+}
+
+"BAJA" : {
+   "seccion" : "san-972",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1796:1814)"
+}
+
+"ALTA" : {
+   "seccion" : "san-1796:1814",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(972)"
+}
+
+"BAJA" : {
+   "seccion" : "yuc-474",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1082:1106)"
+}
+
+"ALTA" : {
+   "seccion" : "yuc-1082:1106",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(474)"
+}
+
+"BAJA" : {
+   "seccion" : "zac-550",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1883:1909)"
+}
+
+"ALTA" : {
+   "seccion" : "zac-1883:1909",
+   "fch" : "20121120",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(550)"
+}
+
+"BAJA" : {
+   "seccion" : "bcs-253",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(440:477)"
+}
+
+"ALTA" : {
+   "seccion" : "bcs-440:477",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(253)"
+}
+
+"BAJA" : {
+   "seccion" : "cps-1744",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2012:2046)"
+}
+
+"ALTA" : {
+   "seccion" : "cps-2012:2046",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1744)"
+}
+
+"BAJA" : {
+   "seccion" : "dgo-447",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1416:1447)"
+}
+
+"ALTA" : {
+   "seccion" : "dgo-1416:1447",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(447)"
+}
+
+"BAJA" : {
+   "seccion" : "jal-3024",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3496:3528)"
+}
+
+"ALTA" : {
+   "seccion" : "jal-3496:3528",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(3024)"
+}
+
+"BAJA" : {
+   "seccion" : "jal-3154",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3529:3548)"
+}
+
+"ALTA" : {
+   "seccion" : "jal-3529:3548",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(3154)"
+}
+
+"BAJA" : {
+   "seccion" : "sin-2808",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(3816:3837)"
+}
+
+"ALTA" : {
+   "seccion" : "sin-3816:3837",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(2808)"
+}
+
+"BAJA" : {
+   "seccion" : "son-227",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1408:1441)"
+}
+
+"ALTA" : {
+   "seccion" : "son-1408:1441",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(227)"
+}
+
+"BAJA" : {
+   "seccion" : "son-585",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1442:1514)"
+}
+
+"ALTA" : {
+   "seccion" : "son-1442:1514",
+   "fch" : "20121121",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(585)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-571",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1807:1846)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1807:1846",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(571)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-123",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1847:1867)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1847:1867",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(123)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-1368",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(1868:1942)"
+}
+
+"ALTA" : {
+   "seccion" : "bc-1868:1942",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1368)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-64",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2438:2493)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2438:2493",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(64)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-65",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2494:2514)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2494:2514",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(65)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-493",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2515:2546)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2515:2546",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(493)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-353",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2547:2618)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2547:2618",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(353)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-525",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2619:2660)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2619:2660",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(525)"
+}
+
+"BAJA" : {
+   "seccion" : "nl-836",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2661:2694)"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2661:2694",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(836)"
+}
+
+"BAJA" : {
+   "seccion" : "pue-1560",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "supersetOf(2583:2621)"
+}
+
+"ALTA" : {
+   "seccion" : "pue-2583:2621",
+   "fch" : "20121122",
+   "cambio" : "reseccionamiento",
+   "set" : "subsetOf(1560)"
+}
+
+
+
+###############################
+###############################
+##   INTEGRACION SECCIONAL   ##
+###############################
+###############################
+
+
+"BAJA" : {
+   "seccion" : "ags-487",
+   "fch" : "20081017",
+   "cambio" : "integracion",
+   "set" : "subsetOf(378)"
+}
+
+"BAJA" : {
+   "seccion" : "bc-205",
+   "fch" : "20081017",
+   "cambio" : "integracion",
+   "set" : "subsetOf(175)"
+}
+
+"BAJA" : {
+   "seccion" : "bcs-65",
+   "fch" : "20081017",
+   "cambio" : "integracion",
+   "set" : "subsetOf(67)"
+}
+
+"BAJA" : {
+   "seccion" : "bcs-100",
+   "fch" : "20081017",
+   "cambio" : "integracion",
+   "set" : "subsetOf(101)"
+}
+
+"BAJA" : {
+   "seccion" : "bcs-106",
+   "fch" : "20081017",
+   "cambio" : "integracion",
+   "set" : "subsetOf(108)"
+}
+
+"BAJA" : {
+   "seccion" : "cam-238",
+   "fch" : "20081017",
+   "cambio" : "integracion",
+   "set" : "subsetOf(239)"
+}
+
+"BAJA" : {
+   "seccion" : "cam-438",
+   "fch" : "20081017",
+   "cambio" : "integracion",
+   "set" : "subsetOf(436)"
+}
+
+
+###########################
+###########################
+##   NUEVOS MUNICIPIOS   ##
+###########################
+###########################
+
+"ENMIENDA" : {
+   "seccion" : "zac-516",
+   "fch" : "20001015",
+   "cambio" : "nuevoMun",
+   "set" : "igual(516)",
+   "munn" : "57",
+   "obs" : "solo cambia de municipio ife-17 (Guadalupe) a ife-57 (Trancoso)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "zac-525:533",
+   "fch" : "20001015",
+   "cambio" : "nuevoMun",
+   "set" : "igual(525:533)",
+   "munn" : "57",
+   "obs" : "solo cambia de municipio ife-17 (Guadalupe) a ife-57 (Trancoso)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "zac-548",
+   "fch" : "20001015",
+   "cambio" : "nuevoMun",
+   "set" : "igual(548)",
+   "munn" : "57",
+   "obs" : "solo cambia de municipio ife-17 (Guadalupe) a ife-57 (Trancoso)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4266:4273",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4266:4273)",
+   "munn" : "123",
+   "obs" : "solo cambia de municipio ife-83 (Tejupilco) a ife-123 (Luvianos)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4278",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4278)",
+   "munn" : "123",
+   "obs" : "solo cambia de municipio ife-83 (Tejupilco) a ife-123 (Luvianos)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4281:4282",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4281:4282)",
+   "munn" : "123",
+   "obs" : "solo cambia de municipio ife-83 (Tejupilco) a ife-123 (Luvianos)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4284:4290",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4284:4290)",
+   "munn" : "123",
+   "obs" : "solo cambia de municipio ife-83 (Tejupilco) a ife-123 (Luvianos)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4296",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4296)",
+   "munn" : "123",
+   "obs" : "solo cambia de municipio ife-83 (Tejupilco) a ife-123 (Luvianos)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4301:4302",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4301:4302)",
+   "munn" : "123",
+   "obs" : "solo cambia de municipio ife-83 (Tejupilco) a ife-123 (Luvianos)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4306",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4306)",
+   "munn" : "123",
+   "obs" : "solo cambia de municipio ife-83 (Tejupilco) a ife-123 (Luvianos)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4317:4318",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4317:4318)",
+   "munn" : "123",
+   "obs" : "solo cambia de municipio ife-83 (Tejupilco) a ife-123 (Luvianos)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4320",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4320)",
+   "munn" : "123",
+   "obs" : "solo cambia de municipio ife-83 (Tejupilco) a ife-123 (Luvianos)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5929",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "subsetOf(4277)",
+   "munn" : "123"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5930",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "subsetOf(4305)",
+   "munn" : "123"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5931",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "subsetOf(4308)",
+   "munn" : "123"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4027:4031",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4027:4031)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4033",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4033)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4044:4050",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4044:4050)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4062:4067",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4062:4067)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4080:4085",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4080:4085)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4091:4096",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4091:4096)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4098",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4098)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4099",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4099)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4101",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4101)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4102",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4102)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4104",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4104)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ENMIENDA" : {
+   "seccion" : "mex-4105",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "igual(4105)",
+   "munn" : "124",
+   "obs" : "solo cambia de municipio ife-75 (San Felipe del Progreso) a ife-124 (San José del Rincón)"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5932",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "subsetOf(4032)",
+   "munn" : "124"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5933",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "subsetOf(4100)",
+   "munn" : "124"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5934",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "subsetOf(4068)",
+   "munn" : "124"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5935",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "subsetOf(4079)",
+   "munn" : "124"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5936",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "subsetOf(4086)",
+   "munn" : "124"
+}
+
+"ALTA" : {
+   "seccion" : "mex-5937",
+   "fch" : "20020915",
+   "cambio" : "nuevoMun",
+   "set" : "subsetOf(4084)",
+   "munn" : "124"
+}
+
+###########################################
+###########################################
+##   ADECUACION DE LIMITES MUNICIPALES   ##
+###########################################
+###########################################
+
+"ALTA" : {
+   "seccion" : "ver-4579",
+   "fch" : "20020915",
+   "cambio" : "limite",
+   "set" : "subsetOf(3828)",
+   "munn" : "147"
+}
+
+"ALTA" : {
+   "seccion" : "nl-2124:2135",
+   "fch" : "20021015",
+   "cambio" : "limite",
+   "set" : "subsetOf(439)",
+   "munn" : "40"
+}
+
+"ENMIENDA" : {
+   "seccion" : "ags-404",
+   "fch" : "20040804",
+   "cambio" : "limite",
+   "set" : "igual(404)",
+   "munn" : "10",
+   "obs" : "seccion pasó integra de Jesús María a San Fco de los Romo"
+}
+
+"ALTA" : {
+   "seccion" : "ags-487",
+   "fch" : "20040804",
+   "cambio" : "limite",
+   "set" : "subsetOf(c(366,408,459))"
+}
+
+"ALTA" : {
+   "seccion" : "ags-488",
+   "fch" : "20040804",
+   "cambio" : "limite",
+   "set" : "subsetOf(451)",
+   "munn" : "6"
+}
+
+
+
