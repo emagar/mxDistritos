@@ -1,0 +1,32 @@
+{
+  "estados": {
+    "aguas": {
+      "alta": {
+        "fch": "20040804",
+        "cambio": "limite",
+        "set": "subsetOf",
+        "secc": "c(366,408,459,404)"
+      },
+      "baja": {
+        "fch": "20040804",
+        "cambio": "limite",
+        "set": "subsetOf",
+        "secc": "c(366,408,459,404)"
+      }
+    },
+    "colima": {
+      "alta": {
+        "fch": "20040804",
+        "cambio": "limite",
+        "set": "subsetOf",
+        "secc": "c(366,408,459,404)"
+      },
+      "baja": {
+        "fch": "20040804",
+        "cambio": "limite",
+        "set": "subsetOf",
+        "secc": "c(366,408,459,404)"
+      }
+    }
+  }
+}
