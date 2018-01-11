@@ -642,35 +642,274 @@ addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "
 #dev.off()
 #}
 
-# plot same distrito's nCasillas
-loc <- c("topright","bottomleft","topleft","bottomleft","bottomleft",
-         "topright","bottomleft","bottomright","topright","topleft",
-         "topleft","topleft","bottomright","topright","topleft",
-         "topleft","topleft","bottomleft","bottomright","topright",
-         "topright","topright","topleft","topright","topright",
-         "bottomright","topright")
-## pdf(file = paste(md2, edo, dn, "-3.pdf", sep = ""))
-par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-tmp <- cabDisNames$cab[which(cabDisNames$edon == edon & cabDisNames$disn==dn)]
-plot(df2006.map[df2006.map$DISTRITO==dn,], axes = TRUE, main = paste("Distrito Federal", dn, "-", tmp))
-plot(ed.map$df, add = TRUE)
-plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray2[se.map$disn==dn]) # color nwin
+################################
+################################
+## grafica municipios 1 por 1 ##
+################################
+################################
+md3 <- "../../../ay/maps/"
+# (use 1984 long/lat for this map when mercator projection was chosen)
+p84 <- function(x = NA){
+    x <- x
+    x <- spTransform(x, CRS("+proj=longlat +datum=WGS84"))
+}
+portray <- se.map$bastion  # elegir qué reportará el mapa 2
+M <- nrow(mu.map@data)    # number of municipalities
+munn <- 1                  # elegir un municipio
+## for (munn in 1:M){
+##     print(paste("munn =", munn))
+## # plot state map with highlighted district
+#png(file = paste(md3, edo, munn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (municipios)")#, bg = "lightblue")
+#plot(p84(ed.map$df), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$pue), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$hgo), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$mor), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$gue), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$mic), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$que), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$gua), col = "white", add = TRUE, lty = 3)
+# 
+plot(p84(mu.map), add = TRUE, border = "gray")
+plot(p84(mu.map[mu.map$municipio==munn,]), add = TRUE, border = "black", col = "hotpink")
+# thick state border
+plot(p84(ed.map$mex), add = TRUE, lwd = 3)
+plot(p84(ed.map$mex), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.85)
+#
+# add neighboring states
+text( x = -99.15,  y = 19.3,  labels = "CDMX",       col = "darkgray", cex = .9 )
+text( x = -99,     y = 20.2,  labels = "HIDALGO",    col = "darkgray", cex = .9 )
+text( x = -98.58,  y = 19.52, labels = "TLAX.",      col = "darkgray", cex = .9, srt = -25)
+text( x = -98.55,  y = 18.6,  labels = "PUEBLA",     col = "darkgray", cex = .9, srt = -90)
+text( x = -99.1,   y = 18.75, labels = "MORELOS",    col = "darkgray", cex = .9 )
+text( x = -99.8,   y = 18.4,  labels = "GUERRERO",   col = "darkgray", cex = .9 )
+text( x = -100.5,  y = 19.5,  labels = "MICHOACAN",  col = "darkgray", cex = .9 )
+text( x = -100.55, y = 20.25, labels = "GUANAJUATO", col = "darkgray", cex = .9 )
+text( x = -100.1,  y = 20.3,  labels = "QUERETARO",  col = "darkgray", cex = .9 )
+#dev.off()
+
+# plot same municipio only
+# need to merge disn info into mun and sec object, in order to select just those belonging to dis
+# get openstreetmap background
+m <- p84(mu.map[mu.map$municipio==munn,])  # subsetted map
+b <- as.data.frame(m@bbox)
+# gets xx degrees more than bbox (decimal defines share of max range)
+xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+#bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+#bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+#bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
+bg <- bg.os
+#
+#png(file = paste(md3, edo, munn, "-2.png", sep = ""))
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+tmp <-  as.character(mu.map$nombre[which(mu.map$municipio==munn)])
+plot(mu.map[mu.map$municipio==munn,], axes = TRUE, main = paste("México ", munn, " - ", tmp, sep = ""))
+plot(bg, add = TRUE)
+#plot(dl.map[dl.map$disloc==munn,], lwd = 5, add = TRUE) # drop
+plot(ed.map$mex, add = TRUE)
+library(scales) # has function alpha()
+plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color nwin
+# plot(se.map[se.map$disn==munn,], add = TRUE, border = "darkgray", col = portray[se.map$disn==munn]) # color nwin -- se.map$disn is disfed
 #plot(ffcc, add = TRUE, lwd = .75)
 #
-plot(ed.map$mor, add = TRUE, lty = 1)
 #
-plot(df2006.map[df2006.map$DISTRITO==dn,], add = TRUE, lwd = 4)
+#plot(ed.map$nay, add = TRUE, lty = 1, col = rgb(1,1,1, alpha = .5)) # blurs colors inside state
+plot(se.map[se.map$MUNICIPIO==munn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$MUNICIPIO==munn], .5)) # color nwin
+# add casillas
+points(cas.map, pch = 20, col = "white" , cex = .3)
+#points(cas.map[cas.map$disloc2017==munn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
+#
+#
+plot(ed.map$que, add = TRUE, lty = 1)
+plot(ed.map$hgo, add = TRUE, lty = 1)
+plot(ed.map$tla, add = TRUE, lty = 1)
+plot(ed.map$pue, add = TRUE, lty = 1)
+plot(ed.map$gue, add = TRUE, lty = 1)
+plot(ed.map$mor, add = TRUE, lty = 1)
+plot(ed.map$mic, add = TRUE, lty = 1)
+#
+plot(dl.map, add = TRUE, lwd = 4)
+#
 plot(mu.map, add = TRUE, border = "green", lwd = 1)
 plot(mu.map, add = TRUE, lwd = 1, lty = 3)
-plot(ed.map$df, add = TRUE, lwd = 3)
-plot(ed.map$df, add = TRUE, border = "red", lty = 3, lwd = 2)
-points(coordinates(cab), pch = 19, col = "white", cex = .5)
-points(coordinates(cab), pch = 1, col = "green", cex = .75)
-text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
-text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
-legend(x=loc[dn], legend=c("21+","11-20","6-10","3-5","2","1"), fill=rev(purples), bty="o", bg = "white", cex=.85, title = "N casillas")
-## dev.off()
-## }
+#
+plot(ed.map$mex, add = TRUE, lwd = 3)
+plot(ed.map$mex, add = TRUE, border = "red", lty = 3, lwd = 2)
+#
+sel <- which(mu.map$municipio==munn)
+text(coordinates(mu.map[-sel,]), labels=mu.map$mun[-sel], cex=.51, col = "green")
+text(coordinates(mu.map[-sel,]), labels=mu.map$mun[-sel], cex=.5)
+lp <- c("bottomright", #1 
+        "bottomright",    #2 
+        "bottomright",  #3 
+        "bottomright", #4 
+        "bottomright", #5 
+        "bottomright", #6 
+        "bottomright", #7 
+        "bottomright", #8 
+        "bottomright", #9 
+        "bottomright",  #10
+        "bottomright", #11
+        "bottomright", #12
+        "bottomright", #13
+        "bottomright",  #14
+        "bottomright",  #15
+        "bottomleft",  #16
+        "bottomright",  #17
+        "bottomright",  #18
+        "bottomright", #19
+        "bottomright",     #20
+        "bottomright",  #21
+        "bottomright", #22
+        "bottomright", #23
+        "bottomright",  #24
+        "bottomright",  #25
+        "bottomright",  #26
+        "bottomright",  #27
+        "bottomright",  #28
+        "bottomright",  #29
+        "bottomright",  #30
+        "bottomright",  #31
+        "bottomright", #32
+        "bottomright", #33
+        "bottomright",  #34
+        "bottomright",  #35
+        "bottomright",  #36
+        "bottomright",  #37
+        "bottomright", #38
+        "bottomright", #39
+        "bottomright",  #40
+        "bottomright",  #41
+        "bottomright", #42
+        "bottomright",     #43
+        "bottomright",  #44
+        "bottomright", #45
+        "bottomright",  #46
+        "bottomright",  #47
+        "bottomright", #48
+        "bottomright", #49
+        "bottomright",  #50
+        "bottomright",  #51
+        "bottomright", #52
+        "bottomright",     #53
+        "bottomright",  #54
+        "bottomright", #55
+        "bottomright",  #56
+        "bottomright",  #57
+        "bottomright", #58
+        "bottomright", #59
+        "bottomleft",  #60
+        "bottomright",  #61
+        "bottomright", #62
+        "bottomright",     #63
+        "bottomright",  #64
+        "bottomright", #65
+        "bottomright",  #66
+        "bottomright",  #67
+        "bottomright", #68
+        "bottomright", #69
+        "bottomright",  #70
+        "bottomright",  #71
+        "bottomleft", #72
+        "bottomright",     #73
+        "bottomright",  #74
+        "bottomright", #75
+        "bottomright",  #76
+        "bottomleft",  #77
+        "bottomright", #78
+        "bottomright", #79
+        "bottomleft",  #80
+        "bottomright",  #81
+        "bottomright", #82
+        "bottomright",     #83
+        "bottomright",  #84
+        "bottomright", #85
+        "bottomright",  #86
+        "bottomright",  #87
+        "bottomright", #88
+        "bottomright", #89
+        "bottomright",  #90
+        "bottomright",  #91
+        "bottomright", #92
+        "bottomleft",     #93
+        "bottomright",  #94
+        "bottomright", #95
+        "bottomright",  #96
+        "bottomright",  #97
+        "bottomright", #98
+        "bottomright", #99
+        "bottomright",  #100
+        "bottomright",  #101
+        "bottomright", #102
+        "bottomright",     #103
+        "bottomright",  #104
+        "bottomright", #105
+        "bottomright",  #106
+        "bottomright",  #107
+        "bottomleft", #108
+        "bottomright", #109
+        "bottomright",  #110
+        "bottomright",  #111
+        "bottomright", #112
+        "bottomright",     #113
+        "bottomright",  #114
+        "bottomright", #115
+        "bottomright",  #116
+        "bottomright",  #117
+        "bottomright", #118
+        "bottomright", #119
+        "bottomright",  #120
+        "bottomleft",  #121
+        "bottomright", #122
+        "bottomright",     #123
+        "bottomright",  #124
+        "bottomright") #125
+legend(x=lp[munn], bg = "white", legend=c("lím. munic.", "dist. local","lím. edo.","casilla"), col=c("black","black","black","gray"), lty = c(1,1,1,1), pch = c(NA,NA,NA,19), lwd = c(2,6,2,0), bty="o", cex=.75)
+legend(x=lp[munn], bg = NULL,    legend=c("lím. munic.","dist. local","lím. edo.","casilla"), col=c("green","black","red","white"),  lty = c(3,1,3,1,1), pch = c(NA,NA,NA,20), lwd = c(2,2,2,0), bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = ifelse(lp[munn]=="topright", "topleft", "topright"), scale=.75)
+addscalebar(style = "ticks", pos = ifelse(lp[munn]=="bottomright", "bottomleft", "bottomright"))
+#dev.off()
+#}
+
+mu.map$mun
+
+## # plot same distrito's nCasillas
+## loc <- c("topright","bottomleft","topleft","bottomleft","bottomleft",
+##          "topright","bottomleft","bottomright","topright","topleft",
+##          "topleft","topleft","bottomright","topright","topleft",
+##          "topleft","topleft","bottomleft","bottomright","topright",
+##          "topright","topright","topleft","topright","topright",
+##          "bottomright","topright")
+## ## pdf(file = paste(md2, edo, dn, "-3.pdf", sep = ""))
+## par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+## tmp <- cabDisNames$cab[which(cabDisNames$edon == edon & cabDisNames$disn==dn)]
+## plot(df2006.map[df2006.map$DISTRITO==dn,], axes = TRUE, main = paste("Distrito Federal", dn, "-", tmp))
+## plot(ed.map$df, add = TRUE)
+## plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray2[se.map$disn==dn]) # color nwin
+## #plot(ffcc, add = TRUE, lwd = .75)
+## #
+## plot(ed.map$mor, add = TRUE, lty = 1)
+## #
+## plot(df2006.map[df2006.map$DISTRITO==dn,], add = TRUE, lwd = 4)
+## plot(mu.map, add = TRUE, border = "green", lwd = 1)
+## plot(mu.map, add = TRUE, lwd = 1, lty = 3)
+## plot(ed.map$df, add = TRUE, lwd = 3)
+## plot(ed.map$df, add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(coordinates(cab), pch = 19, col = "white", cex = .5)
+## points(coordinates(cab), pch = 1, col = "green", cex = .75)
+## text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
+## legend(x=loc[dn], legend=c("21+","11-20","6-10","3-5","2","1"), fill=rev(purples), bty="o", bg = "white", cex=.85, title = "N casillas")
+## ## dev.off()
+## ## }
 
 
 # export for google earth
