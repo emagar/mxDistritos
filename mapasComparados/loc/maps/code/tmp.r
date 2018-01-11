@@ -1,4 +1,9 @@
-# grafica municipios 1 por 1
+################################
+################################
+## grafica municipios 1 por 1 ##
+################################
+################################
+md3 <- "../../ay/maps"
 # (use 1984 long/lat for this map when mercator projection was chosen)
 p84 <- function(x = NA){
     x <- x
@@ -10,8 +15,9 @@ munn <- 1                  # elegir un municipio
 ## for (mun in 1:M){
 ##     print(paste("disn =", mun))
 ## # plot state map with highlighted district
-#png(file = paste(md2, edo, munn, "-1.png", sep = ""))
-par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+#png(file = paste(md3, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (municipios)")#, bg = "lightblue")
 #plot(p84(ed.map$df), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$pue), col = "white", add = TRUE, lty = 3)
@@ -23,7 +29,7 @@ plot(p84(ed.map$que), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$gua), col = "white", add = TRUE, lty = 3)
 # 
 plot(p84(mu.map), add = TRUE, border = "gray")
-plot(p84(mu.map[mu.map$municipio==munn,]), add = TRUE, border = "black", col = "gray")
+plot(p84(mu.map[mu.map$municipio==munn,]), add = TRUE, border = "black", col = "hotpink")
 # thick state border
 plot(p84(ed.map$mex), add = TRUE, lwd = 3)
 plot(p84(ed.map$mex), add = TRUE, border = "red", lty = 3, lwd = 2)
@@ -44,7 +50,7 @@ text( x = -100.55, y = 20.25, labels = "GUANAJUATO", col = "darkgray", cex = .9 
 text( x = -100.1,  y = 20.3,  labels = "QUERETARO",  col = "darkgray", cex = .9 )
 #dev.off()
 
-# plot same distrito only
+# plot same municipio only
 # need to merge disn info into mun and sec object, in order to select just those belonging to dis
 # get openstreetmap background
 m <- p84(mu.map[mu.map$municipio==munn,])  # subsetted map
@@ -57,9 +63,9 @@ xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
 bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
 bg <- bg.os
 #
-#png(file = paste(md2, edo, munn, "-2.png", sep = ""))
+#png(file = paste(md3, edo, munn, "-2.png", sep = ""))
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
-tmp <-  mu.map$nombre[which(mu.map$municipio==munn)]
+tmp <-  as.character(mu.map$nombre[which(mu.map$municipio==munn)])
 plot(mu.map[mu.map$municipio==munn,], axes = TRUE, main = paste("México ", munn, " - ", tmp, sep = ""))
 plot(bg, add = TRUE)
 #plot(dl.map[dl.map$disloc==munn,], lwd = 5, add = TRUE) # drop
@@ -94,8 +100,8 @@ plot(ed.map$mex, add = TRUE, lwd = 3)
 plot(ed.map$mex, add = TRUE, border = "red", lty = 3, lwd = 2)
 #
 sel <- which(mu.map$municipio==munn)
-text(coordinates(mu.map[-sel,]), labels=mu.map$nombre[-sel], cex=.51, col = "green")
-text(coordinates(mu.map[-sel,]), labels=mu.map$nombre[-sel], cex=.5)
+text(coordinates(mu.map[-sel,]), labels=mu.map$mun[-sel], cex=.51, col = "green")
+text(coordinates(mu.map[-sel,]), labels=mu.map$mun[-sel], cex=.5)
 lp <- c("bottomright", #1 
         "bottomright", #2 
         "bottomleft",  #3 
@@ -221,10 +227,10 @@ lp <- c("bottomright", #1
         "topleft",     #123
         "bottomleft",  #124
         "bottomright") #125
-legend(x=lp[mun], bg = "white", legend=c("lím. munic.", "dist. local","lím. edo.","casilla"), col=c("black","black","black","gray"), lty = c(1,1,1,1), pch = c(NA,NA,NA,19), lwd = c(2,6,2,0), bty="o", cex=.75)
-legend(x=lp[mun], bg = NULL,    legend=c("lím. munic.","dist. local","lím. edo.","casilla"), col=c("green","black","red","white"),  lty = c(3,1,3,1,1), pch = c(NA,NA,NA,20), lwd = c(2,2,2,0), bty="o", cex=.75)
+legend(x=lp[munn], bg = "white", legend=c("lím. munic.", "dist. local","lím. edo.","casilla"), col=c("black","black","black","gray"), lty = c(1,1,1,1), pch = c(NA,NA,NA,19), lwd = c(2,6,2,0), bty="o", cex=.75)
+legend(x=lp[munn], bg = NULL,    legend=c("lím. munic.","dist. local","lím. edo.","casilla"), col=c("green","black","red","white"),  lty = c(3,1,3,1,1), pch = c(NA,NA,NA,20), lwd = c(2,2,2,0), bty="o", cex=.75)
 library(prettymapr)
-adnortharrow(pos = ifelse(lp[mun]=="topright", "topleft", "topright"), scale=.75)
-addscalebar(style = "ticks", pos = ifelse(lp[mun]=="bottomright", "bottomleft", "bottomright"))
+addnortharrow(pos = ifelse(lp[munn]=="topright", "topleft", "topright"), scale=.75)
+addscalebar(style = "ticks", pos = ifelse(lp[munn]=="bottomright", "bottomleft", "bottomright"))
 #dev.off()
 #}
