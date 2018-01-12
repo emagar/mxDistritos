@@ -40,7 +40,6 @@ sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/if
 # send to seccion map
 tmp <- data.frame(SECCION = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
-dim(tmp)
 tmp <- merge(x = tmp, y = sec2dis, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden), grep("^dis.+$", colnames(tmp))]
 #tmp <- tmp[order(tmp$orden), grep("SECCION|^dis.+$", colnames(tmp))]
@@ -48,29 +47,33 @@ se.map@data <- cbind(se.map@data, tmp)
 rm(tmp)
 # df2006.map <- unionSpatialPolygons(se.map, se.map$disn) # proper way to get federal district objects... if only seccion shapefiles had no problems
 
-head(se.map$seccion)
-head(tmp$)
-
-
-
 # Now the dissolve
-region <- gUnaryUnion(region, id = region@data$country)
+library(rgeos)
+tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2018)
+plot(tmp)
+## #
+## tmp2 <- unionSpatialPolygons(se.map, se.map$disloc2018) # proper way to get federal district objects... if only seccion shapefiles had no problems
+## plot(tmp2)
 
 # If you want to recreate an object with a data frame
 # make sure row names match
-row.names(region) <- as.character(1:length(region))
+row.names(tmp) <- as.character(1:length(tmp))
 
 # Extract the data you want (the larger geography)
-lu <- unique(lu$country)
+lu <- data.frame()
+lu <- rbind(lu, se.map@data)
+names(se.map@data)
+lu <- unique(lu$disloc2018)
 lu <- as.data.frame(lu)
-colnames(lu) <- "country"  # your data will probably have more than 1 row!
+colnames(lu) <- "disloc2018"  # your data will probably have more than 1 row!
 
 # And add the data back in
-region <- SpatialPolygonsDataFrame(region, lu)
+tmp <- SpatialPolygonsDataFrame(tmp, lu)
 
 # Check it's all worked
-plot(region)
+plot(tmp)
 
 
-
-writeOGR(counties.rg, ".", "counties-rgdal", driver="ESRI Shapefile")
+getwd()
+d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/cps"
+writeOGR(tmp, d, "disloc2018", driver="ESRI Shapefile")
