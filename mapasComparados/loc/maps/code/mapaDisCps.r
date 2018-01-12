@@ -27,15 +27,16 @@ setwd(wd)
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
 md2 <- "../" # c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/maps/")
-edo <- "mex"
-edon <- 15
+edo <- "cps"
+edon <- 7
 
 # geospatial data 
 library(spdep); library(maptools)
 # used to determine what datum rojano data has
 library(rgdal)
 #gpclibPermit()
-tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
+tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con mapas 2018
+#tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 se.map <- readOGR(dsn = tmp, layer = 'SECCION')
 summary(se.map)
 # projects to a different datum with long and lat
@@ -43,193 +44,225 @@ se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 
 # read all state borders from rojano
 ed.map <- list()
-## tmp <- paste(md, "ags", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/ags" # archivo con mapas 2018
+## # tmp <- paste(md, "ags", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$ags <- tmp
 ## #
-## tmp <- paste(md, "bc", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/bc" # archivo con mapas 2018
+## # ## tmp <- paste(md, "bc", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$bc <- tmp
 ## #
-## tmp <- paste(md, "bcs", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/bcs" # archivo con mapas 2018
+## # ## tmp <- paste(md, "bcs", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$bcs <- tmp
 ## #
-## tmp <- paste(md, "cam", sep = "") # archivo con mapas rojano
-## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, osm())
-## ed.map$cam <- tmp
+tmp <- "../../../fed/shp/cam" # archivo con mapas 2018
+## # tmp <- paste(md, "cam", sep = "") # archivo con mapas rojano
+tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+# projects to a different datum with long and lat
+tmp <- spTransform(tmp, osm())
+ed.map$cam <- tmp
 ## #
-## tmp <- paste(md, "coa", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/coa" # archivo con mapas 2018
+## # ## tmp <- paste(md, "coa", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$coa <- tmp
 ## #
-## tmp <- paste(md, "col", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/col" # archivo con mapas 2018
+## # ## tmp <- paste(md, "col", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$col <- tmp
 ## #
-## tmp <- paste(md, "cps", sep = "") # archivo con mapas rojano
-## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, osm())
-## ed.map$cps <- tmp
+tmp <- "../../../fed/shp/cps" # archivo con mapas 2018
+# ## tmp <- paste(md, "cps", sep = "") # archivo con mapas rojano
+tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+# projects to a different datum with long and lat
+tmp <- spTransform(tmp, osm())
+ed.map$cps <- tmp
 ## #
-## tmp <- paste(md, "cua", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/cua" # archivo con mapas 2018
+## # ## tmp <- paste(md, "cua", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$cua <- tmp
-#
-tmp <- paste(md, "df", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$df <- tmp
-#
-## tmp <- paste(md, "dgo", sep = "") # archivo con mapas rojano
+##
+## tmp <- "../../../fed/shp/df" # archivo con mapas 2018
+## # ## tmp <- paste(md, "df", sep = "") # archivo con mapas rojano
+## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+## # projects to a different datum with long and lat
+## tmp <- spTransform(tmp, osm())
+## ed.map$df <- tmp
+##
+## tmp <- "../../../fed/shp/dgo" # archivo con mapas 2018
+## # ## tmp <- paste(md, "dgo", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$dgo <- tmp
 ## #
-tmp <- paste(md, "gua", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$gua <- tmp
-#
-tmp <- paste(md, "gue", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$gue <- tmp
-#
-tmp <- paste(md, "hgo", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$hgo <- tmp
-#
-## tmp <- paste(md, "jal", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/gua" # archivo con mapas 2018
+## # ## tmp <- paste(md, "gua", sep = "") # archivo con mapas rojano
+## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+## # projects to a different datum with long and lat
+## tmp <- spTransform(tmp, osm())
+## ed.map$gua <- tmp
+## #
+## tmp <- "../../../fed/shp/gue" # archivo con mapas 2018
+## # ## tmp <- paste(md, "gue", sep = "") # archivo con mapas rojano
+## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+## # projects to a different datum with long and lat
+## tmp <- spTransform(tmp, osm())
+## ed.map$gue <- tmp
+## #
+## tmp <- "../../../fed/shp/hgo" # archivo con mapas 2018
+## # ## tmp <- paste(md, "hgo", sep = "") # archivo con mapas rojano
+## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+## # projects to a different datum with long and lat
+## tmp <- spTransform(tmp, osm())
+## ed.map$hgo <- tmp
+## #
+## tmp <- "../../../fed/shp/jal" # archivo con mapas 2018
+## # ## tmp <- paste(md, "jal", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$jal <- tmp
-#
-tmp <- paste(md, "mex", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$mex <- tmp
-#
-tmp <- paste(md, "mic", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$mic <- tmp
-#
-tmp <- paste(md, "mor", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$mor <- tmp
-#
-## tmp <- paste(md, "nay", sep = "") # archivo con mapas rojano
+## #
+## tmp <- "../../../fed/shp/mex" # archivo con mapas 2018
+## # ## tmp <- paste(md, "mex", sep = "") # archivo con mapas rojano
+## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+## # projects to a different datum with long and lat
+## tmp <- spTransform(tmp, osm())
+## ed.map$mex <- tmp
+## #
+## tmp <- "../../../fed/shp/mic" # archivo con mapas 2018
+## # ## tmp <- paste(md, "mic", sep = "") # archivo con mapas rojano
+## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+## # projects to a different datum with long and lat
+## tmp <- spTransform(tmp, osm())
+## ed.map$mic <- tmp
+## #
+## tmp <- "../../../fed/shp/mor" # archivo con mapas 2018
+## # ## tmp <- paste(md, "mor", sep = "") # archivo con mapas rojano
+## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+## # projects to a different datum with long and lat
+## tmp <- spTransform(tmp, osm())
+## ed.map$mor <- tmp
+## #
+## tmp <- "../../../fed/shp/nay" # archivo con mapas 2018
+## # ## tmp <- paste(md, "nay", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$nay <- tmp
 ## #
-## tmp <- paste(md, "nl", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/nl" # archivo con mapas 2018
+## # ## tmp <- paste(md, "nl", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$nl <- tmp
 ## #
-## tmp <- paste(md, "oax", sep = "") # archivo con mapas rojano
+tmp <- "../../../fed/shp/oax" # archivo con mapas 2018
+## # tmp <- paste(md, "oax", sep = "") # archivo con mapas rojano
+tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+# projects to a different datum with long and lat
+tmp <- spTransform(tmp, osm())
+ed.map$oax <- tmp
+## #
+## tmp <- "../../../fed/shp/pue" # archivo con mapas 2018
+## # ## tmp <- paste(md, "pue", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
-## ed.map$oax <- tmp
-#
-tmp <- paste(md, "pue", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$pue <- tmp
-#
-tmp <- paste(md, "que", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$que <- tmp
-#
-## tmp <- paste(md, "qui", sep = "") # archivo con mapas rojano
+## ed.map$pue <- tmp
+## #
+## tmp <- "../../../fed/shp/que" # archivo con mapas 2018
+## # ## tmp <- paste(md, "que", sep = "") # archivo con mapas rojano
+## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+## # projects to a different datum with long and lat
+## tmp <- spTransform(tmp, osm())
+## ed.map$que <- tmp
+## #
+## tmp <- "../../../fed/shp/qui" # archivo con mapas 2018
+## # ## tmp <- paste(md, "qui", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$qui <- tmp
 ## #
-## tmp <- paste(md, "san", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/san" # archivo con mapas 2018
+## # ## tmp <- paste(md, "san", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$san <- tmp
 ## #
-## tmp <- paste(md, "sin", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/sin" # archivo con mapas 2018
+## # ## tmp <- paste(md, "sin", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$sin <- tmp
 ## #
-## tmp <- paste(md, "son", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/son" # archivo con mapas 2018
+## # ## tmp <- paste(md, "son", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$son <- tmp
 ## #
-## tmp <- paste(md, "tab", sep = "") # archivo con mapas rojano
-## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-## # projects to a different datum with long and lat
-## tmp <- spTransform(tmp, osm())
-## ed.map$tab <- tmp
+tmp <- "../../../fed/shp/tab" # archivo con mapas 2018
+## # tmp <- paste(md, "tab", sep = "") # archivo con mapas rojano
+tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+# projects to a different datum with long and lat
+tmp <- spTransform(tmp, osm())
+ed.map$tab <- tmp
 ## #
-## tmp <- paste(md, "tam", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/tam" # archivo con mapas 2018
+## # ## tmp <- paste(md, "tam", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$tam <- tmp
-## #
-tmp <- paste(md, "tla", sep = "") # archivo con mapas rojano
-tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
-# projects to a different datum with long and lat
-tmp <- spTransform(tmp, osm())
-ed.map$tla <- tmp
-#
-## tmp <- paste(md, "ver", sep = "") # archivo con mapas rojano
+## ## #
+## tmp <- "../../../fed/shp/tla" # archivo con mapas 2018
+## # ## tmp <- paste(md, "tla", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
-## ed.map$ver <- tmp
+## ed.map$tla <- tmp
 ## #
-## tmp <- paste(md, "yuc", sep = "") # archivo con mapas rojano
+tmp <- "../../../fed/shp/ver" # archivo con mapas 2018
+## # tmp <- paste(md, "ver", sep = "") # archivo con mapas rojano
+tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
+# projects to a different datum with long and lat
+tmp <- spTransform(tmp, osm())
+ed.map$ver <- tmp
+## #
+## tmp <- "../../../fed/shp/yuc" # archivo con mapas 2018
+## # ## tmp <- paste(md, "yuc", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$yuc <- tmp
 ## #
-## tmp <- paste(md, "zac", sep = "") # archivo con mapas rojano
+## tmp <- "../../../fed/shp/zac" # archivo con mapas 2018
+## # ## tmp <- paste(md, "zac", sep = "") # archivo con mapas rojano
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
@@ -249,14 +282,6 @@ cab <- readOGR(dsn = tmp, layer = 'CABECERA_MUNICIPAL')
 cab <- spTransform(cab, osm())
 #cab$LOCALIDAD_.1 # names
 #
-# edit manually to shorten mun names (*need to do this outside!!!*) and plug into mu.map
-#tmp <- munvot[munvot$edon==13 & munvot$yr==2008,]
-#tmp <- tmp[,c("mun","munn")]
-## OJO: EL ORDEN NO JALA
-## data.frame(N=mu.map$NOMBRE, M=mu.map$mun)
-mu.map$mun <- mu.map$NOMBRE
-mu.map$mun <- gsub(pattern = "[0-9]+", replacement = "", mu.map$mun) # en algunos casos NOMBRE trae números, hay que quitarlos
-
 # read shapefiles distritos locales 
 tmp <- paste("/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, sep = "") # archivo con mapas locales
 dl.map <- readOGR(dsn = tmp, layer = 'disloc2018')
