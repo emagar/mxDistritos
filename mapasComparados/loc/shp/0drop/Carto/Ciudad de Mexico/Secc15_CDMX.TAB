@@ -1,27 +1,3 @@
-!table
-!version 300
-!charset WindowsLatin1
-
-Definition Table
-  Type NATIVE Charset "WindowsLatin1"
-  Fields 15
-    ID Integer ;
-    CLAVE Char (20) Index 1 ;
-    ENTIDAD Char (2) Index 2 ;
-    NOMBRE_ENTIDAD Char (50) ;
-    DISTRITO Char (2) ;
-    MUNICIPIO Char (3) ;
-    NOMBRE_MUNICIPIO Char (60) ;
-    SECCION Integer ;
-    TIPO Smallint Index 3 ;
-    NSE Char (4) Index 4 ;
-    CONTROL Smallint ;
-    GPE Float Index 5 ;
-    Dttoloc_viejo Integer Index 6 ;
-    Dttoloc_nuevo Integer Index 7 ;
-    Dttoloc18_nouso Integer Index 8 ;
-begin_metadata
-"\IsReadOnly" = "FALSE"
-"\MapInfo" = ""
-"\MapInfo\TableID" = "64a0cba6-1d6e-4566-b964-a7f398ab40a1"
-end_metadata
+version https://git-lfs.github.com/spec/v1
+oid sha256:e1a8f09f815702d4e3b3faede950aa1f5e15defc154064eb7b350aba559b0e39
+size 691

@@ -1,16 +1,3 @@
-!table
-!version 300
-!charset WindowsLatin1
-
-Definition Table
-  Type NATIVE Charset "WindowsLatin1"
-  Fields 3
-    ENTIDAD Char (2) Index 1 ;
-    NOMBRE_ENTIDAD Char (50) ;
-    Dttoloc_nuevo Integer Index 2 ;
-begin_metadata
-"\IsReadOnly" = "FALSE"
-"\MapInfo" = ""
-"\MapInfo\TableID" = "4e054a50-a5e1-419e-8b6a-f0c0ed8a46cd"
-"\MapInfo\ParentTableID" = "e252f95f-8b4d-4f5d-b26d-a37dbe8bfc61"
-end_metadata
+version https://git-lfs.github.com/spec/v1
+oid sha256:f3b4861eceb2c0f636261112498f001fec2a51a05d150cc719f445f8ad0de55b
+size 418

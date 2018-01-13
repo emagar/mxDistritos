@@ -1,1 +1,3 @@
-PROJCS["_MI_0",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["World_Geodetic_System_of_1984_GEM_10C",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Lambert_Conformal_Conic"],PARAMETER["standard_parallel_1",17.5],PARAMETER["standard_parallel_2",29.5],PARAMETER["latitude_of_origin",12],PARAMETER["central_meridian",-102],PARAMETER["false_easting",0],PARAMETER["false_northing",0],UNIT["Meter",1]]
+version https://git-lfs.github.com/spec/v1
+oid sha256:fbc798e58f9f37ed8ccd3b484d2c2a1f4ab305b4dd0e1a96e88ad77417ee4211
+size 447
