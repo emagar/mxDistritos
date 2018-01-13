@@ -1,28 +1,3 @@
-!table
-!version 300
-!charset WindowsLatin1
-
-Definition Table
-  Type NATIVE Charset "WindowsLatin1"
-  Fields 3
-    ENTIDAD Char (2) Index 1 ;
-    NOMBRE_ENTIDAD Char (50) ;
-    Dttoloc_viejo Integer Index 2 ;
-begin_metadata
-"\IsReadOnly" = "FALSE"
-"\MapInfo" = ""
-"\MapInfo\TableID" = "bae499e4-1cb8-4109-829d-9513aac3666e"
-"\MapInfo\ParentTableID" = "d18f2d4b-1a2d-42b5-9fc3-d75375fd5fa3"
-"\SNAPTHIN" = ""
-"\SNAPTHIN\EnableSnap" = "FALSE"
-"\SNAPTHIN\Node" = "0"
-"\SNAPTHIN\Vec" = "0"
-"\SNAPTHIN\TolUnit" = "1"
-"\SNAPTHIN\EnableThin" = "FALSE"
-"\SNAPTHIN\Bend" = "0"
-"\SNAPTHIN\Dist" = "0"
-"\SNAPTHIN\ThinUnit" = "1"
-"\SNAPTHIN\EnableArea" = "FALSE"
-"\SNAPTHIN\Area" = "0"
-"\SNAPTHIN\AreaUnit" = "15"
-end_metadata
+version https://git-lfs.github.com/spec/v1
+oid sha256:5d30af1ccba9f86effd81d9b179124c567f18b70d7de8f07648f2dab1abeff64
+size 741

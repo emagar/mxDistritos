@@ -1,33 +1,3 @@
-!table
-!version 700
-!charset WindowsLatin1
-
-Definition Table
-  Type SHAPEFILE Charset "WindowsLatin1"
-  Fields 4
-    Entidad Decimal (6, 0) ;
-    Tipo Decimal (6, 0) ;
-    Distrito_l Decimal (6, 0) ;
-    Id Decimal (11, 0) ;
-begin_metadata
-"\IsReadOnly" = "FALSE"
-"\Shapefile" = ""
-"\Shapefile\PersistentCache" = "TRUE"
-"\Spatial Reference" = ""
-"\Spatial Reference\Geographic" = ""
-"\Spatial Reference\Geographic\Projection" = ""
-"\Spatial Reference\Geographic\Projection\Clause" = "CoordSys Earth Projection 8, 104, ""m"", -99, 0, 0.9996, 500000, 0 Bounds (-7745844.29597, -9997964.94324) (8745844.29597, 9997964.94324)"
-"\DefaultStyles" = ""
-"\DefaultStyles\Pen" = ""
-"\DefaultStyles\Pen\LineWidth" = "1"
-"\DefaultStyles\Pen\LineStyle" = "0"
-"\DefaultStyles\Pen\Color" = "0"
-"\DefaultStyles\Pen\Pattern" = "2"
-"\DefaultStyles\Brush" = ""
-"\DefaultStyles\Brush\Pattern" = "2"
-"\DefaultStyles\Brush\Forecolor" = "16777215"
-"\DefaultStyles\Brush\Backcolor" = "16777215"
-"\DefaultStyles\Brush\Transparent" = "FALSE"
-"\MapInfo" = ""
-"\MapInfo\TableID" = "123c6aae-c5bf-45ae-af9f-1266aca59477"
-end_metadata
+version https://git-lfs.github.com/spec/v1
+oid sha256:3d10bc381f783827b666486a646233fa8b95d4c33feee2238894314d15ad4b70
+size 1137

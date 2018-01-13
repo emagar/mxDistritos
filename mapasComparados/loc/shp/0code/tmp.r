@@ -1,25 +1,3 @@
-setwd("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc")
-dj <- read.csv("cpsLoc.csv", stringsAsFactors = FALSE)
-colnames(dj)
-dj <- dj[, -c(1,3)]
-
-
-setwd("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc")
-d <- read.csv("cpsLoc.csv", stringsAsFactors = FALSE)
-head(d)
-
-d2 <- merge(x = d, y = dj, by = "seccion", all = TRUE)
-colnames(d2)
-dim(dj)
-dim(d)
-dim(d2)
-
-
-sel <- which(dj$seccion %in% d$seccion)
-dj$seccion[-sel]
-
-sel <- which(d$seccion %in% dj$seccion)
-d$seccion[-sel]
-
-setwd("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc")
-write.csv(d2, file = "cpsLoc.csv", row.names=FALSE)
+version https://git-lfs.github.com/spec/v1
+oid sha256:7379c5fbc9ed43e6945fed2ea3f20ab8da46b98a717b8b465500d1e16ad0e5c7
+size 722
