@@ -1,11 +1,11 @@
 edon,edo,quien1,quien2,tengoFuentes,disn ok,dsi ok,yrMapNew,yrMapOld,crit8,shp,png,focus
 1,ags,humberto,eric,ok,,ok,ok,verificar,no ok,ok,,
 2,bc,mario,santi,ok,,ok,ok,verificar,no ok,ok,listo,
-3,bcs,daniel,daniel,ok,,ok,ok,ok,no ok,falta 2011,,
-4,cam,eric,eric,ok,,ok,ok,verificar,no ok,,,
+3,bcs,daniel,daniel,ok,,ok,ok,ok,no ok,ok,,
+4,cam,eric,eric,ok,,ok,ok,verificar,no ok,ok,,
 5,coa,eric,eric,ok,ok,ok,ok,ok,sí ok,ok,,← reelegió
-6,col,omar,,ok,,ok,ok,verificar,derfe ok,tengo,,← redistritó antes q INE
-7,cps,humberto,claudia,ok,,ok,ok,verificar,no ok,,,
+6,col,omar,,ok,,ok,ok,verificar,derfe ok,ok,,← redistritó antes q INE
+7,cps,humberto,claudia,ok,,ok,ok,verificar,no ok,ok,,
 8,cua,omar,eric,ok,,ok,ok,verificar,no ok,,,
 9,df33,chema,eric,ok,,ok,ok,ok,sí ok,ok,listo,← redujo SMDs
 9,df40,chema,eric,ok,,ok,ok,ok,sí ok,ok,,← redujo SMDs
@@ -14,7 +14,7 @@ edon,edo,quien1,quien2,tengoFuentes,disn ok,dsi ok,yrMapNew,yrMapOld,crit8,shp,p
 12,gue,victor,eric,ok,ok,check,ok,verificar,no ok,,,
 13,hgo,claudia,listo,ok,,ok,ok,verificar,jge ok?,,,
 14,jal,claudia,claudia,ok,,ok,ok,verificar,jge ok?,,,
-15,mex,claudia,claudia,ok,ok,ok,ok,ok,no ok,,,← demo
+15,mex,claudia,claudia,ok,ok,ok,ok,ok,no ok,ok,,← demo
 16,mic,zabel,,Faltan 3 secciones,,ok,,,,,,
 17,mor12,omar,eric,ok,,ok,ok,verificar,no ok,ok,listo,← redujo SMDs
 17,mor18,omar,eric,ok,,ok,ok,verificar,no ok,ok,,← redujo SMDs
@@ -30,8 +30,8 @@ edon,edo,quien1,quien2,tengoFuentes,disn ok,dsi ok,yrMapNew,yrMapOld,crit8,shp,p
 26,son,moises,,,,,,,,,,
 27,tab,zabel,,ok,,ok,,,,,,
 28,tam,chema,,,,,,,,,,
-29,tla15,zabel,eric,ok,,ok,ok,verificar,sí ok,Falta 2013,,← redujo SMDs
-29,tla19,zabel,eric,ok,,ok,ok,verificar,sí ok,Falta 2013,,← redujo SMDs
+29,tla15,zabel,eric,ok,,ok,ok,verificar,sí ok,ok,,← redujo SMDs
+29,tla19,zabel,eric,ok,,ok,ok,verificar,sí ok,ok,,← redujo SMDs
 30,ver,daniel,daniel,ok,,ok,ok,ok,no ok,,,
 31,yuc,ruben,,,,,,,sí check,,,
 32,zac,veronica,eric,ok,,ok,ok,verificar,ok,,,
