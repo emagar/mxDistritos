@@ -16,8 +16,8 @@ setwd(wd)
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
 md2 <- "../" # c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/maps/")
-edo <- "gua"
-edon <- 11
+edo <- "gue"
+edon <- 12
 
 # geospatial data 
 library(spdep); library(maptools)
@@ -36,7 +36,7 @@ se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 # a. from seccion2dis map, in order to export into se.map for sub-setting
 #sec2dis <- read.csv("/home/eric/Dropbox/data/mapas/reseccionamiento/equivSecc/tablaEquivalenciasSeccionales1994-2010.2013.csv", stringsAsFactors = FALSE)
 #sec2dis <- sec2dis[sec2dis$edon == 18,]
-sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/guaLoc.csv", stringsAsFactors = FALSE)
+sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/gueLoc.csv", stringsAsFactors = FALSE)
 #sec2dis <- read.csv("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc.csv", stringsAsFactors = FALSE) # archivo Julia
 # send to seccion map
 tmp <- data.frame(SECCION = se.map$seccion)
@@ -53,7 +53,7 @@ table(se.map$juanZepedaPerez1)
 
 # Now the dissolve
 library(rgeos)
-tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2012)
+tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2005)
 #tmp <- gUnaryUnion(se.map, id = se.map@data$juanZepedaPerez1)
 plot(tmp)
 ## #
@@ -68,9 +68,9 @@ row.names(tmp) <- as.character(1:length(tmp))
 lu <- data.frame()
 lu <- rbind(lu, se.map@data)
 names(se.map@data)
-lu <- unique(lu$disloc2012)
+lu <- unique(lu$disloc2005)
 lu <- as.data.frame(lu)
-colnames(lu) <- "disloc2012"  # your data will probably have more than 1 row!
+colnames(lu) <- "disloc2005"  # your data will probably have more than 1 row!
 
 # And add the data back in
 tmp <- SpatialPolygonsDataFrame(tmp, lu)
@@ -80,5 +80,5 @@ plot(tmp)
 
 
 getwd()
-d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/2clean/gua"
-writeOGR(tmp, d, "disloc2012", driver="ESRI Shapefile")
+d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/2clean/gue"
+writeOGR(tmp, d, "disloc2005", driver="ESRI Shapefile")
