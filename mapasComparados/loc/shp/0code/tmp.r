@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5951790888241e5e4b0f07ad3229adb18599951b76eb1b80d2cf5b6a907a1548
-size 779
+orig <- read.csv("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc.csv", stringsAsFactors = FALSE) # archivo Julia
+j24 <- read.csv("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc(copy)24Dist.csv", stringsAsFactors = FALSE) # archivo Julia
+j25 <- read.csv("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc(copy)25Dist.csv", stringsAsFactors = FALSE) # archivo Julia
+jabc <- read.csv("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc(copy)ABC.csv", stringsAsFactors = FALSE) # archivo Julia
+
+dim(orig)
+dim(j24)
+dim(j25)
+dim(jabc)
+
+orig <- orig[,c("seccion","escenario1")]
+j24 <- j24[,c("seccion","escenario1")]
+
+orig <- merge(x = orig, y = j24, by = "seccion", all = TRUE)
+head(orig)
+
+write.csv(orig, file = "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/tmp.csv", row.names=FALSE)
