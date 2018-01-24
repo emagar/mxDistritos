@@ -28,7 +28,7 @@ tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con shapefiles ine 20
 #tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 se.map <- readOGR(dsn = tmp, layer = 'SECCION')
 summary(se.map)
-plot(se.map)
+#plot(se.map)
 # projects to a different datum with long and lat
 se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 

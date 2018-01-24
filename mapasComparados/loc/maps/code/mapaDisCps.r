@@ -35,7 +35,7 @@ library(spdep); library(maptools)
 # used to determine what datum rojano data has
 library(rgdal)
 #gpclibPermit()
-tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con mapas 2018
+tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con mapas 2017
 #tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 se.map <- readOGR(dsn = tmp, layer = 'SECCION')
 summary(se.map)
@@ -285,7 +285,7 @@ cab <- spTransform(cab, osm())
 # read shapefiles distritos locales 
 tmp <- paste("/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, sep = "") # archivo con mapas locales
 dl.map <- readOGR(dsn = tmp, layer = 'disloc2018')
-colnames(dl.map@data) <- c("edon","tipo","disloc","id")
+#colnames(dl.map@data) <- c("edon","tipo","disloc","id")
 # projects to a different ./datum with long and lat
 dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
 # read disloc2005
@@ -296,8 +296,9 @@ dl1996.map <- spTransform(dl1996.map, osm()) # project to osm native Mercator
 
 
 # add father/son info and dsi of mapLoc
-dsi <- "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/simIndex/dist_mex.csv"
+dsi <- "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/simIndex/dist_cps.csv"
 dsi <- read.csv(file = dsi, stringsAsFactors = FALSE)
+head(dsi)
 #
 #dl.map$ord <- 1:nrow(dl.map@data)
 dl.map@data <- merge(x = dl.map@data, y = dsi, by.x = "disloc", by.y = "disloc2018", all.x = TRUE, all.y = FALSE)
@@ -307,7 +308,7 @@ rm(dsi)
 # a. from seccion2dis map, in order to export into se.map for sub-setting
 #sec2dis <- read.csv("/home/eric/Dropbox/data/mapas/reseccionamiento/equivSecc/tablaEquivalenciasSeccionales1994-2010.2013.csv", stringsAsFactors = FALSE)
 #sec2dis <- sec2dis[sec2dis$edon == 18,]
-sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/mexLoc.csv", stringsAsFactors = FALSE)
+sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/cpsLoc.csv", stringsAsFactors = FALSE)
 # send to seccion map
 tmp <- data.frame(SECCION = se.map$SECCION)
 tmp$orden <- 1:nrow(tmp)
