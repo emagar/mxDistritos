@@ -16,11 +16,11 @@ setwd(wd)
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
 md2 <- "../" # c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/maps/")
-edo <- "gue"
-edon <- 12
+edo <- "cps"
+edon <- 7
 
 # geospatial data 
-library(spdep); library(maptools)
+library(spdep); library(maptools); library(OpenStreetMap)
 # used to determine what datum rojano data has
 library(rgdal)
 #gpclibPermit()
@@ -28,6 +28,7 @@ tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con shapefiles ine 20
 #tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 se.map <- readOGR(dsn = tmp, layer = 'SECCION')
 summary(se.map)
+plot(se.map)
 # projects to a different datum with long and lat
 se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 
@@ -36,24 +37,27 @@ se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 # a. from seccion2dis map, in order to export into se.map for sub-setting
 #sec2dis <- read.csv("/home/eric/Dropbox/data/mapas/reseccionamiento/equivSecc/tablaEquivalenciasSeccionales1994-2010.2013.csv", stringsAsFactors = FALSE)
 #sec2dis <- sec2dis[sec2dis$edon == 18,]
-sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/gueLoc.csv", stringsAsFactors = FALSE)
-#sec2dis <- read.csv("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc.csv", stringsAsFactors = FALSE) # archivo Julia
+sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/cpsLoc.csv", stringsAsFactors = FALSE)
+#sec2dis <- read.csv("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc(indig)24Dist.csv", stringsAsFactors = FALSE) # archivo Julia
+head(sec2dis)
 # send to seccion map
 tmp <- data.frame(SECCION = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
 tmp <- merge(x = tmp, y = sec2dis, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
-tmp <- tmp[order(tmp$orden), grep("^dis.+$", colnames(tmp))]
+tmp <- tmp[order(tmp$orden),]
+tmp <- tmp[, grep("^dis.+$", colnames(tmp))]
 #tmp <- tmp[order(tmp$orden), grep("SECCION|^dis.+$", colnames(tmp))]
 se.map@data <- cbind(se.map@data, tmp)
 rm(tmp)
 # df2006.map <- unionSpatialPolygons(se.map, se.map$disn) # proper way to get federal district objects... if only seccion shapefiles had no problems
 
 names(se.map@data)
+table(se.map$disloc2018)
 table(se.map$juanZepedaPerez1)
 
 # Now the dissolve
 library(rgeos)
-tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2005)
+tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2018)
 #tmp <- gUnaryUnion(se.map, id = se.map@data$juanZepedaPerez1)
 plot(tmp)
 ## #
@@ -68,9 +72,9 @@ row.names(tmp) <- as.character(1:length(tmp))
 lu <- data.frame()
 lu <- rbind(lu, se.map@data)
 names(se.map@data)
-lu <- unique(lu$disloc2005)
+lu <- unique(lu$disloc2018)
 lu <- as.data.frame(lu)
-colnames(lu) <- "disloc2005"  # your data will probably have more than 1 row!
+colnames(lu) <- "disloc2018"  # your data will probably have more than 1 row!
 
 # And add the data back in
 tmp <- SpatialPolygonsDataFrame(tmp, lu)
@@ -78,7 +82,6 @@ tmp <- SpatialPolygonsDataFrame(tmp, lu)
 # Check it all worked
 plot(tmp)
 
-
 getwd()
-d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/2clean/gue"
-writeOGR(tmp, d, "disloc2005", driver="ESRI Shapefile")
+d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/2clean/cps"
+writeOGR(tmp, d, "disloc2018", driver="ESRI Shapefile")
