@@ -288,11 +288,11 @@ dl.map <- readOGR(dsn = tmp, layer = 'disloc2018')
 #colnames(dl.map@data) <- c("edon","tipo","disloc","id")
 # projects to a different ./datum with long and lat
 dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
-# read disloc2005
-dl1996.map <- readOGR(dsn = tmp, layer = 'disloc1996')
+# read disloc2012
+dl2012.map <- readOGR(dsn = tmp, layer = 'disloc2012')
 colnames(dl1996.map@data) <- c("edon","disloc")
 # projects to a different datum with long and lat
-dl1996.map <- spTransform(dl1996.map, osm()) # project to osm native Mercator
+dl2012.map <- spTransform(dl2012.map, osm()) # project to osm native Mercator
 
 
 # add father/son info and dsi of mapLoc
@@ -301,7 +301,7 @@ dsi <- read.csv(file = dsi, stringsAsFactors = FALSE)
 head(dsi)
 #
 #dl.map$ord <- 1:nrow(dl.map@data)
-dl.map@data <- merge(x = dl.map@data, y = dsi, by.x = "disloc", by.y = "disloc2018", all.x = TRUE, all.y = FALSE)
+dl.map@data <- merge(x = dl.map@data, y = dsi, by.x = "disloc2018", by.y = "disloc2018", all.x = TRUE, all.y = FALSE)
 rm(dsi)
 
 # read comparative district maps
@@ -309,16 +309,49 @@ rm(dsi)
 #sec2dis <- read.csv("/home/eric/Dropbox/data/mapas/reseccionamiento/equivSecc/tablaEquivalenciasSeccionales1994-2010.2013.csv", stringsAsFactors = FALSE)
 #sec2dis <- sec2dis[sec2dis$edon == 18,]
 sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/cpsLoc.csv", stringsAsFactors = FALSE)
+head(sec2dis)
 # send to seccion map
-tmp <- data.frame(SECCION = se.map$SECCION)
+tmp <- data.frame(seccion = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = sec2dis, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = sec2dis, by = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden), grep("^dis.+$", colnames(tmp))]
 #tmp <- tmp[order(tmp$orden), grep("SECCION|^dis.+$", colnames(tmp))]
 se.map@data <- cbind(se.map@data, tmp)
 rm(tmp)
 # df2006.map <- unionSpatialPolygons(se.map, se.map$disn) # proper way to get federal district objects... if only seccion shapefiles had no problems
+
+# aa. Add Julia's lenguas
+p5li <- read.csv(file = "../../cpsJulia/07_poblacion_lenguas_seccion.csv", stringsAsFactors = FALSE)
+colnames(p5li)
+p5li$soloesp <- p5li$pob - p5li$p5li
+# shares
+p5li$tzeltal <- p5li$tzeltal / p5li$p5li
+p5li$tzotzil <- p5li$tzotzil / p5li$p5li
+p5li$chol <- p5li$chol / p5li$p5li
+p5li$zoque <- p5li$zoque / p5li$p5li
+p5li$tojolabal <- p5li$tojolabal / p5li$p5li
+p5li$mame <- p5li$mame / p5li$p5li
+p5li$kanjobal <- p5li$kanjobal / p5li$p5li
+p5li$cluj <- p5li$cluj / p5li$p5li
+p5li$zapoteco <- p5li$zapoteco / p5li$p5li
+p5li$maya <- p5li$maya / p5li$p5li
+p5li$akatako <- p5li$akatako / p5li$p5li
+p5li$chinanteco <- p5li$chinanteco / p5li$p5li
+p5li$nahuatl <- p5li$nahuatl / p5li$p5li
+p5li$linhabOther <- p5li$linhabOther / p5li$p5li
+p5li$p5liesp <- p5li$p5liesp / p5li$p5li
+p5li$p5linoesp <- p5li$p5linoesp / p5li$p5li
 #
+p5li$homb <- p5li$homb / p5li$pob
+p5li$muj <- p5li$muj / p5li$pob
+p5li$p5li <- p5li$p5li / p5li$pob
+p5li$soloesp <- p5li$soloesp / p5li$pob
+
+summary(p5li)
+
+colnames(p5li)
+x
+
 # b. from rojano's 2006 distrito map, which has good-looking shapefiles
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 df2006.map <- readOGR(dsn = tmp, layer = 'DISTRITO')
