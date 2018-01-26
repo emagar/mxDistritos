@@ -278,6 +278,7 @@ mu.map$mun <- mu.map$nombre # mun names
 # read cabeceras municipales
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 cab <- readOGR(dsn = tmp, layer = 'CABECERA_MUNICIPAL')
+names(cab) <- tolower(names(cab))
 # projects to a different datum with long and lat
 cab <- spTransform(cab, osm())
 #cab$LOCALIDAD_.1 # names
@@ -290,7 +291,7 @@ dl.map <- readOGR(dsn = tmp, layer = 'disloc2018')
 dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
 # read disloc2012
 dl2012.map <- readOGR(dsn = tmp, layer = 'disloc2012')
-colnames(dl1996.map@data) <- c("edon","disloc")
+colnames(dl2012.map@data) <- c("edon","disloc")
 # projects to a different datum with long and lat
 dl2012.map <- spTransform(dl2012.map, osm()) # project to osm native Mercator
 
@@ -321,36 +322,67 @@ rm(tmp)
 # df2006.map <- unionSpatialPolygons(se.map, se.map$disn) # proper way to get federal district objects... if only seccion shapefiles had no problems
 
 # aa. Add Julia's lenguas
-p5li <- read.csv(file = "../../cpsJulia/07_poblacion_lenguas_seccion.csv", stringsAsFactors = FALSE)
-colnames(p5li)
-p5li$soloesp <- p5li$pob - p5li$p5li
-# shares
-p5li$tzeltal <- p5li$tzeltal / p5li$p5li
-p5li$tzotzil <- p5li$tzotzil / p5li$p5li
-p5li$chol <- p5li$chol / p5li$p5li
-p5li$zoque <- p5li$zoque / p5li$p5li
-p5li$tojolabal <- p5li$tojolabal / p5li$p5li
-p5li$mame <- p5li$mame / p5li$p5li
-p5li$kanjobal <- p5li$kanjobal / p5li$p5li
-p5li$cluj <- p5li$cluj / p5li$p5li
-p5li$zapoteco <- p5li$zapoteco / p5li$p5li
-p5li$maya <- p5li$maya / p5li$p5li
-p5li$akatako <- p5li$akatako / p5li$p5li
-p5li$chinanteco <- p5li$chinanteco / p5li$p5li
-p5li$nahuatl <- p5li$nahuatl / p5li$p5li
-p5li$linhabOther <- p5li$linhabOther / p5li$p5li
-p5li$p5liesp <- p5li$p5liesp / p5li$p5li
-p5li$p5linoesp <- p5li$p5linoesp / p5li$p5li
+li <- read.csv(file = "../../cpsJulia/07_poblacion_lenguas_seccion.csv", stringsAsFactors = FALSE)
+summary(li$homb + li$muj - li$pob) # check pob ok
+li$ne <- NULL # drop no especificado, suspiciously close to my linhabOther totals
 #
-p5li$homb <- p5li$homb / p5li$pob
-p5li$muj <- p5li$muj / p5li$pob
-p5li$p5li <- p5li$p5li / p5li$pob
-p5li$soloesp <- p5li$soloesp / p5li$pob
-
-summary(p5li)
-
-colnames(p5li)
-x
+if (length(li$p5)==0) li$p5 <- li$pob # temp denominator
+#
+## # subset cols
+## tmp <- li[, c("tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "mame", "kanjobal", "cluj", "zapoteco", "maya", "akatako", "chinanteco", "nahuatl", "linhabOther")]
+## sel <- which(rowSums(tmp) - li$p5li !=0)
+## data.frame(li$seccion[sel], rowSums(tmp)[sel] - li$p5li[sel], li$p5li[sel])
+#
+# shares
+li$homb <- li$homb / li$pob
+li$muj <- li$muj / li$pob
+li$p5li <- li$p5li / li$pob
+#
+# número efectivo de lenguas indígenas
+# subset cols
+tmp <- li[, c("tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "mame", "kanjobal", "cluj", "zapoteco", "maya", "akatako", "chinanteco", "nahuatl", "linhabOther")]
+sel <- which(rowSums(tmp)==0)
+tmp <- tmp/rowSums(tmp) # shares
+tmp.hh <- rowSums(tmp^2)
+nel <- 1/tmp.hh
+tmp.max <- apply(tmp, 1, max)
+nel.moli <- 1 + nel * (tmp.hh - tmp.max^2) / tmp.hh
+li$neli <- nel
+li$neliMoli <- nel.moli
+li$neli[sel] <- li$neliMoli[sel] <- 0
+rm(tmp, tmp.hh, nel, tmp.max, nel.moli, sel)
+#
+# número efectivo de lenguas incluyendo español
+li$soloEsp <- li$p5 - li$p5li
+tmp <- li[, c("tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "mame", "kanjobal", "cluj", "zapoteco", "maya", "akatako", "chinanteco", "nahuatl", "linhabOther","soloEsp")]
+sel <- which(rowSums(tmp)==0)
+tmp <- tmp/li$p5 # shares including spanish
+tmp.hh <- rowSums(tmp^2)
+nel <- 1/tmp.hh
+tmp.max <- apply(tmp, 1, max)
+nel.moli <- 1 + nel * (tmp.hh - tmp.max^2) / tmp.hh
+li$nelwEsp <- nel
+li$nelwEspMoli <- nel.moli
+li$nelwEsp[sel] <- li$nelwEspMoli[sel] <- 0
+rm(tmp, tmp.hh, nel, tmp.max, nel.moli, sel)
+#
+# make colors
+library(RColorBrewer)
+nclr <- 5                                    #CATEGORÍAS DE COLOR (MIN=3 MAX=9)
+greys <- brewer.pal(nclr,"Greys")            #GENERA CODIGOS DE COLOR QUE CRECEN CON GRADO
+library(plyr)
+tmp <- as.numeric(cut(li$p5li, seq(0,1,by = .2), include.lowest = TRUE)) # cut p5li into 5 categories
+li$p5licat <- mapvalues ( tmp, from = 1:5, to = greys)
+# next do same for neli etc when data is clean
+#
+# export to se.map
+tmp <- se.map@data
+tmp$order <- 1:nrow(tmp)
+tmp <- merge(x = tmp, y = li, by = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- tmp[order(tmp$order),]
+tmp$order <- NULL
+se.map@data <- tmp
+rm(tmp)
 
 # b. from rojano's 2006 distrito map, which has good-looking shapefiles
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
@@ -376,12 +408,13 @@ head(df.map@data)
 # add casillas in 2012
 tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 cas.map <- readOGR(dsn = tmp, layer = 'CASILLA')
+names(cas.map) <- tolower(names(cas.map))
 # projects to a different datum with long and lat
 cas.map <- spTransform(cas.map, osm()) # project to osm native Mercator
 #
 # add districts for subsetting
 tmp <- cas.map@data; tmp$ord <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = se.map[,c("SECCION","disfed2006","disfed2018","disloc1996","disloc2018")], by = "SECCION", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = se.map[,c("seccion","disfed2006","disfed2018","disloc2018","disloc2012")], by = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$ord),]
 cas.map@data <- tmp
 #
@@ -391,10 +424,10 @@ if (length(sel)>0) cas.map <- cas.map[-sel,] # drop missing cases
 rm(sel)
 
 # add ncasillas in 2012 to seccion map
-tmp <- data.frame(SECCION = se.map$SECCION)
+tmp <- data.frame(seccion = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon==edon, c("seccion","e12")], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
-tmp <- tmp[order(tmp$orden), c("SECCION","e12")]; 
+tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon==edon, c("seccion","e12")], by = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- tmp[order(tmp$orden), c("seccion","e12")]; 
 se.map$ncasillas <- tmp$e12
 # make colors
 library(RColorBrewer)
@@ -410,10 +443,10 @@ se.map$ncascol[se.map$ncasillas>=11 & se.map$ncasillas<=20] <- purples[5]
 se.map$ncascol[se.map$ncasillas>=21]                        <- purples[6]
 
 # add nwin to seccion map
-tmp <- data.frame(SECCION = se.map$SECCION)
+tmp <- data.frame(seccion = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = nwin[nwin$edon==edon,], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
-tmp <- tmp[order(tmp$orden), c("SECCION","pan","pri","prd")]
+tmp <- merge(x = tmp, y = nwin[nwin$edon==edon,], by = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- tmp[order(tmp$orden), c("seccion","pan","pri","prd")]
 se.map$nwinpan <- tmp$pan
 se.map$nwinpri <- tmp$pri
 se.map$nwinprd <- tmp$prd
@@ -461,9 +494,9 @@ tmp2[,-1] <- round(tmp2[,-1] / v15[v15$edon==edon, c("efec")], 3) # vote shares
 tmp <- apply(X = abs(tmp2[,-1] - tmp1[,-1]), MARGIN = 1, FUN = max) # absolute 2015-2012 vote shares by party
 tmp3 <- cbind(seccion=tmp1$seccion, volat=tmp, lisnom=tmpv$lisnom)
 #
-tmp <- data.frame(SECCION = se.map$SECCION)
+tmp <- data.frame(seccion = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = tmp3, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = tmp3, by = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden),]
 se.map$volat1215 <- tmp$volat
 se.map$ln15 <- tmp$lisnom
@@ -489,9 +522,9 @@ tmpv2 <- t(apply(tmpv2, 1, function(x) sort(x, decreasing = TRUE)))
 #
 pres <- data.frame(seccion=tmpv$seccion, win06p=etiq[,1], mg06p=round( (tmpv2[,1] - tmpv2[,2])/rowSums(tmpv2), 3), fch=round(tmpv$fch/rowSums(tmpv2), 3), amlo06=round(tmpv$amlo/rowSums(tmpv2), 3))
 #
-tmp <- data.frame(SECCION = se.map$SECCION)
+tmp <- data.frame(seccion = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = pres, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = pres, by.x = "seccion", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden),]
 #
 # 2012
@@ -507,7 +540,7 @@ etiq <- sortBy(target = etiq, By = tmpv2)
 tmpv2 <- t(apply(tmpv2, 1, function(x) sort(x, decreasing = TRUE)))
 #
 pres <- data.frame(seccion=tmpv$seccion, win12p=etiq[,1], mg12p=round( (tmpv2[,1] - tmpv2[,2])/rowSums(tmpv2), 3), epn=round(tmpv$epn/rowSums(tmpv2), 3), amlo12=round(tmpv$amlo/rowSums(tmpv2), 3))
-tmp <- merge(x = tmp, y = pres, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = pres, by = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden),]
 #
 se.map@data <- cbind(se.map@data, tmp)
