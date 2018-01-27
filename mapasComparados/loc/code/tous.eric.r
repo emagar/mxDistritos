@@ -337,6 +337,76 @@ d$ptot <- NULL
 
 
 
+#############
+#   7  cps  #
+#############
+
+## # dsi seen from offspring perspective
+## # new district's "father" and district similarity index, cf. Cox & Katz
+## ## READ HISTORICAL MAPS
+## d <- read.csv(file = "cpsLoc.csv", stringsAsFactors = FALSE)
+## son    <- d$disloc2018
+## father <- d$disloc2012
+## N <- max(son, na.rm = TRUE)
+## d$father <- NA
+## d$dsi <- 0
+## for (i in 1:N){
+##     #i <- 1 # debug
+##     sel.n <- which(son==i)                  # secciones in new district
+##     tmp <- table(father[sel.n])
+##     target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+##     d$father[sel.n] <- target
+##     sel.f <- which(father==target) # secciones in father district
+##     sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+##     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+## }
+## dsi <- d[duplicated(son)==FALSE,]
+## dsi <- dsi[,c("edon","disloc2018","father","dsi","cab")]
+## head(dsi)
+## dsi <- dsi[order(dsi$disloc2018),]
+## write.csv(dsi, file = "simIndex/dist_cps.csv", row.names = FALSE)
+## #
+## ## # dsi seen from parent perspective
+## ## # new district's "father" and district similarity index, cf. Cox & Katz
+## ## d$son17 <- NA
+## ## d$dsi <- 0
+## ## for (i in 1:16){
+## ##     #i <- 16 # debug
+## ##     sel.o <- which(d$disn14==i)                  # secciones in original district
+## ##     tmp <- table(d$disn17[sel.o])
+## ##     target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
+## ##     d$son2017[sel.o] <- target
+## ##     sel.s <- which(d$disn17==target) # secciones in son district
+## ##     sel.c <- intersect(sel.o, sel.s) # secciones common to original and son districts
+## ##     d$dsi[sel.o] <- round( length(sel.c) / (length(sel.o) + length(sel.s) - length(sel.c)) , 3 )
+## ## }
+## ## dsi <- d[duplicated(d$disn14)==FALSE, c("disn14","son2017","dsi")]
+## ## dsi <- dsi[order(dsi$disn14),]
+## ## dsi$cab14 <- c("Saltillo", "Saltillo", "Saltillo", "Saltillo", "Ramos Arizpe", "Torreón", "Torreón", "Torreón", "Torreón", "San Pedro", "Frontera", "Monclova", "Múzquiz", "Sabinas", "Acuña", "Piedras Negras")
+## ## dsi <- dsi[order(dsi$dsi),]
+## ## summary(dsi$dsi)
+
+## get functions to include population
+## READ HISTORICAL MAPS
+d <- read.csv(file = "cpsLoc.csv", stringsAsFactors = FALSE)
+source(paste(dd, "code/getPop.r", sep = ""))
+pob05 <- get2005(edon=7)
+pob10 <- get2010(edon=7)
+head(pob05)
+head(pob10)
+head(d)
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+
+head(d)
+
+x
 
 
 
