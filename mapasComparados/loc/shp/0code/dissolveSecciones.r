@@ -11,7 +11,7 @@ rm(list=setdiff(ls(), "munvot")) # clean
 wd2 <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
 setwd(wd2)
 load(file="elDatForMaps.RData")
-wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/maps/code/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/maps/0code/")
 setwd(wd)
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
@@ -57,7 +57,7 @@ table(se.map$juanZepedaPerez1)
 
 # Now the dissolve
 library(rgeos)
-tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2018)
+tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2012)
 #tmp <- gUnaryUnion(se.map, id = se.map@data$juanZepedaPerez1)
 plot(tmp)
 ## #
@@ -72,9 +72,9 @@ row.names(tmp) <- as.character(1:length(tmp))
 lu <- data.frame()
 lu <- rbind(lu, se.map@data)
 names(se.map@data)
-lu <- unique(lu$disloc2018)
+lu <- unique(lu$disloc2012)
 lu <- as.data.frame(lu)
-colnames(lu) <- "disloc2018"  # your data will probably have more than 1 row!
+colnames(lu) <- "disloc2012"  # your data will probably have more than 1 row!
 
 # And add the data back in
 tmp <- SpatialPolygonsDataFrame(tmp, lu)
@@ -84,4 +84,4 @@ plot(tmp)
 
 getwd()
 d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/2clean/cps"
-writeOGR(tmp, d, "disloc2018", driver="ESRI Shapefile")
+writeOGR(tmp, d, "disloc2012", driver="ESRI Shapefile")
