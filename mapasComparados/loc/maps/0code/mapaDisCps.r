@@ -291,7 +291,7 @@ colnames(dl.map@data) <- c("disloc")
 dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
 # read disloc2012
 dl2012.map <- readOGR(dsn = tmp, layer = 'disloc2012')
-colnames(dl2012.map@data) <- c("edon","disloc")
+colnames(dl2012.map@data) <- c("disloc")
 # projects to a different datum with long and lat
 dl2012.map <- spTransform(dl2012.map, osm()) # project to osm native Mercator
 
@@ -302,7 +302,7 @@ dsi <- read.csv(file = dsi, stringsAsFactors = FALSE)
 head(dsi)
 #
 #dl.map$ord <- 1:nrow(dl.map@data)
-dl.map@data <- merge(x = dl.map@data, y = dsi, by.x = "disloc2018", by.y = "disloc2018", all.x = TRUE, all.y = FALSE)
+dl.map@data <- merge(x = dl.map@data, y = dsi, by.x = "disloc", by.y = "disloc2018", all.x = TRUE, all.y = FALSE)
 rm(dsi)
 
 # read comparative district maps
@@ -589,7 +589,7 @@ p84 <- function(x = NA){
 }
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
 portray2 <- se.map$p5licat # elegir qué reportará el mapa 3
-dn <- 1                  # elegir un distrito
+dn <- 2                  # elegir un distrito
 ## for (dn in 30:45){
 ##     print(paste("disn =", dn))
 ## # plot state map with highlighted district
@@ -637,44 +637,40 @@ bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c(
 bg <- bg.os
 #
 #png(file = paste(md2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
+
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
-plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("México ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
+plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Chiapas ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
 plot(bg, add = TRUE)
 #plot(dl.map[dl.map$disloc==dn,], lwd = 5, add = TRUE) # drop
-plot(ed.map$mex, add = TRUE)
+plot(ed.map$cps, add = TRUE)
 library(scales) # has function alpha()
-plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray2, .25)) # color nwin
+plot(se.map,                         add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color nwin
 # plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray[se.map$disn==dn]) # color nwin -- se.map$disn is disfed
 #plot(ffcc, add = TRUE, lwd = .75)
 #
-#
 #plot(ed.map$nay, add = TRUE, lty = 1, col = rgb(1,1,1, alpha = .5)) # blurs colors inside state
-plot(se.map[se.map$disloc2018==dn,], add = TRUE, border = "darkgray", col = alpha(portray2[se.map$disloc2018==dn], .5)) # color nwin
+plot(se.map[se.map$disloc2018==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$disloc2018==dn], .5)) # color nwin
 # add casillas
 points(cas.map, pch = 20, col = "white" , cex = .3)
 #points(cas.map[cas.map$disloc2017==dn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
 #
+plot(ed.map$oax, add = TRUE, lty = 1)
+plot(ed.map$ver, add = TRUE, lty = 1)
+plot(ed.map$tab, add = TRUE, lty = 1)
+plot(ed.map$cam, add = TRUE, lty = 1)
 #
-plot(ed.map$que, add = TRUE, lty = 1)
-plot(ed.map$hgo, add = TRUE, lty = 1)
-plot(ed.map$tla, add = TRUE, lty = 1)
-plot(ed.map$pue, add = TRUE, lty = 1)
-plot(ed.map$gue, add = TRUE, lty = 1)
-plot(ed.map$mor, add = TRUE, lty = 1)
-plot(ed.map$mic, add = TRUE, lty = 1)
-#
-sel <- which(dl1996.map$disloc==dl.map$father[dl.map$disloc==dn])
-plot(dl1996.map[sel,], add = TRUE, lwd = 6, border = "red")
+sel <- which(dl2012.map$disloc==dl.map$father[dl.map$disloc==dn])
+plot(dl2012.map[sel,], add = TRUE, lwd = 6, border = "red")
 #
 plot(dl.map[dl.map$disloc==dn,], add = TRUE, lwd = 4)
 plot(mu.map, add = TRUE, border = "green", lwd = 1)
 plot(mu.map, add = TRUE, lwd = 1, lty = 3)
-plot(ed.map$tla, add = TRUE, lwd = 3)
-plot(ed.map$tla, add = TRUE, border = "red", lty = 3, lwd = 2)
-## points(coordinates(cab), pch = 19, col = "white", cex = .5)
-## points(coordinates(cab), pch = 1, col = "green", cex = .75)
+#
+plot(ed.map$cps, add = TRUE, lwd = 3)
+plot(ed.map$cps, add = TRUE, border = "red", lty = 3, lwd = 2)
+#
 text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
 text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
 lp <- c("bottomright", #1 
@@ -702,28 +698,56 @@ lp <- c("bottomright", #1
         "bottomright", #23
         "bottomleft",  #24
         "bottomleft",  #25
-        "bottomleft",  #26
-        "bottomleft",  #27
-        "bottomleft",  #28
-        "bottomleft",  #29
-        "bottomleft",  #30
-        "bottomleft",  #31
-        "bottomright", #32
-        "bottomright", #33
-        "bottomleft",  #34
-        "bottomleft",  #35
-        "bottomleft",  #36
-        "bottomleft",  #37
-        "bottomright", #38
-        "bottomright", #39
-        "bottomleft",  #40
-        "bottomleft",  #41
-        "bottomright", #42
-        "topleft",     #43
-        "bottomleft",  #44
-        "bottomright") #45
+        "bottomleft")  #26
 legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
 legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
+addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+
+# plot same distrito only: p5li
+#png(file = paste(md3, edo, munn, "-p5li.png", sep = ""))
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
+tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
+plot(dl.map[dl.map$disloc==dn,], axes = TRUE, main = paste("Chiapas ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
+plot(bg, add = TRUE)
+#plot(dl.map[dl.map$disloc==munn,], lwd = 5, add = TRUE) # drop
+plot(ed.map$cps, add = TRUE)
+library(scales) # has function alpha()
+plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray2, .5)) # color p5li
+# plot(se.map[se.map$disn==munn,], add = TRUE, border = "darkgray", col = portray[se.map$disn==munn]) # color nwin -- se.map$disn is disfed
+#plot(ffcc, add = TRUE, lwd = .75)
+#
+#plot(ed.map$nay, add = TRUE, lty = 1, col = rgb(1,1,1, alpha = .5)) # blurs colors inside state
+plot(se.map[se.map$disloc2018==dn,], add = TRUE, border = "darkgray", col = alpha(portray2[se.map$disloc2018==dn], .5)) # color nwin
+# add casillas
+points(cas.map, pch = 20, col = "white" , cex = .3)
+#points(cas.map[cas.map$disloc2017==munn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
+#
+plot(ed.map$oax, add = TRUE, lty = 1)
+plot(ed.map$ver, add = TRUE, lty = 1)
+plot(ed.map$tab, add = TRUE, lty = 1)
+plot(ed.map$cam, add = TRUE, lty = 1)
+#
+sel <- which(dl2012.map$disloc==dl.map$father[dl.map$disloc==dn])
+plot(dl2012.map[sel,], add = TRUE, lwd = 6, border = "red")
+#
+plot(dl.map[dl.map$disloc==dn,], add = TRUE, lwd = 4)
+plot(mu.map, add = TRUE, border = "green", lwd = 1)
+plot(mu.map, add = TRUE, lwd = 1, lty = 3)
+#
+plot(ed.map$cps, add = TRUE, lwd = 3)
+plot(ed.map$cps, add = TRUE, border = "red", lty = 3, lwd = 2)
+#
+sel <- which(mu.map$municipio==munn)
+text(coordinates(mu.map[-sel,]), labels=mu.map$mun[-sel], cex=.51, col = "green")
+text(coordinates(mu.map[-sel,]), labels=mu.map$mun[-sel], cex=.5)
+legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
+legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
+#
+legend(x="bottom", bg = "white", legend=c("0-.2",".2-.4",".4-.6",".6-.8",".8-1"), fill=mauve, title = "Prop. indígena", bty="o", cex=.75)
+#
 library(prettymapr)
 addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
 addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
