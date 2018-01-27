@@ -286,7 +286,7 @@ cab <- spTransform(cab, osm())
 # read shapefiles distritos locales 
 tmp <- paste("/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, sep = "") # archivo con mapas locales
 dl.map <- readOGR(dsn = tmp, layer = 'disloc2018')
-colnames(dl.map@data) <- c("disloc")
+colnames(dl.map@data) <- c("edon","tipo","disloc","id")
 # projects to a different ./datum with long and lat
 dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
 # read disloc2012
