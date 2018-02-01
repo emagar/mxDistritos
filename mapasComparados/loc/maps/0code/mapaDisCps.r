@@ -333,11 +333,6 @@ li$linhabOther[sel] <- li$linhabOther[sel] + li$dif[sel] # adds difference with 
 ## sel <- which(rowSums(tmp) - li$p5li !=0)
 ## data.frame(li$seccion[sel], rowSums(tmp)[sel] - li$p5li[sel], li$p5li[sel])
 #
-# shares
-li$homb <- li$homb / li$pob
-li$muj <- li$muj / li$pob
-li$p5li <- li$p5li / li$pob
-#
 # número efectivo de lenguas indígenas
 # subset cols
 tmp <- li[, c("tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "mame", "kanjobal", "cluj", "zapoteco", "maya", "akatako", "chinanteco", "nahuatl", "linhabOther")]
@@ -366,16 +361,32 @@ li$nelwEspMoli <- nel.moli
 li$nelwEsp[sel] <- li$nelwEspMoli[sel] <- 0
 rm(tmp, tmp.hh, nel, tmp.max, nel.moli, sel)
 #
+# lengua predominante
+# subset cols
+tmp <- li[, c("tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "mame", "kanjobal", "cluj", "zapoteco", "maya", "akatako", "chinanteco", "nahuatl", "linhabOther","soloEsp")]
+li$lengMax <- colnames(tmp)[max.col(tmp, ties.method = "first")] ## returns label of row's max 
+#
+# shares
+li$homb <- li$homb / li$pob
+li$muj <- li$muj / li$pob
+li$p5li <- li$p5li / li$pob
+#
 # make colors
 library(RColorBrewer)
 nclr <- 5                                    #CATEGORÍAS DE COLOR (MIN=3 MAX=9)
-greys <- brewer.pal(nclr,"Greys")            #GENERA CODIGOS DE COLOR QUE CRECEN CON GRADO
 mauve <- brewer.pal(nclr,"BuPu")             #GENERA CODIGOS DE COLOR QUE CRECEN CON GRADO
+redgreen <- brewer.pal(6, "RdYlGn"); redgreen <- redgreen[6:1]
+catcol <- brewer.pal(9, "Set1")
 library(plyr)
 tmp <- as.numeric(cut(li$p5li, seq(0,1,by = .2), include.lowest = TRUE)) # cut p5li into 5 categories
 li$p5licat <- mapvalues ( tmp, from = 1:5, to = mauve)
-# next do same for neli etc when data is clean
-#
+# next do same for neli etc
+li$neliMolicat <- NA; sel <- which(li$p5li>=.4)
+li$neliMolicat[sel] <- cut( round(li$neliMoli[sel],1), breaks = seq(1, 2.2, .2), include.lowest = TRUE)
+li$neliMolicat[sel] <- mapvalues ( li$neliMolicat[sel], from = 1:6, to =redgreen  )
+# colors for majority tongue
+li$lengMaxcat <- mapvalues ( li$lengMax, from = c("soloEsp", "tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "kanjobal", "maya", "linhabOther"), to = catcol )
+
 # export to se.map
 tmp <- se.map@data
 tmp$order <- 1:nrow(tmp)
@@ -581,7 +592,6 @@ df2006.map$disrri15 <- paste(df2006.map$DISTRITO, " (", df2006.map$rris2015, ")"
 ## write(tmp, file = paste(md, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
 
 
-# grafica distritos locales 1 por 1
 # (use 1984 long/lat for this map when mercator projection was chosen)
 p84 <- function(x = NA){
     x <- x
@@ -589,6 +599,150 @@ p84 <- function(x = NA){
 }
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
 portray2 <- se.map$p5licat # elegir qué reportará el mapa 3
+portray3 <- se.map$neliMolicat # elegir qué reportará el mapa 4
+portray4 <- se.map$lengMaxcat # elegir qué reportará el mapa 5
+
+# all state's secciones, colored by % indigenas, in single map
+m <- p84(ed.map$cps)  # subsetted map
+b <- as.data.frame(m@bbox)
+# gets xx degrees more than bbox (decimal defines share of max range)
+xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
+bg <- bg.bi
+
+#pdf(file = paste(md2, edo, "-p5licat.pdf", sep = ""))
+#png(file = paste(md2, edo, "-p5licat.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Chiapas (secciones y distritos)")#, bg = "lightblue")
+#plot(bg, add = TRUE)
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray2, .95))
+#plot(p84(se.map), add = TRUE, border = "gray", col = portray2)
+# 
+plot(p84(dl.map), add = TRUE, border = "black")
+# thick state border
+#plot(p84(ed.map$cps), add = TRUE, lwd = 3)
+#plot(p84(ed.map$cps), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.89, col = "white")
+text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.85)
+#
+# add neighboring states
+text( x = -93.6, y = 15.15, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -40 )
+text( x = -91.25, y = 15.25, labels = "GUATEMALA", col = "darkgray", cex = .9)
+text( x = -90.75, y = 17, labels = "GUATEMALA", col = "darkgray", cex = .9, srt = -35)
+text( x = -94.35, y = 16.6, labels = "OAXACA", col = "darkgray", cex = .9, srt = 90)
+text( x = -94.1, y = 17.5, labels = "VERACRUZ", col = "darkgray", cex = .9, srt = -35)
+text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
+text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
+text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
+#
+legend(x="bottomright", bg = "white", legend=c("0-20","20-40","40-60","60-80","80-100"), fill=mauve, title = "% indígena", bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
+addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+#dev.off()
+
+# distritos c indígenas
+disIndig <- c(4, 5, 7, 8, 9, 11, 20, 21, 22)
+
+# número efectivo d lenguas
+#pdf(file = paste(md2, edo, "-nel.pdf", sep = ""))
+#png(file = paste(md2, edo, "-nel.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Chiapas (secciones y distritos)")#, bg = "lightblue")
+#plot(bg, add = TRUE)
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .95))
+#plot(p84(se.map), add = TRUE, border = "gray", col = portray2)
+# 
+plot(p84(dl.map), add = TRUE, border = "black")
+# thick state border
+#plot(p84(ed.map$cps), add = TRUE, lwd = 3)
+#plot(p84(ed.map$cps), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.89, col = "white")
+text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.85)
+#
+# add neighboring states
+text( x = -93.6, y = 15.15, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -40 )
+text( x = -91.25, y = 15.25, labels = "GUATEMALA", col = "darkgray", cex = .9)
+text( x = -90.75, y = 17, labels = "GUATEMALA", col = "darkgray", cex = .9, srt = -35)
+text( x = -94.35, y = 16.6, labels = "OAXACA", col = "darkgray", cex = .9, srt = 90)
+text( x = -94.1, y = 17.5, labels = "VERACRUZ", col = "darkgray", cex = .9, srt = -35)
+text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
+text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
+text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
+#
+legend(x="bottomright", bg = "white", legend=c("1","1.2","1.4","1.6","1.8","2"), fill=redgreen, title = "nMolinar lenguas", bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
+addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+#dev.off()
+
+# lengua predominante
+#pdf(file = paste(md2, edo, "-lengMax.pdf", sep = ""))
+#png(file = paste(md2, edo, "-lengMax.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Chiapas (secciones y distritos)")#, bg = "lightblue")
+#plot(bg, add = TRUE)
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray4, .95))
+#plot(p84(se.map), add = TRUE, border = "gray", col = portray2)
+# 
+plot(p84(dl.map), add = TRUE, border = "black")
+# thick state border
+#plot(p84(ed.map$cps), add = TRUE, lwd = 3)
+#plot(p84(ed.map$cps), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.89, col = "white")
+text(coordinates(p84(dl.map)), labels=dl.map$disloc, cex=.85)
+#
+# add neighboring states
+text( x = -93.6, y = 15.15, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -40 )
+text( x = -91.25, y = 15.25, labels = "GUATEMALA", col = "darkgray", cex = .9)
+text( x = -90.75, y = 17, labels = "GUATEMALA", col = "darkgray", cex = .9, srt = -35)
+text( x = -94.35, y = 16.6, labels = "OAXACA", col = "darkgray", cex = .9, srt = 90)
+text( x = -94.1, y = 17.5, labels = "VERACRUZ", col = "darkgray", cex = .9, srt = -35)
+text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
+text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
+text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
+#
+legend(x="bottomright", bg = "white", legend=c("español", "tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "kanjobal", "maya", "otras"), fill=catcol, title = "lengua predominante", bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
+addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+#dev.off()
+
+
+# grafica distritos locales 1 por 1
 dn <- 2                  # elegir un distrito
 ## for (dn in 30:45){
 ##     print(paste("disn =", dn))
@@ -637,7 +791,6 @@ bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c(
 bg <- bg.os
 #
 #png(file = paste(md2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
-
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
@@ -706,7 +859,7 @@ addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75
 addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
 
 # plot same distrito only: p5li
-#png(file = paste(md3, edo, munn, "-p5li.png", sep = ""))
+#png(file = paste(md2, edo, munn, "-p5li.png", sep = ""))
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  dl.map$cab[which(dl.map$disloc==dn)]
 tmp2 <- dl.map$dsi[which(dl.map$disloc==dn)]
