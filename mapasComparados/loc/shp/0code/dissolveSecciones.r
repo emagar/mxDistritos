@@ -39,10 +39,12 @@ se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 #sec2dis <- sec2dis[sec2dis$edon == 18,]
 sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/cpsLoc.csv", stringsAsFactors = FALSE)
 #sec2dis <- read.csv("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc(indig)24Dist.csv", stringsAsFactors = FALSE) # archivo Julia
-head(sec2dis)
+colnames(sec2dis)
 # send to seccion map
 tmp <- data.frame(SECCION = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
+head(tmp)
+sec2dis$seccion
 tmp <- merge(x = tmp, y = sec2dis, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden),]
 tmp <- tmp[, grep("^dis.+$", colnames(tmp))]
@@ -54,11 +56,13 @@ rm(tmp)
 names(se.map@data)
 table(se.map$disloc2018)
 table(se.map$juanZepedaPerez1)
+colnames(se.map@data)
+
 
 # Now the dissolve
 library(rgeos)
 tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2012)
-#tmp <- gUnaryUnion(se.map, id = se.map@data$juanZepedaPerez1)
+tmp <- gUnaryUnion(se.map, id = se.map@data$antonioPerezGomez1)
 plot(tmp)
 ## #
 ## tmp2 <- unionSpatialPolygons(se.map, se.map$disloc2018) # proper way to get federal district objects... if only seccion shapefiles had no problems
@@ -72,9 +76,9 @@ row.names(tmp) <- as.character(1:length(tmp))
 lu <- data.frame()
 lu <- rbind(lu, se.map@data)
 names(se.map@data)
-lu <- unique(lu$disloc2012)
+lu <- unique(lu$antonioPerezGomez1)
 lu <- as.data.frame(lu)
-colnames(lu) <- "disloc2012"  # your data will probably have more than 1 row!
+colnames(lu) <- "antonioPerezGomez1"  # your data will probably have more than 1 row!
 
 # And add the data back in
 tmp <- SpatialPolygonsDataFrame(tmp, lu)
@@ -84,4 +88,4 @@ plot(tmp)
 
 getwd()
 d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/2clean/cps"
-writeOGR(tmp, d, "disloc2012", driver="ESRI Shapefile")
+writeOGR(tmp, d, "antonioPerezGomez1", driver="ESRI Shapefile")
