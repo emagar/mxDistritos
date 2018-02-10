@@ -1,101 +1,107 @@
-pob10 <- data.frame()
-for (i in 1:32){
-    tmp <- get2010(edon=i)
-    pob10 <- rbind(pob10, tmp)
-}
-quantile(pob10$ptot, probs=c(.01,.99))
-quantile(pob10$ptot, probs=c(.025,.975))
-x
-
-########################################################################
-# script with functions to get 2005 and 2010 seccion-level populations #
-########################################################################
+############
+#  20 oax  #
+############
+# 2010 map eric re-did
+d <- read.csv(file = "fuenteAlumnos/oaxLoc2010.csv", stringsAsFactors = FALSE)
+sel <- which(d$lisnom==""|d$lisnom=="-")
+d$lisnom[sel] <- 0; rm(sel)
+d$lisnom <- as.numeric(d$lisnom)
+# así se hace en R un by yr mo: egen tmp=sum(invested) de stata
+d$lisnom <- ave(d$lisnom, as.factor(d$seccion), FUN=sum, na.rm=TRUE)
+d <- d[duplicated(d$seccion)==FALSE,] # drop redundant  obs
+d$ord <- NULL; d$loc <- NULL; d$casilla <- NULL
+d$cab2010 <- d$cab; d$cab <- NULL
+d$ife <- 20000 + d$ife # as in aymu
+dim(d)
+d10 <- d; rm(d) #rename
 #
-#########################################################
-#########################################################
-## should edit pop objects to fix changed secciones... ##
-#########################################################
-#########################################################
+# read what claudia prepared
+d <- read.csv(file = "fuenteAlumnos/oaxLoc.csv", stringsAsFactors = FALSE)
+dim(d)
+d <- merge(x = d, y = d10, by = "seccion", all = TRUE)
+d <- d[,c("seccion","munn","ife","mun","edon","lisnom","disfed1979","disfed1997","disfed2006","disfed2018","disloc2010","cab2010","disloc2012","disloc2018","nota")]
+write.csv(d, file = "oaxLoc.csv", row.names = FALSE)
 
-
-
-# function to get conteo 2005 pop (or other info) --- adapted from red.r
-get2005 <- function(edon=NA){
-    edos <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")
-    fls <- c("01_ags_pob.csv", "02_bc_pob.csv", "03_bcs_pob.csv", "04_camp_pob.csv", "05_coah_pob.csv", "06_col_pob.csv", "07_chiap_pob.csv", "08_chih_pob.csv", "09_df_pob.csv", "10_dgo_pob.csv", "11_gto_pob.csv", "12_gro_pob.csv", "13_hgo_pob.csv", "14_jal_pob.csv", "_5_mex_pob.csv", "16_mich_pob.csv", "17_mor_pob.csv", "18_nay_pob.csv", "19_nl_pob.csv", "20_oax_pob.csv", "21_pue_pob.csv", "22_qro_pob.csv", "23_qroo_pob.csv", "24_slp_pob.csv", "_5_sin_pob.csv", "26_son_pob.csv", "27_tab_pob.csv", "28_tamp_pob.csv", "29_tlax_pob.csv", "30_ver_pob.csv", "31_yuc_pob.csv", "_2_zac_pob.csv")
-    edo <- edos[edon]
-    fl <- fls[edon]
-    message(paste("Getting seccion-level 2005 pop. for", edo))
-    c05 <- c("~/Dropbox/data/elecs/MXelsCalendGovt/censos/secciones/conteo2005")
-    tmp <- read.csv( paste(c05,edo,fl,sep="/"), header=TRUE, stringsAsFactors = FALSE)
-    pob05 <- data.frame(edon    =tmp[,grep("ENTIDAD", colnames(tmp))],  
-                        disn2006=tmp[,grep("DISTRITO", colnames(tmp))], 
-                        munn    =tmp[,grep("MUNICIPIO", colnames(tmp))],
-                        seccion =tmp[,grep("SECCION", colnames(tmp))],  
-                        ptot    =tmp[,grep("POB_TOT", colnames(tmp))])
-    return(pob05)
-}    
-
-## function to get 2010 pop --- adapted from red.r
-get2010 <- function(edon=NA){
-    edos <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")
-    fls <- c("secciones_01.csv", "secciones_02.csv", "secciones_03.csv", "secciones_04.csv", "secciones_05.csv", "secciones_06.csv", "secciones_07.csv", "secciones_08.csv", "secciones_09.csv", "secciones_10.csv", "secciones_11.csv", "secciones_12.csv", "secciones_13.csv", "secciones_14.csv", "secciones_15.csv", "secciones_16.csv", "secciones_17.csv", "secciones_18.csv", "secciones_19.csv", "secciones_20.csv", "secciones_21.csv", "secciones_22.csv", "secciones_23.csv", "secciones_24.csv", "secciones_25.csv", "secciones_26.csv", "secciones_27.csv", "secciones_28.csv", "secciones_29.csv", "secciones_30.csv", "secciones_31.csv", "secciones_32.csv")
-    edo <- edos[edon]
-    fl <- fls[edon]
-    message(paste("Getting seccion-level 2010 pop. for", edo))
-    c10 <- c("~/Dropbox/data/mapas/seccionesIfe")
-    tmp <- read.csv( paste(c10,edo,fl,sep="/"), header=TRUE, stringsAsFactors = FALSE)
-    pob10 <- data.frame(edon=tmp[,c("ENTIDAD")],
-                        disn=tmp[,c("DISTRITO")],
-                        seccion=tmp[,c("CLAVEGEO")],
-                        ptot=tmp[,c("POBTOT")],
-#                        p18=tmp[,c("P_18YMAS")])
-    pob10$munn <- as.integer(pob10$seccion/100000) - as.integer(pob10$seccion/100000000)*1000
-    pob10$seccion <- pob10$seccion - as.integer(pob10$seccion/10000)*10000
-    if (edon==7) pob10 <- pob10[which(duplicated(pob10$seccion)==FALSE),] # por alguna razón los datos de chiapas vienen duplicados
-    return(pob10)
-}
-
-tmp <- get2010(3)
-head(tmp)
-
-## ## poblacion del censo 2000
-## c00 <- c("/home/eric/Dropbox/data/mapas/seccionesIfe/2000popThatIFEused/secciones.dat.ife.csv")
-## tmp <- read.csv(c00, stringsAsFactors = FALSE)
-## pob00 <- data.frame(edon=tmp[,c("ENT_CLAVE")],
-##                     seccion=tmp[,c("SEC_CLAVE")],
-##                     ptot=tmp[,c("SEC_POBLACION")])
-## rm(tmp)
-
-## # fusiona pob05 y pob10
-## pob <- pob10; colnames(pob) <- c("edon", "disn10", "seccion",  "ptot10", "p1810", "munn")
-## #summary(pob$seccion)
-## #pob$tmp <- pob$edon*10000 + pob$seccion
-## #summary(pob05$seccion); colnames(pob05)
-## #pob05$tmp <- pob05$edon*10000 + pob05$seccion;
-## #tmp <- pob05[,c("tmp", "ptot", "seccion")]; colnames(tmp) <- c("tmp","ptot05", "seccion05")
-## tmp <- pob05[, c("edon","seccion","disn","ptot")]; colnames(tmp) <- c("edon", "seccion", "disn05", "ptot05")
-## pob <- merge(x = pob, y = tmp, by = c("edon","seccion"), all = TRUE)
-## dim(pob05); dim(pob10); dim(pob); # debug
-## pob <- pob[, c("edon","seccion","disn05","disn10","ptot05","ptot10")] # drops munn and p1810
+## ## READ HISTORICAL MAP (MISSING SECCIONES POSSIBLE)
+## d <- read.csv(file = "fuenteAlumnos/coaLoc.csv", stringsAsFactors = FALSE)
+## 
+## # handy function to rename one data.frame's column
+## rename.col <- function(old=NA, new=NA, what=NA){
+##     old <- old; new <- new; what <- what;
+##     colnames(what)[which(colnames(what)==old)] <- new
+##     return(what)
+## }
+## d <- rename.col(old="disn2005", new="disloc2005", what=d)
+## d <- rename.col(old="disn2011", new="disloc2011", what=d)
+## d <- rename.col(old="disn2017", new="disloc2017", what=d)
 ## #
-## # merge pob2000 into pop object
-## colnames(pob00) <- c("edon","seccion","ptot00")
-## pob <- merge(x = pob, y = pob00, by = c("edon","seccion"), all = TRUE)
-## pob <- pob[, c("edon","seccion","disn05","disn10","ptot00","ptot05","ptot10")] # drops munn and p1810
-## drop <- which(pob$edon==0); pob <- pob[-drop,]; rm(drop) # drops state aggregates that came with pob00 
-## #
-## # sections that are absent from one or the anoother population file
-## pob$dcheck <- 0
-## pob$dcheck[which(is.na(pob$ptot00)==TRUE | is.na(pob$ptot05)==TRUE | is.na(pob$ptot10)==TRUE)] <- 1
-## table(pob$dcheck)
-## pob[is.na(pob)==TRUE] <- 0 # cambia los NAs por ceros para las sumas
-## # Las secciones cambiadas involucran a millones de habitantes
-## sum(pob$ptot00[pob$dcheck==1]); sum(pob$ptot05[pob$dcheck==1]); sum(pob$ptot10[pob$dcheck==1])
-## ## # list them by state
-## ## for(i in 1:32){
-## ##     print(paste("edon =", i));
-## ##     print(pob$seccion[pob$edon==i & pob$dcheck==1]);
-## ## }
-## #
-## # pob$disn05 - pob$disn10 # suggests pob05 reports 1997 districts and pob10 reports 2005 districts
+## # ---> NOTE:                                                                         <--- #
+## # ---> open useEqPrep2fillMissSeccionesLocalMaps.r and run manually to spot errors   <--- #
+## # ---> will generate new eq object with full map (incl. state and federal districts) <--- #
+## 
+## write.csv(eq, file = "coaLoc.csv", row.names = FALSE)
+
+
+## get functions to include population
+source(paste(dd, "code/getPop.r", sep = ""))
+pob05 <- get2005(edon=5)
+pob10 <- get2010(edon=5)
+head(pob05)
+head(pob10)
+head(d)
+# add 2005 pop
+d <- merge(x = d, y = pob05[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob05 <- ave(d$ptot, as.factor(son), FUN = sum, na.rm = TRUE)
+d$ptot <- NULL
+# add 2010 pop
+d <- merge(x = d, y = pob10[,c("seccion","ptot")], by = "seccion", all.x = TRUE, all.y = FALSE)
+d$pob10 <- ave(d$ptot, as.factor(son), FUN=sum, na.rm=TRUE)
+d$ptot <- NULL
+
+## # dsi seen from offspring perspective
+## # new district's "father" and district similarity index, cf. Cox & Katz
+## ## READ HISTORICAL MAPS
+## d <- read.csv(file = "coaLoc.csv", stringsAsFactors = FALSE)
+## head(d)
+## son    <- d$disloc2017
+## father <- d$disloc2011
+## N <- max(son, na.rm = TRUE)
+## d$father <- NA
+## d$dsi <- 0
+## for (i in 1:N){
+##     #i <- 1 # debug
+##     sel.n <- which(son==i)                  # secciones in new district
+##     tmp <- table(father[sel.n])
+##     target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+##     d$father[sel.n] <- target
+##     sel.f <- which(father==target) # secciones in father district
+##     sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+##     d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
+## }
+## dsi <- d[duplicated(son)==FALSE,]
+## dsi <- dsi[,c("edon","disloc2017","father","dsi")]
+## head(dsi)
+## dsi <- dsi[order(dsi$disloc2017),]
+## dsi$cab2017 <- c("Acuña", "Piedras Negras", "Sabinas", "San Pedro", "Monclova", "Frontera", "Matamoros", "Torreón", "Torreón", "Torreón", "Torreón", "Ramos Arizpe", "Saltillo", "Saltillo", "Saltillo", "Saltillo")
+## dsi <- dsi[order(dsi$dsi),]
+## write.csv(dsi, file = "simIndex/dist_coa.csv", row.names = FALSE)
+#
+## # dsi seen from parent perspective
+## # new district's "father" and district similarity index, cf. Cox & Katz
+## d$son17 <- NA
+## d$dsi <- 0
+## for (i in 1:16){
+##     #i <- 16 # debug
+##     sel.o <- which(d$disn14==i)                  # secciones in original district
+##     tmp <- table(d$disn17[sel.o])
+##     target <- as.numeric(names(tmp)[tmp==max(tmp)]) 
+##     d$son2017[sel.o] <- target
+##     sel.s <- which(d$disn17==target) # secciones in son district
+##     sel.c <- intersect(sel.o, sel.s) # secciones common to original and son districts
+##     d$dsi[sel.o] <- round( length(sel.c) / (length(sel.o) + length(sel.s) - length(sel.c)) , 3 )
+## }
+## dsi <- d[duplicated(d$disn14)==FALSE, c("disn14","son2017","dsi")]
+## dsi <- dsi[order(dsi$disn14),]
+## dsi$cab14 <- c("Saltillo", "Saltillo", "Saltillo", "Saltillo", "Ramos Arizpe", "Torreón", "Torreón", "Torreón", "Torreón", "San Pedro", "Frontera", "Monclova", "Múzquiz", "Sabinas", "Acuña", "Piedras Negras")
+## dsi <- dsi[order(dsi$dsi),]
+## summary(dsi$dsi)

@@ -16,8 +16,8 @@ setwd(wd)
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
 md2 <- "../" # c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/maps/")
-edo <- "cps"
-edon <- 7
+edo <- "oax"
+edon <- 20
 
 # geospatial data 
 library(spdep); library(maptools); library(OpenStreetMap)
@@ -37,7 +37,7 @@ se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 # a. from seccion2dis map, in order to export into se.map for sub-setting
 #sec2dis <- read.csv("/home/eric/Dropbox/data/mapas/reseccionamiento/equivSecc/tablaEquivalenciasSeccionales1994-2010.2013.csv", stringsAsFactors = FALSE)
 #sec2dis <- sec2dis[sec2dis$edon == 18,]
-sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/cpsLoc.csv", stringsAsFactors = FALSE)
+sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/oaxLoc.csv", stringsAsFactors = FALSE)
 #sec2dis <- read.csv("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc(indig)24Dist.csv", stringsAsFactors = FALSE) # archivo Julia
 colnames(sec2dis)
 # send to seccion map
