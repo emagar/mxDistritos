@@ -42,13 +42,15 @@ sec2dis <- read.csv("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/if
 colnames(sec2dis)
 # send to seccion map
 tmp <- data.frame(SECCION = se.map$seccion)
+dim(tmp)
 tmp$orden <- 1:nrow(tmp)
-head(tmp)
 sec2dis$seccion
 tmp <- merge(x = tmp, y = sec2dis, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+dim(tmp)
 tmp <- tmp[order(tmp$orden),]
-tmp <- tmp[, grep("^dis.+$", colnames(tmp))]
+tmp <- tmp[, grep("^dis.+$|mun|ife", colnames(tmp))]
 #tmp <- tmp[order(tmp$orden), grep("SECCION|^dis.+$", colnames(tmp))]
+colnames(tmp)
 se.map@data <- cbind(se.map@data, tmp)
 rm(tmp)
 # df2006.map <- unionSpatialPolygons(se.map, se.map$disn) # proper way to get federal district objects... if only seccion shapefiles had no problems
@@ -61,7 +63,7 @@ colnames(se.map@data)
 
 # Now the dissolve
 library(rgeos)
-tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2012)
+tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2010)
 tmp <- gUnaryUnion(se.map, id = se.map@data$antonioPerezGomez1)
 plot(tmp)
 ## #
@@ -76,9 +78,9 @@ row.names(tmp) <- as.character(1:length(tmp))
 lu <- data.frame()
 lu <- rbind(lu, se.map@data)
 names(se.map@data)
-lu <- unique(lu$antonioPerezGomez1)
+lu <- unique(lu$disloc2010)
 lu <- as.data.frame(lu)
-colnames(lu) <- "antonioPerezGomez1"  # your data will probably have more than 1 row!
+colnames(lu) <- "disloc2010"  # your data will probably have more than 1 row!
 
 # And add the data back in
 tmp <- SpatialPolygonsDataFrame(tmp, lu)
@@ -87,5 +89,5 @@ tmp <- SpatialPolygonsDataFrame(tmp, lu)
 plot(tmp)
 
 getwd()
-d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/2clean/cps"
-writeOGR(tmp, d, "antonioPerezGomez1", driver="ESRI Shapefile")
+d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/2clean/oax"
+writeOGR(tmp, d, "disloc2010", driver="ESRI Shapefile")
