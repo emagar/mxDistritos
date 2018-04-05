@@ -1,0 +1,13 @@
+La redistritación por grupos indígenas
+
+1. ¿Por qué consolidar tu 8-12% en un solo distrito en vez de varios (packing)? ¿Por qué reducir a una minoría cuando ya controlas el 90% del distrito (cracking)?
+
+2. Situación de hegemonía tipo V.O. Key: el juego está en las nominaciones.
+
+3. Decisión del grupo: u = p*B - C, donde p es la prob de que el grupo obtenga algo en la nominación, B lo que vale ese algo, C los costos. Problema de optimización estándar con teoría de decisiones: en qué distrito ubicas municipios para max(u).
+
+4. ¿Cuál es la forma de p en función del tamaño relativo del grupo? Tratándose de la nominación del diputado (winner-takes-all), parece curva de logit. Puzzle: la minoría nunca obtendrá nada...
+
+5. Pero quizás la nominación de alcaldes y regidores en el partido se asocia con la nominaión del diputado. Una minoría más grande puede vender su apoyo para un candidato a diputado a cambio de regidurías en sus municipios.
+
+6. En municipio con 8 regidurías, la curva de p se vuelve escalonada, con saltos cada 1/8 de población.
