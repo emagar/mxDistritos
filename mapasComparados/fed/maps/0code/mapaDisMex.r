@@ -19,23 +19,23 @@ edo <- c("ags","bc","bcs","cam","coa","col","cps","cua","df","dgo","gua","gue","
 edo <- edo[edon]
 
 # working directory and data/map directories
-path <- "~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/"
-setwd(paste(path, "maps/0code/", sep = ""))
-dd <- "~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/" # data directory
-md <- paste(path, "shp/disfed2018/", sep = "")                 # main map directory (shapefile repo)
-md2 <- paste(path, "maps/", sep = "")                          # will save maps here
+ruta <- "~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados"
+setwd(ruta)
+datdir <- "~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data" # data directory
+mapdir <- "fed/shp/disfed2018"                                    # main map directory (shapefile repo)
+mapdir2 <- "fed/maps"                                             # will save maps here
 
 ###########################
 # get mun names and votes #
 ###########################
-path <- paste(dd, "aymu1977-present.csv", sep = "")
-munvot <- read.csv(file = path, stringsAsFactors=FALSE)
+ruta <- file.path(datdir, "aymu1977-present.csv")
+munvot <- read.csv(file = ruta, stringsAsFactors=FALSE)
 #
 ###############################################
 # seccion-level dip fed votes for 6 elections #
 ###############################################
-path <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
-load(file=paste(path, "elDatForMaps.RData", sep = "")) 
+ruta <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data")
+load(file=file.path(ruta, "elDatForMaps.RData")) 
 
 ###################
 # geospatial data #
@@ -47,8 +47,8 @@ library(rgdal)
 #################
 # secciones map #
 #################
-path <- paste(md, edo, sep = "") # archivo con mapas ine
-se.map <- readOGR(dsn = path, layer = 'SECCION')
+ruta <- file.path(mapdir, edo) # archivo con mapas ine
+se.map <- readOGR(dsn = ruta, layer = 'SECCION')
 summary(se.map)
 # projects to a different datum with long and lat
 se.map <- spTransform(se.map, osm()) # project to osm native Mercator
@@ -57,201 +57,201 @@ se.map <- spTransform(se.map, osm()) # project to osm native Mercator
 # read state borders 1-by-1: uncomment bordering states for map #
 #################################################################
 ed.map <- list()
-## tmp <- paste(md, "ags", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "ags") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$ags <- tmp
 ## #
-## tmp <- paste(md, "bc", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "bc") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$bc <- tmp
 ## #
-## tmp <- paste(md, "bcs", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "bcs") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$bcs <- tmp
 ## #
-## tmp <- paste(md, "cam", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "cam") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$cam <- tmp
 ## #
-## tmp <- paste(md, "coa", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "coa") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$coa <- tmp
 ## #
-## tmp <- paste(md, "col", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "col") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$col <- tmp
 ## #
-## tmp <- paste(md, "cps", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "cps") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$cps <- tmp
 ## #
-## tmp <- paste(md, "cua", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "cua") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$cua <- tmp
 #
-tmp <- paste(md, "df", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "df") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$df <- tmp
 #
-## tmp <- paste(md, "dgo", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "dgo") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$dgo <- tmp
 ## #
-tmp <- paste(md, "gua", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "gua") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$gua <- tmp
 #
-tmp <- paste(md, "gue", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "gue") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$gue <- tmp
 #
-tmp <- paste(md, "hgo", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "hgo") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$hgo <- tmp
 #
-## tmp <- paste(md, "jal", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "jal") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$jal <- tmp
 #
-tmp <- paste(md, "mex", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "mex") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$mex <- tmp
 #
-tmp <- paste(md, "mic", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "mic") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$mic <- tmp
 #
-tmp <- paste(md, "mor", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "mor") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$mor <- tmp
 #
-## tmp <- paste(md, "nay", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "nay") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$nay <- tmp
 ## #
-## tmp <- paste(md, "nl", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "nl") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$nl <- tmp
 ## #
-## tmp <- paste(md, "oax", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "oax") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$oax <- tmp
 #
-tmp <- paste(md, "pue", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "pue") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$pue <- tmp
 #
-tmp <- paste(md, "que", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "que") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$que <- tmp
 #
-## tmp <- paste(md, "qui", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "qui") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$qui <- tmp
 ## #
-## tmp <- paste(md, "san", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "san") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$san <- tmp
 ## #
-## tmp <- paste(md, "sin", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "sin") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$sin <- tmp
 ## #
-## tmp <- paste(md, "son", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "son") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$son <- tmp
 ## #
-## tmp <- paste(md, "tab", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "tab") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$tab <- tmp
 ## #
-## tmp <- paste(md, "tam", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "tam") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$tam <- tmp
 ## #
-tmp <- paste(md, "tla", sep = "") # archivo con mapas ine
+tmp <- file.path(mapdir, "tla") # archivo con mapas ine
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
 tmp <- spTransform(tmp, osm())
 ed.map$tla <- tmp
 #
-## tmp <- paste(md, "ver", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "ver") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$ver <- tmp
 ## #
-## tmp <- paste(md, "yuc", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "yuc") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$yuc <- tmp
 ## #
-## tmp <- paste(md, "zac", sep = "") # archivo con mapas ine
+## tmp <- file.path(mapdir, "zac") # archivo con mapas ine
 ## tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 ## # projects to a different datum with long and lat
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$zac <- tmp
 
 # read municipios
-path <- paste(md, edo, sep = "") # archivo con mapas ine
-mu.map <- readOGR(dsn = path, layer = 'MUNICIPIO')
+ruta <- file.path(mapdir, edo) # archivo con mapas ine
+mu.map <- readOGR(dsn = ruta, layer = 'MUNICIPIO')
 summary(mu.map)
 mu.map$mun <- mu.map$NOMBRE # mun names
 mu.map$mun <- gsub(pattern = "[0-9]+", replacement = "", mu.map$mun) # some names have numbers, drop them
@@ -262,8 +262,8 @@ mu.map <- spTransform(mu.map, osm())
 #######################################
 # read shapefiles distritos federales #
 #######################################
-path <- paste(md, edo, sep = "") 
-df.map <- readOGR(dsn = path, layer = 'DISTRITO')
+ruta <- file.path(mapdir, edo)
+df.map <- readOGR(dsn = ruta, layer = 'DISTRITO')
 # rename columns
 head(df.map)
 sel <- which(colnames(df.map@data)=="distrito")
@@ -275,8 +275,8 @@ df.map <- spTransform(df.map, osm()) # project to osm native Mercator
 ###################
 # read disfed2006 #
 ###################
-path <- paste(md, "../disfed2006/", edo, sep = "") 
-df2006.map <- readOGR(dsn = path, layer = 'DISTRITO')
+ruta <- file.path("fed/shp/disfed2006", edo) 
+df2006.map <- readOGR(dsn = ruta, layer = 'DISTRITO')
 # rename columns
 head(df2006.map)
 sel <- which(colnames(df2006.map@data)=="DISTRITO")
@@ -312,21 +312,29 @@ df2006.map <- spTransform(df2006.map, osm()) # project to osm native Mercator
 ## #
 
 ## # read cabeceras distritales (via vocal ejecutivo)
-## tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
+## tmp <- file.path(mapdir, edo, # archivo con mapas rojano
 ## cabDis <- readOGR(dsn = tmp, layer = 'VOCAL_EJECUTIVO_DISTRITAL')
 ## # projects to a different datum with long and lat
 ## cabDis <- spTransform(cabDis, osm())
 ## #
-## cabDisNames <- read.csv(paste(wd2, "cabeceras2006.csv", sep = ""), stringsAsFactors = FALSE)
+## cabDisNames <- read.csv(file.path(wd2, "cabeceras2006.csv"), stringsAsFactors = FALSE)
 
 ########################
 # add casillas in 2012 #
 ########################
-path <- paste(md, "../disfed2006/", edo, sep = "") # archivo con mapas rojano
-cas.map <- readOGR(dsn = path, layer = 'CASILLA')
+ruta <- file.path(mapdir, "../disfed2006", edo) # archivo con mapas rojano
+cas.map <- readOGR(dsn = ruta, layer = 'CASILLA')
 # projects to a different datum with long and lat
 cas.map <- spTransform(cas.map, osm()) # project to osm native Mercator
-#
+
+#############################################################
+# add distritos locales: change layer year to match state's #
+#############################################################
+getwd()
+ruta <- file.path(mapdir, "../../../loc/shp/", edo, sep = "")
+dl.map <- readOGR(dsn = ruta, layer = 'disloc2018')
+
+
 # add districts for subsetting
 tmp <- cas.map@data; tmp$ord <- 1:nrow(tmp)
 tmp <- merge(x = tmp, y = se.map[,c("SECCION","disfed2006","disfed2018","disloc1996","disloc2018")], by = "SECCION", all.x = TRUE, all.y = FALSE)
@@ -490,9 +498,9 @@ df2006.map$disrri15 <- paste(df2006.map$DISTRITO, " (", df2006.map$rris2015, ")"
 ## # add centroids
 ## tmp <- coordinates(se.map)
 ## tmp <- data.frame(seccion=se.map$SECCION, edon=se.map$ENTIDAD, disn=se.map$disn, munn=se.map$MUNICIPIO, bastion=se.map$bastion2, ncasillas=sqrt(se.map$ncasillas), lon=tmp[,1], lat=tmp[,2], stringsAsFactors = FALSE)
-## write.csv(tmp, file = paste(md, edo, "/magar.csv", sep = "") )
+## write.csv(tmp, file = paste(mapdir, edo, "/magar.csv", sep = "") )
 ## tmp <- c("\"Integer\"",    "\"Integer\"",    "\"Integer\"",      "\"Integer\"",       "\"Integer\"",        "\"String\"",          "\"Integer\"",                   "\"Real\"", "\"Real\"") #,        "\"Integer\"",      "\"String\"")
-## write(tmp, file = paste(md, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
+## write(tmp, file = paste(mapdir, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
 
 
 # grafica distritos locales 1 por 1
@@ -507,7 +515,7 @@ dn <- 29                  # elegir un distrito
 ## for (dn in 30:45){
 ##     print(paste("disn =", dn))
 ## # plot state map with highlighted district
-#png(file = paste(md2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
+#png(file = paste(mapdir2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 #par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (mapa local 2018)")#, bg = "lightblue")
@@ -555,7 +563,7 @@ xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
 bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
 bg <- bg.os
 #
-#png(file = paste(md2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
+#png(file = paste(mapdir2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  df.map$cab[which(df.map$disloc==dn)]
 tmp2 <- df.map$dsi[which(df.map$disloc==dn)]
@@ -657,7 +665,7 @@ addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "
 ## grafica municipios 1 por 1 ##
 ################################
 ################################
-md3 <- "../../../mun/maps/"
+mapdir3 <- "../../../mun/maps/"
 # (use 1984 long/lat for this map when mercator projection was chosen)
 p84 <- function(x = NA){
     x <- x
@@ -669,7 +677,7 @@ munn <- 1                  # elegir un municipio
 ## for (munn in 1:M){
 ##     print(paste("munn =", munn))
 ## # plot state map with highlighted district
-#png(file = paste(md3, edo, munn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
+#png(file = paste(mapdir3, edo, munn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 #par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
 plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (municipios)")#, bg = "lightblue")
@@ -717,7 +725,7 @@ xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
 bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
 bg <- bg.os
 #
-#png(file = paste(md3, edo, munn, "-2.png", sep = ""))
+#png(file = paste(mapdir3, edo, munn, "-2.png", sep = ""))
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 tmp <-  as.character(mu.map$nombre[which(mu.map$municipio==munn)])
 plot(mu.map[mu.map$municipio==munn,], axes = TRUE, main = paste("México ", munn, " - ", tmp, sep = ""))
