@@ -303,3 +303,6 @@ acs-*.bib
 
 # libreoffice backups
 .~lock*
+
+# emacs backups
+*.*~
