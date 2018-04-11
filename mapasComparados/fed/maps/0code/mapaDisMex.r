@@ -294,7 +294,6 @@ df2006.map <- spTransform(df2006.map, osm()) # project to osm native Mercator
 ## df.map@data <- merge(x = df.map@data, y = dsi, by.x = "disloc", by.y = "disloc2018", all.x = TRUE, all.y = FALSE)
 ## rm(dsi)
 
-## #### DROP????
 ## # read comparative district maps
 ## # a. from seccion2dis map, in order to export into se.map for sub-setting
 ## #sec2dis <- read.csv("/home/eric/Dropbox/data/mapas/reseccionamiento/equivSecc/tablaEquivalenciasSeccionales1994-2010.2013.csv", stringsAsFactors = FALSE)
@@ -319,57 +318,47 @@ df2006.map <- spTransform(df2006.map, osm()) # project to osm native Mercator
 ## #
 ## cabDisNames <- read.csv(file.path(wd2, "cabeceras2006.csv"), stringsAsFactors = FALSE)
 
+#############################################################
+# add distritos locales: change layer year to match state's #
+#############################################################
+ruta <- file.path("loc/shp", edo)
+dl.map <- readOGR(dsn = ruta, layer = 'disloc2018')
+# projects to a different datum with long and lat
+dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
+
+## HASTA AQUI HE REVISADO EL CODIGO, 11-4-2018 ##
+
 ########################
 # add casillas in 2012 #
 ########################
-ruta <- file.path(mapdir, "../disfed2006", edo) # archivo con mapas rojano
+ruta <- file.path("fed/shp/disfed2006", edo) # archivo con mapas rojano
 cas.map <- readOGR(dsn = ruta, layer = 'CASILLA')
 # projects to a different datum with long and lat
 cas.map <- spTransform(cas.map, osm()) # project to osm native Mercator
 
-#############################################################
-# add distritos locales: change layer year to match state's #
-#############################################################
-getwd()
-ruta <- file.path(mapdir, "../../../loc/shp/", edo, sep = "")
-dl.map <- readOGR(dsn = ruta, layer = 'disloc2018')
-
-
-# add districts for subsetting
+# add federal districts for subsetting
 tmp <- cas.map@data; tmp$ord <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = se.map[,c("SECCION","disfed2006","disfed2018","disloc1996","disloc2018")], by = "SECCION", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = se.map[,c("seccion","distrito")], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$ord),]
 cas.map@data <- tmp
-#
+
 # drop casillas from missing secciones to avoid indeterminate subsetting
-sel <- which(is.na(cas.map$disloc2018)==TRUE)
+sel <- which(is.na(cas.map$distrito)==TRUE)
 if (length(sel)>0) cas.map <- cas.map[-sel,] # drop missing cases
 rm(sel)
 
 # add ncasillas in 2012 to seccion map
-tmp <- data.frame(SECCION = se.map$SECCION)
+tmp <- data.frame(seccion = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon==edon, c("seccion","e12")], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
-tmp <- tmp[order(tmp$orden), c("SECCION","e12")]; 
+tmp <- merge(x = tmp, y = ncasillas[ncasillas$edon==edon, c("seccion","e12")], by = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- tmp[order(tmp$orden), c("seccion","e12")]; 
 se.map$ncasillas <- tmp$e12
-# make colors
-library(RColorBrewer)
-nclr <- 6                                    #CATEGORÍAS DE COLOR (MIN=3 MAX=9)
-purples <- brewer.pal(nclr,"Purples")            #GENERA CODIGOS DE COLOR QUE CRECEN CON GRADO
-#display.brewer.all(n=NULL, type="all", select=NULL, exact.n=TRUE, colorblindFriendly=TRUE)
-library(plyr)
-se.map$ncascol[se.map$ncasillas==1] <- purples[1]
-se.map$ncascol[se.map$ncasillas==2] <- purples[2]
-se.map$ncascol[se.map$ncasillas>=3  & se.map$ncasillas<=5]  <- purples[3]
-se.map$ncascol[se.map$ncasillas>=6  & se.map$ncasillas<=10] <- purples[4]
-se.map$ncascol[se.map$ncasillas>=11 & se.map$ncasillas<=20] <- purples[5]
-se.map$ncascol[se.map$ncasillas>=21]                        <- purples[6]
 
 # add nwin to seccion map
-tmp <- data.frame(SECCION = se.map$SECCION)
+tmp <- data.frame(seccion = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = nwin[nwin$edon==edon,], by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
-tmp <- tmp[order(tmp$orden), c("SECCION","pan","pri","prd")]
+tmp <- merge(x = tmp, y = nwin[nwin$edon==edon,], by = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- tmp[order(tmp$orden), c("seccion","pan","pri","prd")]
 se.map$nwinpan <- tmp$pan
 se.map$nwinpri <- tmp$pri
 se.map$nwinprd <- tmp$prd
@@ -476,7 +465,7 @@ tmp <- votPobDis0018$pob.distMap2006
 tmp <- tmp[tmp$edon==edon,]
 tmp1 <- df2006.map@data
 tmp1$ord <- 1:nrow(tmp1)
-tmp1 <- merge(x=tmp1, y=tmp, by.x="DISTRITO", by.y="disn")
+tmp1 <- merge(x=tmp1, y=tmp, by.x="distrito", by.y="disn")
 tmp1[, grep("rri", colnames(tmp1))] <- round(tmp1[, grep("rri", colnames(tmp1))],2)
 tmp1 <- tmp1[order(tmp1$ord), grep("ptot|rri", colnames(tmp1))]
 df2006.map@data <- cbind(df2006.map@data, tmp1)
