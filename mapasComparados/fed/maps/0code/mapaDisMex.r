@@ -21,21 +21,19 @@ edo <- edo[edon]
 # working directory and data/map directories
 ruta <- "~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados"
 setwd(ruta)
-datdir <- "~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data" # data directory
 mapdir <- "fed/shp/disfed2018"                                    # main map directory (shapefile repo)
 mapdir2 <- "fed/maps"                                             # will save maps here
 
-###########################
-# get mun names and votes #
-###########################
-ruta <- file.path(datdir, "aymu1977-present.csv")
-munvot <- read.csv(file = ruta, stringsAsFactors=FALSE)
-#
+## ###########################
+## # get mun names and votes #
+## ###########################
+## ruta <- "~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/aymu1977-present.csv"
+## munvot <- read.csv(file = ruta, stringsAsFactors=FALSE)
+
 ###############################################
 # seccion-level dip fed votes for 6 elections #
 ###############################################
-ruta <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data")
-load(file=file.path(ruta, "elDatForMaps.RData")) 
+load(file="fed/data/elDatForMaps.RData") # "~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data" 
 
 ###################
 # geospatial data #
@@ -325,8 +323,6 @@ ruta <- file.path("loc/shp", edo)
 dl.map <- readOGR(dsn = ruta, layer = 'disloc2018')
 # projects to a different datum with long and lat
 dl.map <- spTransform(dl.map, osm()) # project to osm native Mercator
-
-## HASTA AQUI HE REVISADO EL CODIGO, 11-4-2018 ##
 
 ########################
 # add casillas in 2012 #
