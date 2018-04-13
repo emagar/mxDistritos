@@ -253,7 +253,7 @@ ed.map$tla <- tmp
 ruta <- file.path(mapdir, edo) # archivo con mapas ine
 mu.map <- readOGR(dsn = ruta, layer = 'MUNICIPIO')
 summary(mu.map)
-mu.map$mun <- mu.map$NOMBRE # mun names
+mu.map$mun <- mu.map$nombre # mun names
 mu.map$mun <- gsub(pattern = "[0-9]+", replacement = "", mu.map$mun) # some names have numbers, drop them
 # may need to shorten mun names...
 # projects to a different datum with long and lat
@@ -364,7 +364,10 @@ se.map$nwinpri <- tmp$pri
 se.map$nwinprd <- tmp$prd
 rm(tmp)
 #
-# make colors
+###########################################################
+# make colors                                             #
+# need to change left to exclude morena victories in 2015 # <- OJO
+###########################################################
 library(RColorBrewer)
 nclr <- 7                                    #CATEGORÍAS DE COLOR (MIN=3 MAX=9)
 blues <- brewer.pal(nclr,"Blues")            #GENERA CODIGOS DE COLOR QUE CRECEN CON GRADO
@@ -389,8 +392,10 @@ se.map$bastion[se.map$nwinprd==4] <- yellows[4]
 se.map$bastion[se.map$nwinprd==5] <- yellows[5]
 se.map$bastion[se.map$nwinprd==6] <- yellows[6]
 
-# add seccion volat 2012-2105 = max change
-# add lisnom2015
+############################################
+# add seccion volat 2012-2105 = max change #
+# add lisnom2015                           #
+############################################
 tmp1 <- v12[v12$edon==edon,]
 tmp1$pri <- tmp1$pri + tmp1$pric; tmp1 <- tmp1[, c("seccion","pan","pri","prdc","pvem","panal")]
 tmp1$pt <- tmp1$mc <- tmp1$morena <- tmp1$ph <- tmp1$ps <- tmp1$indep1 <- tmp1$indep2 <- 0
@@ -413,64 +418,66 @@ tmp <- tmp[order(tmp$orden),]
 se.map$volat1215 <- tmp$volat
 se.map$ln15 <- tmp$lisnom
 #
-# add seccion fch, epn, amlo
-# handy function to sort one data frame by order of another, matching data frame
-sortBy <- function(target, By){
-    t <- target; b <- By;
-    do.call(rbind, lapply(seq_len(nrow(b)), 
-            function(i) as.character(unlist(t[i,])[order(unlist(-b[i,]))]))) # change to -b if decreasing wished
-}
-# 2006
-tmpv <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/elecReturns/datosBrutos/resultSecciones/prSeccion2006.csv", stringsAsFactors = FALSE)
-tmpv <- tmpv[tmpv$edon==edon,]
-tmpv$edon <- tmpv$disn <- tmpv$munn <- tmpv$id_elec <- tmpv$nr <- tmpv$nul <- tmpv$tot <- tmpv$lisnom <- NULL
-colnames(tmpv)[grep("pan$", colnames(tmpv))] <- "fch"
-colnames(tmpv)[grep("apm", colnames(tmpv))] <- "pri"
-colnames(tmpv)[grep("pbt", colnames(tmpv))] <- "amlo"
-tmpv2 <- tmpv[,-1] # votes only
-etiq <- data.frame(matrix(rep(colnames(tmpv2), nrow(tmpv2)), nrow=nrow(tmpv2), byrow = TRUE), stringsAsFactors = FALSE)
-etiq <- sortBy(target = etiq, By = tmpv2)
-tmpv2 <- t(apply(tmpv2, 1, function(x) sort(x, decreasing = TRUE)))
-#
-pres <- data.frame(seccion=tmpv$seccion, win06p=etiq[,1], mg06p=round( (tmpv2[,1] - tmpv2[,2])/rowSums(tmpv2), 3), fch=round(tmpv$fch/rowSums(tmpv2), 3), amlo06=round(tmpv$amlo/rowSums(tmpv2), 3))
-#
-tmp <- data.frame(SECCION = se.map$SECCION)
-tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = pres, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
-tmp <- tmp[order(tmp$orden),]
-#
-# 2012
-tmpv <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/elecReturns/datosBrutos/resultSecciones/prSeccion2012.csv", stringsAsFactors = FALSE)
-tmpv <- tmpv[tmpv$edon==edon,]
-tmpv$edon <- tmpv$disn <- tmpv$munn <- tmpv$urbrur <- tmpv$nr <- tmpv$nul <- tmpv$lisnom <- NULL
-tmpv$amlo <- tmpv$prd + tmpv$pt + tmpv$mc + tmpv$prdptmc + tmpv$prdpt + tmpv$prdmc + tmpv$ptmc
-tmpv$epn <- tmpv$pri + tmpv$pvem + tmpv$pripvem
-tmpv$prd <- tmpv$pt <- tmpv$mc <- tmpv$prdptmc <- tmpv$prdpt <- tmpv$prdmc <- tmpv$ptmc <- tmpv$pri <- tmpv$pvem <- tmpv$pripvem <- NULL
-tmpv2 <- tmpv[,-1] # votes only
-etiq <- data.frame(matrix(rep(colnames(tmpv2), nrow(tmpv2)), nrow=nrow(tmpv2), byrow = TRUE), stringsAsFactors = FALSE)
-etiq <- sortBy(target = etiq, By = tmpv2)
-tmpv2 <- t(apply(tmpv2, 1, function(x) sort(x, decreasing = TRUE)))
-#
-pres <- data.frame(seccion=tmpv$seccion, win12p=etiq[,1], mg12p=round( (tmpv2[,1] - tmpv2[,2])/rowSums(tmpv2), 3), epn=round(tmpv$epn/rowSums(tmpv2), 3), amlo12=round(tmpv$amlo/rowSums(tmpv2), 3))
-tmp <- merge(x = tmp, y = pres, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
-tmp <- tmp[order(tmp$orden),]
-#
-se.map@data <- cbind(se.map@data, tmp)
-colnames(se.map@data)
-rm(tmp, tmp1, tmp2, tmp3, tmpv)
+## ##################################################################################
+## # add seccion fch, epn, amlo                                                     #
+## # handy function to sort one data frame by order of another, matching data frame #
+## ##################################################################################
+## sortBy <- function(target, By){
+##     t <- target; b <- By;
+##     do.call(rbind, lapply(seq_len(nrow(b)), 
+##             function(i) as.character(unlist(t[i,])[order(unlist(-b[i,]))]))) # change to -b if decreasing wished
+## }
+## # 2006
+## tmpv <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/elecReturns/datosBrutos/resultSecciones/prSeccion2006.csv", stringsAsFactors = FALSE)
+## tmpv <- tmpv[tmpv$edon==edon,]
+## tmpv$edon <- tmpv$disn <- tmpv$munn <- tmpv$id_elec <- tmpv$nr <- tmpv$nul <- tmpv$tot <- tmpv$lisnom <- NULL
+## colnames(tmpv)[grep("pan$", colnames(tmpv))] <- "fch"
+## colnames(tmpv)[grep("apm", colnames(tmpv))] <- "pri"
+## colnames(tmpv)[grep("pbt", colnames(tmpv))] <- "amlo"
+## tmpv2 <- tmpv[,-1] # votes only
+## etiq <- data.frame(matrix(rep(colnames(tmpv2), nrow(tmpv2)), nrow=nrow(tmpv2), byrow = TRUE), stringsAsFactors = FALSE)
+## etiq <- sortBy(target = etiq, By = tmpv2)
+## tmpv2 <- t(apply(tmpv2, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## pres <- data.frame(seccion=tmpv$seccion, win06p=etiq[,1], mg06p=round( (tmpv2[,1] - tmpv2[,2])/rowSums(tmpv2), 3), fch=round(tmpv$fch/rowSums(tmpv2), 3), amlo06=round(tmpv$amlo/rowSums(tmpv2), 3))
+## #
+## tmp <- data.frame(seccion = se.map$seccion)
+## tmp$orden <- 1:nrow(tmp)
+## tmp <- merge(x = tmp, y = pres, by = "seccion", all.x = TRUE, all.y = FALSE)
+## tmp <- tmp[order(tmp$orden),]
+## #
+## # 2012
+## tmpv <- read.csv(file = "/home/eric/Desktop/data/elecs/MXelsCalendGovt/elecReturns/datosBrutos/resultSecciones/prSeccion2012.csv", stringsAsFactors = FALSE)
+## tmpv <- tmpv[tmpv$edon==edon,]
+## tmpv$edon <- tmpv$disn <- tmpv$munn <- tmpv$urbrur <- tmpv$nr <- tmpv$nul <- tmpv$lisnom <- NULL
+## tmpv$amlo <- tmpv$prd + tmpv$pt + tmpv$mc + tmpv$prdptmc + tmpv$prdpt + tmpv$prdmc + tmpv$ptmc
+## tmpv$epn <- tmpv$pri + tmpv$pvem + tmpv$pripvem
+## tmpv$prd <- tmpv$pt <- tmpv$mc <- tmpv$prdptmc <- tmpv$prdpt <- tmpv$prdmc <- tmpv$ptmc <- tmpv$pri <- tmpv$pvem <- tmpv$pripvem <- NULL
+## tmpv2 <- tmpv[,-1] # votes only
+## etiq <- data.frame(matrix(rep(colnames(tmpv2), nrow(tmpv2)), nrow=nrow(tmpv2), byrow = TRUE), stringsAsFactors = FALSE)
+## etiq <- sortBy(target = etiq, By = tmpv2)
+## tmpv2 <- t(apply(tmpv2, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## pres <- data.frame(seccion=tmpv$seccion, win12p=etiq[,1], mg12p=round( (tmpv2[,1] - tmpv2[,2])/rowSums(tmpv2), 3), epn=round(tmpv$epn/rowSums(tmpv2), 3), amlo12=round(tmpv$amlo/rowSums(tmpv2), 3))
+## tmp <- merge(x = tmp, y = pres, by = "seccion", all.x = TRUE, all.y = FALSE)
+## tmp <- tmp[order(tmp$orden),]
+## #
+## se.map@data <- cbind(se.map@data, tmp)
+## colnames(se.map@data)
+## rm(tmp, tmp1, tmp2, tmp3, tmpv)
 
-# add district ptot, rri proj at each election
-load(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/git-repo/mex-open-map/data/votPobDis0018.RData")
-tmp <- votPobDis0018$pob.distMap2006
-tmp <- tmp[tmp$edon==edon,]
-tmp1 <- df2006.map@data
-tmp1$ord <- 1:nrow(tmp1)
-tmp1 <- merge(x=tmp1, y=tmp, by.x="distrito", by.y="disn")
-tmp1[, grep("rri", colnames(tmp1))] <- round(tmp1[, grep("rri", colnames(tmp1))],2)
-tmp1 <- tmp1[order(tmp1$ord), grep("ptot|rri", colnames(tmp1))]
-df2006.map@data <- cbind(df2006.map@data, tmp1)
-df2006.map$disrri06 <- paste(df2006.map$DISTRITO, " (", df2006.map$rris2006, ")", sep="")
-df2006.map$disrri15 <- paste(df2006.map$DISTRITO, " (", df2006.map$rris2015, ")", sep="")
+## # add district ptot, rri proj at each election
+## load(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/git-repo/mex-open-map/data/votPobDis0018.RData")
+## tmp <- votPobDis0018$pob.distMap2006
+## tmp <- tmp[tmp$edon==edon,]
+## tmp1 <- df2006.map@data
+## tmp1$ord <- 1:nrow(tmp1)
+## tmp1 <- merge(x=tmp1, y=tmp, by.x="distrito", by.y="disn")
+## tmp1[, grep("rri", colnames(tmp1))] <- round(tmp1[, grep("rri", colnames(tmp1))],2)
+## tmp1 <- tmp1[order(tmp1$ord), grep("ptot|rri", colnames(tmp1))]
+## df2006.map@data <- cbind(df2006.map@data, tmp1)
+## df2006.map$disrri06 <- paste(df2006.map$DISTRITO, " (", df2006.map$rris2006, ")", sep="")
+## df2006.map$disrri15 <- paste(df2006.map$DISTRITO, " (", df2006.map$rris2015, ")", sep="")
                          
 ## # export attributes for maps with other software
 ## se.map$bastion2 <- "swing"
@@ -491,23 +498,23 @@ df2006.map$disrri15 <- paste(df2006.map$DISTRITO, " (", df2006.map$rris2015, ")"
 ## tmp <- c("\"Integer\"",    "\"Integer\"",    "\"Integer\"",      "\"Integer\"",       "\"Integer\"",        "\"String\"",          "\"Integer\"",                   "\"Real\"", "\"Real\"") #,        "\"Integer\"",      "\"String\"")
 ## write(tmp, file = paste(mapdir, edo, "/magar.csvt", sep = ""), ncolumns = length(tmp), sep = "," )
 
-
-# grafica distritos locales 1 por 1
-# (use 1984 long/lat for this map when mercator projection was chosen)
+########################################################################
+# grafica distritos 1 por 1                                            #
+# (use 1984 long/lat for this map when mercator projection was chosen) #
+########################################################################
 p84 <- function(x = NA){
     x <- x
     x <- spTransform(x, CRS("+proj=longlat +datum=WGS84"))
 }
 portray <- se.map$bastion  # elegir qué reportará el mapa 2
-portray2 <- se.map$ncascol # elegir qué reportará el mapa 3
-dn <- 29                  # elegir un distrito
-## for (dn in 30:45){
+dn <- 10                  # elegir un distrito
+## for (dn in 1:41){
 ##     print(paste("disn =", dn))
 ## # plot state map with highlighted district
-#png(file = paste(mapdir2, edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
+#png(file = paste(mapdir2, "/", edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 #par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (mapa local 2018)")#, bg = "lightblue")
+plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (distritos federales 2018)")#, bg = "lightblue")
 #plot(p84(ed.map$df), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$pue), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$hgo), col = "white", add = TRUE, lty = 3)
@@ -518,14 +525,14 @@ plot(p84(ed.map$que), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$gua), col = "white", add = TRUE, lty = 3)
 # 
 plot(p84(df.map), add = TRUE, border = "gray")
-plot(p84(df.map[df.map$disloc==dn,]), add = TRUE, border = "gray", col = "hotpink")
+plot(p84(df.map[df.map$disfed==dn,]), add = TRUE, border = "gray", col = "hotpink")
 # thick state border
 plot(p84(ed.map$mex), add = TRUE, lwd = 3)
 plot(p84(ed.map$mex), add = TRUE, border = "red", lty = 3, lwd = 2)
 ## points(cabDis, pch = 3) # cabeceras distritales
 ## points(cabDis)
 ## points(cabDis, pch = 19, cex = .75, col = "orange")
-text(coordinates(p84(df.map)), labels=df.map$disloc, cex=.85)
+text(coordinates(p84(df.map)), labels=df.map$disfed, cex=.85)
 #
 # add neighboring states
 text( x = -99.15, y = 19.3, labels = "CDMX", col = "darkgray", cex = .9 )
@@ -542,7 +549,7 @@ text( x = -100.1, y = 20.3, labels = "QUERETARO", col = "darkgray", cex = .9 )
 # plot same distrito only
 # need to merge disn info into mun and sec object, in order to select just those belonging to dis
 # get openstreetmap background
-m <- p84(df.map[df.map$disloc==dn,])  # subsetted map
+m <- p84(df.map[df.map$disfed==dn,])  # subsetted map
 b <- as.data.frame(m@bbox)
 # gets xx degrees more than bbox (decimal defines share of max range)
 xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
@@ -552,11 +559,11 @@ xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
 bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
 bg <- bg.os
 #
-#png(file = paste(mapdir2, edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
+#png(file = paste(mapdir2, "/", edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
-tmp <-  df.map$cab[which(df.map$disloc==dn)]
-tmp2 <- df.map$dsi[which(df.map$disloc==dn)]
-plot(df.map[df.map$disloc==dn,], axes = TRUE, main = paste("México ", dn, " - ", tmp, " (DSI = ", tmp2, ")", sep = ""))
+tmp <-  df.map$cab[which(df.map$disfed==dn)]
+tmp2 <- df.map$dsi[which(df.map$disfed==dn)]
+plot(df.map[df.map$disfed==dn,], axes = TRUE, main = paste("México ", dn, " - ", tmp, sep = ""))
 plot(bg, add = TRUE)
 #plot(df.map[df.map$disloc==dn,], lwd = 5, add = TRUE) # drop
 plot(ed.map$mex, add = TRUE)
@@ -567,7 +574,7 @@ plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color
 #
 #
 #plot(ed.map$nay, add = TRUE, lty = 1, col = rgb(1,1,1, alpha = .5)) # blurs colors inside state
-plot(se.map[se.map$disloc2018==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$disloc2018==dn], .5)) # color nwin
+plot(se.map[se.map$disfed==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$disfed==dn], .5)) # color nwin
 # add casillas
 points(cas.map, pch = 20, col = "white" , cex = .3)
 #points(cas.map[cas.map$disloc2017==dn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
@@ -581,14 +588,14 @@ plot(ed.map$gue, add = TRUE, lty = 1)
 plot(ed.map$mor, add = TRUE, lty = 1)
 plot(ed.map$mic, add = TRUE, lty = 1)
 #
-sel <- which(dl1996.map$disloc==df.map$father[df.map$disloc==dn])
-plot(dl1996.map[sel,], add = TRUE, lwd = 6, border = "red")
+## sel <- which(df2006.map$disfed==df.map$father[df.map$disloc==dn]) # <- OJO: falta determinar father
+## plot(df2006.map[sel,], add = TRUE, lwd = 6, border = "red")
 #
-plot(df.map[df.map$disloc==dn,], add = TRUE, lwd = 4)
+plot(df.map[df.map$disfed==dn,], add = TRUE, lwd = 4)
 plot(mu.map, add = TRUE, border = "green", lwd = 1)
 plot(mu.map, add = TRUE, lwd = 1, lty = 3)
-plot(ed.map$tla, add = TRUE, lwd = 3)
-plot(ed.map$tla, add = TRUE, border = "red", lty = 3, lwd = 2)
+plot(ed.map$mex, add = TRUE, lwd = 3)
+plot(ed.map$mex, add = TRUE, border = "red", lty = 3, lwd = 2)
 ## points(coordinates(cab), pch = 19, col = "white", cex = .5)
 ## points(coordinates(cab), pch = 1, col = "green", cex = .75)
 text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
@@ -602,7 +609,7 @@ lp <- c("bottomright", #1
         "bottomright", #7 
         "bottomright", #8 
         "bottomright", #9 
-        "bottomleft",  #10
+        "bottomright", #10
         "bottomright", #11
         "bottomright", #12
         "bottomright", #13
@@ -633,256 +640,12 @@ lp <- c("bottomright", #1
         "bottomright", #38
         "bottomright", #39
         "bottomleft",  #40
-        "bottomleft",  #41
-        "bottomright", #42
-        "topleft",     #43
-        "bottomleft",  #44
-        "bottomright") #45
+        "bottomleft")  #41
 legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
 legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
 library(prettymapr)
 addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
 addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
-#dev.off()
-#}
-
-
-
-
-################################
-################################
-## grafica municipios 1 por 1 ##
-################################
-################################
-mapdir3 <- "../../../mun/maps/"
-# (use 1984 long/lat for this map when mercator projection was chosen)
-p84 <- function(x = NA){
-    x <- x
-    x <- spTransform(x, CRS("+proj=longlat +datum=WGS84"))
-}
-portray <- se.map$bastion  # elegir qué reportará el mapa 2
-M <- nrow(mu.map@data)    # number of municipalities
-munn <- 1                  # elegir un municipio
-## for (munn in 1:M){
-##     print(paste("munn =", munn))
-## # plot state map with highlighted district
-#png(file = paste(mapdir3, edo, munn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
-par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
-#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-plot(p84(ed.map$mex), col = "white", axes = TRUE, main = "Estado de México (municipios)")#, bg = "lightblue")
-#plot(p84(ed.map$df), col = "white", add = TRUE, lty = 3)
-plot(p84(ed.map$pue), col = "white", add = TRUE, lty = 3)
-plot(p84(ed.map$hgo), col = "white", add = TRUE, lty = 3)
-plot(p84(ed.map$mor), col = "white", add = TRUE, lty = 3)
-plot(p84(ed.map$gue), col = "white", add = TRUE, lty = 3)
-plot(p84(ed.map$mic), col = "white", add = TRUE, lty = 3)
-plot(p84(ed.map$que), col = "white", add = TRUE, lty = 3)
-plot(p84(ed.map$gua), col = "white", add = TRUE, lty = 3)
-# 
-plot(p84(mu.map), add = TRUE, border = "gray")
-plot(p84(mu.map[mu.map$municipio==munn,]), add = TRUE, border = "black", col = "hotpink")
-# thick state border
-plot(p84(ed.map$mex), add = TRUE, lwd = 3)
-plot(p84(ed.map$mex), add = TRUE, border = "red", lty = 3, lwd = 2)
-## points(cabDis, pch = 3) # cabeceras distritales
-## points(cabDis)
-## points(cabDis, pch = 19, cex = .75, col = "orange")
-text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.85)
-#
-# add neighboring states
-text( x = -99.15,  y = 19.3,  labels = "CDMX",       col = "darkgray", cex = .9 )
-text( x = -99,     y = 20.2,  labels = "HIDALGO",    col = "darkgray", cex = .9 )
-text( x = -98.58,  y = 19.52, labels = "TLAX.",      col = "darkgray", cex = .9, srt = -25)
-text( x = -98.55,  y = 18.6,  labels = "PUEBLA",     col = "darkgray", cex = .9, srt = -90)
-text( x = -99.1,   y = 18.75, labels = "MORELOS",    col = "darkgray", cex = .9 )
-text( x = -99.8,   y = 18.4,  labels = "GUERRERO",   col = "darkgray", cex = .9 )
-text( x = -100.5,  y = 19.5,  labels = "MICHOACAN",  col = "darkgray", cex = .9 )
-text( x = -100.55, y = 20.25, labels = "GUANAJUATO", col = "darkgray", cex = .9 )
-text( x = -100.1,  y = 20.3,  labels = "QUERETARO",  col = "darkgray", cex = .9 )
-#dev.off()
-
-# plot same municipio only
-# need to merge disn info into mun and sec object, in order to select just those belonging to dis
-# get openstreetmap background
-m <- p84(mu.map[mu.map$municipio==munn,])  # subsetted map
-b <- as.data.frame(m@bbox)
-# gets xx degrees more than bbox (decimal defines share of max range)
-xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
-#bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
-#bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
-#bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
-bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
-bg <- bg.os
-#
-#png(file = paste(mapdir3, edo, munn, "-2.png", sep = ""))
-par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
-tmp <-  as.character(mu.map$nombre[which(mu.map$municipio==munn)])
-plot(mu.map[mu.map$municipio==munn,], axes = TRUE, main = paste("México ", munn, " - ", tmp, sep = ""))
-plot(bg, add = TRUE)
-#plot(df.map[df.map$disloc==munn,], lwd = 5, add = TRUE) # drop
-plot(ed.map$mex, add = TRUE)
-library(scales) # has function alpha()
-plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color nwin
-# plot(se.map[se.map$disn==munn,], add = TRUE, border = "darkgray", col = portray[se.map$disn==munn]) # color nwin -- se.map$disn is disfed
-#plot(ffcc, add = TRUE, lwd = .75)
-#
-#
-#plot(ed.map$nay, add = TRUE, lty = 1, col = rgb(1,1,1, alpha = .5)) # blurs colors inside state
-plot(se.map[se.map$MUNICIPIO==munn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$MUNICIPIO==munn], .5)) # color nwin
-# add casillas
-points(cas.map, pch = 20, col = "white" , cex = .3)
-#points(cas.map[cas.map$disloc2017==munn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
-#
-#
-plot(ed.map$que, add = TRUE, lty = 1)
-plot(ed.map$hgo, add = TRUE, lty = 1)
-plot(ed.map$tla, add = TRUE, lty = 1)
-plot(ed.map$pue, add = TRUE, lty = 1)
-plot(ed.map$gue, add = TRUE, lty = 1)
-plot(ed.map$mor, add = TRUE, lty = 1)
-plot(ed.map$mic, add = TRUE, lty = 1)
-#
-plot(df.map, add = TRUE, lwd = 4)
-#
-plot(mu.map, add = TRUE, border = "green", lwd = 1)
-plot(mu.map, add = TRUE, lwd = 1, lty = 3)
-#
-plot(ed.map$mex, add = TRUE, lwd = 3)
-plot(ed.map$mex, add = TRUE, border = "red", lty = 3, lwd = 2)
-#
-sel <- which(mu.map$municipio==munn)
-text(coordinates(mu.map[-sel,]), labels=mu.map$mun[-sel], cex=.51, col = "green")
-text(coordinates(mu.map[-sel,]), labels=mu.map$mun[-sel], cex=.5)
-lp <- c("bottomright", #1 
-        "bottomright", #2 
-        "bottomright", #3 
-        "bottomright", #4 
-        "bottomright", #5 
-        "bottomright", #6 
-        "bottomright", #7 
-        "bottomright", #8 
-        "bottomright", #9 
-        "bottomright", #10
-        "bottomright", #11
-        "bottomright", #12
-        "bottomright", #13
-        "bottomright", #14
-        "bottomright", #15
-        "bottomleft",  #16
-        "bottomright", #17
-        "bottomright", #18
-        "bottomright", #19
-        "bottomright", #20
-        "bottomright", #21
-        "bottomright", #22
-        "bottomright", #23
-        "bottomright", #24
-        "bottomright", #25
-        "bottomright", #26
-        "bottomright", #27
-        "bottomright", #28
-        "bottomright", #29
-        "bottomright", #30
-        "bottomright", #31
-        "bottomright", #32
-        "bottomright", #33
-        "bottomright", #34
-        "bottomright", #35
-        "bottomright", #36
-        "bottomright", #37
-        "bottomright", #38
-        "bottomright", #39
-        "bottomright", #40
-        "bottomright", #41
-        "bottomright", #42
-        "bottomright", #43
-        "bottomright", #44
-        "bottomright", #45
-        "bottomright", #46
-        "bottomright", #47
-        "bottomright", #48
-        "bottomright", #49
-        "bottomright", #50
-        "bottomright", #51
-        "bottomright", #52
-        "bottomright", #53
-        "bottomright", #54
-        "bottomright", #55
-        "bottomright", #56
-        "bottomright", #57
-        "bottomright", #58
-        "bottomright", #59
-        "bottomleft",  #60
-        "bottomright", #61
-        "bottomright", #62
-        "bottomright", #63
-        "bottomright", #64
-        "bottomright", #65
-        "bottomright", #66
-        "bottomright", #67
-        "bottomright", #68
-        "bottomright", #69
-        "bottomright", #70
-        "bottomright", #71
-        "bottomleft",  #72
-        "bottomright", #73
-        "bottomright", #74
-        "bottomright", #75
-        "bottomright", #76
-        "bottomleft",  #77
-        "bottomright", #78
-        "bottomright", #79
-        "bottomleft",  #80
-        "bottomright", #81
-        "bottomright", #82
-        "bottomright", #83
-        "bottomright", #84
-        "bottomright", #85
-        "bottomright", #86
-        "bottomright", #87
-        "bottomright", #88
-        "bottomright", #89
-        "bottomright", #90
-        "bottomright", #91
-        "bottomright", #92
-        "bottomleft",  #93
-        "bottomright", #94
-        "bottomright", #95
-        "bottomright", #96
-        "bottomright", #97
-        "bottomright", #98
-        "bottomright", #99
-        "bottomright", #100
-        "bottomright", #101
-        "bottomright", #102
-        "bottomright", #103
-        "bottomright", #104
-        "bottomright", #105
-        "bottomright", #106
-        "bottomright", #107
-        "bottomleft",  #108
-        "bottomright", #109
-        "bottomright", #110
-        "bottomright", #111
-        "bottomright", #112
-        "bottomright", #113
-        "bottomright", #114
-        "bottomright", #115
-        "bottomright", #116
-        "bottomright", #117
-        "bottomright", #118
-        "bottomright", #119
-        "bottomright", #120
-        "bottomleft",  #121
-        "bottomright", #122
-        "bottomright", #123
-        "bottomright", #124
-        "bottomright") #125
-legend(x=lp[munn], bg = "white", legend=c("lím. munic.", "dist. local","lím. edo.","casilla"), col=c("black","black","black","gray"), lty = c(1,1,1,1), pch = c(NA,NA,NA,19), lwd = c(2,6,2,0), bty="o", cex=.75)
-legend(x=lp[munn], bg = NULL,    legend=c("lím. munic.","dist. local","lím. edo.","casilla"), col=c("green","black","red","white"),  lty = c(3,1,3,1,1), pch = c(NA,NA,NA,20), lwd = c(2,2,2,0), bty="o", cex=.75)
-library(prettymapr)
-addnortharrow(pos = ifelse(lp[munn]=="topright", "topleft", "topright"), scale=.75)
-addscalebar(style = "ticks", pos = ifelse(lp[munn]=="bottomright", "bottomleft", "bottomright"))
 #dev.off()
 #}
 
