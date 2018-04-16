@@ -1,6 +1,6 @@
 # script is adapted from one in /data/elecs/MXelsCalendGovt/atlasDis/code/
 
-#source(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/code/mapPrep.r") # sólo correr si hubiera cambios en los datos
+#source(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/code/mapPrep.r") # sólo correr si hubiera cambios en los datos federales
 
 ## # OJO: when using spTranform in script, use line below for google earth, or next line for OSM/google maps
 #x.map <- spTransform(x.map, CRS("+proj=longlat +datum=WGS84"))
