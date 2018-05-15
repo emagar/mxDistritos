@@ -320,6 +320,19 @@ df2006.map <- spTransform(df2006.map, osm()) # project to osm native Mercator
 ## #
 ## cabDisNames <- read.csv(file.path(wd2, "cabeceras2006.csv"), stringsAsFactors = FALSE)
 
+# read cabeceras distritales 2018
+ruta <- "~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/data/dfdfcabeceras2018.csv"
+tmp <- read.csv(file = ruta, stringsAsFactors = FALSE)
+tmp <- tmp[,c("edon","disn","NOMBRE_LOCALIDAD")]
+colnames(tmp) <- c("edon","disfed","cab")
+tmp2 <- df.map@data
+tmp2$ord <- 1:nrow(tmp2)
+tmp2 <- merge(x = tmp2, y = tmp, by = c("edon","disfed"), all.x = TRUE, all.y = FALSE)
+tmp2 <- tmp2[order(tmp2$ord),]
+tmp2$ord <- NULL
+df.map@data <- tmp2
+
+
 #############################################################
 # add distritos locales: change layer year to match state's #
 #############################################################
@@ -396,10 +409,11 @@ se.map$bastion[se.map$nwinprd==5] <- yellows[5]
 se.map$bastion[se.map$nwinprd==6] <- yellows[6]
 
 # color 2015 winner
-blue <- blues[7]
-red <- reds[7]
+blue <- blues[6]
+red <- reds[6]
 yellow <- rgb(255,215,0, maxColorValue = 255) #"gold"
-brown <- rgb(160,82,45, maxColorValue = 255) #"siena"
+#brown <- rgb(160,82,45, maxColorValue = 255) #"siena"
+brown <- rgb(139,69,19, maxColorValue = 255) #"saddlebrown"
 gray <- rgb(190,190,190, maxColorValue = 255)
 green <- rgb(0,100,0, maxColorValue = 255) #"darkgreen"
 #
@@ -412,6 +426,7 @@ tmp[se.map$win15=="pvem"] <- green
 tmp[se.map$win15=="morena"] <- brown
 #
 se.map$win15 <- tmp
+
 
 ############################################
 # add seccion volat 2012-2105 = max change #
@@ -432,9 +447,9 @@ tmp2[,-1] <- round(tmp2[,-1] / v15[v15$edon==edon, c("efec")], 3) # vote shares
 tmp <- apply(X = abs(tmp2[,-1] - tmp1[,-1]), MARGIN = 1, FUN = max) # absolute 2015-2012 vote shares by party
 tmp3 <- cbind(seccion=tmp1$seccion, volat=tmp, lisnom=tmpv$lisnom)
 #
-tmp <- data.frame(SECCION = se.map$SECCION)
+tmp <- data.frame(seccion = se.map$seccion)
 tmp$orden <- 1:nrow(tmp)
-tmp <- merge(x = tmp, y = tmp3, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
+tmp <- merge(x = tmp, y = tmp3, by = "seccion", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$orden),]
 se.map$volat1215 <- tmp$volat
 se.map$ln15 <- tmp$lisnom
@@ -561,8 +576,6 @@ mapKeyPink <- function(dn = NULL){
     text( x = -100.1, y = 20.3, labels = "QUERETARO", col = "darkgray", cex = .9 )
 }
 
-
-
 # wrap map 2 or 3 (district with 5-cycle history or with 2015 winner)
 mapOneDistrito <- function(dn = NULL, portray = NULL){
     # plot same distrito only
@@ -588,13 +601,13 @@ mapOneDistrito <- function(dn = NULL, portray = NULL){
     #plot(df.map[df.map$disloc==dn,], lwd = 5, add = TRUE) # drop
     plot(ed.map$mex, add = TRUE)
     library(scales) # has function alpha()
-    plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color nwin
+    plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .33)) # color nwin
     # plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray[se.map$disn==dn]) # color nwin -- se.map$disn is disfed
     #plot(ffcc, add = TRUE, lwd = .75)
     #
     #
     #plot(ed.map$nay, add = TRUE, lty = 1, col = rgb(1,1,1, alpha = .5)) # blurs colors inside state
-    plot(se.map[se.map$disfed==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$disfed==dn], .5)) # color nwin
+    plot(se.map[se.map$disfed==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$disfed==dn], .67)) # color nwin
     # add casillas
     points(cas.map, pch = 20, col = "white" , cex = .3)
     #points(cas.map[cas.map$disloc2017==dn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
@@ -663,12 +676,13 @@ mapOneDistrito <- function(dn = NULL, portray = NULL){
             "bottomleft")  #41
     legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
     legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
+    legend(x=ifelse(lp[dn]=="topright", "bottomright", ifelse(lp[dn]=="topleft","bottomleft","topleft")), bg = "white", legend=c("pan","pri","prd","morena","pvem","otro"), fill=alpha(c(blue,red,yellow,brown,green,gray),.67), bty="o", cex=.75)
     library(prettymapr)
     addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
     addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
     #dev.off()
 }
-    
+   
 
 ########################################################################
 # grafica distritos 1 por 1                                            #
@@ -687,21 +701,21 @@ p84 <- function(x = NA){
 ## # plot state map with highlighted district #
 ###############################################
 #png(file = paste(mapdir2, "/", edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
-mapKeyPink(dn = 11)
+mapKeyPink(dn = 18)
 #dev.off()
 
 ##############################################
 ## # plot district map with mid-term history #
 ##############################################
 #png(file = paste(mapdir2, "/", edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
-mapOneDistrito(dn = 11, portray = se.map$bastion)
+mapOneDistrito(dn = 18, portray = se.map$bastion)
 #dev.off()
 
 #########################################
 ## # plot district map with 2015 winner #
 #########################################
 #png(file = paste(mapdir2, "/", edo, dn, "-3.png", sep = ""), width=15, height=15, units="cm", res=144) 
-mapOneDistrito(dn = 11, portray = se.map$win15)
+mapOneDistrito(dn = 18, portray = se.map$win15)
 #dev.off()
 
 # }
