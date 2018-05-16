@@ -538,6 +538,10 @@ se.map$ln15 <- tmp$lisnom
 # grafica distritos 1 por 1                                            #
 # (use 1984 long/lat for this map when mercator projection was chosen) #
 ########################################################################
+p84 <- function(x = NA){
+    x <- x
+    x <- spTransform(x, CRS("+proj=longlat +datum=WGS84"))
+}
 
 # wrap map 1 (state w all districts and selected in pink) in function
 mapKeyPink <- function(dn = NULL){
@@ -576,6 +580,21 @@ mapKeyPink <- function(dn = NULL){
     text( x = -100.1, y = 20.3, labels = "QUERETARO", col = "darkgray", cex = .9 )
 }
 
+# function to re-compute square bbox
+sqbbox <- function(bbox = NULL){
+    b <- bbox
+    maxrange <- max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+    m1 <- (b$min[1] + b$max[1])/2
+    m2 <- (b$min[2] + b$max[2])/2
+    #
+    b2 <- data.frame(min=c(NA,NA), max=c(NA,NA)); rownames(b2) <- c("x","y")
+    b2$min[1] <- m1 - maxrange/2
+    b2$min[2] <- m2 - maxrange/2
+    b2$max[1] <- m1 + maxrange/2
+    b2$max[2] <- m2 + maxrange/2
+    return(b2)
+}
+
 # wrap map 2 or 3 (district with 5-cycle history or with 2015 winner)
 mapOneDistrito <- function(dn = NULL, portray = NULL){
     # plot same distrito only
@@ -583,13 +602,14 @@ mapOneDistrito <- function(dn = NULL, portray = NULL){
     # get openstreetmap background
     m <- p84(df.map[df.map$disfed==dn,])  # subsetted map
     b <- as.data.frame(m@bbox)
-    # gets xx degrees more than bbox (decimal defines share of max range)
+    b <- sqbbox(b)
+    # gets xx% more than bbox
     xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
     # choose one of four background picture types
     #bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
     #bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
     #bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
-    bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))
+    bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))#, minNumTiles = 9)
     bg <- bg.os
     #
     #png(file = paste(mapdir2, "/", edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
@@ -601,13 +621,13 @@ mapOneDistrito <- function(dn = NULL, portray = NULL){
     #plot(df.map[df.map$disloc==dn,], lwd = 5, add = TRUE) # drop
     plot(ed.map$mex, add = TRUE)
     library(scales) # has function alpha()
-    plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .33)) # color nwin
+    plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color nwin
     # plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray[se.map$disn==dn]) # color nwin -- se.map$disn is disfed
     #plot(ffcc, add = TRUE, lwd = .75)
     #
     #
     #plot(ed.map$nay, add = TRUE, lty = 1, col = rgb(1,1,1, alpha = .5)) # blurs colors inside state
-    plot(se.map[se.map$disfed==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$disfed==dn], .67)) # color nwin
+    plot(se.map[se.map$distrito==dn,], add = TRUE, border = "darkgray", col = alpha(portray[se.map$distrito==dn], .5)) # color nwin
     # add casillas
     points(cas.map, pch = 20, col = "white" , cex = .3)
     #points(cas.map[cas.map$disloc2017==dn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
@@ -682,16 +702,15 @@ mapOneDistrito <- function(dn = NULL, portray = NULL){
     addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
     #dev.off()
 }
-   
+
+mapKeyPink(22)
+mapOneDistrito(dn = 22, portray = se.map$win15)
+x
 
 ########################################################################
 # grafica distritos 1 por 1                                            #
 # (use 1984 long/lat for this map when mercator projection was chosen) #
 ########################################################################
-p84 <- function(x = NA){
-    x <- x
-    x <- spTransform(x, CRS("+proj=longlat +datum=WGS84"))
-}
 
 
 ## for (dn in 1:41){
@@ -701,21 +720,21 @@ p84 <- function(x = NA){
 ## # plot state map with highlighted district #
 ###############################################
 #png(file = paste(mapdir2, "/", edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
-mapKeyPink(dn = 18)
+mapKeyPink(dn = 23)
 #dev.off()
 
 ##############################################
 ## # plot district map with mid-term history #
 ##############################################
 #png(file = paste(mapdir2, "/", edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
-mapOneDistrito(dn = 18, portray = se.map$bastion)
+mapOneDistrito(dn = 23, portray = se.map$bastion)
 #dev.off()
 
 #########################################
 ## # plot district map with 2015 winner #
 #########################################
 #png(file = paste(mapdir2, "/", edo, dn, "-3.png", sep = ""), width=15, height=15, units="cm", res=144) 
-mapOneDistrito(dn = 18, portray = se.map$win15)
+mapOneDistrito(dn = 23, portray = se.map$win15)
 #dev.off()
 
 # }
