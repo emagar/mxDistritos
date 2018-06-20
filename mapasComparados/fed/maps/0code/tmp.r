@@ -1,50 +1,85 @@
-x <- rnorm(100)  
-y <- rbinom(100, 1, 0.5)
-
-par(fig = c(0,1,0,1))
-
-hist(x)  
-par(fig = c(0.07, 0.5, 0.5, 1), new = T)  
-boxplot(x ~ y)
-
-
-
-gray
-blues[5:7]
-reds[5:7]
-yellows[5:7]
-
-gray
-blue
-red
-yellow
-green
-brown
-
-        # bastion legend for three parties
-        clr <- data.frame(pan = blues[c(3,5,7)], pri = reds[c(3,5,7)], prd = yellows[c(2,4,6)], stringsAsFactors = FALSE)
-        sz <- .75
-        par(mar=c(0,0,0,0)) ## SETS B L U R MARGIN SIZES
-#        par(bg = "white")
-        plot(x = c(1,6), y = c(0,4.5), type = "n", axes = FALSE)
-        polygon(x = c(1,1,6,6), y = c(4,5,5,4), border = "white", col = "white") # white background
-        polygon(x = c(4,4,6,6), y = c(0,6,6,0), border = "white", col = "white") # white background
-        for (r in 1:3){
-            for (c in 1:3){
-                polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = alpha(clr[r,c], .5), border = "white", lwd = 4)
-            }
+## prepare dsi, fathers, sons
+## READ HISTORICAL MAP
+d <- read.csv(file = "../equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", stringsAsFactors = FALSE)
+sel <- which(d$edon==edon)
+d <- d[sel,] # subset to relevant state
+#
+d2018 <- d
+d2018 <- d[-which(d2018$dis2018==0),] # drop missing secciones
+d <- d[is.na(d2018$dis2018)==FALSE,] # drop missing secciones
+d2018$father <- 0
+d2018$dsi <- 0
+#
+for (s in 1:max(d$dis2018)){
+    # s <- 1 # debug
+    sel <- which(d$dis2018==s)
+    potentialFathers <- unique(d$dis2015[sel])
+    father <- 0
+    dsi <- 0
+    for (f in potentialFathers) {
+        #f <- 1 # debug
+        sel.u <- which(d$dis2018==s | d$dis2015==f)
+        sel.i <- which(d$dis2018==s & d$dis2015==f)
+        if (length(sel.i)/length(sel.u) > dsi){
+            father <- f
+            dsi <- length(sel.i)/length(sel.u)
+        } else {
+            next
         }
-        for (c in 1:3){
-            polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = alpha(gray, .5), border = "white", lwd = 4)
+    }
+    d2018$father[sel] <- father
+    d2018$dsi[sel] <- dsi
+}
+#
+d2018 <- d2018[duplicated(d2018$dis2018)==FALSE, c("dis2018","father","dsi")]
+d2018 <- d2018[order(d2018$dis2018),]
+#
+d2015 <- d
+d2015 <- d[-which(d2015$dis2015==0),] # drop missing secciones
+d <- d[is.na(d2015$dis2015)==FALSE,] # drop missing secciones
+d2015$son <- 0
+d2015$dsi <- 0
+#
+for (f in 1:max(d$dis2015)){
+    # f <- 1 # debug
+    sel <- which(d$dis2015==f)
+    potentialSons <- unique(d$dis2018[sel])
+    son <- 0
+    dsi <- 0
+    for (s in potentialSons) {
+        #s <- 1 # debug
+        sel.u <- which(d$dis2018==s | d$dis2015==f)
+        sel.i <- which(d$dis2018==s & d$dis2015==f)
+        if (length(sel.i)/length(sel.u) > dsi){
+            son <- s
+            dsi <- length(sel.i)/length(sel.u)
+        } else {
+            next
         }
-        text(x = 1.5, y = 4.2, label = "PAN", cex = sz)
-        text(x = 2.5, y = 4.2, label = "PRI", cex = sz)
-        text(x = 3.5, y = 4.2, label = "Left", cex = sz)
-        text(x = 5,   y = 4.2, label = "won", cex = sz)
-        text(x = 4.1, y = 3.5, label = "6 of 6", pos = 4, cex = sz)
-        text(x = 4.1, y = 2.5, label = "5 of 6", pos = 4, cex = sz)
-        text(x = 4.1, y = 1.5, label = "4 of 6", pos = 4, cex = sz)
-        text(x = 4.1, y = 0.5, label = "fewer", pos = 4, cex = sz)
-
-
+    }
+    d2015$son[sel] <- son
+    d2015$dsi[sel] <- dsi
+}
+#
+d2015 <- d2015[duplicated(d2015$dis2015)==FALSE, c("dis2015","son","dsi")]
+d2015 <- d2015[order(d2015$dis2015),]
+#
+tmp <- df.map@data
+tmp$order <- 1:41
+tmp <- merge(tmp, d2018, by.x = "disfed", by.y = "dis2018", all.x = TRUE, all.y = FALSE)
+tmp <- tmp[order(tmp$order),]
+# import father and dsi
+df.map$father <- tmp$father
+df.map$dsi <- tmp$dsi
+#
+tmp <- df2006.map@data
+tmp$order <- 1:40
+tmp <- merge(tmp, d2015, by.x = "disfed", by.y = "dis2015", all.x = TRUE, all.y = FALSE)
+tmp <- tmp[order(tmp$order),]
+# import son and dsi
+df2006.map$son <- tmp$son
+df2006.map$dsi <- tmp$dsi
+#
+# clean
+rm(d, sel, potentialFathers, potentialSons, father, son, dsi, s, f sel.u, sel.i, d2015, d2018)
 
