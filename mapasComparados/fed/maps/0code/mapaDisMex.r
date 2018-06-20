@@ -398,19 +398,19 @@ se.map$bastion <- rgb(190,190,190, maxColorValue = 255) # "gray"
 ## se.map$bastion[se.map$nwinpan>=4] <- "blue"
 ## se.map$bastion[se.map$nwinpri>=4] <- "red"
 ## se.map$bastion[se.map$nwinprd>=4] <- "gold"
-se.map$bastion[se.map$nwinpan==4] <- blues[4]
+se.map$bastion[se.map$nwinpan==4] <- blues[3]
 se.map$bastion[se.map$nwinpan==5] <- blues[5]
-se.map$bastion[se.map$nwinpan==6] <- blues[6]
-se.map$bastion[se.map$nwinpri==4] <- reds[4]
+se.map$bastion[se.map$nwinpan==6] <- blues[7]
+se.map$bastion[se.map$nwinpri==4] <- reds[3]
 se.map$bastion[se.map$nwinpri==5] <- reds[5]
-se.map$bastion[se.map$nwinpri==6] <- reds[6]
-se.map$bastion[se.map$nwinprd==4] <- yellows[4]
-se.map$bastion[se.map$nwinprd==5] <- yellows[5]
+se.map$bastion[se.map$nwinpri==6] <- reds[7]
+se.map$bastion[se.map$nwinprd==4] <- yellows[2]
+se.map$bastion[se.map$nwinprd==5] <- yellows[4]
 se.map$bastion[se.map$nwinprd==6] <- yellows[6]
 
 # color 2015 winner
-blue <- blues[6]
-red <- reds[6]
+blue <- blues[7]
+red <- reds[7]
 yellow <- rgb(255,215,0, maxColorValue = 255) #"gold"
 #brown <- rgb(160,82,45, maxColorValue = 255) #"siena"
 brown <- rgb(139,69,19, maxColorValue = 255) #"saddlebrown"
@@ -557,10 +557,10 @@ mapKeyPink <- function(dn = NULL){
     plot(p84(ed.map$mic), col = "white", add = TRUE, lty = 3)
     plot(p84(ed.map$que), col = "white", add = TRUE, lty = 3)
     plot(p84(ed.map$gua), col = "white", add = TRUE, lty = 3)
-                                        # 
+    # 
     plot(p84(df.map), add = TRUE, border = "gray")
     plot(p84(df.map[df.map$disfed==dn,]), add = TRUE, border = "gray", col = "hotpink")
-                                        # thick state border
+    # thick state border
     plot(p84(ed.map$mex), add = TRUE, lwd = 3)
     plot(p84(ed.map$mex), add = TRUE, border = "red", lty = 3, lwd = 2)
     ## points(cabDis, pch = 3) # cabeceras distritales
@@ -595,25 +595,44 @@ sqbbox <- function(bbox = NULL){
     return(b2)
 }
 
+dn <- 22 #debug
+
 # wrap map 2 or 3 (district with 5-cycle history or with 2015 winner)
-mapOneDistrito <- function(dn = NULL, portray = NULL){
+mapOneDistrito <- function(dn = NULL, what2plot = NULL){
+    if (what2plot!=1 & what2plot!=2) stop("portray must = 1 (bastiones) or 2 (2015 winner)")
+    if (what2plot==1){
+        portray <- se.map$bastion
+        message("Plotting core secciones (bastiones)")
+    } else {
+        portray <- se.map$win15
+        message("Plotting sección winner in 2015")
+    }
     # plot same distrito only
     # need to merge disn info into mun and sec object, in order to select just those belonging to dis
-    # get openstreetmap background
+    # get openstreetmap basemap for background
     m <- p84(df.map[df.map$disfed==dn,])  # subsetted map
     b <- as.data.frame(m@bbox)
     b <- sqbbox(b)
     # gets xx% more than bbox
     xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
-    # choose one of four background picture types
-    #bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
-    #bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
-    #bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
-    bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))#, minNumTiles = 9)
-    bg <- bg.os
+    # checks if basemap (type os, saved as R data) is in disk
+    bmps <- dir(path=paste(mapdir2, "/basemaps/", sep = ""))
+    if (paste(edo, dn, "-os.RData", sep = "") %in% bmps) {
+        load(file = paste(mapdir2, "/basemaps/", edo, dn, "-os.RData", sep = "")) # gets bg.os
+        bg <- bg.os
+    } else {
+        # choose one of four background picture types
+        #bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+        #bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+                                        #bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+        bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))#, minNumTiles = 9)
+        save(bg.os, file = paste(mapdir2, "/basemaps/", edo, dn, "-os.RData", sep = "")) # save a copy of the basemap for future use
+        bg <- bg.os
+    }
     #
     #png(file = paste(mapdir2, "/", edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
-    par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+    par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+    par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
     tmp <-  df.map$cab[which(df.map$disfed==dn)]
     tmp2 <- df.map$dsi[which(df.map$disfed==dn)]
     plot(df.map[df.map$disfed==dn,], axes = TRUE, main = paste("México ", dn, " - ", tmp, sep = ""))
@@ -653,92 +672,120 @@ mapOneDistrito <- function(dn = NULL, portray = NULL){
     ## points(coordinates(cab), pch = 1, col = "green", cex = .75)
     text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
     text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
-    lp <- c("bottomright", #1 
-            "bottomright", #2 
+    lp <- c("topleft", #1 
+            "topleft", #2 
             "bottomleft",  #3 
-            "bottomright", #4 
-            "bottomright", #5 
-            "bottomright", #6 
-            "bottomright", #7 
-            "bottomright", #8 
-            "bottomright", #9 
-            "bottomright", #10
-            "bottomright", #11
-            "bottomright", #12
-            "bottomright", #13
+            "topleft", #4 
+            "topleft", #5 
+            "topleft", #6 
+            "topleft", #7 
+            "topleft", #8 
+            "topleft", #9 
+            "topleft", #10
+            "topleft", #11
+            "topleft", #12
+            "topleft", #13
             "bottomleft",  #14
             "bottomleft",  #15
             "bottomleft",  #16
             "bottomleft",  #17
             "bottomleft",  #18
-            "bottomright", #19
+            "topleft", #19
             "topleft",     #20
             "bottomleft",  #21
-            "bottomright", #22
-            "bottomright", #23
+            "topleft", #22
+            "topleft", #23
             "bottomleft",  #24
             "bottomleft",  #25
             "bottomleft",  #26
-            "bottomleft",  #27
+            "bottomright",  #27
             "bottomleft",  #28
             "bottomleft",  #29
-            "bottomleft",  #30
+            "topright",  #30
             "bottomleft",  #31
-            "bottomright", #32
-            "bottomright", #33
+            "topleft", #32
+            "topleft", #33
             "bottomleft",  #34
             "bottomleft",  #35
             "bottomleft",  #36
             "bottomleft",  #37
-            "bottomright", #38
-            "bottomright", #39
+            "topleft", #38
+            "topleft", #39
             "bottomleft",  #40
             "bottomleft")  #41
     legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
     legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
-    legend(x=ifelse(lp[dn]=="topright", "bottomright", ifelse(lp[dn]=="topleft","bottomleft","topleft")), bg = "white", legend=c("pan","pri","prd","morena","pvem","otro"), fill=alpha(c(blue,red,yellow,brown,green,gray),.67), bty="o", cex=.75)
     library(prettymapr)
     addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
     addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+    #
+    if (what2plot==1){
+        # size reduction for secondary plot (serves as legend) conditional on placement
+        if (lp[dn]=="topright")    par(fig = c( .8,  1,  0, .2), new = TRUE) 
+        if (lp[dn]=="topleft")     par(fig = c(  0, .2,  0, .2), new = TRUE)
+        if (lp[dn]=="bottomleft")  par(fig = c(  0, .2, .8,  1), new = TRUE) 
+        if (lp[dn]=="bottomright") par(fig = c(  0, .2, .8,  1), new = TRUE) 
+        ##################################################################################################################
+        # bastion legend for three parties
+        clr <- data.frame(pan = blues[c(3,5,7)], pri = reds[c(3,5,7)], prd = yellows[c(2,4,6)], stringsAsFactors = FALSE)
+        sz <- .75
+        par(mar=c(0,0,1,0)) ## SETS B L U R MARGIN SIZES
+#        par(bg = "white")
+        plot(x = c(1,6), y = c(0,4.5), type = "n", axes = FALSE, main = "Ganó 2000-15", cex.main = .75)
+        polygon(x = c(1,1,6,6), y = c(4,5,5,4), border = "white", col = "white") # white background
+        polygon(x = c(4,4,6,6), y = c(0,6,6,0), border = "white", col = "white") # white background
+        for (r in 1:3){
+            for (c in 1:3){
+                polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = alpha(clr[r,c], .65), border = "white", lwd = 4)
+            }
+        }
+        for (c in 1:3){
+            polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = alpha(gray, .65), border = "white", lwd = 4)
+        }
+        text(x = 1.5, y = 4.2, label = "pan", cex = sz)
+        text(x = 2.5, y = 4.2, label = "pri", cex = sz)
+        text(x = 3.5, y = 4.2, label = "izq.", cex = sz)
+        #text(x = 5,   y = 4.2, label = "won", cex = sz)
+        text(x = 4.75, y = 3.5, label = "6de6", pos = NULL, cex = sz)
+        text(x = 4.75, y = 2.5, label = "5de6", pos = NULL, cex = sz)
+        text(x = 4.75, y = 1.5, label = "4de6", pos = NULL, cex = sz)
+        text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
+        ###################################################################################################################
+    }
+    #
+    if (what2plot==2){
+        legend(x=ifelse(lp[dn]=="topright", "bottomright", ifelse(lp[dn]=="topleft","bottomleft","topleft")), bg = "white", legend=c("pan","pri","prd","morena","pvem","otro"), fill=alpha(c(blue,red,yellow,brown,green,gray),.67), bty="o", cex=.75)
+    }
     #dev.off()
 }
 
-mapKeyPink(22)
-mapOneDistrito(dn = 22, portray = se.map$win15)
-x
+mapKeyPink(28)
+mapOneDistrito(dn = 30, what2plot = 1)
 
 ########################################################################
 # grafica distritos 1 por 1                                            #
 # (use 1984 long/lat for this map when mercator projection was chosen) #
 ########################################################################
-
-
-## for (dn in 1:41){
-##     print(paste("disn =", dn))
-
-###############################################
-## # plot state map with highlighted district #
-###############################################
-#png(file = paste(mapdir2, "/", edo, dn, "-1.png", sep = ""), width=10, height=10, units="cm", res=144) 
-mapKeyPink(dn = 23)
-#dev.off()
-
-##############################################
-## # plot district map with mid-term history #
-##############################################
-#png(file = paste(mapdir2, "/", edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
-mapOneDistrito(dn = 23, portray = se.map$bastion)
-#dev.off()
-
-#########################################
-## # plot district map with 2015 winner #
-#########################################
-#png(file = paste(mapdir2, "/", edo, dn, "-3.png", sep = ""), width=15, height=15, units="cm", res=144) 
-mapOneDistrito(dn = 23, portray = se.map$win15)
-#dev.off()
-
-# }
-
-
+for (dn in 1:41){
+    print(paste("disn =", dn))
+    ## #############################################
+    ## ## plot state map with highlighted district #
+    ## #############################################
+    ## png(file = paste(mapdir2, "/", edo, dn, "-1.png", sep = ""), width=15, height=15, units="cm", res=144) 
+    ## mapKeyPink(dn)
+    ## dev.off()
+    ## #######################################
+    ## ## plot district map with 2015 winner #
+    ## #######################################
+    ## png(file = paste(mapdir2, "/", edo, dn, "-3.png", sep = ""), width=15, height=15, units="cm", res=144) 
+    ## mapOneDistrito(dn = dn, what2plot = 2)
+    ## dev.off()
+    ############################################
+    ## plot district map with mid-term history #
+    ############################################
+    png(file = paste(mapdir2, "/", edo, dn, "-2.png", sep = ""), width=15, height=15, units="cm", res=144) 
+    mapOneDistrito(dn = dn, what2plot = 1)
+    dev.off()
+}
 
 
