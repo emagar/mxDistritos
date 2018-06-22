@@ -323,7 +323,7 @@ df2006.map <- spTransform(df2006.map, osm()) # project to osm native Mercator
 # read cabeceras distritales 2018
 ruta <- "~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/data/dfdfcabeceras2018.csv"
 tmp <- read.csv(file = ruta, stringsAsFactors = FALSE)
-tmp <- tmp[,c("edon","disn","NOMBRE_LOCALIDAD")]
+tmp <- tmp[,c("edon","disn","mun")]
 colnames(tmp) <- c("edon","disfed","cab")
 tmp2 <- df.map@data
 tmp2$ord <- 1:nrow(tmp2)
@@ -331,7 +331,6 @@ tmp2 <- merge(x = tmp2, y = tmp, by = c("edon","disfed"), all.x = TRUE, all.y = 
 tmp2 <- tmp2[order(tmp2$ord),]
 tmp2$ord <- NULL
 df.map@data <- tmp2
-
 
 #############################################################
 # add distritos locales: change layer year to match state's #
@@ -539,15 +538,17 @@ se.map$ln15 <- tmp$lisnom
 d <- read.csv(file = "../equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", stringsAsFactors = FALSE)
 sel <- which(d$edon==edon)
 d <- d[sel,] # subset to relevant state
+d <- d[is.na(d$dis2018)==FALSE,] # drop missing secciones
+d <- d[is.na(d$dis2015)==FALSE,] # drop missing secciones
+sel <- which(d$dis2015==0 | d$dis2018==0)
+if (length(sel)>0) d <- d[-sel,] # drop missing secciones
 #
 d2018 <- d
-d2018 <- d[-which(d2018$dis2018==0),] # drop missing secciones
-d <- d[is.na(d2018$dis2018)==FALSE,] # drop missing secciones
 d2018$father <- 0
 d2018$dsi <- 0
 #
 for (s in 1:max(d$dis2018)){
-    # s <- 1 # debug
+    # s <- 5 # debug
     sel <- which(d$dis2018==s)
     potentialFathers <- unique(d$dis2015[sel])
     father <- 0
@@ -571,8 +572,6 @@ d2018 <- d2018[duplicated(d2018$dis2018)==FALSE, c("dis2018","father","dsi")]
 d2018 <- d2018[order(d2018$dis2018),]
 #
 d2015 <- d
-d2015 <- d[-which(d2015$dis2015==0),] # drop missing secciones
-d <- d[is.na(d2015$dis2015)==FALSE,] # drop missing secciones
 d2015$son <- 0
 d2015$dsi <- 0
 #
@@ -601,7 +600,7 @@ d2015 <- d2015[duplicated(d2015$dis2015)==FALSE, c("dis2015","son","dsi")]
 d2015 <- d2015[order(d2015$dis2015),]
 #
 tmp <- df.map@data
-tmp$order <- 1:41
+tmp$order <- 1:nrow(tmp)
 tmp <- merge(tmp, d2018, by.x = "disfed", by.y = "dis2018", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$order),]
 # import father and dsi
@@ -609,7 +608,7 @@ df.map$father <- tmp$father
 df.map$dsi <- tmp$dsi
 #
 tmp <- df2006.map@data
-tmp$order <- 1:40
+tmp$order <- 1:nrow(tmp)
 tmp <- merge(tmp, d2015, by.x = "disfed", by.y = "dis2015", all.x = TRUE, all.y = FALSE)
 tmp <- tmp[order(tmp$order),]
 # import son and dsi
@@ -617,7 +616,7 @@ df2006.map$son <- tmp$son
 df2006.map$dsi <- tmp$dsi
 #
 # clean
-rm(d, sel, potentialFathers, potentialSons, father, son, dsi, s, f sel.u, sel.i, d2015, d2018)
+rm(d, sel, potentialFathers, potentialSons, father, son, dsi, s, f, sel.u, sel.i, d2015, d2018)
 
 
 ########################################################################
@@ -746,8 +745,9 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     plot(ed.map$mor, add = TRUE, lty = 1)
     plot(ed.map$mic, add = TRUE, lty = 1)
     #
-    ## sel <- which(df2006.map$disfed==df.map$father[df.map$disloc==dn]) # <- OJO: falta determinar father
-    ## plot(df2006.map[sel,], add = TRUE, lwd = 6, border = "red")
+    # dibuja distrito padre
+    sel <- which(df2006.map$disfed==df.map$father[df.map$disfed==dn])
+    plot(df2006.map[sel,], add = TRUE, lwd = 6, border = "red")
     #
     plot(df.map[df.map$disfed==dn,], add = TRUE, lwd = 4)
     plot(mu.map, add = TRUE, border = "green", lwd = 1)
@@ -758,59 +758,63 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     ## points(coordinates(cab), pch = 1, col = "green", cex = .75)
     text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
     text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
-    lp <- c("topleft", #1 
-            "topleft", #2 
-            "bottomleft",  #3 
-            "topleft", #4 
-            "topleft", #5 
-            "topleft", #6 
-            "topleft", #7 
-            "topleft", #8 
-            "topleft", #9 
-            "topleft", #10
-            "topleft", #11
-            "topleft", #12
-            "topleft", #13
-            "bottomleft",  #14
-            "bottomleft",  #15
-            "bottomleft",  #16
-            "bottomleft",  #17
-            "bottomleft",  #18
-            "topleft", #19
-            "topleft",     #20
-            "bottomleft",  #21
-            "topleft", #22
-            "topleft", #23
-            "bottomleft",  #24
-            "bottomleft",  #25
-            "bottomleft",  #26
-            "bottomright",  #27
-            "bottomleft",  #28
-            "bottomleft",  #29
-            "topright",  #30
-            "bottomleft",  #31
-            "topleft", #32
-            "topleft", #33
-            "bottomleft",  #34
-            "bottomleft",  #35
-            "bottomleft",  #36
-            "bottomleft",  #37
-            "topleft", #38
-            "topleft", #39
-            "bottomleft",  #40
-            "bottomleft")  #41
-    legend(x=lp[dn], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
-    legend(x=lp[dn], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
+    # 1st item in pair is border legend placement, 2nd is color code (1=ne 2=se 3=sw 4=nw)
+    lp <- list(c(4,3), #1 
+               c(4,2), #2 
+               c(1,2), #3 
+               c(1,2), #4 
+               c(1,2), #5 
+               c(1,2), #6 
+               c(4,3), #7 
+               c(1,3), #8 
+               c(4,2), #9 
+               c(1,2), #10
+               c(4,3), #11
+               c(4,3), #12
+               c(4,2), #13
+               c(1,3), #14
+               c(4,3), #15
+               c(4,2), #16
+               c(1,3), #17
+               c(2,3), #18
+               c(1,2), #19
+               c(4,3), #20
+               c(1,3), #21
+               c(4,2), #22
+               c(4,2), #23
+               c(1,2), #24
+               c(4,3), #25
+               c(1,3), #26
+               c(4,2), #27
+               c(4,3), #28
+               c(1,3), #29
+               c(1,2), #30
+               c(1,3), #31
+               c(4,3), #32
+               c(4,2), #33
+               c(1,2), #34
+               c(1,3), #35
+               c(4,3), #36
+               c(2,3), #37
+               c(4,3), #38
+               c(3,2), #39
+               c(2,3), #40
+               c(1,3)) #41
+    lp <- lp[[dn]] # pick relevant pair only
+    lp <- c(lp, setdiff(1:4,lp)) # add free corners for north arrow and scale
+    lp <- mapvalues( lp, from = 1:4, to = c("topright","bottomright","bottomleft","topleft"), warn_missing = FALSE )
+    legend(x=lp[1], bg = "white", legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","black","black","gray"), lty = c(1,1,1,1,1), pch = c(NA,NA,NA,NA,19), lwd = c(6,6,2,2,0), bty="o", cex=.75)
+    legend(x=lp[1], bg = NULL,    legend=c("distrito","padre","lím. edo.","lím. munic.","casilla"), col=c("black","red","red","green","white"),  lty = c(1,1,3,3,1), pch = c(NA,NA,NA,NA,20), lwd = c(2,2,2,2,0), bty="o", cex=.75)
     library(prettymapr)
-    addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
-    addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+    addnortharrow(pos = lp[3], scale=.75)
+    addscalebar(style = "ticks", pos = lp[4])
     #
     if (what2plot==1){
         # size reduction for secondary plot (serves as legend) conditional on placement
-        if (lp[dn]=="topright")    par(fig = c( .8,  1,  0, .2), new = TRUE) 
-        if (lp[dn]=="topleft")     par(fig = c(  0, .2,  0, .2), new = TRUE)
-        if (lp[dn]=="bottomleft")  par(fig = c(  0, .2, .8,  1), new = TRUE) 
-        if (lp[dn]=="bottomright") par(fig = c(  0, .2, .8,  1), new = TRUE) 
+        if (lp[2]=="topright")    par(fig = c( .8,  1, .8,  1), new = TRUE) 
+        if (lp[2]=="topleft")     par(fig = c(  0, .2, .8,  1), new = TRUE)
+        if (lp[2]=="bottomleft")  par(fig = c(  0, .2,  0, .2), new = TRUE) 
+        if (lp[2]=="bottomright") par(fig = c( .8,  1,  0, .2), new = TRUE) 
         ##################################################################################################################
         # bastion legend for three parties
         clr <- data.frame(pan = blues[c(3,5,7)], pri = reds[c(3,5,7)], prd = yellows[c(2,4,6)], stringsAsFactors = FALSE)
@@ -840,32 +844,33 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     }
     #
     if (what2plot==2){
-        legend(x=ifelse(lp[dn]=="topright", "bottomright", ifelse(lp[dn]=="topleft","bottomleft","topleft")), bg = "white", legend=c("pan","pri","prd","morena","pvem","otro"), fill=alpha(c(blue,red,yellow,brown,green,gray),.67), bty="o", cex=.75)
+        legend(x=lp[2], bg = "white", legend=c("pan","pri","prd","morena","pvem","otro"), fill=alpha(c(blue,red,yellow,brown,green,gray),.67), bty="o", cex=.75)
     }
     #dev.off()
 }
 
 mapKeyPink(28)
-mapOneDistrito(dn = 30, what2plot = 1)
+mapOneDistrito(dn = 2, what2plot = 1)
 
 ########################################################################
 # grafica distritos 1 por 1                                            #
 # (use 1984 long/lat for this map when mercator projection was chosen) #
 ########################################################################
 for (dn in 1:41){
+    #dn <- 10 # debug
     print(paste("disn =", dn))
-    ## #############################################
-    ## ## plot state map with highlighted district #
-    ## #############################################
-    ## png(file = paste(mapdir2, "/", edo, dn, "-1.png", sep = ""), width=15, height=15, units="cm", res=144) 
-    ## mapKeyPink(dn)
-    ## dev.off()
-    ## #######################################
-    ## ## plot district map with 2015 winner #
-    ## #######################################
-    ## png(file = paste(mapdir2, "/", edo, dn, "-3.png", sep = ""), width=15, height=15, units="cm", res=144) 
-    ## mapOneDistrito(dn = dn, what2plot = 2)
-    ## dev.off()
+    #############################################
+    ## plot state map with highlighted district #
+    #############################################
+    png(file = paste(mapdir2, "/", edo, dn, "-1.png", sep = ""), width=15, height=15, units="cm", res=144) 
+    mapKeyPink(dn)
+    dev.off()
+    #######################################
+    ## plot district map with 2015 winner #
+    #######################################
+    png(file = paste(mapdir2, "/", edo, dn, "-3.png", sep = ""), width=15, height=15, units="cm", res=144) 
+    mapOneDistrito(dn = dn, what2plot = 2)
+    dev.off()
     ############################################
     ## plot district map with mid-term history #
     ############################################
