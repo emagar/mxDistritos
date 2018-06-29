@@ -701,10 +701,10 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
     tmp <-  df.map$cab[which(df.map$disfed==dn)]
     tmp2 <- df.map$dsi[which(df.map$disfed==dn)]
-    plot(df.map[df.map$disfed==dn,], axes = TRUE, main = paste("CdMx ", dn, " - ", tmp, sep = ""))
+    plot(df.map[df.map$disfed==dn,], axes = TRUE, main = paste("Aguascalientes ", dn, " - ", tmp, sep = ""))
     plot(bg, add = TRUE)
     #plot(df.map[df.map$disloc==dn,], lwd = 5, add = TRUE) # drop
-    plot(ed.map$ver, add = TRUE)
+    plot(ed.map$ags, add = TRUE)
     library(scales) # has function alpha()
     plot(se.map, add = TRUE, border = "darkgray", col = alpha(portray, .25)) # color nwin
     # plot(se.map[se.map$disn==dn,], add = TRUE, border = "darkgray", col = portray[se.map$disn==dn]) # color nwin -- se.map$disn is disfed
@@ -718,15 +718,9 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     #points(cas.map[cas.map$disloc2017==dn,], pch = 20, col = rgb(1,1,1,.33), cex = .3)
     #
     #
-    plot(ed.map$tam, add = TRUE, lty = 1)
-    plot(ed.map$hgo, add = TRUE, lty = 1)
-    plot(ed.map$pue, add = TRUE, lty = 1)
-    plot(ed.map$mex, add = TRUE, lty = 1)
-    plot(ed.map$mor, add = TRUE, lty = 1)
-    #plot(ed.map$gue, add = TRUE, lty = 1)
-    plot(ed.map$oax, add = TRUE, lty = 1)
-    plot(ed.map$cps, add = TRUE, lty = 1)
-    plot(ed.map$tab, add = TRUE, lty = 1)
+    plot(ed.map$jal, add = TRUE, lty = 1)
+    plot(ed.map$zac, add = TRUE, lty = 1)
+    plot(ed.map$san, add = TRUE, lty = 1)
     #
     # dibuja distrito padre
     sel <- which(df2006.map$disfed==df.map$father[df.map$disfed==dn])
@@ -735,37 +729,16 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     plot(df.map[df.map$disfed==dn,], add = TRUE, lwd = 4)
     plot(mu.map, add = TRUE, border = "green", lwd = 1)
     plot(mu.map, add = TRUE, lwd = 1, lty = 3)
-    plot(ed.map$ver, add = TRUE, lwd = 3)
-    plot(ed.map$ver, add = TRUE, border = "red", lty = 3, lwd = 2)
+    plot(ed.map$ags, add = TRUE, lwd = 3)
+    plot(ed.map$ags, add = TRUE, border = "red", lty = 3, lwd = 2)
     ## points(coordinates(cab), pch = 19, col = "white", cex = .5)
     ## points(coordinates(cab), pch = 1, col = "green", cex = .75)
     text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
     text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
     # 1st item in pair is border legend placement, 2nd is color code (1=ne 2=se 3=sw 4=nw)
-    lp <- list(c(4,3), #1 
-               c(3,2), #2 
-               c(1,3), #3 
-               c(1,2), #4 
-               c(4,3), #5 
-               c(4,2), #6 
-               c(4,3), #7 
-               c(1,3), #8 
-               c(4,3), #9 
-               c(1,2), #10
-               c(1,2), #11
-               c(4,3), #12
-               c(4,2), #13
-               c(1,2), #14
-               c(4,3), #15
-               c(4,2), #16
-               c(4,2), #17
-               c(2,3), #18
-               c(1,2), #19
-               c(1,2), #20
-               c(1,3), #21
-               c(4,2), #22
-               c(4,3), #23
-               c(1,3)) #24
+    lp <- list(c(4,2), #1 
+               c(4,2), #2 
+               c(2,3)) #3
     lp <- lp[[dn]] # pick relevant pair only
     lp <- c(lp, setdiff(1:4,lp)) # add free corners for north arrow and scale
     lp <- mapvalues( lp, from = 1:4, to = c("topright","bottomright","bottomleft","topleft"), warn_missing = FALSE )
@@ -815,14 +788,14 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     #dev.off()
 }
 
-mapKeyPink(2)
-mapOneDistrito(dn = 12, what2plot = 1)
+mapKeyPink(1)
+mapOneDistrito(dn = 3, what2plot = 1)
 
 ########################################################################
 # grafica distritos 1 por 1                                            #
 # (use 1984 long/lat for this map when mercator projection was chosen) #
 ########################################################################
-for (dn in 1:24){
+for (dn in 1:3){
     #dn <- 10 # debug
     print(paste("disn =", dn))
     #############################################
