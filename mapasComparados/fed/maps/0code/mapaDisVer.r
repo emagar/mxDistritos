@@ -618,7 +618,6 @@ df2006.map$dsi <- tmp$dsi
 # clean
 rm(d, sel, potentialFathers, potentialSons, father, son, dsi, s, f, sel.u, sel.i, d2015, d2018)
 
-
 ########################################################################
 # grafica distritos 1 por 1                                            #
 # (use 1984 long/lat for this map when mercator projection was chosen) #
@@ -725,7 +724,7 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
     tmp <-  df.map$cab[which(df.map$disfed==dn)]
     tmp2 <- df.map$dsi[which(df.map$disfed==dn)]
-    plot(df.map[df.map$disfed==dn,], axes = TRUE, main = paste("CdMx ", dn, " - ", tmp, sep = ""))
+    plot(df.map[df.map$disfed==dn,], axes = TRUE, main = paste("Veracruz ", dn, " - ", tmp, sep = ""))
     plot(bg, add = TRUE)
     #plot(df.map[df.map$disloc==dn,], lwd = 5, add = TRUE) # drop
     plot(ed.map$ver, add = TRUE)
@@ -766,30 +765,26 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     text(coordinates(mu.map), labels=mu.map$mun, cex=.51, col = "green")
     text(coordinates(mu.map), labels=mu.map$mun, cex=.5)
     # 1st item in pair is border legend placement, 2nd is color code (1=ne 2=se 3=sw 4=nw)
-    lp <- list(c(4,3), #1 
-               c(3,2), #2 
+    lp <- list(c(1,3), #1 
+               c(1,4), #2 
                c(1,3), #3 
-               c(1,2), #4 
+               c(1,3), #4 
                c(4,3), #5 
-               c(4,2), #6 
-               c(4,3), #7 
-               c(1,3), #8 
+               c(1,3), #6 
+               c(4,2), #7 
+               c(4,1), #8 
                c(4,3), #9 
-               c(1,2), #10
+               c(1,3), #10
                c(1,2), #11
-               c(4,3), #12
-               c(4,2), #13
-               c(1,2), #14
+               c(1,3), #12
+               c(1,3), #13
+               c(3,2), #14
                c(4,3), #15
-               c(4,2), #16
-               c(4,2), #17
+               c(4,3), #16
+               c(4,3), #17
                c(2,3), #18
-               c(1,2), #19
-               c(1,2), #20
-               c(1,3), #21
-               c(4,2), #22
-               c(4,3), #23
-               c(1,3)) #24
+               c(1,3), #19
+               c(1,3)) #20
     lp <- lp[[dn]] # pick relevant pair only
     lp <- c(lp, setdiff(1:4,lp)) # add free corners for north arrow and scale
     lp <- mapvalues( lp, from = 1:4, to = c("topright","bottomright","bottomleft","topleft"), warn_missing = FALSE )
@@ -839,14 +834,14 @@ mapOneDistrito <- function(dn = NULL, what2plot = NULL){
     #dev.off()
 }
 
-mapKeyPink(12)
-mapOneDistrito(dn = 12, what2plot = 1)
-
+mapKeyPink(1)
+mapOneDistrito(dn = 20, what2plot = 1)
+x
 ########################################################################
 # grafica distritos 1 por 1                                            #
 # (use 1984 long/lat for this map when mercator projection was chosen) #
 ########################################################################
-for (dn in 1:24){
+for (dn in 1:nrow(df.map@data)){
     #dn <- 10 # debug
     print(paste("disn =", dn))
     #############################################
