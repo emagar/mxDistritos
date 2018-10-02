@@ -52,7 +52,7 @@ sec2dis$seccion
 tmp <- merge(x = tmp, y = sec2dis, by.x = "SECCION", by.y = "seccion", all.x = TRUE, all.y = FALSE)
 dim(tmp)
 tmp <- tmp[order(tmp$orden),]
-tmp <- tmp[, grep("^dis.+$|mun|ife", colnames(tmp))] # subset columns
+#tmp <- tmp[, grep("^dis.+$|mun|ife", colnames(tmp))] # subset columns
 #tmp <- tmp[order(tmp$orden), grep("SECCION|^dis.+$", colnames(tmp))]
 colnames(tmp)
 se.map@data <- cbind(se.map@data, tmp)
