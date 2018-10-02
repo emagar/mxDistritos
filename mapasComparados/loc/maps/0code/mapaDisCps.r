@@ -15,7 +15,7 @@ library(rgdal)
 rm(list = ls())
 # get mun names and votes
 #load("/home/eric/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/aymu1977-present.RData")
-d <- read.csv(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/aymu1977-present.csv", stringsAsFactors=FALSE)
+d <- read.csv(file = "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/aymu1977-present.csv", stringsAsFactors=FALSE)
 munvot <- d
 rm(list=setdiff(ls(), "munvot")) # clean
 #
@@ -35,7 +35,7 @@ library(spdep); library(maptools)
 # used to determine what datum rojano data has
 library(rgdal)
 #gpclibPermit()
-tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con mapas 2017
+tmp <- paste("../../../fed/shp/disfed2018/", edo, sep = "") # archivo con mapas 2017
 #tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 se.map <- readOGR(dsn = tmp, layer = 'SECCION')
 summary(se.map)
@@ -65,7 +65,7 @@ ed.map <- list()
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$bcs <- tmp
 ## #
-tmp <- "../../../fed/shp/cam" # archivo con mapas 2018
+tmp <- "../../../fed/shp/disfed2018/cam" # archivo con mapas 2018
 ## # tmp <- paste(md, "cam", sep = "") # archivo con mapas rojano
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
@@ -86,7 +86,7 @@ ed.map$cam <- tmp
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$col <- tmp
 ## #
-tmp <- "../../../fed/shp/cps" # archivo con mapas 2018
+tmp <- "../../../fed/shp/disfed2018/cps" # archivo con mapas 2018
 # ## tmp <- paste(md, "cps", sep = "") # archivo con mapas rojano
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
@@ -177,7 +177,7 @@ ed.map$cps <- tmp
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$nl <- tmp
 ## #
-tmp <- "../../../fed/shp/oax" # archivo con mapas 2018
+tmp <- "../../../fed/shp/disfed2018/oax" # archivo con mapas 2018
 ## # tmp <- paste(md, "oax", sep = "") # archivo con mapas rojano
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
@@ -226,7 +226,7 @@ ed.map$oax <- tmp
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$son <- tmp
 ## #
-tmp <- "../../../fed/shp/tab" # archivo con mapas 2018
+tmp <- "../../../fed/shp/disfed2018/tab" # archivo con mapas 2018
 ## # tmp <- paste(md, "tab", sep = "") # archivo con mapas rojano
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
@@ -247,7 +247,7 @@ ed.map$tab <- tmp
 ## tmp <- spTransform(tmp, osm())
 ## ed.map$tla <- tmp
 ## #
-tmp <- "../../../fed/shp/ver" # archivo con mapas 2018
+tmp <- "../../../fed/shp/disfed2018/ver" # archivo con mapas 2018
 ## # tmp <- paste(md, "ver", sep = "") # archivo con mapas rojano
 tmp <- readOGR(dsn = tmp, layer = 'ENTIDAD')
 # projects to a different datum with long and lat
@@ -270,7 +270,7 @@ ed.map$ver <- tmp
 
 # read municipios
 #tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
-tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con mapas 2018
+tmp <- paste("../../../fed/shp/disfed2018/", edo, sep = "") # archivo con mapas 2018
 mu.map <- readOGR(dsn = tmp, layer = 'MUNICIPIO')
 # projects to a different datum with long and lat
 mu.map <- spTransform(mu.map, osm())
@@ -294,7 +294,6 @@ dl2012.map <- readOGR(dsn = tmp, layer = 'disloc2012')
 colnames(dl2012.map@data) <- c("disloc")
 # projects to a different datum with long and lat
 dl2012.map <- spTransform(dl2012.map, osm()) # project to osm native Mercator
-
 
 # add father/son info and dsi of mapLoc
 dsi <- "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/simIndex/dist_cps.csv"
@@ -377,6 +376,7 @@ nclr <- 5                                    #CATEGORÍAS DE COLOR (MIN=3 MAX=9)
 mauve <- brewer.pal(nclr,"BuPu")             #GENERA CODIGOS DE COLOR QUE CRECEN CON GRADO
 redgreen <- brewer.pal(6, "RdYlGn"); redgreen <- redgreen[6:1]
 catcol <- brewer.pal(9, "Set1")
+catcol <- c(catcol[9], catcol[2:8], catcol[1]) # invert colors for esp and oth
 library(plyr)
 tmp <- as.numeric(cut(li$p5li, seq(0,1,by = .2), include.lowest = TRUE)) # cut p5li into 5 categories
 li$p5licat <- mapvalues ( tmp, from = 1:5, to = mauve)
@@ -403,7 +403,7 @@ df2006.map <- readOGR(dsn = tmp, layer = 'DISTRITO')
 df2006.map <- spTransform(df2006.map, osm())
 
 # c. from ine's 2018 distrito maps
-tmp <- paste("../../../fed/shp/", edo, sep = "") # archivo con mapas 2018
+tmp <- paste("../../../fed/shp/disfed2018/", edo, sep = "") # archivo con mapas 2018
 df.map <- readOGR(dsn = tmp, layer = 'DISTRITO')
 # projects to a different datum with long and lat
 df.map <- spTransform(df.map, osm())
@@ -602,7 +602,12 @@ portray2 <- se.map$p5licat # elegir qué reportará el mapa 3
 portray3 <- se.map$neliMolicat # elegir qué reportará el mapa 4
 portray4 <- se.map$lengMaxcat # elegir qué reportará el mapa 5
 
-# all state's secciones, colored by % indigenas, in single map
+eric  x
+############################################################################
+############################################################################
+## all state's secciones and districts, colored by % indigenas, in one map 
+############################################################################
+############################################################################
 m <- p84(ed.map$cps)  # subsetted map
 b <- as.data.frame(m@bbox)
 # gets xx degrees more than bbox (decimal defines share of max range)
@@ -650,8 +655,8 @@ text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
 #
 legend(x="bottomright", bg = "white", legend=c("0-20","20-40","40-60","60-80","80-100"), fill=mauve, title = "% indígena", bty="o", cex=.75)
 library(prettymapr)
-addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
-addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "bottomleft")
 #dev.off()
 
 # distritos c indígenas
@@ -695,8 +700,8 @@ text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
 #
 legend(x="bottomright", bg = "white", legend=c("1","1.2","1.4","1.6","1.8","2"), fill=redgreen, title = "nMolinar lenguas", bty="o", cex=.75)
 library(prettymapr)
-addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
-addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "bottomleft")
 #dev.off()
 
 # lengua predominante
@@ -737,8 +742,8 @@ text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
 #
 legend(x="bottomright", bg = "white", legend=c("español", "tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "kanjobal", "maya", "otras"), fill=catcol, title = "lengua predominante", bty="o", cex=.75)
 library(prettymapr)
-addnortharrow(pos = ifelse(lp[dn]=="topright", "topleft", "topright"), scale=.75)
-addscalebar(style = "ticks", pos = ifelse(lp[dn]=="bottomright", "bottomleft", "bottomright"))
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "bottomleft")
 #dev.off()
 
 
