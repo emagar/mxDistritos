@@ -71,12 +71,12 @@ tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2010)
 tmp <- gUnaryUnion(se.map, id = se.map@data$escenario1)
 tmp <- gUnaryUnion(se.map, id = se.map@data$antonioPerezGomez1)
 tmp <- gUnaryUnion(se.map, id = se.map@data$magdalenaGironLopez1)
-tmp <- gUnaryUnion(se.map, id = se.map@data$juanZepedaPerez1)
 tmp <- gUnaryUnion(se.map, id = se.map@data$JoseDomingoVazquezLopez1a)
 tmp <- gUnaryUnion(se.map, id = se.map@data$JoseDomingoVazquezLopez1b)
 tmp <- gUnaryUnion(se.map, id = se.map@data$leonardoLopezPerez1)
 tmp <- gUnaryUnion(se.map, id = se.map@data$lorenzoLopezMendez1a)
 tmp <- gUnaryUnion(se.map, id = se.map@data$lorenzoLopezMendez1b)
+tmp <- gUnaryUnion(se.map, id = se.map@data$juanZepedaPerez1)
 ## #
 ## tmp2 <- unionSpatialPolygons(se.map, se.map$disloc2018) # proper way to get federal district objects... if only seccion shapefiles had no problems
 ## plot(tmp2)
