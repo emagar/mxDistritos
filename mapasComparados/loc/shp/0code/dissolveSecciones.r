@@ -71,6 +71,12 @@ tmp <- gUnaryUnion(se.map, id = se.map@data$disloc2010)
 tmp <- gUnaryUnion(se.map, id = se.map@data$escenario1)
 tmp <- gUnaryUnion(se.map, id = se.map@data$antonioPerezGomez1)
 tmp <- gUnaryUnion(se.map, id = se.map@data$magdalenaGironLopez1)
+tmp <- gUnaryUnion(se.map, id = se.map@data$juanZepedaPerez1)
+tmp <- gUnaryUnion(se.map, id = se.map@data$JoseDomingoVazquezLopez1a)
+tmp <- gUnaryUnion(se.map, id = se.map@data$JoseDomingoVazquezLopez1b)
+tmp <- gUnaryUnion(se.map, id = se.map@data$leonardoLopezPerez1)
+tmp <- gUnaryUnion(se.map, id = se.map@data$lorenzoLopezMendez1a)
+tmp <- gUnaryUnion(se.map, id = se.map@data$lorenzoLopezMendez1b)
 ## #
 ## tmp2 <- unionSpatialPolygons(se.map, se.map$disloc2018) # proper way to get federal district objects... if only seccion shapefiles had no problems
 ## plot(tmp2)
@@ -83,7 +89,7 @@ tmp <- SpatialPolygonsDataFrame(tmp,IDs)
 # Check it all worked
 plot(tmp)
 xy <- coordinates(tmp)
-text(xy[,1],xy[,2],tmp$ID,cex=0.5,col="red")
+text(xy[,1],xy[,2],tmp$ID,cex=1,col="red")
 
 ## # another older way to achieve this
 ## # If you want to recreate an object with a data frame
@@ -106,6 +112,4 @@ names(tmp@data)
 
 getwd()
 d <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/2clean/cps"
-writeOGR(tmp, d, "escenario1", driver="ESRI Shapefile")
-writeOGR(tmp, d, "antonioPerezGomez1", driver="ESRI Shapefile")
-writeOGR(tmp, d, "magdalenaGironLopez1", driver="ESRI Shapefile")
+writeOGR(tmp, d, "LorenzoLopezMendez1b", driver="ESRI Shapefile")
