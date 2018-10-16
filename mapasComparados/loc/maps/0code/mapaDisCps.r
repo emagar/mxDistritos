@@ -803,7 +803,7 @@ dlapg.map <- spTransform(dlapg.map, osm()) # project to osm native Mercator
 #
 
 # read shapefiles JoseDomingoVazquezLopez1a
-tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/JoseDomingoVazquezLopez1a", sep = "") # archivo con mapas locales
+tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/joseDomingoVazquezLopez1a", sep = "") # archivo con mapas locales
 dljdvla.map <- readOGR(dsn = tmp, layer = 'JoseDomingoVazquezLopez1a', stringsAsFactors = FALSE)
 colnames(dljdvla.map@data) <- c("id")
 # projects to a different ./datum with long and lat
@@ -811,12 +811,42 @@ dljdvla.map <- spTransform(dljdvla.map, osm()) # project to osm native Mercator
 #
 
 # read shapefiles JoseDomingoVazquezLopez1b
-tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/JoseDomingoVazquezLopez1b", sep = "") # archivo con mapas locales
+tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/joseDomingoVazquezLopez1b", sep = "") # archivo con mapas locales
 dljdvlb.map <- readOGR(dsn = tmp, layer = 'JoseDomingoVazquezLopez1b', stringsAsFactors = FALSE)
 colnames(dljdvlb.map@data) <- c("id")
 # projects to a different ./datum with long and lat
 dljdvlb.map <- spTransform(dljdvlb.map, osm()) # project to osm native Mercator
 #
+
+# read shapefiles juanZepedaPerez1
+tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/juanZepedaPerez1", sep = "") # archivo con mapas locales
+dljzp.map <- readOGR(dsn = tmp, layer = 'juanZepedaPerez1', stringsAsFactors = FALSE)
+colnames(dljzp.map@data) <- c("id")
+# projects to a different ./datum with long and lat
+dljzp.map <- spTransform(dljzp.map, osm()) # project to osm native Mercator
+
+ 
+# read shapefiles leonardoLopezPerez1
+tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/leonardoLopezPerez1", sep = "") # archivo con mapas locales
+dlllp.map <- readOGR(dsn = tmp, layer = 'leonardoLopezPerez1', stringsAsFactors = FALSE)
+colnames(dlllp.map@data) <- c("id")
+# projects to a different ./datum with long and lat
+dlllp.map <- spTransform(dlllp.map, osm()) # project to osm native Mercator
+
+# read shapefiles lorenzoLopezMéndez1a
+tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/lorenzoLopezMendez1a", sep = "") # archivo con mapas locales
+dlllma.map <- readOGR(dsn = tmp, layer = 'lorenzoLopezMendez1a', stringsAsFactors = FALSE)
+colnames(dlllma.map@data) <- c("id")
+# projects to a different ./datum with long and lat
+dlllma.map <- spTransform(dlllma.map, osm()) # project to osm native Mercator
+
+# read shapefiles lorenzoLopezMéndez1b
+tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/lorenzoLopezMendez1b", sep = "") # archivo con mapas locales
+dlllmb.map <- readOGR(dsn = tmp, layer = 'lorenzoLopezMendez1b', stringsAsFactors = FALSE)
+colnames(dlllmb.map@data) <- c("id")
+# projects to a different ./datum with long and lat
+dlllmb.map <- spTransform(dlllmb.map, osm()) # project to osm native Mercator
+
 
 # add escenario 1 and indigenous amendments to sec map
 tmp <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/loc/cpsLoc(indig)ABC.csv"
@@ -1283,7 +1313,7 @@ zemap <- dljdvla.map
 ## plot(zemap)
 ## xy <- coordinates(zemap)
 ## text(xy[,1],xy[,2],zemap$id,col="red",cex=.7)
-sel1 <- which(dle1.map$id==6 | dle1.map$id==7) # relevant 4 juanZapedaPerez
+sel1 <- which(dle1.map$id==6 | dle1.map$id==7) # relevant 4 case
 sel1s <- which(se.map$escenario1==6 | se.map$escenario1==7)
 selm <- which(zemap$id==25 | zemap$id==26)
 #plot(dle1.map[sel1,])
@@ -1505,7 +1535,7 @@ zemap <- dljdvlb.map
 ## plot(zemap)
 ## xy <- coordinates(zemap)
 ## text(xy[,1],xy[,2],zemap$id,col="red",cex=.7)
-sel1 <- which(dle1.map$id==6 | dle1.map$id==7 | dle1.map$id==9 | dle1.map$id==18 | dle1.map$id==19) # relevant 4 juanZapedaPerez
+sel1 <- which(dle1.map$id==6 | dle1.map$id==7 | dle1.map$id==9 | dle1.map$id==18 | dle1.map$id==19) # relevant 4 case
 sel1s <- which(se.map$escenario1==6 | se.map$escenario1==7 | se.map$escenario1==9 | se.map$escenario1==18 | se.map$escenario1==19)
 selm <- which(zemap$id==25 | zemap$id==26 | zemap$id==27)
 #plot(dle1.map[sel1,])
@@ -1721,6 +1751,909 @@ text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
 ###################################################################################################################
 #dev.off()
 
+############################################################################
+############################################################################
+## close-up of consulta munic and secc, colored by % indigenas
+## juanZepedaPerez1 cambia distritos 6 7 9 18 19 
+############################################################################
+############################################################################
+name <- "Juan Zepeda Pérez" 
+abrev <- "jzp"
+zemap <- dljzp.map
+## # locate districts
+## plot(zemap)
+## xy <- coordinates(zemap)
+## text(xy[,1],xy[,2],zemap$id,col="red",cex=.7)
+sel1 <- which(dle1.map$id==17 | dle1.map$id==18 | dle1.map$id==19 | dle1.map$id==21 | dle1.map$id==22 | dle1.map$id==23 | dle1.map$id==24) # relevant 4 juanZapedaPerez
+sel1s <- which(se.map$escenario1==17 | se.map$escenario1==18 | se.map$escenario1==19 | se.map$escenario1==21 | se.map$escenario1==22 | se.map$escenario1==23 | se.map$escenario1==24)
+selm <- which(zemap$id==25 | zemap$id==26 | zemap$id==27 | zemap$id==28 | zemap$id==29 | zemap$id==30)
+#plot(dle1.map[sel1,])
+## m <- p84(dle1.map[sel1,])  # subsetted map
+## b <- as.data.frame(m@bbox)
+## b <- sqbbox(b)
+## # gets xx degrees more than bbox (decimal defines share of max range)
+## xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+##     # checks if basemap (type os, saved as R data) is in disk
+##     bmps <- dir(path=paste(md2, "basemaps/", sep = ""))
+##     if (paste(edo, "mgl-os.RData", sep = "") %in% bmps) {
+##         load(file = paste(md2, "basemaps/", edo, "mgl-os.RData", sep = "")) # gets bg.os
+##         bg <- bg.os
+##     } else {
+##         # choose one of four background picture types
+##         #bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+##         #bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+##         #bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+##         bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))#, minNumTiles = 9)
+##         save(bg.os, file = paste(md2, "basemaps/", edo, "mgl-os.RData", sep = "")) # save a copy of the basemap for future use
+##         bg <- bg.os
+##     }
+#
+#pdf(file = paste(md2, edo, "-", abrev, "-p5licat.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-p5licat.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -91.3, y = 17.525, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+text( x = -92.7, y = 17.825, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+text( x = -91.25, y = 15.7, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = 0)
+text( x = -90.75, y = 17, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = -35)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray2, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray2[sel1s], .67))
+#
+# escenario1 borders and case borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("0-20","20-40","40-60","60-80","80-100"), fill=alpha(mauve, .67), title = "% indígena", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# número efectivo d lenguas
+#pdf(file = paste(md2, edo, "-", abrev, "-nel.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-nel.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -91.3, y = 17.525, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+text( x = -92.7, y = 17.625, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 25)
+text( x = -91.25, y = 15.7, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = 0)
+text( x = -90.75, y = 17, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = -35)
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+#
+# escenario1 borders and magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("1","1.2","1.4","1.6","1.8","2"), fill=alpha(redgreen, .67), title = "nMolinar lenguas", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# lengua predominante
+#pdf(file = paste(md2, edo, "-", abrev, "-lengMax.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-lengMax.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -91.3, y = 17.525, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+text( x = -92.7, y = 17.625, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 25)
+text( x = -91.25, y = 15.7, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = 0)
+text( x = -90.75, y = 17, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = -35)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray4, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray4[sel1s], .67))
+#
+# escenario1 borders
+# magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "green", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("español", "tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "kanjobal", "maya", "otras"), fill=alpha(catcol, .67), title = "lengua predominante", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# historia electoral
+#pdf(file = paste(md2, edo, "-", abrev, "-core.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-core.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -91.3, y = 17.525, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+text( x = -92.7, y = 17.625, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 25)
+text( x = -91.25, y = 15.7, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = 0)
+text( x = -90.75, y = 17, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = -35)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray[sel1s], .67))
+#
+# escenario1 borders
+# magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+##################################################################################################################
+# bastion legend for three parties
+# size reduction for secondary plot (serves as legend) conditional on placement
+par(fig = c( .8,  1,  0, .2), new = TRUE) 
+clr <- data.frame(pan = blues[c(5,6,7)], pri = reds[c(5,6,7)], prd = yellows[c(5,6,7)], stringsAsFactors = FALSE)
+sz <- .75
+par(mar=c(0,0,1,0)) ## SETS B L U R MARGIN SIZES
+# par(bg = "white")
+plot(x = c(1,6), y = c(0,4.5), type = "n", axes = FALSE, main = "Ganó 2000-15", cex.main = .75)
+polygon(x = c(1,1,6,6), y = c(4,5,5,4), border = "white", col = "white") # white background
+polygon(x = c(4,4,6,6), y = c(0,6,6,0), border = "white", col = "white") # white background
+for (r in 1:3){
+    for (c in 1:3){
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = "white", border = "white", lwd = 4)
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = alpha(clr[r,c], .67), border = "white", lwd = 4)
+    }
+}
+for (c in 1:3){
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = "white", border = "white", lwd = 4)
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = alpha(gray, .67), border = "white", lwd = 4)
+}
+text(x = 1.5, y = 4.2, label = "pan", cex = sz)
+text(x = 2.5, y = 4.2, label = "pri", cex = sz)
+text(x = 3.5, y = 4.2, label = "izq.", cex = sz)
+#text(x = 5,   y = 4.2, label = "won", cex = sz)
+text(x = 4.75, y = 3.5, label = "6de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 2.5, label = "5de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 1.5, label = "4de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
+###################################################################################################################
+#dev.off()
+
+############################################################################
+############################################################################
+## close-up of consulta munic and secc, colored by % indigenas
+## juanZepedaPerez1 cambia distritos 20 21 22 23
+############################################################################
+############################################################################
+name <- "Leonardo López Pérez" 
+abrev <- "llp"
+zemap <- dlllp.map
+## # locate districts
+## plot(zemap)
+## xy <- coordinates(zemap)
+## text(xy[,1],xy[,2],zemap$id,col="red",cex=.7)
+sel1 <- which(dle1.map$id==20 | dle1.map$id==21 | dle1.map$id==22 | dle1.map$id==23) # relevant 4 case
+sel1s <- which(se.map$escenario1==20 | se.map$escenario1==21 | se.map$escenario1==22 | se.map$escenario1==23)
+selm <- which(zemap$id==25 | zemap$id==26 | zemap$id==27)
+#plot(dle1.map[sel1,])
+## m <- p84(dle1.map[sel1,])  # subsetted map
+## b <- as.data.frame(m@bbox)
+## b <- sqbbox(b)
+## # gets xx degrees more than bbox (decimal defines share of max range)
+## xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+##     # checks if basemap (type os, saved as R data) is in disk
+##     bmps <- dir(path=paste(md2, "basemaps/", sep = ""))
+##     if (paste(edo, "mgl-os.RData", sep = "") %in% bmps) {
+##         load(file = paste(md2, "basemaps/", edo, "mgl-os.RData", sep = "")) # gets bg.os
+##         bg <- bg.os
+##     } else {
+##         # choose one of four background picture types
+##         #bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+##         #bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+##         #bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+##         bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))#, minNumTiles = 9)
+##         save(bg.os, file = paste(md2, "basemaps/", edo, "mgl-os.RData", sep = "")) # save a copy of the basemap for future use
+##         bg <- bg.os
+##     }
+#
+#pdf(file = paste(md2, edo, "-", abrev, "-p5licat.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-p5licat.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -91.4, y = 17.525, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+text( x = -92.7, y = 17.825, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray2, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray2[sel1s], .67))
+#
+# escenario1 borders and case borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("0-20","20-40","40-60","60-80","80-100"), fill=alpha(mauve, .67), title = "% indígena", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# número efectivo d lenguas
+#pdf(file = paste(md2, edo, "-", abrev, "-nel.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-nel.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -91.3, y = 17.525, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+text( x = -92.7, y = 17.625, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 25)
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+#
+# escenario1 borders and magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("1","1.2","1.4","1.6","1.8","2"), fill=alpha(redgreen, .67), title = "nMolinar lenguas", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# lengua predominante
+#pdf(file = paste(md2, edo, "-", abrev, "-lengMax.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-lengMax.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -91.3, y = 17.525, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+text( x = -92.7, y = 17.625, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 25)
+text( x = -91.25, y = 15.7, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = 0)
+text( x = -90.75, y = 17, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = -35)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray4, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray4[sel1s], .67))
+#
+# escenario1 borders
+# magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "green", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("español", "tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "kanjobal", "maya", "otras"), fill=alpha(catcol, .67), title = "lengua predominante", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# historia electoral
+#pdf(file = paste(md2, edo, "-", abrev, "-core.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-core.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -91.3, y = 17.525, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+text( x = -92.7, y = 17.625, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 25)
+text( x = -91.25, y = 15.7, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = 0)
+text( x = -90.75, y = 17, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = -35)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray[sel1s], .67))
+#
+# escenario1 borders
+# magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+##################################################################################################################
+# bastion legend for three parties
+# size reduction for secondary plot (serves as legend) conditional on placement
+par(fig = c( .8,  1,  0, .2), new = TRUE) 
+clr <- data.frame(pan = blues[c(5,6,7)], pri = reds[c(5,6,7)], prd = yellows[c(5,6,7)], stringsAsFactors = FALSE)
+sz <- .75
+par(mar=c(0,0,1,0)) ## SETS B L U R MARGIN SIZES
+# par(bg = "white")
+plot(x = c(1,6), y = c(0,4.5), type = "n", axes = FALSE, main = "Ganó 2000-15", cex.main = .75)
+polygon(x = c(1,1,6,6), y = c(4,5,5,4), border = "white", col = "white") # white background
+polygon(x = c(4,4,6,6), y = c(0,6,6,0), border = "white", col = "white") # white background
+for (r in 1:3){
+    for (c in 1:3){
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = "white", border = "white", lwd = 4)
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = alpha(clr[r,c], .67), border = "white", lwd = 4)
+    }
+}
+for (c in 1:3){
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = "white", border = "white", lwd = 4)
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = alpha(gray, .67), border = "white", lwd = 4)
+}
+text(x = 1.5, y = 4.2, label = "pan", cex = sz)
+text(x = 2.5, y = 4.2, label = "pri", cex = sz)
+text(x = 3.5, y = 4.2, label = "izq.", cex = sz)
+#text(x = 5,   y = 4.2, label = "won", cex = sz)
+text(x = 4.75, y = 3.5, label = "6de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 2.5, label = "5de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 1.5, label = "4de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
+###################################################################################################################
+#dev.off()
+
+############################################################################
+############################################################################
+## close-up of consulta munic and secc, colored by % indigenas
+## lorenzoLopezMéndez1a cambia distritos 1 18 21 22 23 24
+############################################################################
+############################################################################
+name <- "Lorenzo López Méndez v1" 
+abrev <- "llma"
+zemap <- dlllma.map
+## # locate districts
+## plot(zemap)
+## xy <- coordinates(zemap)
+## text(xy[,1],xy[,2],zemap$id,col="red",cex=.7)
+sel1 <- which(dle1.map$id==1 | dle1.map$id==18 | dle1.map$id==21 | dle1.map$id==22 | dle1.map$id==23 | dle1.map$id==24) # relevant 4 case
+sel1s <- which(se.map$escenario1==1 | se.map$escenario1==18 | se.map$escenario1==21 | se.map$escenario1==22 | se.map$escenario1==23 | se.map$escenario1==24)
+selm <- which(zemap$id==25 | zemap$id==26 | zemap$id==27 | zemap$id==28 | zemap$id==29)
+#plot(dle1.map[sel1,])
+## m <- p84(dle1.map[sel1,])  # subsetted map
+## b <- as.data.frame(m@bbox)
+## b <- sqbbox(b)
+## # gets xx degrees more than bbox (decimal defines share of max range)
+## xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+##     # checks if basemap (type os, saved as R data) is in disk
+##     bmps <- dir(path=paste(md2, "basemaps/", sep = ""))
+##     if (paste(edo, "mgl-os.RData", sep = "") %in% bmps) {
+##         load(file = paste(md2, "basemaps/", edo, "mgl-os.RData", sep = "")) # gets bg.os
+##         bg <- bg.os
+##     } else {
+##         # choose one of four background picture types
+##         #bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+##         #bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+##         #bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+##         bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))#, minNumTiles = 9)
+##         save(bg.os, file = paste(md2, "basemaps/", edo, "mgl-os.RData", sep = "")) # save a copy of the basemap for future use
+##         bg <- bg.os
+##     }
+#
+#pdf(file = paste(md2, edo, "-", abrev, "-p5licat.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-p5licat.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -92.8, y = 17.55, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray2, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray2[sel1s], .67))
+#
+# escenario1 borders and case borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("0-20","20-40","40-60","60-80","80-100"), fill=alpha(mauve, .67), title = "% indígena", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# número efectivo d lenguas
+#pdf(file = paste(md2, edo, "-", abrev, "-nel.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-nel.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -92.8, y = 17.55, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+#
+# escenario1 borders and magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("1","1.2","1.4","1.6","1.8","2"), fill=alpha(redgreen, .67), title = "nMolinar lenguas", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# lengua predominante
+#pdf(file = paste(md2, edo, "-", abrev, "-lengMax.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-lengMax.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -92.8, y = 17.55, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray4, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray4[sel1s], .67))
+#
+# escenario1 borders
+# magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "green", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("español", "tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "kanjobal", "maya", "otras"), fill=alpha(catcol, .67), title = "lengua predominante", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# historia electoral
+#pdf(file = paste(md2, edo, "-", abrev, "-core.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-core.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -92.8, y = 17.55, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray[sel1s], .67))
+#
+# escenario1 borders
+# magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+##################################################################################################################
+# bastion legend for three parties
+# size reduction for secondary plot (serves as legend) conditional on placement
+par(fig = c( .8,  1,  0, .2), new = TRUE) 
+clr <- data.frame(pan = blues[c(5,6,7)], pri = reds[c(5,6,7)], prd = yellows[c(5,6,7)], stringsAsFactors = FALSE)
+sz <- .75
+par(mar=c(0,0,1,0)) ## SETS B L U R MARGIN SIZES
+# par(bg = "white")
+plot(x = c(1,6), y = c(0,4.5), type = "n", axes = FALSE, main = "Ganó 2000-15", cex.main = .75)
+polygon(x = c(1,1,6,6), y = c(4,5,5,4), border = "white", col = "white") # white background
+polygon(x = c(4,4,6,6), y = c(0,6,6,0), border = "white", col = "white") # white background
+for (r in 1:3){
+    for (c in 1:3){
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = "white", border = "white", lwd = 4)
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = alpha(clr[r,c], .67), border = "white", lwd = 4)
+    }
+}
+for (c in 1:3){
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = "white", border = "white", lwd = 4)
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = alpha(gray, .67), border = "white", lwd = 4)
+}
+text(x = 1.5, y = 4.2, label = "pan", cex = sz)
+text(x = 2.5, y = 4.2, label = "pri", cex = sz)
+text(x = 3.5, y = 4.2, label = "izq.", cex = sz)
+#text(x = 5,   y = 4.2, label = "won", cex = sz)
+text(x = 4.75, y = 3.5, label = "6de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 2.5, label = "5de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 1.5, label = "4de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
+###################################################################################################################
+#dev.off()
+
+############################################################################
+############################################################################
+## close-up of consulta munic and secc, colored by % indigenas
+## lorenzoLopezMéndez1b cambia distritos 1 17 18 22 23 24
+############################################################################
+############################################################################
+name <- "Lorenzo López Méndez v2" 
+abrev <- "llmb"
+zemap <- dlllmb.map
+## # locate districts
+## plot(zemap)
+## xy <- coordinates(zemap)
+## text(xy[,1],xy[,2],zemap$id,col="red",cex=.7)
+sel1 <- which(dle1.map$id==1 | dle1.map$id==17 | dle1.map$id==18 | dle1.map$id==22 | dle1.map$id==23 | dle1.map$id==24) # relevant 4 case
+sel1s <- which(se.map$escenario1==1 | se.map$escenario1==17 | se.map$escenario1==18 | se.map$escenario1==22 | se.map$escenario1==23 | se.map$escenario1==24)
+selm <- which(zemap$id==25 | zemap$id==26 | zemap$id==27 | zemap$id==28 | zemap$id==29 | zemap$id==30)
+#plot(dle1.map[sel1,])
+## m <- p84(dle1.map[sel1,])  # subsetted map
+## b <- as.data.frame(m@bbox)
+## b <- sqbbox(b)
+## # gets xx degrees more than bbox (decimal defines share of max range)
+## xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+##     # checks if basemap (type os, saved as R data) is in disk
+##     bmps <- dir(path=paste(md2, "basemaps/", sep = ""))
+##     if (paste(edo, "mgl-os.RData", sep = "") %in% bmps) {
+##         load(file = paste(md2, "basemaps/", edo, "mgl-os.RData", sep = "")) # gets bg.os
+##         bg <- bg.os
+##     } else {
+##         # choose one of four background picture types
+##         #bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+##         #bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+##         #bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+##         bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))#, minNumTiles = 9)
+##         save(bg.os, file = paste(md2, "basemaps/", edo, "mgl-os.RData", sep = "")) # save a copy of the basemap for future use
+##         bg <- bg.os
+##     }
+#
+#pdf(file = paste(md2, edo, "-", abrev, "-p5licat.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-p5licat.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -92.8, y = 17.65, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray2, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray2[sel1s], .67))
+#
+# escenario1 borders and case borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("0-20","20-40","40-60","60-80","80-100"), fill=alpha(mauve, .67), title = "% indígena", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# número efectivo d lenguas
+#pdf(file = paste(md2, edo, "-", abrev, "-nel.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-nel.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -92.8, y = 17.65, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+#
+# escenario1 borders and magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("1","1.2","1.4","1.6","1.8","2"), fill=alpha(redgreen, .67), title = "nMolinar lenguas", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# lengua predominante
+#pdf(file = paste(md2, edo, "-", abrev, "-lengMax.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-lengMax.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -92.8, y = 17.65, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray4, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray4[sel1s], .67))
+#
+# escenario1 borders
+# magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "green", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomright", bg = "white", legend=c("español", "tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "kanjobal", "maya", "otras"), fill=alpha(catcol, .67), title = "lengua predominante", bty="o", cex=.9)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+#dev.off()
+
+# historia electoral
+#pdf(file = paste(md2, edo, "-", abrev, "-core.pdf", sep = ""))
+#png(file = paste(md2, edo, "-", abrev, "-core.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(dle1.map[sel1,]), axes = TRUE, main = name)#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+text( x = -92.8, y = 17.65, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray[sel1s], .67))
+#
+# escenario1 borders
+# magda giron borders
+plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "white", lwd = 4.5)
+plot(p84(zemap[selm,]), add = TRUE, border = "red", lwd = 3)
+plot(p84(dle1.map[sel1,]), add = TRUE, lwd = 1.5)
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
+# nombres municipios
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
+## text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
+#
+legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+##################################################################################################################
+# bastion legend for three parties
+# size reduction for secondary plot (serves as legend) conditional on placement
+par(fig = c( .8,  1,  0, .2), new = TRUE) 
+clr <- data.frame(pan = blues[c(5,6,7)], pri = reds[c(5,6,7)], prd = yellows[c(5,6,7)], stringsAsFactors = FALSE)
+sz <- .75
+par(mar=c(0,0,1,0)) ## SETS B L U R MARGIN SIZES
+# par(bg = "white")
+plot(x = c(1,6), y = c(0,4.5), type = "n", axes = FALSE, main = "Ganó 2000-15", cex.main = .75)
+polygon(x = c(1,1,6,6), y = c(4,5,5,4), border = "white", col = "white") # white background
+polygon(x = c(4,4,6,6), y = c(0,6,6,0), border = "white", col = "white") # white background
+for (r in 1:3){
+    for (c in 1:3){
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = "white", border = "white", lwd = 4)
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = alpha(clr[r,c], .67), border = "white", lwd = 4)
+    }
+}
+for (c in 1:3){
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = "white", border = "white", lwd = 4)
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = alpha(gray, .67), border = "white", lwd = 4)
+}
+text(x = 1.5, y = 4.2, label = "pan", cex = sz)
+text(x = 2.5, y = 4.2, label = "pri", cex = sz)
+text(x = 3.5, y = 4.2, label = "izq.", cex = sz)
+#text(x = 5,   y = 4.2, label = "won", cex = sz)
+text(x = 4.75, y = 3.5, label = "6de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 2.5, label = "5de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 1.5, label = "4de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
+###################################################################################################################
+#dev.off()
 
 
 
