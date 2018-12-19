@@ -1987,7 +1987,7 @@ text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
 ############################################################################
 ############################################################################
 ## close-up of consulta munic and secc, colored by % indigenas
-## juanZepedaPerez1 cambia distritos 20 21 22 23
+## Leonardo López Pérez cambia distritos 20 21 22 23
 ############################################################################
 ############################################################################
 name <- "Leonardo López Pérez" 
@@ -2052,12 +2052,12 @@ plot(p84(mu.map), add = TRUE, border = "forestgreen", lwd = .75, lty = 3)
 text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.51, col = "green")
 text(coordinates(p84(mu.map)), labels=mu.map$mun, cex=.5)
 #
-legend(x="bottomright", bg = "white", legend=c("0-20","20-40","40-60","60-80","80-100"), fill=alpha(mauve, .67), title = "% indígena", bty="o", cex=.9)
+legend(x="topright", bg = "white", legend=c("0-20","20-40","40-60","60-80","80-100"), fill=alpha(mauve, .67), title = "% indígena", bty="o", cex=.9)
 #
-legend(x="bottomleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
+legend(x="topleft", bg = "white", legend=c("1er escenario","consulta","municipales"), col=c("black","red","green"), lty = c(1,1,3), lwd = c(4,4,2), title = "Límites", bty="o", cex=.9)
 library(prettymapr)
-addnortharrow(pos = "topleft", scale=.75)
-addscalebar(style = "ticks", pos = "topright")
+addnortharrow(pos = "bottomleft", scale=.75)
+addscalebar(style = "ticks", pos = "bottomright")
 #dev.off()
 
 # número efectivo d lenguas
