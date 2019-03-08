@@ -272,6 +272,10 @@ ed.map$ver <- tmp
 #tmp <- paste(md, edo, sep = "") # archivo con mapas rojano
 tmp <- paste("../../../fed/shp/disfed2018/", edo, sep = "") # archivo con mapas 2018
 mu.map <- readOGR(dsn = tmp, layer = 'MUNICIPIO')
+# polygon area in km2
+crs(mu.map) # projection is in m
+mu.map$km2 <- round(area(mu.map) / 1000000, 1)
+mu.map@data[, c("municipio","nombre","km2")]
 # projects to a different datum with long and lat
 mu.map <- spTransform(mu.map, osm())
 mu.map$mun <- mu.map$nombre # mun names
@@ -349,7 +353,7 @@ rm(tmp, tmp.hh, nel, tmp.max, nel.moli, sel)
 # número efectivo de lenguas incluyendo español
 li$soloEsp <- li$p5 - li$p5li
 tmp <- li[, c("tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "mame", "kanjobal", "cluj", "zapoteco", "maya", "akatako", "chinanteco", "nahuatl", "linhabOther","soloEsp")]
-sel <- which(rowSums(tmp)==0)
+sel <- which(rowSums(tmp)==0) # secciones wo lengua data
 tmp <- tmp/li$p5 # shares including spanish
 tmp.hh <- rowSums(tmp^2)
 nel <- 1/tmp.hh
@@ -357,7 +361,7 @@ tmp.max <- apply(tmp, 1, max)
 nel.moli <- 1 + nel * (tmp.hh - tmp.max^2) / tmp.hh
 li$nelwEsp <- nel
 li$nelwEspMoli <- nel.moli
-li$nelwEsp[sel] <- li$nelwEspMoli[sel] <- 0
+li$nelwEsp[sel] <- li$nelwEspMoli[sel] <- 0 # secciones wo lengua data have NAs, remove them
 rm(tmp, tmp.hh, nel, tmp.max, nel.moli, sel)
 #
 # lengua predominante
@@ -374,16 +378,54 @@ li$p5li <- li$p5li / li$pob
 library(RColorBrewer)
 nclr <- 5                                    #CATEGORÍAS DE COLOR (MIN=3 MAX=9)
 mauve <- brewer.pal(nclr,"BuPu")             #GENERA CODIGOS DE COLOR QUE CRECEN CON GRADO
-redgreen <- brewer.pal(6, "RdYlGn"); redgreen <- redgreen[6:1]
+redgreen6 <- brewer.pal(6, "RdYlGn"); redgreen6 <- rev(redgreen6)
+redgreen7 <- brewer.pal(7, "RdYlGn"); redgreen7 <- rev(redgreen7)
+redgreen8 <- brewer.pal(8, "RdYlGn"); redgreen8 <- rev(redgreen8)
+redgreen9 <- brewer.pal(9, "RdYlGn"); redgreen9 <- rev(redgreen9)
 catcol <- brewer.pal(9, "Set1")
 catcol <- c(catcol[9], catcol[2:8], catcol[1]) # invert colors for esp and oth
+
 library(plyr)
 tmp <- as.numeric(cut(li$p5li, seq(0,1,by = .2), include.lowest = TRUE)) # cut p5li into 5 categories
 li$p5licat <- mapvalues ( tmp, from = 1:5, to = mauve)
+#
 # next do same for neli etc
-li$neliMolicat <- NA; sel <- which(li$p5li>=.4)
-li$neliMolicat[sel] <- cut( round(li$neliMoli[sel],1), breaks = seq(1, 2.2, .2), include.lowest = TRUE)
-li$neliMolicat[sel] <- mapvalues ( li$neliMolicat[sel], from = 1:6, to =redgreen  )
+li$nel.i.woEsp <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$nel.i.woEsp[sel],1), useNA = "always")   # debug
+  leg.nel.i.woEsp <- seq(1, 3.4, .3); leg.nel.i.woEsp # debug
+li$nel.i.woEsp[sel] <- cut( round(li$neli[sel],1), breaks = leg.nel.i.woEsp, include.lowest = TRUE)
+li$nel.i.woEsp[sel] <- mapvalues ( li$nel.i.woEsp[sel], from = 1:8, to =redgreen8  )
+#
+li$mol.i.woEsp <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$mol.i.woEsp[sel],1), useNA = "always") # debug
+  leg.mol.i.woEsp <- seq(1, 2.2, .2); leg.mol.i.woEsp   # debug
+li$mol.i.woEsp[sel] <- cut( round(li$neliMoli[sel],1), breaks = leg.mol.i.woEsp, include.lowest = TRUE)
+li$mol.i.woEsp[sel] <- mapvalues ( li$mol.i.woEsp[sel], from = 1:6, to =redgreen6  )
+#
+li$mol.all.wEsp <- NA; sel <- which(li$nelwEspMoli==.0) # drop zeroes, but compute for all secciones in cps
+  table(round(li$mol.all.wEsp[-sel],1), useNA = "always") # debug
+  leg.mol.all.wEsp <- seq(1, 2.8, .2); leg.mol.all.wEsp     # debug
+li$mol.all.wEsp[-sel] <- cut( round(li$nelwEspMoli[-sel],1), breaks = leg.mol.all.wEsp, include.lowest = TRUE)
+li$mol.all.wEsp[-sel] <- mapvalues ( li$mol.all.wEsp[-sel], from = 1:9, to =redgreen9  )
+#
+li$nel.all.wEsp <- NA; sel <- which(li$nelwEsp==.0) # drop zeroes, but compute for all secciones in cps
+  table(round(li$nel.all.wEsp[-sel],1), useNA = "always") # debug
+  leg.nel.all.wEsp <- seq(1, 3.8, .4); leg.nel.all.wEsp # debug
+li$nel.all.wEsp[-sel] <- cut( round(li$nelwEsp[-sel],1), breaks = leg.nel.all.wEsp, include.lowest = TRUE)
+li$nel.all.wEsp[-sel] <- mapvalues ( li$nel.all.wEsp[-sel], from = 1:7, to =redgreen7  )
+#
+li$nel.i.wEsp <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$nel.i.wEsp[sel],1), useNA = "always")   # debug
+  leg.nel.i.wEsp <- seq(1, 3.4, .3); leg.nel.i.wEsp # debug
+li$nel.i.wEsp[sel] <- cut( round(li$neli[sel],1), breaks = leg.nel.i.wEsp, include.lowest = TRUE)
+li$nel.i.wEsp[sel] <- mapvalues ( li$nel.i.wEsp[sel], from = 1:8, to =redgreen8  )
+#
+li$mol.i.wEsp <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$mol.i.wEsp[sel],1), useNA = "always") # debug
+  leg.mol.i.wEsp <- seq(1, 2.2, .2); leg.mol.i.wEsp   # debug
+li$mol.i.wEsp[sel] <- cut( round(li$neliMoli[sel],1), breaks = leg.mol.i.wEsp, include.lowest = TRUE)
+li$mol.i.wEsp[sel] <- mapvalues ( li$mol.i.wEsp[sel], from = 1:6, to =redgreen6  )
+#
 # colors for majority tongue
 li$lengMaxcat <- mapvalues ( li$lengMax, from = c("soloEsp", "tzeltal", "tzotzil", "chol", "zoque", "tojolabal", "kanjobal", "maya", "linhabOther"), to = catcol )
 
@@ -597,10 +639,17 @@ p84 <- function(x = NA){
     x <- x
     x <- spTransform(x, CRS("+proj=longlat +datum=WGS84"))
 }
-portray <- se.map$bastion  # elegir qué reportará el mapa 2
-portray2 <- se.map$p5licat # elegir qué reportará el mapa 3
-portray3 <- se.map$neliMolicat # elegir qué reportará el mapa 4
-portray4 <- se.map$lengMaxcat # elegir qué reportará el mapa 5
+portray  <- se.map$bastion        # elegir qué reportará el mapa 1
+portray2 <- se.map$p5licat        # elegir qué reportará el mapa 2
+#
+portray4 <- se.map$lengMaxcat     # elegir qué reportará el mapa 4
+#
+portray01 <- se.map$nel.i.woEsp    # elegir qué reportará el mapa 01
+portray02 <- se.map$mol.i.woEsp    # elegir qué reportará el mapa 02
+portray03 <- se.map$nel.all.wEsp   # elegir qué reportará el mapa 03
+portray04 <- se.map$mol.all.wEsp   # elegir qué reportará el mapa 04
+portray05 <- se.map$nel.i.wEsp     # elegir qué reportará el mapa 05
+portray06 <- se.map$mol.i.wEsp     # elegir qué reportará el mapa 06
 
 gray <- rgb(190,190,190, maxColorValue = 255)
 
@@ -627,22 +676,23 @@ sqbbox <- function(bbox = NULL){
 m <- p84(ed.map$cps)  # subsetted map
 b <- as.data.frame(m@bbox)
 b <- sqbbox(b)
-# gets xx degrees more than bbox (decimal defines share of max range)
-xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
-    # checks if basemap (type os, saved as R data) is in disk
-    bmps <- dir(path=paste(md2, "basemaps/", sep = ""))
-    if (paste(edo, "-os.RData", sep = "") %in% bmps) {
-        load(file = paste(md2, "basemaps/", edo, dn, "-os.RData", sep = "")) # gets bg.os
-        bg <- bg.os
-    } else {
-        # choose one of four background picture types
-        #bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
-        #bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
-                                        #bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
-        bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))#, minNumTiles = 9)
-        save(bg.os, file = paste(md2, "basemaps/", edo, "-os.RData", sep = "")) # save a copy of the basemap for future use
-        bg <- bg.os
-    }
+## dn <- 2                  # elegir un distrito
+## # gets xx degrees more than bbox (decimal defines share of max range)
+## xx <- .12*max(b$max[2] - b$min[2], b$max[1] - b$min[1])
+##     # checks if basemap (type os, saved as R data) is in disk
+##     bmps <- dir(path=paste(md2, "basemaps/", sep = ""))
+##     if (paste(edo, "-os.RData", sep = "") %in% bmps) {
+##         load(file = paste(md2, "basemaps/", edo, dn, "-os.RData", sep = "")) # gets bg.os
+##         bg <- bg.os
+##     } else {
+##         # choose one of four background picture types
+##         #bg.tn <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("stamen-toner"))
+##         #bg.bi <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("bing"))
+##                                         #bg.to <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("maptoolkit-topo"))
+##         bg.os <- openmap(c(b$max[2]+xx,b$min[1]-xx), c(b$min[2]-xx,b$max[1]+xx), type=c("osm"))#, minNumTiles = 9)
+##         save(bg.os, file = paste(md2, "basemaps/", edo, "-os.RData", sep = "")) # save a copy of the basemap for future use
+##         bg <- bg.os
+##     }
 #
 #pdf(file = paste(md2, edo, "-p5licat.pdf", sep = ""))
 #png(file = paste(md2, edo, "-p5licat.png", sep = ""), width=10, height=10, units="cm", res=144) 
@@ -689,12 +739,14 @@ addscalebar(style = "ticks", pos = "bottomleft")
 # distritos c indígenas
 disIndig <- c(4, 5, 7, 8, 9, 11, 20, 21, 22)
 
-# número efectivo d lenguas
-#pdf(file = paste(md2, edo, "-nel.pdf", sep = ""))
-#png(file = paste(md2, edo, "-nel.png", sep = ""), width=10, height=10, units="cm", res=144) 
+######################################################################
+## número efectivo d lenguas -- nel en subset indígena sin español  ##
+######################################################################
+#pdf(file = paste(md2, edo, "-nel.i.woEsp.pdf", sep = ""))
+#png(file = paste(md2, edo, "-nel.i.woEsp.png", sep = ""), width=10, height=10, units="cm", res=144) 
 par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
 #par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
-plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Pluralidad lingüística de secciones y municipios indígenas")#, bg = "lightblue")
+plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Pluralidad lingüística de secciones indígenas (excl. español)")#, bg = "lightblue")
 #plot(bg, add = TRUE)
 plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
@@ -702,7 +754,7 @@ plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
 #
 library(scales) # has function alpha()
-plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .95))
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray01, .95))
 # municipal borders
 plot(p84(mu.map), add = TRUE, border = "white", lwd = 2.5, lty = 1)
 plot(p84(mu.map), add = TRUE, border = "black", lwd = 1, lty = 1)
@@ -726,11 +778,244 @@ text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
 text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
 text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
 #
-legend(x="bottomright", bg = "white", legend=c("1","1.2","1.4","1.6","1.8","2"), fill=redgreen, title = "nMolinar lenguas", bty="o", cex=.75)
+tmp <- leg.nel.i.woEsp[1:8] # select legend labels
+legend(x="bottomright", bg = "white", legend=tmp, fill=redgreen8, title = "nMolinar lenguas", bty="o", cex=.75)
 library(prettymapr)
 addnortharrow(pos = "topleft", scale=.75)
 addscalebar(style = "ticks", pos = "bottomleft")
 #dev.off()
+
+##########################################################################
+## número efectivo d lenguas -- Molinar en subset indígena sin español  ##
+##########################################################################
+#pdf(file = paste(md2, edo, "-mol.i.woEsp.pdf", sep = ""))
+#png(file = paste(md2, edo, "-mol.i.woEsp.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Pluralidad lingüística de secciones indígenas (excl. español)")#, bg = "lightblue") # "Pluralidad lingüística de secciones y municipios indígenas"
+#plot(bg, add = TRUE)
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray02, .95))
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "white", lwd = 2.5, lty = 1)
+plot(p84(mu.map), add = TRUE, border = "black", lwd = 1, lty = 1)
+# thick state border
+plot(p84(ed.map$cps), add = TRUE, lwd = 3)
+#plot(p84(ed.map$cps), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+# add municipio numbers
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.89, col = "white")
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.85)
+#
+# add neighboring states
+text( x = -93.6, y = 15.15, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -40 )
+text( x = -91.25, y = 15.25, labels = "GUATEMALA", col = "darkgray", cex = .9)
+text( x = -90.75, y = 17, labels = "GUATEMALA", col = "darkgray", cex = .9, srt = -35)
+text( x = -94.35, y = 16.6, labels = "OAXACA", col = "darkgray", cex = .9, srt = 90)
+text( x = -94.1, y = 17.5, labels = "VERACRUZ", col = "darkgray", cex = .9, srt = -35)
+text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
+text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
+text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
+#
+tmp <- leg.mol.i.woEsp[1:6] # select legend labels
+legend(x="bottomright", bg = "white", legend=tmp, fill=redgreen6, title = "nMolinar lenguas", bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "bottomleft")
+#dev.off()
+
+###########################################################
+## número efectivo d lenguas --- nel en todo con español ##
+###########################################################
+#pdf(file = paste(md2, edo, "-nel.all.wEsp.pdf", sep = ""))
+#png(file = paste(md2, edo, "-nel.all.wEsp.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Pluralidad lingüística de secciones y municipios (incl. español)")#, bg = "lightblue")
+#plot(bg, add = TRUE)
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray03, .95))
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "white", lwd = 2.5, lty = 1)
+plot(p84(mu.map), add = TRUE, border = "black", lwd = 1, lty = 1)
+# thick state border
+plot(p84(ed.map$cps), add = TRUE, lwd = 3)
+#plot(p84(ed.map$cps), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+# add municipio numbers
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.89, col = "white")
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.85)
+#
+# add neighboring states
+text( x = -93.6, y = 15.15, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -40 )
+text( x = -91.25, y = 15.25, labels = "GUATEMALA", col = "darkgray", cex = .9)
+text( x = -90.75, y = 17, labels = "GUATEMALA", col = "darkgray", cex = .9, srt = -35)
+text( x = -94.35, y = 16.6, labels = "OAXACA", col = "darkgray", cex = .9, srt = 90)
+text( x = -94.1, y = 17.5, labels = "VERACRUZ", col = "darkgray", cex = .9, srt = -35)
+text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
+text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
+text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
+#
+tmp <- leg.nel.all.wEsp[1:7] # select legend labels
+legend(x="bottomright", bg = "white", legend=tmp, fill=redgreen7, title = "N efec. lenguas", bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "bottomleft")
+#dev.off()
+
+#########################################################
+## número efectivo d lenguas --- Molinar w esp en todo ##
+#########################################################
+#pdf(file = paste(md2, edo, "-mol.all.wEsp.pdf", sep = ""))
+#png(file = paste(md2, edo, "-mol.all.wEsp.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Pluralidad lingüística de secciones y municipios (incl. español)")#, bg = "lightblue")
+#plot(bg, add = TRUE)
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray04, .95))
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "white", lwd = 2.5, lty = 1)
+plot(p84(mu.map), add = TRUE, border = "black", lwd = 1, lty = 1)
+# thick state border
+plot(p84(ed.map$cps), add = TRUE, lwd = 3)
+#plot(p84(ed.map$cps), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+# add municipio numbers
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.89, col = "white")
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.85)
+#
+# add neighboring states
+text( x = -93.6, y = 15.15, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -40 )
+text( x = -91.25, y = 15.25, labels = "GUATEMALA", col = "darkgray", cex = .9)
+text( x = -90.75, y = 17, labels = "GUATEMALA", col = "darkgray", cex = .9, srt = -35)
+text( x = -94.35, y = 16.6, labels = "OAXACA", col = "darkgray", cex = .9, srt = 90)
+text( x = -94.1, y = 17.5, labels = "VERACRUZ", col = "darkgray", cex = .9, srt = -35)
+text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
+text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
+text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
+#
+tmp <- leg.mol.all.wEsp[1:9] # select legend labels
+legend(x="bottomright", bg = "white", legend=tmp, fill=redgreen9, title = "nMolinar lenguas", bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "bottomleft")
+#dev.off()
+
+######################################################################
+## número efectivo d lenguas -- nel en subset indígena con español  ##
+######################################################################
+#pdf(file = paste(md2, edo, "-nel.i.wEsp.pdf", sep = ""))
+#png(file = paste(md2, edo, "-nel.i.wEsp.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Pluralidad lingüística de secciones indígenas (incl. español)")#, bg = "lightblue")
+#plot(bg, add = TRUE)
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray05, .95))
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "white", lwd = 2.5, lty = 1)
+plot(p84(mu.map), add = TRUE, border = "black", lwd = 1, lty = 1)
+# thick state border
+plot(p84(ed.map$cps), add = TRUE, lwd = 3)
+#plot(p84(ed.map$cps), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+# add municipio numbers
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.89, col = "white")
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.85)
+#
+# add neighboring states
+text( x = -93.6, y = 15.15, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -40 )
+text( x = -91.25, y = 15.25, labels = "GUATEMALA", col = "darkgray", cex = .9)
+text( x = -90.75, y = 17, labels = "GUATEMALA", col = "darkgray", cex = .9, srt = -35)
+text( x = -94.35, y = 16.6, labels = "OAXACA", col = "darkgray", cex = .9, srt = 90)
+text( x = -94.1, y = 17.5, labels = "VERACRUZ", col = "darkgray", cex = .9, srt = -35)
+text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
+text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
+text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
+#
+tmp <- leg.nel.i.wEsp[1:8] # select legend labels
+legend(x="bottomright", bg = "white", legend=tmp, fill=redgreen8, title = "nMolinar lenguas", bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "bottomleft")
+#dev.off()
+
+##########################################################################
+## número efectivo d lenguas -- Molinar en subset indígena con español  ##
+##########################################################################
+#pdf(file = paste(md2, edo, "-mol.i.wEsp.pdf", sep = ""))
+#png(file = paste(md2, edo, "-mol.i.wEsp.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(mar=c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$cps), col = "white", axes = TRUE, main = "Pluralidad lingüística de secciones indígenas (incl. español)")#, bg = "lightblue") # "Pluralidad lingüística de secciones y municipios indígenas"
+#plot(bg, add = TRUE)
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray06, .95))
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "white", lwd = 2.5, lty = 1)
+plot(p84(mu.map), add = TRUE, border = "black", lwd = 1, lty = 1)
+# thick state border
+plot(p84(ed.map$cps), add = TRUE, lwd = 3)
+#plot(p84(ed.map$cps), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+# add municipio numbers
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.89, col = "white")
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.85)
+#
+# add neighboring states
+text( x = -93.6, y = 15.15, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -40 )
+text( x = -91.25, y = 15.25, labels = "GUATEMALA", col = "darkgray", cex = .9)
+text( x = -90.75, y = 17, labels = "GUATEMALA", col = "darkgray", cex = .9, srt = -35)
+text( x = -94.35, y = 16.6, labels = "OAXACA", col = "darkgray", cex = .9, srt = 90)
+text( x = -94.1, y = 17.5, labels = "VERACRUZ", col = "darkgray", cex = .9, srt = -35)
+text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
+text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
+text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
+#
+tmp <- leg.mol.i.wEsp[1:6] # select legend labels
+legend(x="bottomright", bg = "white", legend=tmp, fill=redgreen6, title = "nMolinar lenguas", bty="o", cex=.75)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "bottomleft")
+#dev.off()
+
+
 
 # lengua predominante
 #pdf(file = paste(md2, edo, "-lengMax.pdf", sep = ""))
@@ -782,9 +1067,15 @@ addscalebar(style = "ticks", pos = "bottomleft")
 tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/escenario1", sep = "") # archivo con mapas locales
 dle1.map <- readOGR(dsn = tmp, layer = 'escenario1', stringsAsFactors = FALSE)
 colnames(dle1.map@data) <- c("id")
+# polygon area in km2
+crs(dle1.map) # projection is in m
+dle1.map$km2 <- round(area(dle1.map) / 1000000, 1)
+dle1.map@data
 # projects to a different ./datum with long and lat
 dle1.map <- spTransform(dle1.map, osm()) # project to osm native Mercator
 #
+
+
 
 # read shapefiles MagdalenaGironLopez
 tmp <- paste("/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/loc/shp/", edo, "/magdalenaGironLopez1", sep = "") # archivo con mapas locales
@@ -948,8 +1239,8 @@ plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
 text( x = -91.57, y = 17.44, labels = "TAB.", col = "darkgray", cex = .9 , srt = -5)
 library(scales) # has function alpha()
-plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
-plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray02, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray02[sel1s], .67))
 #
 # escenario1 borders and magda giron borders
 plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
@@ -1168,8 +1459,8 @@ text( x = -92.75, y = 17.58, labels = "TABASCO", col = "darkgray", cex = .9 )
 text( x = -91.6, y = 17.555, labels = "TAB.", col = "darkgray", cex = .9 , srt = -90)
 #
 library(scales) # has function alpha()
-plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
-plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray02, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray02[sel1s], .67))
 #
 # escenario1 borders and magda giron borders
 plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
@@ -1391,8 +1682,8 @@ plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
 text( x = -91.5, y = 15.85, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = 0)
 library(scales) # has function alpha()
-plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
-plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray02, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray02[sel1s], .67))
 #
 # escenario1 borders and magda giron borders
 plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
@@ -1617,8 +1908,8 @@ text( x = -91.185, y = 17.325, labels = "TABASCO", col = "darkgray", cex = .9 , 
 text( x = -91.25, y = 15.7, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = 0)
 text( x = -90.75, y = 17, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = -35)
 library(scales) # has function alpha()
-plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
-plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray02, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray02[sel1s], .67))
 #
 # escenario1 borders and magda giron borders
 plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
@@ -1848,8 +2139,8 @@ text( x = -92.7, y = 17.625, labels = "TABASCO", col = "darkgray", cex = .9 , sr
 text( x = -91.25, y = 15.7, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = 0)
 text( x = -90.75, y = 17, labels = "G U A T E M A L A", col = "darkgray", cex = .9 , srt = -35)
 library(scales) # has function alpha()
-plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
-plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray02, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray02[sel1s], .67))
 #
 # escenario1 borders and magda giron borders
 plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
@@ -2021,7 +2312,7 @@ selm <- which(zemap$id==25 | zemap$id==26 | zemap$id==27)
 ##         bg <- bg.os
 ##     }
 #
-#pdf(file = paste(md2, edo, "-", abrev, "-p5licat.pdf", sep = ""))
+pdf(file = paste(md2, edo, "-", abrev, "-p5licat.pdf", sep = ""))
 #png(file = paste(md2, edo, "-", abrev, "-p5licat.png", sep = ""), width=10, height=10, units="cm", res=144) 
 par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
 par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
@@ -2058,7 +2349,7 @@ legend(x="topleft", bg = "white", legend=c("1er escenario","consulta","municipal
 library(prettymapr)
 addnortharrow(pos = "bottomleft", scale=.75)
 addscalebar(style = "ticks", pos = "bottomright")
-#dev.off()
+dev.off()
 
 # número efectivo d lenguas
 #pdf(file = paste(md2, edo, "-", abrev, "-nel.pdf", sep = ""))
@@ -2077,8 +2368,8 @@ plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
 text( x = -91.3, y = 17.525, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
 text( x = -92.7, y = 17.625, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 25)
 library(scales) # has function alpha()
-plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
-plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray02, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray02[sel1s], .67))
 #
 # escenario1 borders and magda giron borders
 plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
@@ -2304,8 +2595,8 @@ plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
 text( x = -92.8, y = 17.55, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
 library(scales) # has function alpha()
-plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
-plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray02, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray02[sel1s], .67))
 #
 # escenario1 borders and magda giron borders
 plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)
@@ -2525,8 +2816,8 @@ plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
 plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
 text( x = -92.8, y = 17.65, labels = "TABASCO", col = "darkgray", cex = .9 , srt = 0)
 library(scales) # has function alpha()
-plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray3, .33))
-plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray3[sel1s], .67))
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray02, .33))
+plot(p84(se.map[sel1s,]), add = TRUE, border = "gray", col = alpha(portray02[sel1s], .67))
 #
 # escenario1 borders and magda giron borders
 plot(p84(dle1.map[sel1,]), add = TRUE, border = "white", lwd = 4.5)

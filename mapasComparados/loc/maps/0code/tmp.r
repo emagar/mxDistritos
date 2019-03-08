@@ -649,5 +649,74 @@ text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
 #dev.off()
 
 
+li$nelwEspMolicat <- NA#; sel <- which(li$p5li>=.4)
+li$nelwEspMolicat <- cut( round(li$nelwEspMoli,1), breaks = seq(1, 2.2, .2), include.lowest = TRUE)
+li$nelwEspMolicat <- mapvalues ( li$nelwEspMolicat, from = 1:6, to =redgreen  )
+#
+li$nelwEspcat <- NA#; sel <- which(li$p5li>=.4)
+li$nelwEspcat <- cut( round(li$nelwEsp,1), breaks = seq(1, 2.2, .2), include.lowest = TRUE)
+li$nelwEspcat <- mapvalues ( li$nelwEspcat, from = 1:6, to =redgreen  )
+
+
+li$neliwEspMolicat
+
+li$neliwEspMolicat <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$neliwEspMolicat[sel],1), useNA = "always") # debug
+  leg.mol.i.wEsp <- seq(1, 2.2, .2); leg.mol.i.wEsp   # debug
+li$neliwEspMolicat[sel] <- cut( round(li$neliwEspMoli[sel],1), breaks = leg.mol.i.wEsp, include.lowest = TRUE)
+li$neliwEspMolicat[sel] <- mapvalues ( li$neliwEspMolicat[sel], from = 1:6, to =redgreen6  )
+#
+li$nelicat <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$nelicat[sel],1), useNA = "always")   # debug
+  leg.nel.i.woEsp <- seq(1, 3.4, .3); leg.nel.i.woEsp # debug
+li$nelicat[sel] <- cut( round(li$neli[sel],1), breaks = leg.nel.i.wEsp, include.lowest = TRUE)
+li$nelicat[sel] <- mapvalues ( li$nelicat[sel], from = 1:8, to =redgreen8  )
+#
+
+
+
+
+older
+
+
+
+# next do same for neli etc
+li$nel.i.woEsp <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$nel.i.woEsp[sel],1), useNA = "always")   # debug
+  leg.nel.i.woEsp <- seq(1, 3.4, .3); leg.nel.i.woEsp # debug
+li$nel.i.woEsp[sel] <- cut( round(li$neli[sel],1), breaks = leg.nel.i.woEsp, include.lowest = TRUE)
+li$nel.i.woEsp[sel] <- mapvalues ( li$nel.i.woEsp[sel], from = 1:8, to =redgreen8  )
+#
+li$mol.i.woEsp <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$mol.i.woEsp[sel],1), useNA = "always") # debug
+  leg.mol.i.woEsp <- seq(1, 2.2, .2); leg.mol.i.woEsp   # debug
+li$mol.i.woEsp[sel] <- cut( round(li$neliMoli[sel],1), breaks = leg.mol.i.woEsp, include.lowest = TRUE)
+li$mol.i.woEsp[sel] <- mapvalues ( li$mol.i.woEsp[sel], from = 1:6, to =redgreen6  )
+#
+li$mol.all.wEsp <- NA; sel <- which(li$nelwEspMoli==.0) # drop zeroes, but compute for all secciones in cps
+  table(round(li$mol.all.wEsp[-sel],1), useNA = "always") # debug
+  leg.mol.all.wEsp <- seq(1, 2.8, .2); leg.mol.all.wEsp     # debug
+li$mol.all.wEsp[-sel] <- cut( round(li$nelwEspMoli[-sel],1), breaks = leg.mol.all.wEsp, include.lowest = TRUE)
+li$mol.all.wEsp[-sel] <- mapvalues ( li$mol.all.wEsp[-sel], from = 1:9, to =redgreen9  )
+#
+li$nel.all.wEsp <- NA; sel <- which(li$nelwEsp==.0) # drop zeroes, but compute for all secciones in cps
+  table(round(li$nel.all.wEsp[-sel],1), useNA = "always") # debug
+  leg.nel.all.wEsp <- seq(1, 3.8, .4); leg.nel.all.wEsp # debug
+li$nel.all.wEsp[-sel] <- cut( round(li$nelwEsp[-sel],1), breaks = leg.nel.all.wEsp, include.lowest = TRUE)
+li$nel.all.wEsp[-sel] <- mapvalues ( li$nel.all.wEsp[-sel], from = 1:7, to =redgreen7  )
+
+li$nel.i.wEsp <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$nel.i.wEsp[sel],1), useNA = "always")   # debug
+  leg.nel.i.wEsp <- seq(1, 3.4, .3); leg.nel.i.wEsp # debug
+li$nel.i.wEsp[sel] <- cut( round(li$neli[sel],1), breaks = leg.nel.i.wEsp, include.lowest = TRUE)
+li$nel.i.wEsp[sel] <- mapvalues ( li$nel.i.wEsp[sel], from = 1:8, to =redgreen8  )
+#
+li$mol.i.wEsp <- NA; sel <- which(li$p5li>=.4)
+  table(round(li$mol.i.wEsp[sel],1), useNA = "always") # debug
+  leg.mol.i.wEsp <- seq(1, 2.2, .2); leg.mol.i.wEsp   # debug
+li$mol.i.wEsp[sel] <- cut( round(li$neliMoli[sel],1), breaks = leg.mol.i.wEsp, include.lowest = TRUE)
+li$mol.i.wEsp[sel] <- mapvalues ( li$mol.i.wEsp[sel], from = 1:6, to =redgreen6  )
+#
+
 
 
