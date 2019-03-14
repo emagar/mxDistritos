@@ -704,7 +704,7 @@ li$nel.all.wEsp <- NA; sel <- which(li$nelwEsp==.0) # drop zeroes, but compute f
   leg.nel.all.wEsp <- seq(1, 3.8, .4); leg.nel.all.wEsp # debug
 li$nel.all.wEsp[-sel] <- cut( round(li$nelwEsp[-sel],1), breaks = leg.nel.all.wEsp, include.lowest = TRUE)
 li$nel.all.wEsp[-sel] <- mapvalues ( li$nel.all.wEsp[-sel], from = 1:7, to =redgreen7  )
-
+#
 li$nel.i.wEsp <- NA; sel <- which(li$p5li>=.4)
   table(round(li$nel.i.wEsp[sel],1), useNA = "always")   # debug
   leg.nel.i.wEsp <- seq(1, 3.4, .3); leg.nel.i.wEsp # debug
