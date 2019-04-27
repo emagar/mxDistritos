@@ -736,6 +736,85 @@ addnortharrow(pos = "topleft", scale=.75)
 addscalebar(style = "ticks", pos = "bottomleft")
 #dev.off()
 
+########################
+## historia electoral ##
+########################
+pdf(file = paste(md2, edo, "-core.pdf", sep = ""))
+#png(file = paste(md2, edo, "-core.png", sep = ""), width=10, height=10, units="cm", res=144) 
+par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
+par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
+#par(mar=c(2,2,2,1)) ## SETS B L U R MARGIN SIZES
+plot(p84(ed.map$cps), axes = TRUE, main = "Historia electoral de municipios y secciones de Chiapas")#, bg = "lightblue")
+#plot(bg, add = TRUE)
+#
+# add neighboring states
+plot(p84(ed.map$oax), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$ver), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$tab), col = "white", add = TRUE, lty = 3)
+plot(p84(ed.map$cam), col = "white", add = TRUE, lty = 3)
+#
+library(scales) # has function alpha()
+plot(p84(se.map), add = TRUE, border = "gray", col = alpha(portray, .67))
+# municipal borders
+plot(p84(mu.map), add = TRUE, border = "white", lwd = 2.5, lty = 1)
+plot(p84(mu.map), add = TRUE, border = "black", lwd = 1, lty = 1)
+# thick state border
+plot(p84(ed.map$cps), add = TRUE, lwd = 3)
+#plot(p84(ed.map$cps), add = TRUE, border = "red", lty = 3, lwd = 2)
+## points(cabDis, pch = 3) # cabeceras distritales
+## points(cabDis)
+## points(cabDis, pch = 19, cex = .75, col = "orange")
+# add municipio numbers
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.89, col = "white")
+## text(coordinates(p84(mu.map)), labels=mu.map$municipio, cex=.85)
+#
+# add neighboring states
+text( x = -93.6, y = 15.15, labels = "O C E A N O   P A C I F I C O", cex = .9, col = "deepskyblue", srt = -40 )
+text( x = -91.25, y = 15.25, labels = "GUATEMALA", col = "darkgray", cex = .9)
+text( x = -90.75, y = 17, labels = "GUATEMALA", col = "darkgray", cex = .9, srt = -35)
+text( x = -94.35, y = 16.6, labels = "OAXACA", col = "darkgray", cex = .9, srt = 90)
+text( x = -94.1, y = 17.5, labels = "VERACRUZ", col = "darkgray", cex = .9, srt = -35)
+text( x = -92.65, y = 17.85, labels = "TABASCO", col = "darkgray", cex = .9 )
+text( x = -91.8, y = 18.05, labels = "CAMP.", col = "darkgray", cex = .9, srt = -35)
+text( x = -90.6, y = 18, labels = "CAMPECHE", col = "darkgray", cex = .9 )
+#
+legend(x="bottomleft", bg = "white", legend=c("municipios","secciones"), col=c("black","gray"), lty = c(1,1), lwd = c(1,1), title = "Límites", bty="o", cex=.9)
+library(prettymapr)
+addnortharrow(pos = "topleft", scale=.75)
+addscalebar(style = "ticks", pos = "topright")
+##################################################################################################################
+# bastion legend for three parties
+# size reduction for secondary plot (serves as legend) conditional on placement
+par(fig = c( .8,  1,  0, .2), new = TRUE) 
+clr <- data.frame(pan = blues[c(5,6,7)], pri = reds[c(5,6,7)], prd = yellows[c(5,6,7)], stringsAsFactors = FALSE)
+sz <- .75
+par(mar=c(0,0,1,0)) ## SETS B L U R MARGIN SIZES
+# par(bg = "white")
+plot(x = c(1,6), y = c(0,4.5), type = "n", axes = FALSE, main = "Ganó 2000-15", cex.main = .75)
+polygon(x = c(1,1,6,6), y = c(4,5,5,4), border = "white", col = "white") # white background
+polygon(x = c(4,4,6,6), y = c(0,6,6,0), border = "white", col = "white") # white background
+for (r in 1:3){
+    for (c in 1:3){
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = "white", border = "white", lwd = 4)
+        polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0)+r, col = alpha(clr[r,c], .67), border = "white", lwd = 4)
+    }
+}
+for (c in 1:3){
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = "white", border = "white", lwd = 4)
+    polygon(x = c(0,0,1,1)+c, y = c(0,1,1,0), col = alpha(gray, .67), border = "white", lwd = 4)
+}
+text(x = 1.5, y = 4.2, label = "pan", cex = sz)
+text(x = 2.5, y = 4.2, label = "pri", cex = sz)
+text(x = 3.5, y = 4.2, label = "izq.", cex = sz)
+#text(x = 5,   y = 4.2, label = "won", cex = sz)
+text(x = 4.75, y = 3.5, label = "6de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 2.5, label = "5de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 1.5, label = "4de6", pos = NULL, cex = sz)
+text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
+###################################################################################################################
+dev.off()
+
+
 # distritos c indígenas
 disIndig <- c(4, 5, 7, 8, 9, 11, 20, 21, 22)
 

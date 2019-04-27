@@ -13,6 +13,8 @@ sqbbox <- function(bbox = NULL){
     return(b2)
 }
 
+
+
 ############################################################################
 ############################################################################
 ## all state's municipios and secciones, colored by % indigenas, in one map 
