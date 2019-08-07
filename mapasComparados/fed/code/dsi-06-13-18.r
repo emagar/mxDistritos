@@ -11,7 +11,7 @@ es <- "/home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/equivSecc
 es <- read.csv(file = es, stringsAsFactors = FALSE)
 head(es)
 
-# get primeros escenarios for each state for 2018
+# get first scenarios for each state for 2018
 # also has party modifications, not considered for now
 tmp2 <- data.frame()
 tmp <- read.csv("agsFed.csv", stringsAsFactors = FALSE)
@@ -84,11 +84,13 @@ tmp <- tmp[, c("edon","seccion","escenario1")]; colnames(tmp)[3] <- "e1.2018"; t
 es <- merge(x = es, y = tmp2, by = c("edon", "seccion"), all = TRUE)
 rm(tmp, tmp2)
 
-# get primeros escenarios for each state for 2013 (slow)
+
+# get first scenarios for each state for 2013 (slow)
 source("/home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/code/e1-2013-prep.r")
 
+
 # missing secciones will need to be re-assigned with from.to
-# OJO: IMPORTANT TO DEAL WITH THIS LATER
+# OJO: IMPORTANT TO DEAL WITH THIS LATER. DONE FOR ALL EXCEPT FIRST SCENARIOS.
 table(is.na(es$e1.2013),is.na(es$e1.2018))
 table(is.na(es$dis2013),is.na(es$dis2018))
 table(is.na(es$dis2006),is.na(es$dis2018))
@@ -96,11 +98,17 @@ table(is.na(es$e1.2013),is.na(es$dis2018))
 
 
 
-## prepare district similarity index, cf. Cox & Katz
-## son's perspective: how similar is son to its father
+###############################################################
+## ######################################################### ##
+## ## prepare district similarity index, cf. Cox & Katz   ## ##
+## ## son's perspective: how similar is son to its father ## ##
+## ######################################################### ##
+###############################################################
 ##
-##   2006 = father
-##   2018 = son
+###################
+## 2006 = father ##
+## 2018 = son    ##
+###################
 dsi <- data.frame()
 for (e in 1:32){ # loop over states
     #e <- 1 # debug
@@ -108,7 +116,7 @@ for (e in 1:32){ # loop over states
     d <- es[sel,]
     father <- d$dis2015 # 2015 used 2006 map and has most reseccionamiento updates
     son <- d$dis2018
-    sel.drop <- which(son==0)
+    sel.drop <- which(son==0) # quick fix for re-seccionamiento
     if (length(sel.drop)>0){
         d <- d[-sel.drop,]; father <- father[-sel.drop]; son <- son[-sel.drop]
     }
@@ -118,19 +126,18 @@ for (e in 1:32){ # loop over states
     d$dsi <- 0
     for (i in 1:N){ # loop over districts
         #i <- 1 # debug
-        sel.n <- which(son==i)                  # secciones in new district
-        tmp <- table(father[sel.n])
-        target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # takes first instance in case of tie (dual fathers) 
+        sel.n <- which(son==i)                  # secciones in new district (son)
+        tmp <- table(father[sel.n])             # how many secciones did each potnetial father contribute to son
+        target <- as.numeric(names(tmp)[tmp==max(tmp)][1]) # picks largest as father (first in case of tie) 
         d$father[sel.n] <- target
-        sel.f <- which(father==target) # secciones in father district
-        sel.c <- intersect(sel.n, sel.f)             # secciones common to father and new districts
+        sel.f <- which(father==target)          # secciones in father district
+        sel.c <- intersect(sel.n, sel.f)        # secciones common to father and son
         d$dsi[sel.n] <- round( length(sel.c) / (length(sel.f) + length(sel.n) - length(sel.c)) , 3 )
     }
     d <- d[duplicated(son)==FALSE,]
     d <- d[,c("edon","dis","father","dsi")]
     d <- d[order(d$dis),]
     dsi <- rbind(dsi, d)
-    #head(d) # debug
 }
 dsi <- dsi[-which(dsi$dis==0),] # will drop secciones that are missing... dealing w reseccionamiento above will make this unnecessary
 #
@@ -138,8 +145,10 @@ dsi.18v06 <- dsi
 rm(e,i,d,N,dsi,sel,sel.n,sel.f,sel.c,target,tmp,father,son,sel.drop)
 
 
-##   2006 = father
-##   2013 = son
+###################
+## 2006 = father ##
+## 2013 = son    ##
+###################
 dsi <- data.frame()
 for (e in 1:32){ # loop over states
     #e <- 1 # debug
@@ -169,7 +178,6 @@ for (e in 1:32){ # loop over states
     d <- d[,c("edon","dis","father","dsi")]
     d <- d[order(d$dis),]
     dsi <- rbind(dsi, d)
-    #head(d) # debug
 }
 dsi <- dsi[-which(dsi$dis==0),] # will drop secciones that are missing... dealing w reseccionamiento above will make this unnecessary
 #
@@ -177,8 +185,10 @@ dsi.13v06 <- dsi
 rm(e,i,d,N,dsi,sel,sel.n,sel.f,sel.c,target,tmp,father,son,sel.drop)
 
 
-##   2018e1 = father
-##   2018e3 = son
+#####################
+## 2018e1 = father ##
+## 2018e3 = son    ##
+#####################
 dsi <- data.frame()
 for (e in 1:32){ # loop over states
     #e <- 1 # debug
@@ -208,15 +218,16 @@ for (e in 1:32){ # loop over states
     d <- d[,c("edon","dis","father","dsi")]
     d <- d[order(d$dis),]
     dsi <- rbind(dsi, d)
-    #head(d) # debug
 }
 #
 dsi.18v18e1 <- dsi
 rm(e,i,d,N,dsi,sel,sel.n,sel.f,sel.c,target,tmp,father,son,sel.drop)
 
 
-##   2013e1 = father
-##   2013e3 = son
+#####################
+## 2013e1 = father ##
+## 2013e3 = son    ##
+#####################
 dsi <- data.frame()
 for (e in 1:32){ # loop over states
     #e <- 1 # debug
@@ -246,19 +257,24 @@ for (e in 1:32){ # loop over states
     d <- d[,c("edon","dis","father","dsi")]
     d <- d[order(d$dis),]
     dsi <- rbind(dsi, d)
-    #head(d) # debug
 }
 #
 dsi.13v13e1 <- dsi
 rm(e,i,d,N,dsi,sel,sel.n,sel.f,sel.c,target,tmp,father,son,sel.drop)
 
 
-## next pair takes the father's perspective instead: how similar is father to its son
-## reason: locating father f's son and son s's father can lead to  
-## unlike real people (genetics), in districts, if f were son s's father, then s may (most likely) or may not (unlikely but possible) be f's son. Since the father (2006) is common to both new maps, taking its perspective makes the measure comparable.  
+####################################################################################
+## next pair takes the father's perspective instead: how similar is father to son ##
+## reason: unlike real people (genetics), in districts, if f were son s's father, ##
+## then s may (most likely) or may not (unlikely but possible) be f's son. Since  ##
+## the father (2006) is common to both new maps, taking its perspective makes the ##
+## measure comparable.                                                            ##
+####################################################################################
 ##
-##   2006 = father
-##   2018e1 = son
+###################
+## 2006 = father ##
+## 2018e1 = son  ##
+###################
 dsi <- data.frame()
 for (e in 1:32){ # loop over states
     #e <- 1 # debug
@@ -288,7 +304,6 @@ for (e in 1:32){ # loop over states
     d <- d[,c("edon","dis","son","dsi")]
     d <- d[order(d$dis),]
     dsi <- rbind(dsi, d)
-    #head(d) # debug
 }
 #
 sel.drop <- which(dsi$dis==0); dsi <- dsi[-sel.drop,] # drops dis=0, unnecessary once missing secciones fixed
@@ -296,8 +311,10 @@ dsi.06v18e1 <- dsi
 rm(e,i,d,N,dsi,sel,sel.n,sel.f,sel.c,target,tmp,father,son,sel.drop)
 
 
-##   2006 = father
-##   2013e1 = son
+###################
+## 2006 = father ##
+## 2013e1 = son  ##
+###################
 dsi <- data.frame()
 for (e in 1:32){ # loop over states
     #e <- 1 # debug
@@ -327,12 +344,12 @@ for (e in 1:32){ # loop over states
     d <- d[,c("edon","dis","son","dsi")]
     d <- d[order(d$dis),]
     dsi <- rbind(dsi, d)
-    #head(d) # debug
 }
 #
 sel.drop <- which(dsi$dis==0); dsi <- dsi[-sel.drop,] # drops dis=0, unnecessary once missing secciones fixed
 dsi.06v13e1 <- dsi
 rm(e,i,d,N,dsi,sel,sel.n,sel.f,sel.c,target,tmp,father,son,sel.drop)
+
 
 # export dsis
 write.csv(dsi.18v06, file = "dsi18v06.csv", row.names = FALSE)
@@ -342,9 +359,4 @@ write.csv(dsi.13v13e1, file = "dsi13v13e1.csv", row.names = FALSE)
 #
 write.csv(dsi.06v13e1, file = "dsi06v13e1.csv", row.names = FALSE)
 write.csv(dsi.06v18e1, file = "dsi06v18e1.csv", row.names = FALSE)
-
-
-
-
-
 
