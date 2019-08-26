@@ -1,9 +1,9 @@
 rm(list = ls())
 options(width = 120)
 
-dd <- "/home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/fed"
+dm <- "/home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ineRedist2017/deJsonConEtiquetas/fed"
 dd <- "/home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/data/dsi"
-setwd(dd)
+setwd(dm)
 
 # will work with equivalencia seccionales
 # has 2006 2013 2018 (3er escenarios)
@@ -139,7 +139,7 @@ for (e in 1:32){ # loop over states
     d <- d[order(d$dis),]
     dsi <- rbind(dsi, d)
 }
-dsi <- dsi[-which(dsi$dis==0),] # will drop secciones that are missing... dealing w reseccionamiento above will make this unnecessary
+#dsi <- dsi[-which(dsi$dis==0),] # will drop secciones that are missing... dealing w reseccionamiento above will make this unnecessary
 #
 dsi.18v06 <- dsi
 rm(e,i,d,N,dsi,sel,sel.n,sel.f,sel.c,target,tmp,father,son,sel.drop)
@@ -179,7 +179,7 @@ for (e in 1:32){ # loop over states
     d <- d[order(d$dis),]
     dsi <- rbind(dsi, d)
 }
-dsi <- dsi[-which(dsi$dis==0),] # will drop secciones that are missing... dealing w reseccionamiento above will make this unnecessary
+#dsi <- dsi[-which(dsi$dis==0),] # will drop secciones that are missing... dealing w reseccionamiento above will make this unnecessary
 #
 dsi.13v06 <- dsi
 rm(e,i,d,N,dsi,sel,sel.n,sel.f,sel.c,target,tmp,father,son,sel.drop)
@@ -352,6 +352,7 @@ rm(e,i,d,N,dsi,sel,sel.n,sel.f,sel.c,target,tmp,father,son,sel.drop)
 
 
 # export dsis
+setwd(dd)
 write.csv(dsi.18v06, file = "dsi18v06.csv", row.names = FALSE)
 write.csv(dsi.13v06, file = "dsi13v06.csv", row.names = FALSE)
 write.csv(dsi.18v18e1, file = "dsi18v18e1.csv", row.names = FALSE)
