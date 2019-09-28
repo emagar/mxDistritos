@@ -42,6 +42,7 @@ The repository contains maps of Mexican districts used to elect representatives 
     - `color` = character string indicated the cell color in the original excel sheet (secciones that suffered contemporaneous changes shared the same color).
     - `coment` = character string with comments.
   + *Citation for this dataset*: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, /Political Geography/ 57(1):1-12. 
+- ~equivSecc/docsRedistReseccRemunic/~ = folder containing numerous primary sources from INE/IFE regarding redistricting criteria, changes in sección delimitations (reseccionamiento), and changes in a state's municipalities.
 * Acknowledgements
 Eric Magar acknowledges financial support from the Asociación Mexicana de Cultura A.C. and CONACYT's Sistema Nacional de Investigadores. He is responsible for mistakes and shortcomings in the data. 
 

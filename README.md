@@ -1,14 +1,14 @@
 
 # Table of Contents
 
-1.  [Description of *Recent Mexican federal election geography* repository](#org8b135a6)
-2.  [Files in the repository and how to cite them](#orgaaf9aef)
-3.  [Acknowledgements](#org83c170c)
+1.  [Description of *Recent Mexican federal election geography* repository](#orgba45e40)
+2.  [Files in the repository and how to cite them](#orgac7e853)
+3.  [Acknowledgements](#orgda41df2)
 
 Last revision: 2019-09-27
 
 
-<a id="org8b135a6"></a>
+<a id="orgba45e40"></a>
 
 # Description of *Recent Mexican federal election geography* repository
 
@@ -18,7 +18,7 @@ Last revision: 2019-09-27
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [here](https://cartografia.ife.org.mx/sige7/?cartografia)). Data in this repo is prepared for mapping and preliminary/basic analysis.
 
 
-<a id="orgaaf9aef"></a>
+<a id="orgac7e853"></a>
 
 # Files in the repository and how to cite them
 
@@ -52,9 +52,10 @@ The repository contains maps of Mexican districts used to elect representatives 
         -   \`color\` = character string indicated the cell color in the original excel sheet (secciones that suffered contemporaneous changes shared the same color).
         -   \`coment\` = character string with comments.
     -   **Citation for this dataset**: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, *Political Geography* 57(1):1-12.
+-   `equivSecc/docsRedistReseccRemunic/` = folder containing numerous primary sources from INE/IFE regarding redistricting criteria, changes in sección delimitations (reseccionamiento), and changes in a state's municipalities.
 
 
-<a id="org83c170c"></a>
+<a id="orgda41df2"></a>
 
 # Acknowledgements
 
