@@ -34,20 +34,20 @@ The repository contains maps of Mexican districts used to elect representatives 
     - `dis2013` = federal district of the 2013 map that sección belonged to; 2013 map was never adopted.
     - `dis2015` = federal district of the 2006 map that sección belonged to at the 2015 election.
     - `dis2018` = federal district of the 2018 map that sección belonged to at the 2018 election.
-    - `OBSERVACIONES` = character string describing changes that a sección may have suffered through time.
+    - `OBSERVACIONES` = character string describing changes that a sección may have suffered through time in the source;
     - `action` = character string indicates change that sección may have suffered: /merged/ if it was integrated into a neighboring sección due to under-population; /split/ if it was subdivided into two or more new secciones due to over-population; /new/ if it was created from a split sección; /munic/ if it arose to accommodate a change in intermunicipal border lines; /stateChg/ if it arose to accommodate a change in interstate border lines.
     - `fr.to` = character string indicates whether sección arose /from/ another sección (eg. after latter was split) or was incorported /to/ another sección (eg. latter absorbed it when both were merged).
     - `orig.dest` = when sección was subdivided, indicates sección number(s) that arose; when sección was merged, indicates which one absorbed it.
     - `when` = year the change took place.
     - `color` = character string indicated the cell color in the original excel sheet (secciones that suffered contemporaneous changes shared the same color).
-    - `coment` = character string with comments I have added (unlike `OBSERVACIONES`, which come from the source).
+    - `coment` = character string with comments.
   + *Citation for this dataset*: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, /Political Geography/ 57(1):1-12. 
 * Acknowledgements
 Eric Magar acknowledges financial support from the Asociación Mexicana de Cultura A.C. and CONACYT's Sistema Nacional de Investigadores. He is responsible for mistakes and shortcomings in the data. 
 
 * below are elements to copy/emulate in this readme file ---
 
-federal and state legislative districts, and code voting data for recent Mexican elections for certain offices at different levels of aggregation. Data has been compiled from many sources. More recent years tend to be coded from official vote returns. Earlier elections tend to be from secondary sources (see Souces section). Data inludes district-level federal deputy vote returns since 1979 and district-level presidential vote returns since 2006; and municipality-level municipal president vote returns (except in the state of Nayarit, votes cast for municipal president also elect a municipal council in a fused ballot). 
+Maps of federal and state legislative districts, and code voting data for recent Mexican elections for certain offices at different levels of aggregation. Data has been compiled from many sources. More recent years tend to be coded from official vote returns. Earlier elections tend to be from secondary sources (see Souces section). Data inludes district-level federal deputy vote returns since 1979 and district-level presidential vote returns since 2006; and municipality-level municipal president vote returns (except in the state of Nayarit, votes cast for municipal president also elect a municipal council in a fused ballot). 
 
 /Important note:/ older incarnations of this this repository contain LFS (Large File System) parts. Make sure to install [[https://git-lfs.github.com/][LFS]] in your machine before cloning previous commits of the repository.
 
