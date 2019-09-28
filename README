@@ -1,0 +1,9 @@
+Code and data to analyze Mexican federal districts used in 2006-2012 elections and the 2013 redistricting proposal. 
+This is work in progress.
+
+Download files to disk, then set (towards the start of file analizaEscenarios2013.r) the directory where code and data are stored. 
+The said file has code to replicate, in R, the preliminary analysis appearing in ericmagar.wordpress.com/.
+
+Author: Eric Magar
+email: emagar at gmail.com
+Date: May 4, 2014
