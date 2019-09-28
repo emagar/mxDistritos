@@ -1,14 +1,19 @@
 
 # Table of Contents
 
-1.  [Description of *Recent Mexican federal election geography* repository](#org05fc99d)
-2.  [Files in the repository](#org883b885)
-3.  [Acknowledgements](#org5a38838)
+1.  [Description of *Recent Mexican federal election geography* repository](#org1bdb46b)
+2.  [Files in the repository and how to cite them](#org7b08490)
+3.  [Acknowledgements](#orgadca006)
+4.  [Files in the repository and how to cite them](#orgb538eed)
+5.  [Codebook](#org6b2f76b)
+6.  [Coding procedure for the incumbent's status](#org5570f68)
+7.  [Procedimiento para codificar el estatus del ocupante](#org82852d2)
+8.  [Sources](#org4825a0a)
 
 Last revision: 2019-09-27
 
 
-<a id="org05fc99d"></a>
+<a id="org1bdb46b"></a>
 
 # Description of *Recent Mexican federal election geography* repository
 
@@ -18,45 +23,172 @@ Last revision: 2019-09-27
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [here](https://cartografia.ife.org.mx/sige7/?cartografia)). Data in this repo is prepared for mapping and preliminary/basic analysis.
 
 
-<a id="org883b885"></a>
+<a id="org7b08490"></a>
 
-# Files in the repository
+# Files in the repository and how to cite them
 
 -   `equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv` = historical record of *secciones electorales* nationwide since 1994. Secciones, which do not traverse municipal borders, are the the basic building blocks for districting at both the federal and state levels (see Magar et al. 2017, fn. 9). Each row reports one sección (\(N \approx 69,000\)) and the district it belonged to in four federal congressional district maps (maps inaugurated in 1979, 1997, 2006, and 2018). It also reports the district it would have belonged to in the 2013 map that was rejected prior to adoption. A small but important number of secciones suffered changes through time (the official term is *reseccionamiento*)&#x2014;most frequently due to under- or over-population, but also after court rulings effecting modifications in state or municipal borders; see the \`OBSERVACIONES\` and its right-adjacent variables). For this reason, the dataset maps secciones-to-districts at each federal election since 1994.  
     -   This dataset builds upon an excel sheet that IFE/INE distributes (included in the repository and listed next).
     -   Variables in the dataset:
-        -   \`ord\` = observation counter
-        -   \`edon\` = state number
-        -   \`edo\` = state abbreviation (may differ from the 'official' abbreviations so that sorting them alphabetically preserves the order set by *edon*)
-        -   \`seccion\` = IFE's sección number (starts at 1 for each state)
-        -   \`munn\` = municipality's number
-        -   \`ife\` = municipality's code used by IFE/INE
-        -   \`inegi\` = municipality's code used by INEGI
-        -   \`mun\` = municipality's name
-        -   \`edosecn\` = string identitying state.sección
-        -   \`dis1994\` = federal district of the 1976 map that sección belonged to for the 1994 election
-        -   \`dis1997\` = federal district of the 1997 map that sección belonged to for the 1997 election
-        -   \`dis2000\` = federal district of the 1997 map that sección belonged to for the 2000 election
-        -   \`dis2003\` = federal district of the 1997 map that sección belonged to for the 2003 election
-        -   \`dis2006\` = federal district of the 2006 map that sección belonged to for the 2006 election
-        -   \`dis2009\` = federal district of the 2006 map that sección belonged to for the 2009 election
-        -   \`dis2012\` = federal district of the 2006 map that sección belonged to for the 2012 election
-        -   \`dis2013\` = federal district of the 2013 map that sección belonged to; 2013 map was never adopted
-        -   \`dis2015\` = federal district of the 2006 map that sección belonged to for the 2015 election
-        -   \`dis2018\` = federal district of the 2018 map that sección belonged to for the 2018 election
-        -   \`OBSERVACIONES\` = character string describing changes that a sección may have suffered through time
-        -   \`action\` = character string indicates change that sección may have suffered: *merged* if it was integrated into a neighboring sección due to under-population; *split* if it was subdivided into two or more new secciones due to over-population; *new* if it was created from a split sección; *munic* if it arose to accommodate a change in intermunicipal border lines; *stateChg* if it arose to accommodate a change in interstate border lines
-        -   \`fr.to\` = character string indicates whether sección arose *from* another sección (eg. after latter was split) or was incorported *to* another sección (eg. latter absorbed it when both were merged)
-        -   \`orig.dest\` = when sección was subdivided, indicates sección number(s) that arose; when sección was merged, indicates which one absorbed it
-        -   \`when\` = year the change took place
-        -   \`color\` = character string indicated the cell color in the original excel sheet (secciones that suffered contemporaneous changes shared the same color)
-        -   \`coment\` = character string with comments I have added (unlike \`OBSERVACIONES\`, which come from the source)
+        -   \`ord\` = observation counter.
+        -   \`edon\` = state number.
+        -   \`edo\` = state abbreviation (may differ from the 'official' abbreviations so that sorting them alphabetically preserves the order set by *edon*).
+        -   \`seccion\` = IFE's sección number starting at 1 for each state.
+        -   \`munn\` = municipality's number.
+        -   \`ife\` = municipality's code used by IFE/INE.
+        -   \`inegi\` = municipality's code used by INEGI.
+        -   \`mun\` = municipality's name.
+        -   \`edosecn\` = string identitying \`edon\` and \`seccion\` period separated; distinguishes units with same \`seccion\` value across states.
+        -   \`dis1994\` = federal district of the 1976 map that sección belonged to at the 1994 election.
+        -   \`dis1997\` = federal district of the 1997 map that sección belonged to at the 1997 election.
+        -   \`dis2000\` = federal district of the 1997 map that sección belonged to at the 2000 election.
+        -   \`dis2003\` = federal district of the 1997 map that sección belonged to at the 2003 election.
+        -   \`dis2006\` = federal district of the 2006 map that sección belonged to at the 2006 election.
+        -   \`dis2009\` = federal district of the 2006 map that sección belonged to at the 2009 election.
+        -   \`dis2012\` = federal district of the 2006 map that sección belonged to at the 2012 election.
+        -   \`dis2013\` = federal district of the 2013 map that sección belonged to; 2013 map was never adopted.
+        -   \`dis2015\` = federal district of the 2006 map that sección belonged to at the 2015 election.
+        -   \`dis2018\` = federal district of the 2018 map that sección belonged to at the 2018 election.
+        -   \`OBSERVACIONES\` = character string describing changes that a sección may have suffered through time.
+        -   \`action\` = character string indicates change that sección may have suffered: *merged* if it was integrated into a neighboring sección due to under-population; *split* if it was subdivided into two or more new secciones due to over-population; *new* if it was created from a split sección; *munic* if it arose to accommodate a change in intermunicipal border lines; *stateChg* if it arose to accommodate a change in interstate border lines.
+        -   \`fr.to\` = character string indicates whether sección arose *from* another sección (eg. after latter was split) or was incorported *to* another sección (eg. latter absorbed it when both were merged).
+        -   \`orig.dest\` = when sección was subdivided, indicates sección number(s) that arose; when sección was merged, indicates which one absorbed it.
+        -   \`when\` = year the change took place.
+        -   \`color\` = character string indicated the cell color in the original excel sheet (secciones that suffered contemporaneous changes shared the same color).
+        -   \`coment\` = character string with comments I have added (unlike \`OBSERVACIONES\`, which come from the source).
     -   **Citation for this dataset**: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, *Political Geography* 57(1):1-12.
 
 
-<a id="org5a38838"></a>
+<a id="orgadca006"></a>
 
 # Acknowledgements
 
 Eric Magar acknowledges financial support from the Asociación Mexicana de Cultura A.C. and CONACYT's Sistema Nacional de Investigadores. He is responsible for mistakes and shortcomings in the data. 
+
+&#x2014; below are elements to copy/emulate in this readme file &#x2014;
+
+fifederal and state legislative districts, and code voting data for recent Mexican elections for certain offices at different levels of aggregation. Data has been compiled from many sources. More recent years tend to be coded from official vote returns. Earlier elections tend to be from secondary sources (see Souces section). Data inludes district-level federal deputy vote returns since 1979 and district-level presidential vote returns since 2006; and municipality-level municipal president vote returns (except in the state of Nayarit, votes cast for municipal president also elect a municipal council in a fused ballot). 
+
+*Important note:* older incarnations of this this repository contain LFS (Large File System) parts. Make sure to install [LFS](https://git-lfs.github.com/) in your machine before cloning previous commits of the repository.
+
+
+<a id="orgb538eed"></a>
+
+# Files in the repository and how to cite them
+
+You are free to download and modify the data (see the LICENSE document for details) provided you give proper credit to this source. Unless otherwise noted next to the file descriptor, the cite is Eric Magar (2018) Recent Mexican election vote returns repository, <https://github.com/emagar/elecReturns>.
+
+In general, file names identify the office elected (i.e., **df**, **se**, **pr**, **dl**, **go**, **ay** for *diputados federales*, *senadores*, *presidente*, *diputados locales*, *gobernador*, and *ayuntamiento*, respectively), followed by the unit of observation (i.e., **ed**, **df**, **dl**, **mu**, **de**, **se**, **ca** for *estado*, *distrito federal*, *distrito local*, *municipio*, *demarcación*, *sección*, and *casilla* respectively), and the years included. Other than in Nayarit since 2008 (and, pending a court case, Mexico City since 2018), *ayuntamientos* are elected in fused ballots for a *presidente municipal* and a fraction of the municipal council (*regidores* and *síndicos*). Nayarit elects these members of the municipal council in single-member plurality districts called *demarcaciones*.
+
+-   `data/aymu1977-present.csv` = updated to 2018, can be processed with code/ay.r in order to systematize coalitions (ie., aggregate votes when member parties' returns are reported separately and remove redundant columns).
+-   `data/aymu1997-present.coalAgg.csv` = pre-processed version of the above (starting in 1997) so that coalition votes appear properly aggregated.
+-   `data/aymu1989-present.incumbents.csv` = names of municipal election winning candidates since 1989 (work in progress).
+-   `data/ayde2008-presentNayRegid.csv` = Nayarit's municipal demarcaciones vote returns since 2008.
+-   `code/ay.r` = script to manipulate *ayuntamiento* returns.
+-   `code/ayClean.r` = script used to clean *ayuntamiento* returns, should be unnecessary unless new data are added because output has been saved into csv file.
+-   `data/dfdf1979-on.csv`
+    -   **Citation for this dataset**: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, *Political Geography* 57(1):1-12.
+-   `data/dfdf1979-on.coalAgg.csv` = pre-processed version of the above so that coalition votes appear properly aggregated.
+    -   **Citation for this dataset**: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, *Political Geography* 57(1):1-12.
+-   `data/dfdf2012-onCandidates.csv` = names of all federal deputy candidates in districts and party lists since 2012.
+-   `data/seedcandidates2018.csv` = names of all senatorial candidates in states and party lists in 2018.
+-   `data/goed1961-on.csv` = updated to 2010
+    -   **Citation for this dataset**: Eric Magar (2012) Gubernatorial Coattails in Mexican Congressional Elections, *The Journal of Politics* 74(2):383-399.
+-   `data/prdf2006-on.csv`
+    -   **Citation for this dataset**: Eric Magar (2012) Gubernatorial Coattails in Mexican Congressional Elections, *The Journal of Politics* 74(2):383-399.
+-   <del>`datosBrutos/` = large directory containing primary sources</del> (dropped from repo due to large size&#x2026; [mail me](mailto:emagar@itam.mx) if you need this).
+
+
+<a id="org6b2f76b"></a>
+
+# Codebook
+
+Most variables are included in every file, some appear in selected files only.  
+
+-   *edon* = state number 1:32.
+-   *edo* =
+-   *disn* = district number.
+-   *emm* = municipal indentifying code (*edo*-electionCycle./munn/).
+-   *mun* = municipality.
+-   *munn*, *inegi*, *ife* = municipal identifier, reporting the number and the codes used by INEGI and IFE, respectively.
+-   *yr*, *mo*, *dy* = year, month, day of the election.
+-   *cab* = cabecera, district's administrative center.
+-   *circ* = PR district (circunscripcion electoral, 2nd tier).
+-   *v01*, *v02*, &#x2026; = raw vote for candidate 1, 2, etc.
+-   *l01*, *l02*, &#x2026; = label of candidate 1's, 2's, &#x2026; party or coalition.
+-   *c01*, *c02*, &#x2026; = candidate 1's, 2's, &#x2026; name.
+-   *s01*, *s02*, &#x2026; = suplente (substitute) for candidate 1, 2, etc.
+-   *efec* = effective votes, equal the total raw votes minus votes for write-in candidates and invalid ballots.
+-   *nr* = votes for write-in candidates.
+-   *nul* = invalid ballots.
+-   *tot* = total raw votes.
+-   *lisnom* = eligible voters (*lista nominal*).
+-   *nota* = notes.
+-   *fuente* = source.
+-   *ncand* = number of candidates running.
+-   *dcoal* = dummy equal 1 if at least one major party candidate ran on a multi-party pre-electoral coalition, 0 otherwise.
+-   *coalpan*, *coalpri*, *coalprd* = members of major-party coalitions ('no' indidates no coalition).
+-   *imputacion*, *distpan*, *distpri*, *distprd* = when some parties coelesced in such way that only their pooled vote was reported, an attempt is made to infer how many votes each coalition member contributed to team. Variable *imputacion* lists what earlier election was used for this purpose ('no' if none carried); *dist* variables report the share of the coalition total attributable to PAN, PRI, and PRD, respectively. See [this](https://github.com/emagar/replicationMaterial/blob/master/gubCoat/onlineAppendix.pdf) for details.
+-   *seyr*, *semo* = year of the previous/concurrent senatorial election.
+-   *sepan*, *sepri*, *seprd* = votes won by major parties in previous/concurrent senatorial election.
+-   *seefec* = effective votes in previous/concurrent senatorial election.
+-   *fake* = indicates fake data for hegemonic era elections, made up of best guesses about what happened in the state's race for the purpose of computing vote lags. Will normally be dropped from analysis.
+-   *win* = winner's party or coalition.
+-   *incumbent* = winning candidate's name.
+-   *race.after* = incumbent's status in the subsequent race. See [this](#org09f425d) for categories and coding procedure ([aquí](#org108b3ec) la versión en español del procedimiento codificador).
+
+
+<a id="org5570f68"></a>
+
+# Coding procedure for the incumbent's status<a id="org09f425d"></a>
+
+In file `data/aymu1985-present.incumbents.csv`, variable *race.after* equals one of the following categories: 
+
+1.  'Beaten' if the incumbent re-ran and lost;
+2.  'Reelected' if the incumbent re-ran and won;
+3.  'Renom-killed' if the incumbent re-ran and was killed in the campaign;
+4.  'Hi-office' if the incumbent ran for higher office;
+5.  'Out' if the incumbent withdrew or was not renominated;
+6.  'Term-limited' if the incumbent was ineligible for reelection due to a term limit;
+7.  A year indicates that it is too early to know the incumbent's status (and the year of the next race).
+
+In categories other than the first two above, a suffix may be present. 
+
+-   Suffix '-p-lost' indicates that the party lost the subsequent race (or, in case of incumbents elected by a multi-party coalition, that none of them won or was part of the winning coalition).
+-   Suffix '-p-won' indicates that the party won the subsequent race (or, in case of incumbents elected by a multi-party coalition, that one of them won or at least one of them was in the winning coalition).
+
+
+<a id="org82852d2"></a>
+
+# Procedimiento para codificar el estatus del ocupante<a id="org108b3ec"></a>
+
+En el archivo `data/aymu1985-present.incumbents.csv`, la variable *race.after* indica el estatus del ocupante en la elección subsecuente. El estatus puede ser una de las categorías siguientes: 
+
+1.  'Beaten' si el ocupante volvió a contender y perdió;
+2.  'Reelected' si el ocupante volvió a contender y ganó;
+3.  'Renom-killed' si el ocupante volvió a contender y fue asesinado en la campaña;
+4.  'Hi-office' si el ocupante contendió por otro cargo de elección (p.ej. gobernador o senador);
+5.  'Out' si el ocupante se retiró o no fue repostulado por el partido;
+6.  'Term-limited' si el ocupante estaba constitucionalmente impedido para aspirar a reelegirse;
+7.  Un año indica que aún es temprano para conocer el estatus (y el año de la próxima elección).
+
+En las categorías 3 en adelante, un sufijo puede estar presente. 
+
+-   El sufijo '-p-lost' indica que el partido perdió la elección subsecuente (o, para ocupantes electos por una coalición multi-partidista, que ninguno de esos partidos ganó o fue parte de la coalición ganadora).
+-   El sufijo '-p-won' indica que el partido ganó la elección subsecuente (o, para ocupantes electos por una coalición multi-partidista, que uno de esos partidos ganó o que por lo menos uno fue parte de la coalición ganadora).
+
+
+<a id="org4825a0a"></a>
+
+# Sources
+
+Work in progress&#x2026;
+
+-   *Fuente* = iee indicates data obtined from the primary source, the state's election board's web site.
+-   *Fuente* = tesis Melissa
+-   *Fuente* = Mexico Electoral Banamex
+-   *Fuente* = prep
+-   *Fuente* = Toledo Patiño paper
+-   *Fuente* = UAM Iztapalapa
+-   *Fuente* = voz y voto
 
