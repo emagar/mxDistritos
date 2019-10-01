@@ -1,20 +1,20 @@
 
 # Table of Contents
 
-1.  [Description of *Recent Mexican federal election geography* repository](#orgc5aa1f9)
-2.  [Files in the repository and how to cite them](#org076d2cb)
-3.  [Acknowledgements](#org15745a5)
-4.  [below are elements to copy/emulate in this readme file ---](#org2cd5acc)
-5.  [Files in the repository and how to cite them](#org59055fb)
-6.  [Codebook](#orgcc195fc)
-7.  [Coding procedure for the incumbent's status](#orgf64dc00)
-8.  [Procedimiento para codificar el estatus del ocupante](#org3fda000)
-9.  [Sources](#orgffbacce)
+1.  [Description of *Recent Mexican federal election geography* repository](#orgceae78c)
+2.  [Files in the repository and how to cite them](#org0e53cbf)
+3.  [Acknowledgements](#orgd50021e)
+4.  [below are elements to copy/emulate in this readme file ---](#org454291a)
+5.  [Files in the repository and how to cite them](#org6f4c156)
+6.  [Codebook](#org0b68df6)
+7.  [Coding procedure for the incumbent's status](#orgbc88e0f)
+8.  [Procedimiento para codificar el estatus del ocupante](#org0a8f551)
+9.  [Sources](#org03c8ffa)
 
 Last revision: 2019-09-27
 
 
-<a id="orgc5aa1f9"></a>
+<a id="orgceae78c"></a>
 
 # Description of *Recent Mexican federal election geography* repository
 
@@ -24,13 +24,13 @@ Last revision: 2019-09-27
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [here](https://cartografia.ife.org.mx/sige7/?cartografia)). Data in this repo is prepared for mapping and preliminary/basic analysis.
 
 
-<a id="org076d2cb"></a>
+<a id="org0e53cbf"></a>
 
 # Files in the repository and how to cite them
 
--   `code/`
+-   `code/elec-data-for-maps.r` = code manipulates sección-level vote returns in federal deputy elections 2000&#x2013;2018 for use in maps.
 -   `equivSecc/docsRedistReseccRemunic/` = folder contains numerous documents prepared by INE/IFE explaining redistricting criteria, changes in sección delimitations (*reseccionamiento*), and changes in a state's municipalities.
--   `equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv` = historical record of *secciones electorales* nationwide since 1994. Secciones, which do not traverse municipal borders, are the the basic building blocks for districting at both the federal and state levels (see Magar et al. 2017, fn. 9). Each row reports one sección (\![equation](<https://latex.codecogs.com/gif.latex?$N&space;\approx&space;69,000>$)) and the district it belonged to in four federal congressional district maps (maps inaugurated in 1979, 1997, 2006, and 2018). It also reports the district it would have belonged to in the 2013 map that was rejected prior to adoption. A small but important number of secciones suffered changes through time (the official term is *reseccionamiento*)&#x2014;most frequently due to under- or over-population, but also after court rulings effecting modifications in state or municipal borders; see the \`OBSERVACIONES\` and its right-adjacent variables). For this reason, the dataset maps secciones-to-districts at each federal election since 1994.  
+-   `equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv` = historical record of *secciones electorales* nationwide since 1994. Secciones, which do not traverse municipal borders, are the the basic building blocks for districting at both the federal and state levels (see Magar et al. 2017, fn. 9). Each row reports one sección (approx. 69,000 total) and the district it belonged to in four federal congressional district maps (maps inaugurated in 1979, 1997, 2006, and 2018). It also reports the district it would have belonged to in the 2013 map that was rejected prior to adoption. A small but important number of secciones suffered changes through time (the official term is *reseccionamiento*)&#x2014;most frequently due to under- or over-population, but also after court rulings effecting modifications in state or municipal borders; see the \`OBSERVACIONES\` and its right-adjacent variables). For this reason, the dataset maps secciones-to-districts at each federal election since 1994.  
     -   This dataset builds upon an excel sheet that IFE/INE distributes (included in the repository and listed next).
     -   Variables in the dataset:
         -   \`ord\` = observation counter.
@@ -62,14 +62,14 @@ The repository contains maps of Mexican districts used to elect representatives 
     -   **Citation for this dataset**: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, *Political Geography* 57(1):1-12.
 
 
-<a id="org15745a5"></a>
+<a id="orgd50021e"></a>
 
 # Acknowledgements
 
 Eric Magar acknowledges financial support from the Asociación Mexicana de Cultura A.C. and CONACYT's Sistema Nacional de Investigadores. He is responsible for mistakes and shortcomings in the data. 
 
 
-<a id="org2cd5acc"></a>
+<a id="org454291a"></a>
 
 # below are elements to copy/emulate in this readme file ---
 
@@ -78,7 +78,7 @@ Maps of federal and state legislative districts, and code voting data for recent
 *Important note:* older incarnations of this this repository contain LFS (Large File System) parts. Make sure to install [LFS](https://git-lfs.github.com/) in your machine before cloning previous commits of the repository.
 
 
-<a id="org59055fb"></a>
+<a id="org6f4c156"></a>
 
 # Files in the repository and how to cite them
 
@@ -105,7 +105,7 @@ In general, file names identify the office elected (i.e., **df**, **se**, **pr**
 -   <del>`datosBrutos/` = large directory containing primary sources</del> (dropped from repo due to large size&#x2026; [mail me](mailto:emagar@itam.mx) if you need this).
 
 
-<a id="orgcc195fc"></a>
+<a id="org0b68df6"></a>
 
 # Codebook
 
@@ -141,12 +141,12 @@ Most variables are included in every file, some appear in selected files only.
 -   *fake* = indicates fake data for hegemonic era elections, made up of best guesses about what happened in the state's race for the purpose of computing vote lags. Will normally be dropped from analysis.
 -   *win* = winner's party or coalition.
 -   *incumbent* = winning candidate's name.
--   *race.after* = incumbent's status in the subsequent race. See [this](#orgb9d5b0b) for categories and coding procedure ([aquí](#org14bdb86) la versión en español del procedimiento codificador).
+-   *race.after* = incumbent's status in the subsequent race. See [this](#orga9bd8da) for categories and coding procedure ([aquí](#orgd8f6f13) la versión en español del procedimiento codificador).
 
 
-<a id="orgf64dc00"></a>
+<a id="orgbc88e0f"></a>
 
-# Coding procedure for the incumbent's status<a id="orgb9d5b0b"></a>
+# Coding procedure for the incumbent's status<a id="orga9bd8da"></a>
 
 In file `data/aymu1985-present.incumbents.csv`, variable *race.after* equals one of the following categories: 
 
@@ -164,9 +164,9 @@ In categories other than the first two above, a suffix may be present.
 -   Suffix '-p-won' indicates that the party won the subsequent race (or, in case of incumbents elected by a multi-party coalition, that one of them won or at least one of them was in the winning coalition).
 
 
-<a id="org3fda000"></a>
+<a id="org0a8f551"></a>
 
-# Procedimiento para codificar el estatus del ocupante<a id="org14bdb86"></a>
+# Procedimiento para codificar el estatus del ocupante<a id="orgd8f6f13"></a>
 
 En el archivo `data/aymu1985-present.incumbents.csv`, la variable *race.after* indica el estatus del ocupante en la elección subsecuente. El estatus puede ser una de las categorías siguientes: 
 
@@ -184,7 +184,7 @@ En las categorías 3 en adelante, un sufijo puede estar presente.
 -   El sufijo '-p-won' indica que el partido ganó la elección subsecuente (o, para ocupantes electos por una coalición multi-partidista, que uno de esos partidos ganó o que por lo menos uno fue parte de la coalición ganadora).
 
 
-<a id="orgffbacce"></a>
+<a id="org03c8ffa"></a>
 
 # Sources
 
