@@ -1,5 +1,6 @@
 ## Code is a replica, updated, of /home/eric/Downloads/Desktop/MXelsCalendGovt/atlasDis/code/mapPrep.r
 ## Prepares various seccion-level measures of party performance in federal diputado elections
+## retrieves electoral info from data in another repository: github.com/emagar/elecRturns
 
 ## esto prepara los datos electorales para mapear los distritos de cada estado.
 ## el contenido queda guardado en una archivo de datos.
@@ -10,7 +11,8 @@ options(width = 70)
 #
 # old #dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+# DROP #wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
 # cambiar por cartografía 2017 en /home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/shp/disfed2018
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
 
@@ -28,7 +30,11 @@ ag.sec <- function(d=d, sel.c=sel.c){
     return(d)
 }
 
-#read seccion-level data
+###################################
+## ############################# ##
+## ## read seccion-level data ## ##
+## ############################# ##
+###################################
 ##########
 ## 2000 ##
 ##########
@@ -55,16 +61,23 @@ v00 <- d
 d <- read.csv( "dip2003.csv", header=TRUE, , stringsAsFactors=FALSE)
 d[is.na(d)] <- 0 # replace NAs
 d <- d[order(d$edon, d$seccion),]
-d <- within(d, efec <- pan + pri + prd + pt + pvem + conve + psn + pas + mp + plm + fc + apt)
+colnames(d)[which(colnames(d)=="apt")] <- "pric" # "pri-pvem"
+d <- within(d, efec <- pan + pri + prd + pt + pvem + conve + psn + pas + mp + plm + fc + pric)
 d <- within(d, tot <- nul <- nr <- NULL)
+#
 sel.r <- grep("MR|[Nn]o ", d$status) # casillas anuladas no instaladas
-sel.c <- c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","apt","efec")
+sel.c <- c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric","efec")
 sel.c <- which(colnames(d) %in% sel.c)
 d[sel.r,sel.c] <- 0 # anuladas to 0
+#
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
+# district coalition dummies
+d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dpric <- as.numeric(d$dpric>0)
+table(d$dpric)
+#
 # clean
-colnames(d)[which(colnames(d)=="apt")] <- "pric" # "pri-pvem"
 d <- within(d, casilla <- status <- ID_ELEC <- NULL)
 v03 <- d
 #
@@ -128,7 +141,9 @@ d$pt <- d$conve <- d$ptconve <- NULL
 d <- within(d, circun <- edo <- cabecera <- munn <- casilla <- status <- tepjf <- dptc <- NULL)
 v09 <- d
 #
-# 2012
+##########
+## 2012 ##
+##########
 d <- read.csv( "dip2012.csv", header=TRUE, , stringsAsFactors=FALSE)
 d[is.na(d)] <- 0 # replace NAs
 colnames(d)[which(colnames(d)=="ID_ESTADO")] <- "edon"
@@ -163,9 +178,7 @@ table(d$ESTATUS_ACTA) # no tengo codebook, pareciera que 3 y 4 que sólo tienen 
 d[which(d$ESTATUS_ACTA==3),]
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom")
 sel.c <- which(colnames(d) %in% sel.c)
-###################################
 ## aggregate seccion-level votes ##
-###################################
 d <- ag.sec(d, sel.c)
 #
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
@@ -184,7 +197,9 @@ d$prdc <- (d$prd + d$pt + d$mc + d$prdc) * d$dprdc;
 d <- within(d, casilla <- TIPO_CASILLA <- ESTATUS_ACTA <- prd <- pt <- mc <- dprdc <- NULL)
 v12 <- d
 #
-# 2015
+##########
+## 2015 ##
+##########
 d <- read.csv( "dip2015.csv", header=TRUE, , stringsAsFactors=FALSE)
 d[d=="-"] <- 0
 d <- d[order(d$edon, d$seccion),]
@@ -245,6 +260,17 @@ colnames(d)[which(colnames(d)=="pt.morena.pes")]  <- "morenac"
 d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + morena + pes + panc + pric + morenac + indep1 + indep2)
 d <- within(d, nr <- nul <- tot <- NULL)
 #
+# district coalition dummies
+d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dpric <- as.numeric(d$dpric>0)
+d$dmorenac <- ave(d$morenac, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dmorenac <- as.numeric(d$dmorenac>0)
+table(d$dpanc)
+table(d$dpric)
+table(d$dmorenac)
+#
 # sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom")
 sel.c <- which(colnames(d) %in% sel.c)
@@ -259,7 +285,9 @@ v18 <- d
 # clean
 rm(ag.sec,d,sel.c,sel.r)
 
-# district winners 2006-2015
+################################
+## district winners 2006-2015 ##
+################################
 v06d <- v06; v09d <- v09; v12d <- v12; v15d <- v15; v18d <- v18
 v06d <- within(v06d, {
     pan   <- ave(pan,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
@@ -435,6 +463,16 @@ rm(vot,etiq)
 #
 ## write.csv(windis, file = paste(dd, "dfdf2006-2015winners.csv", sep = ""))
 
+# get equivalencias seccionales
+tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
+eq <- read.csv(tmp)
+# get municipio info to merge into votes
+##################################################################
+## (pending: adapt secciones to 2017 shapefiles to avoid blanks ##
+##################################################################
+muns <- eq[,c("edon","seccion","ife","inegi")]
+#muns <- eq[,c("edon","seccion","ife","inegi","mun")]
+
 # match yearly observations (secciones)
 #dim(v06); dim(v09); dim(v12); dim(v15) # something amiss in 2009?
 v00$edosecn <- v00$edon*10000 + v00$seccion; v00$d00 <- 1
@@ -444,6 +482,7 @@ v09$edosecn <- v09$edon*10000 + v09$seccion; v09$d09 <- 1
 v12$edosecn <- v12$edon*10000 + v12$seccion; v12$d12 <- 1
 v15$edosecn <- v15$edon*10000 + v15$seccion; v15$d15 <- 1
 v18$edosecn <- v18$edon*10000 + v18$seccion; v18$d18 <- 1
+# dummies d00 to d18 indicate if seccion exists each year
 tmp <- merge(x=v00[,c("edosecn","d00")], y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v06[,c("edosecn","d06")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v09[,c("edosecn","d09")], by = "edosecn", all = TRUE)
@@ -452,21 +491,125 @@ tmp <- merge(x=tmp,                      y=v15[,c("edosecn","d15")], by = "edose
 tmp <- merge(x=tmp,                      y=v18[,c("edosecn","d18")], by = "edosecn", all = TRUE)
 v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- NULL # clean
 #
+# adds any missing secciones to each object
 v00 <- merge(x=tmp, y=v00, by = "edosecn", all = TRUE)
 v03 <- merge(x=tmp, y=v03, by = "edosecn", all = TRUE)
 v06 <- merge(x=tmp, y=v06, by = "edosecn", all = TRUE)
 v09 <- merge(x=tmp, y=v09, by = "edosecn", all = TRUE)
 v12 <- merge(x=tmp, y=v12, by = "edosecn", all = TRUE)
 v15 <- merge(x=tmp, y=v15, by = "edosecn", all = TRUE)
+v18 <- merge(x=tmp, y=v18, by = "edosecn", all = TRUE)
 #dim(v00); dim(v03); dim(v06); dim(v06); dim(v12); dim(v15);
 # fill in missing edon and seccion numbers
-v00$edon <- as.integer(v00$edosecn/10000); v00$seccion <- v00$edosecn - v00$edon*10000
-v03$edon <- as.integer(v03$edosecn/10000); v03$seccion <- v03$edosecn - v03$edon*10000
-v06$edon <- as.integer(v06$edosecn/10000); v06$seccion <- v06$edosecn - v06$edon*10000
-v09$edon <- as.integer(v09$edosecn/10000); v09$seccion <- v09$edosecn - v09$edon*10000
-v12$edon <- as.integer(v12$edosecn/10000); v12$seccion <- v12$edosecn - v12$edon*10000
-v15$edon <- as.integer(v15$edosecn/10000); v15$seccion <- v15$edosecn - v15$edon*10000
+v00 <- within(v00, {
+    edon    <- as.integer(edosecn/10000);
+    seccion <- edosecn - edon*10000;
+})
+v03 <- within(v03, {
+    edon    <- as.integer(edosecn/10000);
+    seccion <- edosecn - edon*10000;
+})
+v06 <- within(v06, {
+    edon    <- as.integer(edosecn/10000);
+    seccion <- edosecn - edon*10000;
+})
+v09 <- within(v09, {
+    edon    <- as.integer(edosecn/10000);
+    seccion <- edosecn - edon*10000;
+})
+v12 <- within(v12, {
+    edon    <- as.integer(edosecn/10000);
+    seccion <- edosecn - edon*10000;
+})
+v15 <- within(v15, {
+    edon    <- as.integer(edosecn/10000);
+    seccion <- edosecn - edon*10000;
+})
+v18 <- within(v18, {
+    edon    <- as.integer(edosecn/10000);
+    seccion <- edosecn - edon*10000;
+})
 rm(tmp)
+
+# consolidate municipios
+muns$edosecn <- muns$edon*10000 + muns$seccion
+# add municipio names to votes
+sel.drop <- which(colnames(muns) %in% c("edon","seccion")) # do not merge these columns
+v00 <- merge(x = v00, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v00$munn <- NULL
+v03 <- merge(x = v03, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v03$munn <- NULL
+v06 <- merge(x = v06, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v06$munn <- NULL
+v09 <- merge(x = v09, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v09$munn <- NULL
+v12 <- merge(x = v12, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v12$munn <- NULL
+v15 <- merge(x = v15, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
+v18 <- merge(x = v18, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
+
+#################################################
+## function to aggregate municipio-level votes ##
+#################################################
+ag.mun <- function(d=d, sel.c=sel.c){
+    for (i in 1:length(sel.c)){
+        d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$inegi, FUN=sum, na.rm=TRUE)
+    }
+    sel.r <- which(duplicated(d$edon*1000+d$inegi)==TRUE)
+    d <- d[-sel.r,]
+    return(d)
+}
+##########
+## 2000 ##
+##########
+d <- v00; d[is.na(d)] <- 0
+sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec")
+d <- ag.mun(d,sel.c)
+v00m <- d
+##########
+## 2003 ##
+##########
+d <- v03; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec")
+d <- ag.mun(d,sel.c)
+v03m <- d
+##########
+## 2006 ##
+##########
+d <- v06; d[is.na(d)] <- 0
+sel.c <- c("pan","pric","prdc","pna","asdc","efec")
+d <- ag.mun(d,sel.c)
+v06m <- d
+##########
+## 2009 ##
+##########
+d <- v09; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pric","prd","pvem","pna","psd","ptc","efec","lisnom")
+d <- ag.mun(d,sel.c)
+v09m <- d
+##########
+## 2012 ##
+##########
+d <- v12; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pvem","pna","pric","prdc","efec","lisnom")
+d <- ag.mun(d,sel.c)
+v12m <- d
+##########
+## 2015 ##
+##########
+d <- v15; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom")
+d <- ag.mun(d,sel.c)
+v15m <- d
+##########
+## 2018 ##
+##########
+d <- v18; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom")
+d <- ag.mun(d,sel.c)
+v18m <- d
+#
+dim(v00); dim(v03); dim(v06); dim(v09); dim(v12); dim(v15); dim(v18); 
+
+# prepare "party" objects for time-series regression
+v12m[1,]
+table(v03m$dpric)
+x
 
 # rank, margin, winner
 n <- nrow(v15)
