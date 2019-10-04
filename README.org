@@ -1,10 +1,10 @@
 #+TITLE: Recent Mexican election geography
 #+AUTHOR: Eric Magar
-Last revision: 2019-09-27
+Last revision: 2019-10-04
 
 # Export to md: M-x org-md-export-to-markdown
 
-$\rightarrow$ *Under construction* $\leftarrow$
+*~.~.~> Under construction <~.~.~*
 
 * Description of /Recent Mexican federal election geography/ repository
 
