@@ -565,8 +565,9 @@ v00m <- d
 ## 2003 ##
 ##########
 d <- v03; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec")
+sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
 d <- ag.mun(d,sel.c)
+d$dpric <- as.numeric(d$dpric>0)
 v03m <- d
 ##########
 ## 2006 ##
@@ -579,38 +580,150 @@ v06m <- d
 ## 2009 ##
 ##########
 d <- v09; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pric","prd","pvem","pna","psd","ptc","efec","lisnom")
+sel.c <- c("pan","pri","pric","prd","pvem","pna","psd","ptc","efec","lisnom","dpric")
 d <- ag.mun(d,sel.c)
+d$dpric <- as.numeric(d$dpric>0)
 v09m <- d
 ##########
 ## 2012 ##
 ##########
 d <- v12; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pvem","pna","pric","prdc","efec","lisnom")
+sel.c <- c("pan","pri","pvem","pna","pric","prdc","efec","lisnom","dpric")
 d <- ag.mun(d,sel.c)
+d$dpric <- as.numeric(d$dpric>0)
 v12m <- d
 ##########
 ## 2015 ##
 ##########
 d <- v15; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom")
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
 d <- ag.mun(d,sel.c)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
 v15m <- d
 ##########
 ## 2018 ##
 ##########
 d <- v18; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom")
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
 d <- ag.mun(d,sel.c)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
 v18m <- d
 #
 dim(v00); dim(v03); dim(v06); dim(v09); dim(v12); dim(v15); dim(v18); 
 
-# prepare "party" objects for time-series regression
-v12m[1,]
+##################################################################
+## prepare manipulated party objects for time-series regression ##
+##################################################################
+#
+# version 1: extend partial coalitions across the board
+morenaExtm <- data.frame(v00 = v00m$prdc,
+                         v03 = (v03m$prd + v03m$pt + v03m$conve),
+                         v06 = v06m$prdc,
+                         v09 = (v09m$prd + v09m$ptc),
+                         v12 = v12m$prdc,
+                         v15 = (v15m$prd + v15m$prdc + v15m$pt + v15m$morena + v15m$pes),
+                         v18 = (v18m$morena + v18m$morenac + v18m$pt + v18m$pes))
+
+tmp <- function(x) as.numeric(x>0)
+tmp.verif <- apply(X = morenaExtm, MARGIN = c(1,2), tmp) 
+
+tmp <- which(rowSums(tmp.verif)<7)
+i <- i+1
+v00m[tmp[i],]
+v03m[tmp[i],]
+v06m[tmp[i],]
+v09m[tmp[i],]
+v12m[tmp[i],]
+v15m[tmp[i],]
+v18m[tmp[i],]
+
+#
+morenaExtm <- data.frame(v00 = ifelse(v00m$efec==0, NA, v00m$prdc / v00m$efec),
+                         v03 = ifelse(v03m$efec==0, NA, (v03m$prd + v03m$pt + v03m$conve) / v03m$efec),
+                         v06 = ifelse(v06m$efec==0, NA, v06m$prdc / v06m$efec),
+                         v09 = ifelse(v09m$efec==0, NA, (v09m$prd + v09m$ptc) / v09m$efec),
+                         v12 = ifelse(v12m$efec==0, NA, v12m$prdc / v12m$efec),
+                         v15 = ifelse(v15m$efec==0, NA, (v15m$prd + v15m$prdc + v15m$pt + v15m$morena + v15m$pes) / v15m$efec),
+                         v18 = ifelse(v18m$efec==0, NA, (v18m$morena + v18m$morenac + v18m$pt + v18m$pes) / v18m$efec))
+morenaExtm <- round(morenaExtm, 3)
+
+# munic means dropping NAs
+tmp <- apply(morenaExtm, 1, function(x) mean(x, na.rm = TRUE))
+tmp <- round(tmp, 3)
+tmp <- cbind(tmp,tmp,tmp,tmp,tmp,tmp,tmp)
+# replace NAs with munic mean
+morenaExtm[is.na(morenaExtm)] <- tmp[is.na(morenaExtm)]
+# version 2: coalitions only in districts where they happened
+## morenaRealm <- data.frame(v00 = v00m$prdc / v00m$efec,
+##                           v03 = v03m$prd / v03m$efec,
+##                           v06 = v06m$prdc / v06m$efec,
+##                           v09 = v09m$prd / v09m$efec,
+##                           v12 = v12m$prdc / v12m$efec,
+##                           v15 = (v15m$prd * (1 - v15m$dprdc) + v15m$prdc * v15m$dprdc + v15m$morena) / v15m$efec,
+##                           v18 = (v18m$morena * (1 - v18m$dmorenac) + v18m$morenac * v18m$dmorenac) / v18m$efec)
+## esto no jala, parece que morena!=0 cuando dmorenac==1
+## morenaRealm[1,]
+# version 3: party's own vote plus proportional part of coal
+## morenaBrkm
+
+
+# check these
+table(v12m$dpric, v12m$pri>0)
+sel <- which(v12m$dpric==1 & (v12m$pri>0)==TRUE)
+sel <- which(v12m$edon==4 & v12m$disn==2)
+v12m[sel,]
 table(v03m$dpric)
 x
 
+# falta leer presidenciales 94 00 06 12 18
+# falta leer dipfed 91 94 97
+# falta leer municipales 91--19
+
+# pasos para correr las regresiones
+dat <- morenaExtm
+Y <- ncol(dat) # total years
+M <- nrow(dat) # total municipios
+dat <- as.data.frame(t(dat))
+vhat <- dat; vhat[] <- NA # prepara df vacío
+#
+sel.row <- which(rownames(dat) %in% paste("v", c("00","03","06","09","12"), sep = "")) # subset regression data years to predict 2015
+dat[,1]
+for (m in 1:M){
+    #m <- 1 # debug
+    sel <- which(rownames(vhat) %in% "v15")
+    y <- dat[sel.row,m]; names(y) <- NULL;
+    x <- seq(from = 2000, to = 2012, by = 3);
+    d <- data.frame(y = y, x = x)
+    m <- lm(y ~ x, data = d);
+    new.d <- data.frame(x = c(2006,2012,2015,2018))
+    p <- predict(m, newdata = new.d)
+    v.hat[m,] <- p;
+}
+
+                                                                  
+Supón que tienes los datos organizados así (cada fila es un municipio):
+amlo <- data.frame(v06=c(.4,.2,.6),
+                   v12=c(.3,.3,.7),
+                   v15=c(.2,.4,.5),
+                   v18=c(.5,.7,.8))
+Podrías hacer un loop:
+v.hat <- data.frame(matrix(NA, nrow = nrow(amlo), ncol = 4)); colnames(v.hat) <- c("v06","v12","v15","v18")# prepara df vacío
+for (i in 1:nrow(amlo)){
+    #i <- 1 # debug
+    y <- amlo[i,1:3]; names(y) <- NULL
+    x <- c(2006,2012,2015)
+    d <- as.data.frame(t(rbind(y,x))); colnames(d) <- c("y","x")
+    m <- lm(y ~ x, data = d);
+    new.d <- data.frame(x = c(2006,2012,2015,2018))
+    p <- predict(m, newdata = new.d)
+    v.hat[i,] <- p;
+}
+v.hat$v18 # esta es la predicción 2018 para cada municipio
+amlo$v18 - v.hat$v18 # éste el residual
+                                                
 # rank, margin, winner
 n <- nrow(v15)
 win <- runnerup <- data.frame(e06=character(n), e09=character(n), e12=character(n), e15=character(n))
