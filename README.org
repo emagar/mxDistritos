@@ -4,7 +4,7 @@ Last revision: 2019-10-04
 
 # Export to md: M-x org-md-export-to-markdown
 
-*>>> Under construction <<<*
+*>>> Under construction (around 2019-10-04) <<<*
 
 * Description of /Recent Mexican federal election geography/ repository
 

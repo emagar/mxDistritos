@@ -7,7 +7,7 @@
 ## sólo tiene que correrse en caso de cambios.
 
 rm(list=ls())
-options(width = 70)
+options(width = 210)
 #
 # old #dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
@@ -30,6 +30,23 @@ ag.sec <- function(d=d, sel.c=sel.c){
     return(d)
 }
 
+##########################################################################
+## function to replace character/factor cells with numeric value or NA; ##
+## then chg NAs w 0s                                                    ##
+##########################################################################
+to.num <- function(d = d, sel.c = sel.c){
+    sel.c <- which(colnames(d) %in% sel.c); # extract indices
+    tmp.d <- d[,sel.c];                     # subset data for manipulation
+    # filter non-mumeric w chars then numeric: if not 0-9 will become NAs 
+    tmp.d <- sapply(tmp.d, function(x){     
+        if (is.numeric(x)) x else suppressWarnings(as.numeric(as.character(x)))
+    });
+    tmp.d[is.na(tmp.d)] <- 0; # change resulting NAs with zero
+    d[,sel.c] <- tmp.d;       # return manipulated data
+    return(d)
+}
+
+
 ###################################
 ## ############################# ##
 ## ## read seccion-level data ## ##
@@ -38,18 +55,18 @@ ag.sec <- function(d=d, sel.c=sel.c){
 ##########
 ## 2000 ##
 ##########
-# old #d <- read.csv( "dfSeccion2000.csv", header=TRUE, stringsAsFactors=FALSE)
-d <- read.csv( "dip2000.csv", header=TRUE, stringsAsFactors=FALSE)
+d <- read.csv("dip2000.csv", header=TRUE, stringsAsFactors=FALSE)
 d <- d[order(d$edon, d$seccion),]
-d <- within(d, efec <- ac + pri + am + pcd + parm + dsppn)
-d <- within(d, tot <- nul <- nr <- NULL)
 colnames(d)[which(colnames(d)=="ac")] <- "panc" # "pan-pvem"
 colnames(d)[which(colnames(d)=="am")] <- "prdc" # "prd y muchos más"
-sel.r <- grep("MR", d$status) # casillas anuladas
 sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec")
-sel.c <- which(colnames(d) %in% sel.c)
+d <- to.num(d,sel.c) # clean data
+d <- within(d, efec <- panc + pri + prdc + pcd + parm + dsppn)
+d <- within(d, tot <- nul <- nr <- NULL)
+sel.r <- grep("MR", d$status) # casillas anuladas
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
+sel.c <- which(colnames(d) %in% sel.c)
 d <- ag.sec(d, sel.c)
 # clean
 d <- within(d, casilla <- status <- ID_ELEC <- NULL)
@@ -59,14 +76,14 @@ v00 <- d
 ## 2003 ##
 ##########
 d <- read.csv( "dip2003.csv", header=TRUE, , stringsAsFactors=FALSE)
-d[is.na(d)] <- 0 # replace NAs
 d <- d[order(d$edon, d$seccion),]
 colnames(d)[which(colnames(d)=="apt")] <- "pric" # "pri-pvem"
+sel.c <- c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric","efec")
+d <- to.num(d,sel.c) # clean data
 d <- within(d, efec <- pan + pri + prd + pt + pvem + conve + psn + pas + mp + plm + fc + pric)
 d <- within(d, tot <- nul <- nr <- NULL)
 #
 sel.r <- grep("MR|[Nn]o ", d$status) # casillas anuladas no instaladas
-sel.c <- c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric","efec")
 sel.c <- which(colnames(d) %in% sel.c)
 d[sel.r,sel.c] <- 0 # anuladas to 0
 #
@@ -75,7 +92,7 @@ d <- ag.sec(d, sel.c)
 # district coalition dummies
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpric <- as.numeric(d$dpric>0)
-table(d$dpric)
+table(d$dpric, useNA = "always")
 #
 # clean
 d <- within(d, casilla <- status <- ID_ELEC <- NULL)
@@ -85,67 +102,66 @@ v03 <- d
 ## 2006 ##
 ##########
 d <- read.csv( "dip2006.csv", header=TRUE, , stringsAsFactors=FALSE)
-d[is.na(d)] <- 0 # replace NAs
 d <- d[order(d$edon, d$seccion),]
-d <- within(d, efec <- pan + apm + pbt + panal + asdc)
+# rename cols
+colnames(d)[which(colnames(d)=="apm")] <- "pric" # "pri-pvem"
+colnames(d)[which(colnames(d)=="pbt")] <- "prdc" # "prd-pt-conve"
+colnames(d)[which(colnames(d)=="panal")] <- "pna" 
+sel.c <- c("pan","pric","prdc","pna","asdc","efec")
+d <- to.num(d,sel.c) # clean data
+d <- within(d, efec <- pan + pric + prdc + pna + asdc)
 d <- within(d, tot <- nul <- nr <- NULL)
 sel.r <- grep("Anulada|No ", d$status) # casillas anuladas no instaladas
-sel.c <- c("pan","apm","pbt","panal","asdc","efec")
 sel.c <- which(colnames(d) %in% sel.c)
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 # clean
 d <- within(d, casilla <- ID_ELEC <- ord <- status <- nota <- valid <- NULL)
-# rename cols
-colnames(d)[which(colnames(d)=="apm")] <- "pric" # "pri-pvem"
-colnames(d)[which(colnames(d)=="pbt")] <- "prdc" # "prd-pt-conve"
-colnames(d)[which(colnames(d)=="panal")] <- "pna" 
 v06 <- d
 #
 ##########
 ## 2009 ##
 ##########
 d <- read.csv( "dip2009.csv", header=TRUE, , stringsAsFactors=FALSE)
-d[is.na(d)] <- 0
 d <- d[order(d$edon, d$seccion),]
-colnames(d)[which(colnames(d)=="PRIMERO_MEXICO")] <- "pripvem"
-colnames(d)[which(colnames(d)=="SALVEMOS_MEXICO")] <- "ptconve"
+colnames(d)[which(colnames(d)=="PRIMERO_MEXICO")] <- "pric" # pri-pvem
+colnames(d)[which(colnames(d)=="SALVEMOS_MEXICO")] <- "ptc" # pt-conve"
 colnames(d)[which(colnames(d)=="panal")] <- "pna"
-d <- within(d, efec <- pan + pri + prd + pvem + pt + conve + pna + psd + pripvem + ptconve)
+sel.c <- c("pan","pri","prd","pvem","pt","conve","pna","psd","pric","ptc","efec","lisnom")
+d <- to.num(d,sel.c) # clean data
+d <- within(d, efec <- pan + pri + prd + pvem + pt + conve + pna + psd + pric + ptc)
 d <- within(d, tot <- nul <- nr <- NULL)
 sel.r <- grep("NO INSTALADA|SIN ACTA|NO ENTREGADO", d$status)
 sel.r2 <- grep("ANULADA", d$tepjf) # casillas anuladas no instaladas
 sel.r <- union(sel.r, sel.r2); rm(sel.r2)
-sel.c <- c("pan","pri","prd","pvem","pt","conve","pna","psd","pripvem","ptconve","efec","lisnom")
 sel.c <- which(colnames(d) %in% sel.c)
 d[sel.r,sel.c] <- 0 # anuladas to 0
-###################################
 ## aggregate seccion-level votes ##
-###################################
 d <- ag.sec(d, sel.c)
 # district coalition dummies
-d$dpric <- ave(d$pripvem, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpric <- as.numeric(d$dpric>0)
-d$dptc <- ave(d$ptconve, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)   # if >0 will infer district coalition
+d$dptc <- ave(d$ptc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)   # if >0 will infer district coalition
 d$dptc <- as.numeric(d$dptc>0)
-table(d$dpric)
-table(d$dptc)
+table(d$dpric, useNA = "always")
+table(d$dptc, useNA = "always")
 #
-# need coalition votes only
-d$pric <- (d$pri + d$pvem + d$pripvem) * d$dpric; d$pripvem <- NULL
-d$pri <- d$pri * (1 - d$dpric)
-d$pvem <- d$pvem * (1 - d$dpric)
-d$ptc <- (d$pt + d$conve + d$ptconve) * d$dptc; d$ptconve <- NULL
-d$pt <- d$conve <- d$ptconve <- NULL
-d <- within(d, circun <- edo <- cabecera <- munn <- casilla <- status <- tepjf <- dptc <- NULL)
+## Drop
+## # need coalition votes only
+## d$pric <- (d$pri + d$pvem + d$pripvem) * d$dpric; d$pripvem <- NULL
+## d$pri <- d$pri * (1 - d$dpric)
+## d$pvem <- d$pvem * (1 - d$dpric)
+## d$ptc <- (d$pt + d$conve + d$ptconve) * d$dptc; d$ptconve <- NULL
+## d$pt <- d$conve <- d$ptconve <- NULL
+#
+d <- within(d, circun <- edo <- cabecera <- munn <- casilla <- status <- tepjf <- NULL)
 v09 <- d
 #
 ##########
 ## 2012 ##
 ##########
 d <- read.csv( "dip2012.csv", header=TRUE, , stringsAsFactors=FALSE)
-d[is.na(d)] <- 0 # replace NAs
 colnames(d)[which(colnames(d)=="ID_ESTADO")] <- "edon"
 colnames(d)[which(colnames(d)=="D_DISTRITO")] <- "disn"
 colnames(d)[which(colnames(d)=="ID_CASILLA")] <- "casilla"
@@ -165,18 +181,18 @@ colnames(d)[which(colnames(d)=="PVEM")]  <- "pvem"
 colnames(d)[which(colnames(d)=="PT")]    <- "pt"
 colnames(d)[which(colnames(d)=="MC")]    <- "mc"
 colnames(d)[which(colnames(d)=="PANAL")] <- "pna"
-#
 colnames(d)[which(colnames(d)=="PRI_PVEM")] <- "pric"
-d <- within(d, prdc <- PRD_PT_MC + PRD_PT + PRD_MC + PT_MC)
-d <- within(d, PRD_PT_MC <- PRD_PT <- PRD_MC <- PT_MC <- NULL)
+d <- within(d, prdc <- PRD_PT_MC  + PRD_PT  + PRD_MC  + PT_MC)
+d <- within(d,         PRD_PT_MC <- PRD_PT <- PRD_MC <- PT_MC <- NULL)
 #
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom")
+d <- to.num(d,sel.c) # clean data
 d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + pric + prdc)
 d <- within(d, tot <- nul <- nr <- NULL)
 #
 # recode status
-table(d$ESTATUS_ACTA) # no tengo codebook, pareciera que 3 y 4 que sólo tienen NAs son anulados/notregados o algi así...
+table(d$ESTATUS_ACTA) # missing codebook, quizás 3 y 4 que sólo tienen NAs sean anulados/noentregados o algo así
 d[which(d$ESTATUS_ACTA==3),]
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom")
 sel.c <- which(colnames(d) %in% sel.c)
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
@@ -185,78 +201,74 @@ d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)   # if >0 will infer district coalition
 d$dprdc <- as.numeric(d$dprdc>0)
-table(d$dpric)
-table(d$dprdc)
+table(d$dpric, useNA = "always")
+table(d$dprdc, useNA = "always")
 #
-# need coalition votes only
-d$pric <- (d$pri + d$pvem + d$pric) * d$dpric;
-d$pri <- d$pri * (1 - d$dpric)
-d$pvem <- d$pvem * (1 - d$dpric)
-d$prdc <- (d$prd + d$pt + d$mc + d$prdc) * d$dprdc;
+## DROP
+## # need coalition votes only
+## d$pric <- (d$pri + d$pvem + d$pric) * d$dpric;
+## d$pri <- d$pri * (1 - d$dpric)
+## d$pvem <- d$pvem * (1 - d$dpric)
+## d$prdc <- (d$prd + d$pt + d$mc + d$prdc) * d$dprdc;
+#
 # clean
-d <- within(d, casilla <- TIPO_CASILLA <- ESTATUS_ACTA <- prd <- pt <- mc <- dprdc <- NULL)
+d <- within(d, casilla <- TIPO_CASILLA <- ESTATUS_ACTA <- prd <- pt <- mc <- NULL)
 v12 <- d
 #
 ##########
 ## 2015 ##
 ##########
 d <- read.csv( "dip2015.csv", header=TRUE, , stringsAsFactors=FALSE)
-d[d=="-"] <- 0
 d <- d[order(d$edon, d$seccion),]
-d <- within(d, pri_pvem <- as.numeric(pri_pvem))
-d <- within(d, prd_pt <- as.numeric(prd_pt))
-d <- within(d, indep1 <- as.numeric(indep1))
-d <- within(d, indep2 <- as.numeric(indep2))
-d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + panal + morena + ph + pes + pri_pvem + prd_pt + indep1 + indep2)
-d <- within(d, tot <- nul <- nr <- NULL)
 #
 colnames(d)[which(colnames(d)=="panal")] <- "pna"
 colnames(d)[which(colnames(d)=="pri_pvem")] <- "pric"
 colnames(d)[which(colnames(d)=="prd_pt")] <- "prdc"
 #
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom")
+d <- to.num(d,sel.c) # clean data
+#
+d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + morena + ph + pes + pric + prdc + indep1 + indep2)
+d <- within(d, tot <- nul <- nr <- NULL)
+#
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dprdc <- as.numeric(d$dprdc>0)
-table(d$dpric)
-table(d$dprdc)
+table(d$dpric, useNA = "always")
+table(d$dprdc, useNA = "always")
 #
 sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom")
 sel.c <- which(colnames(d) %in% sel.c)
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
-# need coalition votes only
-d$pric <- (d$pri + d$pvem + d$pric) * d$dpric
-d$pri <- d$pri * (1 - d$dpric)
-d$pvem <- d$pvem * (1 - d$dpric)
-d$prdc <- (d$prd + d$pt   + d$prdc)   * d$dprdc
-d$prd <- d$prd * (1 - d$dprdc)
-d$pt <- d$pt * (1 - d$dprdc)
-d <- within(d, ID_CASILLA <- TIPO_CASILLA <- EXT_CONTIGUA <- OBSERVACIONES <- NULL)
+## DROP
+## # need coalition votes only
+## d$pric <- (d$pri + d$pvem + d$pric) * d$dpric
+## d$pri <- d$pri * (1 - d$dpric)
+## d$pvem <- d$pvem * (1 - d$dpric)
+## d$prdc <- (d$prd + d$pt   + d$prdc)   * d$dprdc
+## d$prd <- d$prd * (1 - d$dprdc)
+## d$pt <- d$pt * (1 - d$dprdc)
+# clean
+d <- within(d, ord <- ID_CASILLA <- TIPO_CASILLA <- EXT_CONTIGUA <- OBSERVACIONES <- NULL)
 v15 <- d
 #
 ##########
 ## 2018 ##
 ##########
 d <- read.csv( "dip2018.csv", header=TRUE, , stringsAsFactors=FALSE)
-d[d=="-"] <- 0
-d <- within(d, pan <- as.numeric(pan))
-d <- within(d, pri <- as.numeric(pri))
-d <- within(d, prd <- as.numeric(prd))
-d <- within(d, pvem <- as.numeric(pvem))
-d <- within(d, pt <- as.numeric(pt))
-d <- within(d, mc <- as.numeric(mc))
-d <- within(d, panal <- as.numeric(panal))
-d <- within(d, morena <- as.numeric(morena))
-d <- within(d, pes <- as.numeric(pes))
-d <- within(d, indep1 <- as.numeric(indep1))
-d <- within(d, indep2 <- as.numeric(indep2))
+d <- d[order(d$edon, d$seccion),]
+#
 colnames(d)[which(colnames(d)=="panal")]     <- "pna"
 colnames(d)[which(colnames(d)=="pan.prd.mc")]     <- "panc"
 colnames(d)[which(colnames(d)=="pri.pvem.panal")] <- "pric"
 colnames(d)[which(colnames(d)=="pt.morena.pes")]  <- "morenac"
+#
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom")
+d <- to.num(d,sel.c) # clean data
+#
 d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + morena + pes + panc + pric + morenac + indep1 + indep2)
 d <- within(d, nr <- nul <- tot <- NULL)
 #
@@ -267,19 +279,17 @@ d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >
 d$dpric <- as.numeric(d$dpric>0)
 d$dmorenac <- ave(d$morenac, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dmorenac <- as.numeric(d$dmorenac>0)
-table(d$dpanc)
-table(d$dpric)
-table(d$dmorenac)
+table(d$dpanc, useNA = "always")
+table(d$dpric, useNA = "always")
+table(d$dmorenac, useNA = "always")
 #
 # sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom")
 sel.c <- which(colnames(d) %in% sel.c)
 #d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 # clean
 d <- within(d, edo <- cabecera <- casn <- TIPO_CASILLA <- NULL)
-d[1,]
 v18 <- d
 
 # clean
@@ -619,28 +629,34 @@ dim(v00); dim(v03); dim(v06); dim(v09); dim(v12); dim(v15); dim(v18);
 ##################################################################
 #
 # version 1: extend partial coalitions across the board
-morenaExtm <- data.frame(v00 = v00m$prdc,
-                         v03 = (v03m$prd + v03m$pt + v03m$conve),
-                         v06 = v06m$prdc,
-                         v09 = (v09m$prd + v09m$ptc),
-                         v12 = v12m$prdc,
-                         v15 = (v15m$prd + v15m$prdc + v15m$pt + v15m$morena + v15m$pes),
-                         v18 = (v18m$morena + v18m$morenac + v18m$pt + v18m$pes))
+## # debug
+## morenaExtm <- data.frame(v00 = v00m$prdc,
+##                          v03 = (v03m$prd + v03m$pt + v03m$conve),
+##                          v06 = v06m$prdc,
+##                          v09 = (v09m$prd + v09m$ptc),
+##                          v12 = v12m$prdc,
+##                          v15 = (v15m$prd + v15m$prdc + v15m$pt + v15m$morena + v15m$pes),
+##                          v18 = (v18m$morena + v18m$morenac + v18m$pt + v18m$pes))
 
-tmp <- function(x) as.numeric(x>0)
-tmp.verif <- apply(X = morenaExtm, MARGIN = c(1,2), tmp) 
-
-tmp <- which(rowSums(tmp.verif)<7)
-i <- i+1
-v00m[tmp[i],]
-v03m[tmp[i],]
-v06m[tmp[i],]
-v09m[tmp[i],]
-v12m[tmp[i],]
-v15m[tmp[i],]
-v18m[tmp[i],]
-
-#
+## tmp.verif <- apply(X = morenaExtm, MARGIN = c(1,2), function(x) as.numeric(x>0)) 
+## tmp <- which(rowSums(tmp.verif)<7)
+## i <- i+1
+## morenaExtm[tmp[i],]
+## v00m[tmp[i],]
+## v03m[tmp[i],]
+## v06m[tmp[i],]
+## v09m[tmp[i],]
+## v12m[tmp[i],]
+## v15m[tmp[i],]
+## v18m[tmp[i],]
+## #
+## tmp.verif <- as.numeric(v00m$efec==0) 
+## tmp <- which(tmp.verif==1)
+## i <- i+1
+## v00m[tmp[i],]
+## morenaExtm[tmp[i],]
+## x
+# shares
 morenaExtm <- data.frame(v00 = ifelse(v00m$efec==0, NA, v00m$prdc / v00m$efec),
                          v03 = ifelse(v03m$efec==0, NA, (v03m$prd + v03m$pt + v03m$conve) / v03m$efec),
                          v06 = ifelse(v06m$efec==0, NA, v06m$prdc / v06m$efec),
@@ -649,13 +665,22 @@ morenaExtm <- data.frame(v00 = ifelse(v00m$efec==0, NA, v00m$prdc / v00m$efec),
                          v15 = ifelse(v15m$efec==0, NA, (v15m$prd + v15m$prdc + v15m$pt + v15m$morena + v15m$pes) / v15m$efec),
                          v18 = ifelse(v18m$efec==0, NA, (v18m$morena + v18m$morenac + v18m$pt + v18m$pes) / v18m$efec))
 morenaExtm <- round(morenaExtm, 3)
-
-# munic means dropping NAs
+# munic means dropping NAs (to replace those NAs)
 tmp <- apply(morenaExtm, 1, function(x) mean(x, na.rm = TRUE))
 tmp <- round(tmp, 3)
 tmp <- cbind(tmp,tmp,tmp,tmp,tmp,tmp,tmp)
 # replace NAs with munic mean
 morenaExtm[is.na(morenaExtm)] <- tmp[is.na(morenaExtm)]
+# substract .001 to ones to avoid indeterminacy
+summary(morenaExtm)
+sel <- which(apply(morenaExtm, 1, function(x) as.numeric(max(x)>=1))==1)
+morenaExtm[sel,]
+v03m[sel,]
+morenaExtm[morenaExtm==1] <- 
+morenaExtm[morenaExtm==0] <- 
+
+
+x
 # version 2: coalitions only in districts where they happened
 ## morenaRealm <- data.frame(v00 = v00m$prdc / v00m$efec,
 ##                           v03 = v03m$prd / v03m$efec,
@@ -684,6 +709,7 @@ x
 
 # pasos para correr las regresiones
 dat <- morenaExtm
+summary(dat)
 Y <- ncol(dat) # total years
 M <- nrow(dat) # total municipios
 dat <- as.data.frame(t(dat))
