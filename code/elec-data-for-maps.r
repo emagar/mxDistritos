@@ -68,6 +68,13 @@ d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 sel.c <- which(colnames(d) %in% sel.c)
 d <- ag.sec(d, sel.c)
+# district coalition dummies
+d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dprdc <- as.numeric(d$dprdc>0)
+table(d$dpanc, useNA = "always")
+table(d$dprdc, useNA = "always")
 # clean
 d <- within(d, casilla <- status <- ID_ELEC <- NULL)
 v00 <- d
@@ -185,7 +192,7 @@ colnames(d)[which(colnames(d)=="PRI_PVEM")] <- "pric"
 d <- within(d, prdc <- PRD_PT_MC  + PRD_PT  + PRD_MC  + PT_MC)
 d <- within(d,         PRD_PT_MC <- PRD_PT <- PRD_MC <- PT_MC <- NULL)
 #
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom")
+sel.c <-            c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom")
 d <- to.num(d,sel.c) # clean data
 d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + pric + prdc)
 d <- within(d, tot <- nul <- nr <- NULL)
@@ -212,7 +219,7 @@ table(d$dprdc, useNA = "always")
 ## d$prdc <- (d$prd + d$pt + d$mc + d$prdc) * d$dprdc;
 #
 # clean
-d <- within(d, casilla <- TIPO_CASILLA <- ESTATUS_ACTA <- prd <- pt <- mc <- NULL)
+d <- within(d, casilla <- TIPO_CASILLA <- ESTATUS_ACTA <- NULL)
 v12 <- d
 #
 ##########
@@ -376,7 +383,6 @@ v18d <- within(v18d, {
 v18d <- v18d[duplicated(v18d$edon*100 + v18d$disn)==FALSE,]
 v18d <- v18d[order(v18d$edon*100, v18d$disn),]
 #
-
 windis <- v15d[,c("edon","disn")] # will receive data
 #
 # handy function to sort one data frame by order of another, matching data frame
@@ -392,7 +398,6 @@ sortBy <- function(target, By){
 ## w.sorted <- sortBy(target = w, By = v)
 ## sortBy(target = v, By = v)
 #
-
 # 2006
 vot <- v06d[,c("pan","pric","prdc","pna","asdc")]
 vot[is.na(vot)==TRUE] <- 0 # drop NAs
@@ -568,8 +573,10 @@ ag.mun <- function(d=d, sel.c=sel.c){
 ## 2000 ##
 ##########
 d <- v00; d[is.na(d)] <- 0
-sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec")
+sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
 d <- ag.mun(d,sel.c)
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dprdc <- as.numeric(d$dprdc>0)
 v00m <- d
 ##########
 ## 2003 ##
@@ -590,17 +597,19 @@ v06m <- d
 ## 2009 ##
 ##########
 d <- v09; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pric","prd","pvem","pna","psd","ptc","efec","lisnom","dpric")
+sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
 d <- ag.mun(d,sel.c)
 d$dpric <- as.numeric(d$dpric>0)
+d$dptc <- as.numeric(d$dptc>0)
 v09m <- d
 ##########
 ## 2012 ##
 ##########
 d <- v12; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pvem","pna","pric","prdc","efec","lisnom","dpric")
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
 d <- ag.mun(d,sel.c)
 d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
 v12m <- d
 ##########
 ## 2015 ##
@@ -624,63 +633,306 @@ v18m <- d
 #
 dim(v00); dim(v03); dim(v06); dim(v09); dim(v12); dim(v15); dim(v18); 
 
-##################################################################
-## prepare manipulated party objects for time-series regression ##
-##################################################################
+
+###########################################
+## prepare manipulated party objects     ##
+## for time-series and alpha regressions ##
+###########################################
 #
 # version 1: extend partial coalitions across the board
-## # debug
-## morenaExtm <- data.frame(v00 = v00m$prdc,
-##                          v03 = (v03m$prd + v03m$pt + v03m$conve),
-##                          v06 = v06m$prdc,
-##                          v09 = (v09m$prd + v09m$ptc),
-##                          v12 = v12m$prdc,
-##                          v15 = (v15m$prd + v15m$prdc + v15m$pt + v15m$morena + v15m$pes),
-##                          v18 = (v18m$morena + v18m$morenac + v18m$pt + v18m$pes))
-
-## tmp.verif <- apply(X = morenaExtm, MARGIN = c(1,2), function(x) as.numeric(x>0)) 
-## tmp <- which(rowSums(tmp.verif)<7)
-## i <- i+1
-## morenaExtm[tmp[i],]
-## v00m[tmp[i],]
-## v03m[tmp[i],]
-## v06m[tmp[i],]
-## v09m[tmp[i],]
-## v12m[tmp[i],]
-## v15m[tmp[i],]
-## v18m[tmp[i],]
-## #
-## tmp.verif <- as.numeric(v00m$efec==0) 
-## tmp <- which(tmp.verif==1)
-## i <- i+1
-## v00m[tmp[i],]
-## morenaExtm[tmp[i],]
-## x
 # shares
-morenaExtm <- data.frame(v00 = ifelse(v00m$efec==0, NA, v00m$prdc / v00m$efec),
-                         v03 = ifelse(v03m$efec==0, NA, (v03m$prd + v03m$pt + v03m$conve) / v03m$efec),
-                         v06 = ifelse(v06m$efec==0, NA, v06m$prdc / v06m$efec),
-                         v09 = ifelse(v09m$efec==0, NA, (v09m$prd + v09m$ptc) / v09m$efec),
-                         v12 = ifelse(v12m$efec==0, NA, v12m$prdc / v12m$efec),
-                         v15 = ifelse(v15m$efec==0, NA, (v15m$prd + v15m$prdc + v15m$pt + v15m$morena + v15m$pes) / v15m$efec),
-                         v18 = ifelse(v18m$efec==0, NA, (v18m$morena + v18m$morenac + v18m$pt + v18m$pes) / v18m$efec))
-morenaExtm <- round(morenaExtm, 3)
-# munic means dropping NAs (to replace those NAs)
-tmp <- apply(morenaExtm, 1, function(x) mean(x, na.rm = TRUE))
-tmp <- round(tmp, 3)
-tmp <- cbind(tmp,tmp,tmp,tmp,tmp,tmp,tmp)
-# replace NAs with munic mean
-morenaExtm[is.na(morenaExtm)] <- tmp[is.na(morenaExtm)]
-# substract .001 to ones to avoid indeterminacy
-summary(morenaExtm)
-sel <- which(apply(morenaExtm, 1, function(x) as.numeric(max(x)>=1))==1)
-morenaExtm[sel,]
-v03m[sel,]
-morenaExtm[morenaExtm==1] <- 
-morenaExtm[morenaExtm==0] <- 
+pan <- data.frame(v00 = ifelse(v00m$efec==0, NA,  v00m$panc / v00m$efec),
+                  v03 = ifelse(v03m$efec==0, NA,  v03m$pan  / v03m$efec),
+                  v06 = ifelse(v06m$efec==0, NA,  v06m$pan  / v06m$efec),
+                  v09 = ifelse(v09m$efec==0, NA,  v09m$pan  / v09m$efec),
+                  v12 = ifelse(v12m$efec==0, NA,  v12m$pan  / v12m$efec),
+                  v15 = ifelse(v15m$efec==0, NA,  v15m$pan  / v15m$efec),
+                  v18 = ifelse(v18m$efec==0, NA, (v18m$pan + v18m$panc + v18m$prd + v18m$mc) / v18m$efec))
+pan <- round(pan, 3)
+#
+pri <- data.frame(v00 = ifelse(v00m$efec==0, NA,  v00m$pri / v00m$efec),
+                  v03 = ifelse(v03m$efec==0, NA, (v03m$pri + v03m$pric + v03m$pvem) / v03m$efec),
+                  v06 = ifelse(v06m$efec==0, NA,  v06m$pric / v06m$efec),
+                  v09 = ifelse(v09m$efec==0, NA, (v09m$pri + v09m$pric + v09m$pvem) / v09m$efec),
+                  v12 = ifelse(v12m$efec==0, NA, (v12m$pri + v12m$pric + v12m$pvem) / v12m$efec),
+                  v15 = ifelse(v15m$efec==0, NA, (v15m$pri + v15m$pric + v15m$pvem) / v15m$efec),
+                  v18 = ifelse(v18m$efec==0, NA, (v18m$pri + v18m$pric + v18m$pvem + v18m$pna) / v18m$efec))
+pri <- round(pri, 3)
+#
+morena <- data.frame(v00 = ifelse(v00m$efec==0, NA,  v00m$prdc / v00m$efec),
+                     v03 = ifelse(v03m$efec==0, NA, (v03m$prd + v03m$pt + v03m$conve) / v03m$efec),
+                     v06 = ifelse(v06m$efec==0, NA,  v06m$prdc / v06m$efec),
+                     v09 = ifelse(v09m$efec==0, NA, (v09m$prd + v09m$pt + v09m$ptc + v09m$conve) / v09m$efec),
+                     v12 = ifelse(v12m$efec==0, NA, (v12m$prd + v12m$prdc + v12m$pt + v12m$mc)  / v12m$efec),
+                     v15 = ifelse(v15m$efec==0, NA, (v15m$prd + v15m$prdc + v15m$pt + v15m$morena + v15m$pes) / v15m$efec),
+                     v18 = ifelse(v18m$efec==0, NA, (v18m$morena + v18m$morenac + v18m$pt + v18m$pes) / v18m$efec))
+morena <- round(morena, 3)
+#
+oth <- data.frame(v00 = ifelse(v00m$efec==0, NA, (v00m$pcd + v00m$parm + v00m$dsppn) / v00m$efec),
+                  v03 = ifelse(v03m$efec==0, NA, (v03m$psn + v03m$pas + v03m$mp + v03m$plm + v03m$fc) / v03m$efec),
+                  v06 = ifelse(v06m$efec==0, NA, (v06m$pna + v06m$asdc) / v06m$efec),
+                  v09 = ifelse(v09m$efec==0, NA, (v09m$pna + v09m$psd) / v09m$efec),
+                  v12 = ifelse(v12m$efec==0, NA,  v12m$pna / v12m$efec),
+                  v15 = ifelse(v15m$efec==0, NA, (v15m$mc + v15m$pna + v15m$ph + v15m$indep1 + v15m$indep2) / v15m$efec),
+                  v18 = ifelse(v18m$efec==0, NA, (v18m$indep1 + v18m$indep2) / v18m$efec))
+oth <- round(oth, 3)
+# transpose to plug columns into new data.frames
+pan <- t(pan)
+pri <- t(pri)
+morena <- t(morena)
+oth <- t(oth)
+#
+extendCoal <- as.list(rep(NA, nrow(v00m))) # empty list will receive one data.frame per municipio
+# loop over municipios
+for (i in 1:nrow(v00m)){
+    #i <- 2 # debug
+    tmp <- data.frame(yr = seq(from=2000, to=2018, by=3),
+                      pan = pan[,i],
+                      pri = pri[,i],
+                      morena = morena[,i],
+                      oth = oth[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan[is.na(tmp$pan)] <- per.means["pan"];
+        tmp$pri[is.na(tmp$pri)] <- per.means["pri"];
+        tmp$morena[is.na(tmp$morena)] <- per.means["morena"];
+        tmp$oth[is.na(tmp$oth)] <- per.means["oth"];
+    }
+    # add epsilon = 2*max(rounding error) to zeroes 
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+        tmp[,2:5]
+        rowSums(tmp[,2:5])
+        tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3) # re-compute shares
+    }
+    extendCoal[[i]] <- tmp
+}
+#
+# datos para regresión de alfa
+yr.means <- data.frame(yr = seq(2000,2018,3),
+                       pan = rep(NA,7),
+                       pri = rep(NA,7),
+                       morena = rep(NA,7),
+                       oth = rep(NA,7))
+#
+yr.means$pan[1]    <-  apply(v00m, 2, sum)["panc"]                               / apply(v00m, 2, sum)["efec"]
+yr.means$pri[1]    <-  apply(v00m, 2, sum)["pri"]                                / apply(v00m, 2, sum)["efec"]
+yr.means$morena[1] <-  apply(v00m, 2, sum)["prdc"]                               / apply(v00m, 2, sum)["efec"]
+yr.means$oth[1]    <- (apply(v00m, 2, sum)["pcd"] + apply(v00m, 2, sum)["parm"]) / apply(v00m, 2, sum)["efec"]
+#
+yr.means$pan[2]    <-  apply(v03m, 2, sum)["pan"]                                / apply(v03m, 2, sum)["efec"]
+yr.means$pri[2]    <-  (apply(v03m, 2, sum)["pri"] + apply(v03m, 2, sum)["pric"] + apply(v03m, 2, sum)["pvem"])  / apply(v03m, 2, sum)["efec"]
+yr.means$morena[2] <-  (apply(v03m, 2, sum)["prd"] + apply(v03m, 2, sum)["pt"]   + apply(v03m, 2, sum)["conve"]) / apply(v03m, 2, sum)["efec"]
+yr.means$oth[2]    <-  (apply(v03m, 2, sum)["psn"] + apply(v03m, 2, sum)["pas"] + apply(v03m, 2, sum)["mp"] + apply(v03m, 2, sum)["plm"] + apply(v03m, 2, sum)["fc"]) / apply(v03m, 2, sum)["efec"]
+#
+yr.means$pan[3]    <-   apply(v06m, 2, sum)["pan"]                                / apply(v06m, 2, sum)["efec"]
+yr.means$pri[3]    <-   apply(v06m, 2, sum)["pric"]                               / apply(v06m, 2, sum)["efec"]
+yr.means$morena[3] <-   apply(v06m, 2, sum)["prdc"]                               / apply(v06m, 2, sum)["efec"]
+yr.means$oth[3]    <-   (apply(v06m, 2, sum)["pna"] + apply(v06m, 2, sum)["asdc"]) / apply(v06m, 2, sum)["efec"]
+#
+yr.means$pan[4]    <-   apply(v09m, 2, sum)["pan"]                                / apply(v09m, 2, sum)["efec"]
+yr.means$pri[4]    <-  (apply(v09m, 2, sum)["pri"] + apply(v09m, 2, sum)["pric"] + apply(v09m, 2, sum)["pvem"])  / apply(v09m, 2, sum)["efec"]
+yr.means$morena[4] <-   (apply(v09m, 2, sum)["prd"] + apply(v09m, 2, sum)["pt"]   + apply(v09m, 2, sum)["ptc"] + apply(v09m, 2, sum)["conve"]) / apply(v09m, 2, sum)["efec"]
+yr.means$oth[4]    <-   (apply(v09m, 2, sum)["pna"] + apply(v09m, 2, sum)["psd"])  / apply(v09m, 2, sum)["efec"]
+#
+yr.means$pan[5]    <-    apply(v12m, 2, sum)["pan"] / apply(v12m, 2, sum)["efec"]
+yr.means$pri[5]    <-   (apply(v12m, 2, sum)["pri"] + apply(v12m, 2, sum)["pric"] + apply(v12m, 2, sum)["pvem"])  / apply(v12m, 2, sum)["efec"]
+yr.means$morena[5] <-   (apply(v12m, 2, sum)["prd"] + apply(v12m, 2, sum)["prdc"]   + apply(v12m, 2, sum)["pt"] + apply(v12m, 2, sum)["mc"]) / apply(v12m, 2, sum)["efec"]
+yr.means$oth[5]    <-    apply(v12m, 2, sum)["pna"] / apply(v12m, 2, sum)["efec"]
+#
+yr.means$pan[6]    <-    apply(v15m, 2, sum)["pan"] / apply(v15m, 2, sum)["efec"]
+yr.means$pri[6]    <-   (apply(v15m, 2, sum)["pri"] + apply(v15m, 2, sum)["pric"] + apply(v15m, 2, sum)["pvem"])  / apply(v15m, 2, sum)["efec"]
+yr.means$morena[6] <-   (apply(v15m, 2, sum)["prd"] + apply(v15m, 2, sum)["prdc"]   + apply(v15m, 2, sum)["pt"] + apply(v15m, 2, sum)["morena"] + apply(v15m, 2, sum)["pes"]) / apply(v15m, 2, sum)["efec"]
+yr.means$oth[6]    <-   (apply(v15m, 2, sum)["mc"] + apply(v15m, 2, sum)["pna"] + apply(v15m, 2, sum)["ph"] + apply(v15m, 2, sum)["indep1"] + apply(v15m, 2, sum)["indep2"]) / apply(v15m, 2, sum)["efec"]
+#
+yr.means$pan[7]    <-   (apply(v18m, 2, sum)["pan"] + apply(v18m, 2, sum)["panc"] + apply(v18m, 2, sum)["prd"] + apply(v18m, 2, sum)["mc"]) / apply(v18m, 2, sum)["efec"]
+yr.means$pri[7]    <-   (apply(v18m, 2, sum)["pri"] + apply(v18m, 2, sum)["pric"] + apply(v18m, 2, sum)["pvem"] + apply(v18m, 2, sum)["pna"]) / apply(v18m, 2, sum)["efec"]
+yr.means$morena[7] <-   (apply(v18m, 2, sum)["morena"] + apply(v18m, 2, sum)["morenac"] + apply(v18m, 2, sum)["pt"] + apply(v18m, 2, sum)["pes"]) / apply(v18m, 2, sum)["efec"]
+yr.means$oth[7]    <-   (apply(v18m, 2, sum)["indep1"] + apply(v18m, 2, sum)["indep2"]) / apply(v18m, 2, sum)["efec"]
+#
+yr.means <- within(yr.means, mean.rpan <- pan/pri)
+yr.means <- within(yr.means, mean.rmorena <- morena/pri)
+yr.means <- within(yr.means, mean.roth <- oth/pri)
+#
+yr.means[,2:8] <- round(yr.means[,2:8], 3)
+#
+# plug into data
+for (i in 1:nrow(v00m)){
+    #i <- 2 # debug
+    extendCoal[[i]] <- cbind(extendCoal[[i]], yr.means[,6:8])
+}
 
+############################################################################
+## should also try jags estimation to get post-sample of vhats and alphas ##
+############################################################################
+#
+###############################
+## código de las regresiones ##
+###############################
+vhat.2018 <- vhat.2015 <- data.frame(pan    = rep(NA, nrow(v00m)),
+                                     pri    = rep(NA, nrow(v00m)),
+                                     morena = rep(NA, nrow(v00m))) # will receive vote estimates
+#
+alphahat <- data.frame(pan    = rep(NA, nrow(v00m)),
+                       pri    = rep(NA, nrow(v00m)),
+                       morena = rep(NA, nrow(v00m))) # will receive municipio's alphas
+betahat <- data.frame(pan    = rep(NA, nrow(v00m)),
+                      morena = rep(NA, nrow(v00m)),
+                      oth    = rep(NA, nrow(v00m))) # will receive municipio's betas (none for pri)
+#
+tmp <- as.list(rep(NA, nrow(v00m))) # empty list will receive one time-series
+                                                       # regression per municipio, each used to
+                                                       # predict votes in 2015 and 2018 
+#
+regs.2015 <- regs.2018 <- list(pan = tmp,
+                               morena = tmp,
+                               oth = tmp,
+                               readme = "No pri regs because DVs are pri-ratios")
+#
+mean.regs <- list(pan = tmp,
+                  morena = tmp,
+                  oth = tmp,
+                  readme = "No pri regs bec DVs are pri-ratios")
+
+for (i in 1:nrow(v00m)){
+    #i <- 500 # debug
+    message(sprintf("loop %s of %s", i, nrow(v00m)))
+    data.tmp <- extendCoal[[i]]
+    #
+    ##################################
+    ## predict 2015 with last 5 els ##
+    ##################################
+    year <- 2015
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    #
+    ## plug into results objects ##
+    vhat.2015[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    regs.2015$pan[[i]]    <- reg.pan
+    regs.2015$morena[[i]] <- reg.morena
+    regs.2015$oth[[i]]    <- reg.oth
+    #
+    data.tmp$vhat.morena <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # open slots for projections
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    #
+    ##################################
+    ## predict 2018 with last 5 els ##
+    ##################################
+    year <- 2018
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    #
+    ## plug into results objects ##
+    vhat.2018[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    regs.2018$pan   [[i]] <- reg.pan
+    regs.2018$morena[[i]] <- reg.morena
+    regs.2018$oth   [[i]] <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    #
+    # ALTERNATIVE: exp(predict.lm(reg.pan,    newdata = new.d, interval = "confidence"))
+    # #########################################################################
+    ## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
+    #########################################################################
+    reg.pan    <- lm(formula = log(pan/pri)    ~ mean.rpan, data = data.tmp)
+    reg.morena <- lm(formula = log(morena/pri) ~ mean.rmorena, data = data.tmp)
+    reg.oth    <- lm(formula = log(oth/pri)    ~ mean.roth, data = data.tmp)
+    #
+    new.d <- data.frame(mean.rpan = 0)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    new.d <- data.frame(mean.rmorena = 0)
+    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    new.d <- data.frame(mean.roth = 0)
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    #
+    #c(vhat.pan, vhat.pri, vhat.morena, 1-vhat.pan-vhat.pri-vhat.morena)
+    alphahat[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    betahat[i,1] <- coef(reg.pan)   [2]
+    betahat[i,2] <- coef(reg.morena)[2]
+    betahat[i,3] <- coef(reg.oth)   [2]
+    mean.regs$pan   [[i]] <- reg.pan
+    mean.regs$morena[[i]] <- reg.morena
+    mean.regs$oth   [[i]] <- reg.oth
+    #
+    # add alphas and betas for whole period
+    data.tmp$alphahat.morena <- data.tmp$alphahat.pri <- data.tmp$alphahat.pan <- NA # open slots for alphas
+    data.tmp$betahat.morena <- data.tmp$betahat.pan <- NA # open slots for betas
+    data.tmp$alphahat.pan    <- alphahat$pan   [i]
+    data.tmp$alphahat.pri    <- alphahat$pri   [i]
+    data.tmp$alphahat.morena <- alphahat$morena[i]
+    data.tmp$betahat.pan    <- betahat$pan   [i]
+    data.tmp$betahat.morena <- betahat$morena[i]
+    data.tmp$betahat.oth    <- betahat$oth   [i]
+    data.tmp <- round(data.tmp,3)
+    #
+    ########################################################
+    ## optional: plug vhats alphas betas back into data   ##
+    ########################################################
+    data.tmp$mean.rpan <- data.tmp$mean.rmorena <- data.tmp$mean.roth <- NULL # remove mean ratios
+    extendCoal[[i]] <- data.tmp
+}
+
+# generate data frame with 2018 values for export
+sel <- which(extendCoal[[1]]$yr==2018) # which row reports 2018
+tmp <- lapply(extendCoal, function(x) {
+    prune <- x[sel,] # keep selected row only
+    return(prune)
+}) # keep sel yr only in every municipio
+tmp <- do.call("rbind", tmp)   # turn into one dataframe
+rownames(tmp) <- NULL
+tmp <- cbind(tmp, v00m[,c("edon","ife","inegi","disn")])
+    
+    #
+    ## # I could also report/add time-trend regression coefficients thus
+    ## tmp <- function(x) {
+    ##     coefs <- coef(summary(x))[,1] # extract regression coefficiens
+    ##     return(coefs)
+    ## }
+    ## coefs.time <- lapply(regs.2018$morena, tmp) # keep sel yr only in every municipio
+    ## # extract alpha
+    ## tmp.alpha <- lapply(mean.regs$morena, tmp) # keep sel yr only in every municipio
+
+
+
+extendCoal.2018 <- tmp
+dim(extendCoal.2018)
+
+
+
+
+extendCoal.2018[1,]
+
+paste(wd, "data/dipfed2018mu-vhat.csv", sep = "")
 
 x
+
+
 # version 2: coalitions only in districts where they happened
 ## morenaRealm <- data.frame(v00 = v00m$prdc / v00m$efec,
 ##                           v03 = v03m$prd / v03m$efec,
@@ -703,52 +955,11 @@ v12m[sel,]
 table(v03m$dpric)
 x
 
+# falta intentar jags estimation
 # falta leer presidenciales 94 00 06 12 18
 # falta leer dipfed 91 94 97
 # falta leer municipales 91--19
 
-# pasos para correr las regresiones
-dat <- morenaExtm
-summary(dat)
-Y <- ncol(dat) # total years
-M <- nrow(dat) # total municipios
-dat <- as.data.frame(t(dat))
-vhat <- dat; vhat[] <- NA # prepara df vacío
-#
-sel.row <- which(rownames(dat) %in% paste("v", c("00","03","06","09","12"), sep = "")) # subset regression data years to predict 2015
-dat[,1]
-for (m in 1:M){
-    #m <- 1 # debug
-    sel <- which(rownames(vhat) %in% "v15")
-    y <- dat[sel.row,m]; names(y) <- NULL;
-    x <- seq(from = 2000, to = 2012, by = 3);
-    d <- data.frame(y = y, x = x)
-    m <- lm(y ~ x, data = d);
-    new.d <- data.frame(x = c(2006,2012,2015,2018))
-    p <- predict(m, newdata = new.d)
-    v.hat[m,] <- p;
-}
-
-                                                                  
-Supón que tienes los datos organizados así (cada fila es un municipio):
-amlo <- data.frame(v06=c(.4,.2,.6),
-                   v12=c(.3,.3,.7),
-                   v15=c(.2,.4,.5),
-                   v18=c(.5,.7,.8))
-Podrías hacer un loop:
-v.hat <- data.frame(matrix(NA, nrow = nrow(amlo), ncol = 4)); colnames(v.hat) <- c("v06","v12","v15","v18")# prepara df vacío
-for (i in 1:nrow(amlo)){
-    #i <- 1 # debug
-    y <- amlo[i,1:3]; names(y) <- NULL
-    x <- c(2006,2012,2015)
-    d <- as.data.frame(t(rbind(y,x))); colnames(d) <- c("y","x")
-    m <- lm(y ~ x, data = d);
-    new.d <- data.frame(x = c(2006,2012,2015,2018))
-    p <- predict(m, newdata = new.d)
-    v.hat[i,] <- p;
-}
-v.hat$v18 # esta es la predicción 2018 para cada municipio
-amlo$v18 - v.hat$v18 # éste el residual
                                                 
 # rank, margin, winner
 n <- nrow(v15)
