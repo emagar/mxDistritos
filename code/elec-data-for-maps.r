@@ -639,9 +639,9 @@ d$edosecn <- d$seccion <- NULL
 v18m <- d
 #
 dim(v00); dim(v03); dim(v06); dim(v09); dim(v12); dim(v15); dim(v18); 
-
 # rename section-level aggregates to free v00 v03 etc for general use
 v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18;
+#
 rm(v00,v03,v06,v09,v12,v15,v18)
 
 ############################################################
@@ -650,7 +650,7 @@ rm(v00,v03,v06,v09,v12,v15,v18)
 ## ## by choosing s, m, d...                           ## ##
 ## ###################################################### ##
 ############################################################
-agg <- c("m","s","d")[1]
+agg <- c("m","s","d")[2]
 if (agg=="m") {
 v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
 }
@@ -712,7 +712,7 @@ oth <- t(oth)
 extendCoal <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
 # loop over municipios
 for (i in 1:nrow(v00)){
-    #i <- 2 # debug
+    #i <- 98 # debug
     tmp <- data.frame(yr = seq(from=2000, to=2018, by=3),
                       pan = pan[,i],
                       pri = pri[,i],
@@ -742,41 +742,42 @@ yr.means <- data.frame(yr = seq(2000,2018,3),
                        pri = rep(NA,7),
                        morena = rep(NA,7),
                        oth = rep(NA,7))
+cs <- function(x) colSums(x, na.rm=TRUE)
 #
-yr.means$pan[1]    <-  apply(v00, 2, sum)["panc"]                              / apply(v00, 2, sum)["efec"]
-yr.means$pri[1]    <-  apply(v00, 2, sum)["pri"]                               / apply(v00, 2, sum)["efec"]
-yr.means$morena[1] <-  apply(v00, 2, sum)["prdc"]                              / apply(v00, 2, sum)["efec"]
-yr.means$oth[1]    <- (apply(v00, 2, sum)["pcd"] + apply(v00, 2, sum)["parm"]) / apply(v00, 2, sum)["efec"]
+yr.means$pan[1]    <-  cs(v00)["panc"]                   / cs(v00)["efec"]
+yr.means$pri[1]    <-  cs(v00)["pri"]                    / cs(v00)["efec"]
+yr.means$morena[1] <-  cs(v00)["prdc"]                   / cs(v00)["efec"]
+yr.means$oth[1]    <- (cs(v00)["pcd"] + cs(v00)["parm"]) / cs(v00)["efec"]
 #
-yr.means$pan[2]    <-   apply(v03, 2, sum)["pan"]                                / apply(v03, 2, sum)["efec"]
-yr.means$pri[2]    <-  (apply(v03, 2, sum)["pri"] + apply(v03, 2, sum)["pric"] + apply(v03, 2, sum)["pvem"])  / apply(v03, 2, sum)["efec"]
-yr.means$morena[2] <-  (apply(v03, 2, sum)["prd"] + apply(v03, 2, sum)["pt"]   + apply(v03, 2, sum)["conve"]) / apply(v03, 2, sum)["efec"]
-yr.means$oth[2]    <-  (apply(v03, 2, sum)["psn"] + apply(v03, 2, sum)["pas"]  + apply(v03, 2, sum)["mp"] + apply(v03, 2, sum)["plm"] + apply(v03, 2, sum)["fc"]) / apply(v03, 2, sum)["efec"]
+yr.means$pan[2]    <-   cs(v03)["pan"]                                                                     / cs(v03)["efec"]
+yr.means$pri[2]    <-  (cs(v03)["pri"] + cs(v03)["pric"] + cs(v03)["pvem"])                                / cs(v03)["efec"]
+yr.means$morena[2] <-  (cs(v03)["prd"] + cs(v03)["pt"]   + cs(v03)["conve"])                               / cs(v03)["efec"]
+yr.means$oth[2]    <-  (cs(v03)["psn"] + cs(v03)["pas"]  + cs(v03)["mp"] + cs(v03)["plm"] + cs(v03)["fc"]) / cs(v03)["efec"]
 #
-yr.means$pan[3]    <-   apply(v06, 2, sum)["pan"]                               / apply(v06, 2, sum)["efec"]
-yr.means$pri[3]    <-   apply(v06, 2, sum)["pric"]                              / apply(v06, 2, sum)["efec"]
-yr.means$morena[3] <-   apply(v06, 2, sum)["prdc"]                              / apply(v06, 2, sum)["efec"]
-yr.means$oth[3]    <-  (apply(v06, 2, sum)["pna"] + apply(v06, 2, sum)["asdc"]) / apply(v06, 2, sum)["efec"]
+yr.means$pan[3]    <-   cs(v06)["pan"]                    / cs(v06)["efec"]
+yr.means$pri[3]    <-   cs(v06)["pric"]                   / cs(v06)["efec"]
+yr.means$morena[3] <-   cs(v06)["prdc"]                   / cs(v06)["efec"]
+yr.means$oth[3]    <-  (cs(v06)["pna"] + cs(v06)["asdc"]) / cs(v06)["efec"]
 #
-yr.means$pan[4]    <-   apply(v09, 2, sum)["pan"]                                / apply(v09, 2, sum)["efec"]
-yr.means$pri[4]    <-  (apply(v09, 2, sum)["pri"] + apply(v09, 2, sum)["pric"] + apply(v09, 2, sum)["pvem"])  / apply(v09, 2, sum)["efec"]
-yr.means$morena[4] <-  (apply(v09, 2, sum)["prd"] + apply(v09, 2, sum)["pt"]   + apply(v09, 2, sum)["ptc"] + apply(v09, 2, sum)["conve"]) / apply(v09, 2, sum)["efec"]
-yr.means$oth[4]    <-  (apply(v09, 2, sum)["pna"] + apply(v09, 2, sum)["psd"]) / apply(v09, 2, sum)["efec"]
+yr.means$pan[4]    <-   cs(v09)["pan"]                                                        / cs(v09)["efec"]
+yr.means$pri[4]    <-  (cs(v09)["pri"] + cs(v09)["pric"] + cs(v09)["pvem"])                   / cs(v09)["efec"]
+yr.means$morena[4] <-  (cs(v09)["prd"] + cs(v09)["pt"]   + cs(v09)["ptc"] + cs(v09)["conve"]) / cs(v09)["efec"]
+yr.means$oth[4]    <-  (cs(v09)["pna"] + cs(v09)["psd"])                                      / cs(v09)["efec"]
 #
-yr.means$pan[5]    <-    apply(v12, 2, sum)["pan"] / apply(v12, 2, sum)["efec"]
-yr.means$pri[5]    <-   (apply(v12, 2, sum)["pri"] + apply(v12, 2, sum)["pric"] + apply(v12, 2, sum)["pvem"])  / apply(v12, 2, sum)["efec"]
-yr.means$morena[5] <-   (apply(v12, 2, sum)["prd"] + apply(v12, 2, sum)["prdc"] + apply(v12, 2, sum)["pt"] + apply(v12, 2, sum)["mc"]) / apply(v12, 2, sum)["efec"]
-yr.means$oth[5]    <-    apply(v12, 2, sum)["pna"] / apply(v12, 2, sum)["efec"]
+yr.means$pan[5]    <-    cs(v12)["pan"]                                                    / cs(v12)["efec"]
+yr.means$pri[5]    <-   (cs(v12)["pri"] + cs(v12)["pric"] + cs(v12)["pvem"])               / cs(v12)["efec"]
+yr.means$morena[5] <-   (cs(v12)["prd"] + cs(v12)["prdc"] + cs(v12)["pt"] + cs(v12)["mc"]) / cs(v12)["efec"]
+yr.means$oth[5]    <-    cs(v12)["pna"]                                                    / cs(v12)["efec"]
 #
-yr.means$pan[6]    <-    apply(v15, 2, sum)["pan"] / apply(v15, 2, sum)["efec"]
-yr.means$pri[6]    <-   (apply(v15, 2, sum)["pri"] + apply(v15, 2, sum)["pric"] + apply(v15, 2, sum)["pvem"])  / apply(v15, 2, sum)["efec"]
-yr.means$morena[6] <-   (apply(v15, 2, sum)["prd"] + apply(v15, 2, sum)["prdc"]   + apply(v15, 2, sum)["pt"] + apply(v15, 2, sum)["morena"] + apply(v15, 2, sum)["pes"]) / apply(v15, 2, sum)["efec"]
-yr.means$oth[6]    <-   (apply(v15, 2, sum)["mc"] + apply(v15, 2, sum)["pna"] + apply(v15, 2, sum)["ph"] + apply(v15, 2, sum)["indep1"] + apply(v15, 2, sum)["indep2"]) / apply(v15, 2, sum)["efec"]
+yr.means$pan[6]    <-    cs(v15)["pan"]                                                                           / cs(v15)["efec"]
+yr.means$pri[6]    <-   (cs(v15)["pri"] + cs(v15)["pric"] + cs(v15)["pvem"])                                      / cs(v15)["efec"]
+yr.means$morena[6] <-   (cs(v15)["prd"] + cs(v15)["prdc"]   + cs(v15)["pt"] + cs(v15)["morena"] + cs(v15)["pes"]) / cs(v15)["efec"]
+yr.means$oth[6]    <-   (cs(v15)["mc"] + cs(v15)["pna"] + cs(v15)["ph"] + cs(v15)["indep1"] + cs(v15)["indep2"])  / cs(v15)["efec"]
 #
-yr.means$pan[7]    <-   (apply(v18, 2, sum)["pan"] + apply(v18, 2, sum)["panc"] + apply(v18, 2, sum)["prd"] + apply(v18, 2, sum)["mc"]) / apply(v18, 2, sum)["efec"]
-yr.means$pri[7]    <-   (apply(v18, 2, sum)["pri"] + apply(v18, 2, sum)["pric"] + apply(v18, 2, sum)["pvem"] + apply(v18, 2, sum)["pna"]) / apply(v18, 2, sum)["efec"]
-yr.means$morena[7] <-   (apply(v18, 2, sum)["morena"] + apply(v18, 2, sum)["morenac"] + apply(v18, 2, sum)["pt"] + apply(v18, 2, sum)["pes"]) / apply(v18, 2, sum)["efec"]
-yr.means$oth[7]    <-   (apply(v18, 2, sum)["indep1"] + apply(v18, 2, sum)["indep2"]) / apply(v18, 2, sum)["efec"]
+yr.means$pan[7]    <-   (cs(v18)["pan"] + cs(v18)["panc"] + cs(v18)["prd"] + cs(v18)["mc"])       / cs(v18)["efec"]
+yr.means$pri[7]    <-   (cs(v18)["pri"] + cs(v18)["pric"] + cs(v18)["pvem"] + cs(v18)["pna"])     / cs(v18)["efec"]
+yr.means$morena[7] <-   (cs(v18)["morena"] + cs(v18)["morenac"] + cs(v18)["pt"] + cs(v18)["pes"]) / cs(v18)["efec"]
+yr.means$oth[7]    <-   (cs(v18)["indep1"] + cs(v18)["indep2"])                                   / cs(v18)["efec"]
 #
 yr.means <- within(yr.means, mean.rpan    <- pan/pri)
 yr.means <- within(yr.means, mean.rmorena <- morena/pri)
@@ -822,9 +823,16 @@ mean.regs <- list(pan    = tmp,
                   oth    = tmp,
                   readme = "No pri regs bec DVs are pri-ratios")
 
-for (i in 1:nrow(v00)){
-    #i <- 500 # debug
-    message(sprintf("loop %s of %s", i, nrow(v00)))
+# drop list elements that still have NAs from loop
+# (happens with some secciones)
+non.nas <- lapply(extendCoal, sum)
+non.nas <- unlist(non.nas)
+non.nas <- which(is.na(non.nas)==FALSE)
+#    
+for (i in non.nas){
+#for (i in 1:nrow(v00)){
+    #i <- 7729 # debug
+    message(sprintf("loop %s", i))
     data.tmp <- extendCoal[[i]]
     #
     ##################################
@@ -932,7 +940,14 @@ tmp <- lapply(extendCoal, function(x) {
     prune <- x[sel,] # keep selected row only
     return(prune)
 }) # keep sel yr only in every municipio
-tmp <- do.call("rbind", tmp)   # turn into one dataframe
+# spot NAs in list
+tmp.sel <- setdiff(1:length(extendCoal), non.nas)
+# fill with same-dim NA data.frame
+tmp.manip <- tmp[[non.nas[1]]]
+tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
+tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
+# turn into one dataframe
+tmp <- do.call("rbind", tmp)
 rownames(tmp) <- NULL
 if (agg=="m") sel.col <- c("edon","ife","inegi","disn")       # cols to merge when using municipios
 if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi","disn") # when using secciones
@@ -947,7 +962,14 @@ tmp <- lapply(extendCoal, function(x) {
     prune <- x[sel,] # keep selected row only
     return(prune)
 }) # keep sel yr only in every municipio
-tmp <- do.call("rbind", tmp)   # turn into one dataframe
+# spot NAs in list
+tmp.sel <- setdiff(1:length(extendCoal), non.nas)
+# fill with same-dim NA data.frame
+tmp.manip <- tmp[[non.nas[1]]]
+tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
+tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
+# turn into one dataframe
+tmp <- do.call("rbind", tmp)
 rownames(tmp) <- NULL
 if (agg=="m") sel.col <- c("edon","ife","inegi","disn")       # cols to merge when using municipios
 if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi","disn") # when using secciones
@@ -958,11 +980,11 @@ extendCoal.2015 <- tmp
 
 # save to disk
 write.csv(extendCoal.2018,
-          file = paste(wd, "data/dipfed2018mu-vhat.csv", sep = ""),
+          file = paste(wd, "data/dipfed2018se-vhat.csv", sep = ""),
           row.names = FALSE)
 #
 write.csv(extendCoal.2015,
-          file = paste(wd, "data/dipfed2015mu-vhat.csv", sep = ""),
+          file = paste(wd, "data/dipfed2015se-vhat.csv", sep = ""),
           row.names = FALSE)
 
 dim(extendCoal.2018)
