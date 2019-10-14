@@ -989,9 +989,9 @@ write.csv(extendCoal.2015,
 
 dim(extendCoal.2018)
 
-round(quantile(x = (extendCoal.2018$pan    - extendCoal.2018$vhat.pan)   , probs = seq(0,1,.1)),3)
-round(quantile(x = (extendCoal.2018$pri    - extendCoal.2018$vhat.pri)   , probs = seq(0,1,.1)),3)
-round(quantile(x = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), probs = seq(0,1,.1)),3)
+round(quantile(x = (extendCoal.2018$pan    - extendCoal.2018$vhat.pan)   , probs = seq(0,1,.1), na.rm = TRUE),3)
+round(quantile(x = (extendCoal.2018$pri    - extendCoal.2018$vhat.pri)   , probs = seq(0,1,.1), na.rm = TRUE),3)
+round(quantile(x = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), probs = seq(0,1,.1), na.rm = TRUE),3)
 
 col.pan <-    rgb(.18,.24,.73, alpha = .3) # moderate blue
 col.pri <-    rgb(.89,.17,.17, alpha = .3) # bright red
@@ -1002,8 +1002,8 @@ extendCoal.2015[1,]
 # morena vs pri core
 plot(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), type = "n", xlab = "Núcleo del PRI", ylab = "Residual de Morena en 2018")
 abline(h = 0, col = col.pri)
-points(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), pch = 20, cex = 1.25, col = rgb(.55,.27,.07, alpha = .3))
-fit <- lm((morena - vhat.morena) ~ poly(alphahat.pri,3), data = extendCoal.2018)
+points(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), pch = 20, cex = .15, col = rgb(.55,.27,.07, alpha = .3))
+fit <- lm((morena - vhat.morena) ~ poly(alphahat.pri,3), data = extendCoal.2018[non.nas])
 xx <- seq(from = 0, to = 1, by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pri=xx)), col = "black", lwd = 1.5)
 
