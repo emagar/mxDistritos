@@ -1,22 +1,22 @@
 
 # Table of Contents
 
-1.  [Description of *Recent Mexican electoral geography* repository](#orgf424ca0)
-2.  [Files in the repository and how to cite them](#orgd20e938)
-3.  [Acknowledgements](#orgc4d7449)
-4.  [below are elements to copy/emulate in this readme file ---](#orgbf204b0)
-5.  [Files in the repository and how to cite them](#org0402355)
-6.  [Codebook](#org2d33bbf)
-7.  [Coding procedure for the incumbent's status](#orgd1302c5)
-8.  [Procedimiento para codificar el estatus del ocupante](#orgdfe777f)
-9.  [Sources](#org99894d5)
+1.  [Description of *Recent Mexican electoral geography* repository](#orgf1a1b11)
+2.  [Files in the repository and how to cite them](#org3054e39)
+3.  [Acknowledgements](#org8e49fbd)
+4.  [below are elements to copy/emulate in this readme file ---](#org220160c)
+5.  [Files in the repository and how to cite them](#org8536e38)
+6.  [Codebook](#org20ec5cf)
+7.  [Coding procedure for the incumbent's status](#orgbc0d04e)
+8.  [Procedimiento para codificar el estatus del ocupante](#orgf365148)
+9.  [Sources](#org11d656f)
 
 Last revision: 2019-10-16
 
 **>>> Under construction (expected completion end of Oct. 2019) <<<**
 
 
-<a id="orgf424ca0"></a>
+<a id="orgf1a1b11"></a>
 
 # Description of *Recent Mexican electoral geography* repository
 
@@ -26,13 +26,17 @@ Last revision: 2019-10-16
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [here](https://cartografia.ife.org.mx/sige7/?cartografia)). Data in this repo is prepared for mapping and preliminary/basic analysis.
 
 
-<a id="orgd20e938"></a>
+<a id="org3054e39"></a>
 
 # Files in the repository and how to cite them
 
--   `code/elec-data-for-maps.r` = code manipulates sección-level vote returns in federal deputy elections 2000&#x2013;2018 for use in maps.
+-   `code/elec-data-for-maps.r` = code manipulates sección-level vote returns in federal deputy elections 1994&#x2013;2018 for use in maps.
+-   `vhat` files = electoral statistics for different years and units of aggregation calculated from federal diputado single-member district elections. Measures of interest are (a) the parties' vote shares in the unit-year; (b) the predicted vote share for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (c) estimates of each party's core support in the unit for the whole period; (d) number of times each party won the vote plurality/majority in the unit in the period. Coalitions are extended nationwide for convenience in the analysis (`code/elec-data-for-maps.r` was used to prepare these files).
+    -   Variables in the datasets:<a id="orga5ca93c"></a> most variables described here are included in every year and level of aggregation file. When this is not true, the corresponding file mentions the exception. 
+        -   Years/levels of aggregation:
+
 -   `data/dipfed2015mu-vhat.csv` = 2015 federal diputado single-member district election statistics. The units are municipalities. Data are municipal aggregates of sección-level returns (i.e. votes from all secciones belonging to a given municipality are added up). The PRI fielded joint candidates with the Green party in some states only, as did the PRD with the PT; both coalitions are extended nationwide for convenience in the analysis (`code/elec-data-for-maps.r` was used to prepare this file). 
-    -   Variables in the dataset:<a id="org140a4a5"></a>
+    -   Variables in the dataset:<a id="orga57934c"></a>
         -   \`yr\` = election year.
         -   \`edon\` = state number 1:32.
         -   \`inegi\` = municipality's code used by INEGI (census bureau).
@@ -58,7 +62,7 @@ The repository contains maps of Mexican districts used to elect representatives 
 -   `equivSecc/docsRedistReseccRemunic/` = folder contains numerous documents prepared by INE/IFE explaining redistricting criteria, changes in sección delimitations (*reseccionamiento*), and changes in a state's municipalities.
 -   `equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv` = historical record of *secciones electorales* nationwide since 1994. Secciones, which do not traverse municipal borders, are the the basic building blocks for districting at both the federal and state levels (see Magar et al. 2017, fn. 9). Each row reports one sección (approx. 69,000 total) and the district it belonged to in four federal congressional district maps (maps inaugurated in 1979, 1997, 2006, and 2018). It also reports the district it would have belonged to in the 2013 map that was rejected prior to adoption. A small but important number of secciones suffered changes through time (the official term is *reseccionamiento*)&#x2014;most frequently due to under- or over-population, but also after court rulings effecting modifications in state or municipal borders; see the \`OBSERVACIONES\` and its right-adjacent variables). For this reason, the dataset maps secciones-to-districts at each federal election since 1994.  
     -   This dataset builds upon an excel sheet that IFE/INE distributes (included in the repository and listed next).
-    -   Variables in the dataset:<a id="orgef81800"></a>
+    -   Variables in the dataset:<a id="org4597595"></a>
         -   \`ord\` = observation counter.
         -   \`edon\` = state number 1:32.
         -   \`edo\` = state abbreviation (may differ from the 'official' abbreviations so that sorting them alphabetically preserves the order set by *edon*).
@@ -88,14 +92,14 @@ The repository contains maps of Mexican districts used to elect representatives 
     -   **Citation for this dataset**: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, *Political Geography* 57(1):1-12.
 
 
-<a id="orgc4d7449"></a>
+<a id="org8e49fbd"></a>
 
 # Acknowledgements
 
 Eric Magar acknowledges financial support from the Asociación Mexicana de Cultura A.C. and CONACYT's Sistema Nacional de Investigadores. He is responsible for mistakes and shortcomings in the data. 
 
 
-<a id="orgbf204b0"></a>
+<a id="org220160c"></a>
 
 # below are elements to copy/emulate in this readme file ---
 
@@ -104,7 +108,7 @@ Maps of federal and state legislative districts, and code voting data for recent
 *Important note:* older incarnations of this this repository contain LFS (Large File System) parts. Make sure to install [LFS](https://git-lfs.github.com/) in your machine before cloning previous commits of the repository.
 
 
-<a id="org0402355"></a>
+<a id="org8536e38"></a>
 
 # Files in the repository and how to cite them
 
@@ -131,7 +135,7 @@ In general, file names identify the office elected (i.e., **df**, **se**, **pr**
 -   <del>`datosBrutos/` = large directory containing primary sources</del> (dropped from repo due to large size&#x2026; [mail me](mailto:emagar@itam.mx) if you need this).
 
 
-<a id="org2d33bbf"></a>
+<a id="org20ec5cf"></a>
 
 # Codebook
 
@@ -167,12 +171,12 @@ Most variables are included in every file, some appear in selected files only.
 -   *fake* = indicates fake data for hegemonic era elections, made up of best guesses about what happened in the state's race for the purpose of computing vote lags. Will normally be dropped from analysis.
 -   *win* = winner's party or coalition.
 -   *incumbent* = winning candidate's name.
--   *race.after* = incumbent's status in the subsequent race. See [this](#orgd6db870) for categories and coding procedure ([aquí](#org52b80bd) la versión en español del procedimiento codificador).
+-   *race.after* = incumbent's status in the subsequent race. See [this](#org4e060fe) for categories and coding procedure ([aquí](#org7a947f1) la versión en español del procedimiento codificador).
 
 
-<a id="orgd1302c5"></a>
+<a id="orgbc0d04e"></a>
 
-# Coding procedure for the incumbent's status<a id="orgd6db870"></a>
+# Coding procedure for the incumbent's status<a id="org4e060fe"></a>
 
 In file `data/aymu1985-present.incumbents.csv`, variable *race.after* equals one of the following categories: 
 
@@ -190,9 +194,9 @@ In categories other than the first two above, a suffix may be present.
 -   Suffix '-p-won' indicates that the party won the subsequent race (or, in case of incumbents elected by a multi-party coalition, that one of them won or at least one of them was in the winning coalition).
 
 
-<a id="orgdfe777f"></a>
+<a id="orgf365148"></a>
 
-# Procedimiento para codificar el estatus del ocupante<a id="org52b80bd"></a>
+# Procedimiento para codificar el estatus del ocupante<a id="org7a947f1"></a>
 
 En el archivo `data/aymu1985-present.incumbents.csv`, la variable *race.after* indica el estatus del ocupante en la elección subsecuente. El estatus puede ser una de las categorías siguientes: 
 
@@ -210,7 +214,7 @@ En las categorías 3 en adelante, un sufijo puede estar presente.
 -   El sufijo '-p-won' indica que el partido ganó la elección subsecuente (o, para ocupantes electos por una coalición multi-partidista, que uno de esos partidos ganó o que por lo menos uno fue parte de la coalición ganadora).
 
 
-<a id="org99894d5"></a>
+<a id="org11d656f"></a>
 
 # Sources
 

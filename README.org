@@ -14,7 +14,11 @@ Last revision: 2019-10-16
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [[https://cartografia.ife.org.mx/sige7/?cartografia][here]]). Data in this repo is prepared for mapping and preliminary/basic analysis.
 
 * Files in the repository and how to cite them
-- ~code/elec-data-for-maps.r~ = code manipulates sección-level vote returns in federal deputy elections 2000--2018 for use in maps.
+- ~code/elec-data-for-maps.r~ = code manipulates sección-level vote returns in federal deputy elections 1994--2018 for use in maps.
+- ~vhat~ files = electoral statistics for different years and units of aggregation calculated from federal diputado single-member district elections. Measures of interest are (a) the parties' vote shares in the unit-year; (b) the predicted vote share for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (c) estimates of each party's core support in the unit for the whole period; (d) number of times each party won the vote plurality/majority in the unit in the period. Coalitions are extended nationwide for convenience in the analysis (~code/elec-data-for-maps.r~ was used to prepare these files).
+  + Variables in the datasets:<<codebookElec>> most variables described here are included in every year and level of aggregation file. When this is not true, the corresponding file mentions the exception. 
+    * Years/levels of aggregation:
+
 - ~data/dipfed2015mu-vhat.csv~ = 2015 federal diputado single-member district election statistics. The units are municipalities. Data are municipal aggregates of sección-level returns (i.e. votes from all secciones belonging to a given municipality are added up). The PRI fielded joint candidates with the Green party in some states only, as did the PRD with the PT; both coalitions are extended nationwide for convenience in the analysis (~code/elec-data-for-maps.r~ was used to prepare this file). 
   + Variables in the dataset:<<codebookElec>>
     - `yr` = election year.
