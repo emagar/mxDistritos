@@ -1238,12 +1238,53 @@ write.csv(extendCoal.2018,
           file = paste(wd, "data/dipfed2018mu-vhat.csv", sep = ""),
           row.names = FALSE)
 
-# save regression objects
+# save municipal regression objects
 save(mean.regs, file = paste(wd, "data/dipfed-mu-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 save(regs.2009, file = paste(wd, "data/dipfed-mu-regs-2009.RData", sep = ""), compress = "gzip")
 save(regs.2012, file = paste(wd, "data/dipfed-mu-regs-2012.RData", sep = ""), compress = "gzip")
 save(regs.2015, file = paste(wd, "data/dipfed-mu-regs-2015.RData", sep = ""), compress = "gzip")
 save(regs.2018, file = paste(wd, "data/dipfed-mu-regs-2018.RData", sep = ""), compress = "gzip")
+
+# save secciónregression objects
+save(mean.regs, file = paste(wd, "data/dipfed-se-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+#save(regs.2009, file = paste(wd, "data/dipfed-se-regs-2009.RData", sep = ""), compress = "gzip")
+#save(regs.2012, file = paste(wd, "data/dipfed-se-regs-2012.RData", sep = ""), compress = "gzip")
+save(regs.2015, file = paste(wd, "data/dipfed-se-regs-2015.RData", sep = ""), compress = "gzip")
+save(regs.2018, file = paste(wd, "data/dipfed-se-regs-2018.RData", sep = ""), compress = "gzip")
+
+# load regression object
+
+non.nas <- lapply(regs.2015$pan, is.na)
+non.nas <- unlist(non.nas)
+non.nas <- which(is.na(non.nas)==FALSE)
+
+
+load(file = paste(wd, "data/dipfed-se-regs-2015.RData", sep = ""))
+summary.lm(regs.2015$morena[[1]])$coef[2,1]
+
+pan.tmp
+pan.tmp <- lapply(regs.2015$pan, function(x) {
+    slope <-    summary.lm(x)$coef[2,1]
+    return(slope)
+})
+morena.tmp <- lapply(regs.2015$morena, function(x) {
+    slope <-    summary.lm(x)$coef[2,1]
+    return(slope)
+})
+warnings()
+tmp <- data.frame(pan=pan.tmp, morena=morena.tmp)
+x
+                                        # spot NAs in list
+    tmp.sel <- setdiff(1:length(extendCoal), non.nas)
+    # fill with same-dim NA data.frame
+    tmp.manip <- tmp[[non.nas[1]]]
+    tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
+    tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
+    # turn into one dataframe
+    tmp <- do.call("rbind", tmp)
+    rownames(tmp) <- NULL
+
+x
 
 dim(extendCoal.2018)
 

@@ -21,7 +21,6 @@ The repository contains maps of Mexican districts used to elect representatives 
     - `edon` = state number 1:32.
     - `inegi` = municipality's code used by INEGI (census bureau).
     - `ife` = municipality's code used by IFE/INE (election board).
-    - `disn` = federal district the municipality belongs to. *OJO: what about mun with many districts???*
     - `pan` = vote share won by the PAN.
     - `pri` = vote share won by the PRI+PVEM coalition.
     - `morena` = vote share won by the left and allies. The PRD and its PT ally's votes, MORENA's, and the PES's are aggregated (in order to ease comparison to the 2018 election, when Morena+PT+PES fielded joit candidates).  
