@@ -26,11 +26,15 @@ The repository contains maps of Mexican districts used to elect representatives 
     - `pri` = vote share won by the PRI+PVEM coalition.
     - `morena` = vote share won by the left and allies. The PRD and its PT ally's votes, MORENA's, and the PES's are aggregated (in order to ease comparison to the 2018 election, when Morena+PT+PES fielded joit candidates).  
     - `oth` = vote share of minor candidates fielded by MC, PNA, PH, and independents. 
-    - `vhat` variables = vote share estimates from a linear prediction for the current year (`yr`) from the party's performance in five immediately previous federal diputado elections in the unit. The equation v_{i,t} = a + bt, t = (yr - 15, yr - 12, yr - 9, yr - 6, yr - 3) estimated via OLS in each unit (municipality/sección) for this purpose. Compositional variable specification used for estimation, see XXXX for details.
+    - `vhat` variables = vote share estimates from a linear prediction for the current year (`yr`) from the party's performance in five immediately previous federal diputado elections in the unit. Defining party i's vote share ratio to the PRI as r_{i,t} = v_{i,t} / v_{PRI,t}, the equation r_{i,t} = a + bt, t = (yr - 15, yr - 12, yr - 9, yr - 6, yr - 3) was estimated via OLS in each unit (municipality/sección) for this purpose. As in compositional variable analysis, \hat{v}_{i,t} = \hat{r}_{i,t} / (1 + \sum-over-i-not-pri r_{i,t}). See XXXX for details.
       * `vhat.pan` = PAN's vote share estimate. 
       * `vhat.pri` = PRI's vote share estimate. 
-      * `vhat.morena` = left's vote share estimate. 
-    - `alphahat` variables = party core support estimate for the unit in 2000-2018 federal diputado elections. See XXXX for estimation details. 
+      * `vhat.morena` = left's vote share estimate.
+    - `bhat` variables = point estimates of the slope (b) coefficient from the regression described in the bullet above.     - `alphahat` variables = party core support estimate for the unit in 2000-2018 federal diputado elections. See XXXX for estimation details. 
+      * `bhat.pan` = PAN's slope estimate. 
+      * `bhat.morena` = left's slope estimate. 
+      * `bhat.pri` = PRI's slope estimate.
+    - `alphahat` variables = vote share estimates from a linear prediction for the current year (`yr`) from the party's performance in five immediately previous federal diputado elections in the unit. The equation v_{i,t} = a + bt, t = (yr - 15, yr - 12, yr - 9, yr - 6, yr - 3) estimated via OLS in each unit (municipality/sección) for this purpose. Compositional variable specification used for estimation, see XXXX for details.
       * `alphahat.pan` = PAN's core support estimate. 
       * `alphahat.pri` = PRI's core support estimate.
       * `alphahat.morena` = left's core support estimate.

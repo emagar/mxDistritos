@@ -5,9 +5,8 @@
 ## esto prepara los datos electorales para mapear los distritos de cada estado.
 ## el contenido queda guardado en una archivo de datos.
 ## sólo tiene que correrse en caso de cambios.
-
 rm(list=ls())
-options(width = 210)
+options(width = 140)
 #
 # old #dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
@@ -22,8 +21,10 @@ setwd(dd)
 ## function to aggregate seccion-level votes ##
 ###############################################
 ag.sec <- function(d=d, sel.c=sel.c){
-    for (i in 1:length(sel.c)){
-        d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*10000+d$seccion, FUN=sum, na.rm=TRUE)
+    sel.c <- which(colnames(d) %in% sel.c); # extract indices
+    for (i in sel.c){
+        #i <- sel.c[1] #debug
+        d[,i] <- ave(d[,i], d$edon*10000+d$seccion, FUN=sum, na.rm=TRUE)
     }
     sel.r <- which(duplicated(d$edon*10000+d$seccion)==TRUE)
     d <- d[-sel.r,]
@@ -52,6 +53,63 @@ to.num <- function(d = d, sel.c = sel.c){
 ## ## read seccion-level data ## ##
 ## ############################# ##
 ###################################
+## out because missing tons of secciones (n max = 653) GET CASILLA DATA AGAIN
+## ##########
+## ## 1991 ##
+## ##########
+## d <- read.csv("dip1991.csv", header=TRUE, stringsAsFactors=FALSE)
+## colnames(d) <- tolower(colnames(d))
+## colnames(d)[colnames(d)=="secc"] <- "seccion"
+## colnames(d)[colnames(d)=="distrito"] <- "disn"
+## colnames(d)[colnames(d)=="id_ent"] <- "edon"
+## colnames(d)[colnames(d)=="id_mpio"] <- "munn"
+## d <- d[order(d$edon, d$seccion),]
+## sel.c <-            c("pan","pri","parm","pdm","pfcrn","pps","prd","pt","pem","prt","efec")
+## d <- to.num(d,sel.c) # clean data
+## d <- within(d, efec <- pan + pri + parm + pdm + pfcrn + pps + prd + pt + pem + prt)
+## d <- within(d, total <- nulos <- no_reg <- validos <- link <- NULL)
+## sel.r <- grep("Anulada", d$status) # casillas anuladas
+## d[sel.r,sel.c] <- 0 # anuladas to 0
+## ## aggregate seccion-level votes ##
+##  <- ag.sec(d, sel.c)
+## # clean
+## d <- within(d, casilla <- status <- id_elec <- NULL)
+## v91 <- d
+#
+##########
+## 1994 ##
+##########
+d <- read.csv("dip1994.csv", header=TRUE, stringsAsFactors=FALSE)
+d <- d[order(d$edon, d$seccion),]
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
+d <- to.num(d,sel.c) # clean data
+d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + uno.pdm + pt + pvem)
+d <- within(d, tot <- nul <- nr <- NULL)
+sel.r <- grep("Anulada", d$STATUS) # casillas anuladas
+d[sel.r,sel.c] <- 0 # anuladas to 0
+## aggregate seccion-level votes ##
+d <- ag.sec(d, sel.c)
+# clean
+d <- within(d, casilla <- STATUS <- ID_ELEC <- NULL)
+v94 <- d
+#
+##########
+## 1997 ##
+##########
+d <- read.csv("dip1997.csv", header=TRUE, stringsAsFactors=FALSE)
+d <- d[order(d$edon, d$seccion),]
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
+d <- to.num(d,sel.c) # clean data
+d <- within(d, efec <- pan + pri + prd + pc + pt + pvem + pps + pdm)
+d <- within(d, tot <- nul <- nr <- NULL)
+sel.r <- grep("MR", d$STATUS) # casillas anuladas
+d[sel.r,sel.c] <- 0 # anuladas to 0
+## aggregate seccion-level votes ##
+d <- ag.sec(d, sel.c)
+# clean
+d <- within(d, casilla <- STATUS <- ID_ELEC <- NULL)
+v97 <- d
+#
 ##########
 ## 2000 ##
 ##########
@@ -66,7 +124,6 @@ d <- within(d, tot <- nul <- nr <- NULL)
 sel.r <- grep("MR", d$status) # casillas anuladas
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
-sel.c <- which(colnames(d) %in% sel.c)
 d <- ag.sec(d, sel.c)
 # district coalition dummies
 d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
@@ -91,7 +148,6 @@ d <- within(d, efec <- pan + pri + prd + pt + pvem + conve + psn + pas + mp + pl
 d <- within(d, tot <- nul <- nr <- NULL)
 #
 sel.r <- grep("MR|[Nn]o ", d$status) # casillas anuladas no instaladas
-sel.c <- which(colnames(d) %in% sel.c)
 d[sel.r,sel.c] <- 0 # anuladas to 0
 #
 ## aggregate seccion-level votes ##
@@ -119,7 +175,6 @@ d <- to.num(d,sel.c) # clean data
 d <- within(d, efec <- pan + pric + prdc + pna + asdc)
 d <- within(d, tot <- nul <- nr <- NULL)
 sel.r <- grep("Anulada|No ", d$status) # casillas anuladas no instaladas
-sel.c <- which(colnames(d) %in% sel.c)
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
@@ -142,7 +197,6 @@ d <- within(d, tot <- nul <- nr <- NULL)
 sel.r <- grep("NO INSTALADA|SIN ACTA|NO ENTREGADO", d$status)
 sel.r2 <- grep("ANULADA", d$tepjf) # casillas anuladas no instaladas
 sel.r <- union(sel.r, sel.r2); rm(sel.r2)
-sel.c <- which(colnames(d) %in% sel.c)
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
@@ -200,7 +254,6 @@ d <- within(d, tot <- nul <- nr <- NULL)
 # recode status
 table(d$ESTATUS_ACTA) # missing codebook, quizás 3 y 4 que sólo tienen NAs sean anulados/noentregados o algo así
 d[which(d$ESTATUS_ACTA==3),]
-sel.c <- which(colnames(d) %in% sel.c)
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 #
@@ -246,7 +299,6 @@ table(d$dpric, useNA = "always")
 table(d$dprdc, useNA = "always")
 #
 sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
-sel.c <- which(colnames(d) %in% sel.c)
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
@@ -291,7 +343,6 @@ table(d$dpric, useNA = "always")
 table(d$dmorenac, useNA = "always")
 #
 # sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
-sel.c <- which(colnames(d) %in% sel.c)
 #d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
@@ -490,23 +541,64 @@ muns <- eq[,c("edon","seccion","ife","inegi")]
 
 # match yearly observations (secciones)
 #dim(v06); dim(v09); dim(v12); dim(v15) # something amiss in 2009?
-v00$edosecn <- v00$edon*10000 + v00$seccion; v00$d00 <- 1
-v03$edosecn <- v03$edon*10000 + v03$seccion; v03$d03 <- 1
-v06$edosecn <- v06$edon*10000 + v06$seccion; v06$d06 <- 1
-v09$edosecn <- v09$edon*10000 + v09$seccion; v09$d09 <- 1
-v12$edosecn <- v12$edon*10000 + v12$seccion; v12$d12 <- 1
-v15$edosecn <- v15$edon*10000 + v15$seccion; v15$d15 <- 1
-v18$edosecn <- v18$edon*10000 + v18$seccion; v18$d18 <- 1
+
+## v91 <- within(v91, {
+##     edosecn <- edon*10000 + seccion;
+##     d91     <- 1;})
+v94 <- within(v94, {
+    edosecn <- edon*10000 + seccion;
+    d94     <- 1;
+})
+v97 <- within(v97, {
+    edosecn <- edon*10000 + seccion;
+    d97     <- 1;
+})
+v00 <- within(v00, {
+    edosecn <- edon*10000 + seccion;
+    d00     <- 1;
+})
+v03 <- within(v03, {
+    edosecn <- edon*10000 + seccion;
+    d03     <- 1;
+})
+v06 <- within(v06, {
+    edosecn <- edon*10000 + seccion;
+    d06     <- 1;
+})
+v09 <- within(v09, {
+    edosecn <- edon*10000 + seccion;
+    d09     <- 1;
+})
+v12 <- within(v12, {
+    edosecn <- edon*10000 + seccion;
+    d12     <- 1;
+})
+v15 <- within(v15, {
+    edosecn <- edon*10000 + seccion;
+    d15     <- 1;
+})
+v18 <- within(v18, {
+    edosecn <- edon*10000 + seccion;
+    d18    <- 1;
+})
 # dummies d00 to d18 indicate if seccion exists each year
-tmp <- merge(x=v00[,c("edosecn","d00")], y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
+#tmp <- merge(x=v91[,c("edosecn","d91")], y=v94[,c("edosecn","d94")], by = "edosecn", all = TRUE)
+tmp <- merge(x=v94[,c("edosecn","d94")], y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
+tmp <- merge(x=tmp,                      y=v00[,c("edosecn","d00")], by = "edosecn", all = TRUE)
+tmp <- merge(x=tmp,                      y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
+#tmp <- merge(x=v00[,c("edosecn","d00")], y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v06[,c("edosecn","d06")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v09[,c("edosecn","d09")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v12[,c("edosecn","d12")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v15[,c("edosecn","d15")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v18[,c("edosecn","d18")], by = "edosecn", all = TRUE)
-v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- NULL # clean
+## v91$d91 <-
+v94$d94 <- v97$d97 <- v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- NULL # clean
 #
 # adds any missing secciones to each object
+## v91 <- merge(x=tmp, y=v91, by = "edosecn", all = TRUE)
+v94 <- merge(x=tmp, y=v94, by = "edosecn", all = TRUE)
+v97 <- merge(x=tmp, y=v97, by = "edosecn", all = TRUE)
 v00 <- merge(x=tmp, y=v00, by = "edosecn", all = TRUE)
 v03 <- merge(x=tmp, y=v03, by = "edosecn", all = TRUE)
 v06 <- merge(x=tmp, y=v06, by = "edosecn", all = TRUE)
@@ -514,42 +606,35 @@ v09 <- merge(x=tmp, y=v09, by = "edosecn", all = TRUE)
 v12 <- merge(x=tmp, y=v12, by = "edosecn", all = TRUE)
 v15 <- merge(x=tmp, y=v15, by = "edosecn", all = TRUE)
 v18 <- merge(x=tmp, y=v18, by = "edosecn", all = TRUE)
-#dim(v00); dim(v03); dim(v06); dim(v06); dim(v12); dim(v15);
+# verify dimensionality
+## dim(v91);
+dim(v94); dim(v97); dim(v00); dim(v03); dim(v06); dim(v06); dim(v12); dim(v15);
 # fill in missing edon and seccion numbers
-v00 <- within(v00, {
-    edon    <- as.integer(edosecn/10000);
-    seccion <- edosecn - edon*10000;
-})
-v03 <- within(v03, {
-    edon    <- as.integer(edosecn/10000);
-    seccion <- edosecn - edon*10000;
-})
-v06 <- within(v06, {
-    edon    <- as.integer(edosecn/10000);
-    seccion <- edosecn - edon*10000;
-})
-v09 <- within(v09, {
-    edon    <- as.integer(edosecn/10000);
-    seccion <- edosecn - edon*10000;
-})
-v12 <- within(v12, {
-    edon    <- as.integer(edosecn/10000);
-    seccion <- edosecn - edon*10000;
-})
-v15 <- within(v15, {
-    edon    <- as.integer(edosecn/10000);
-    seccion <- edosecn - edon*10000;
-})
-v18 <- within(v18, {
-    edon    <- as.integer(edosecn/10000);
-    seccion <- edosecn - edon*10000;
-})
-rm(tmp)
+tmp.func <- function(x) {
+    within(x, {
+        edon    <- as.integer(edosecn/10000);
+        seccion <- edosecn - edon*10000;
+    })
+}
+## v91 <- tmp.func(v91)
+v94 <- tmp.func(v94)
+v97 <- tmp.func(v97)
+v00 <- tmp.func(v00)
+v03 <- tmp.func(v03)
+v06 <- tmp.func(v06)
+v09 <- tmp.func(v09)
+v12 <- tmp.func(v12)
+v15 <- tmp.func(v15)
+v18 <- tmp.func(v18)
+rm(tmp,tmp.func) # clean
 
 # consolidate municipios
 muns$edosecn <- muns$edon*10000 + muns$seccion
 # add municipio names to votes
 sel.drop <- which(colnames(muns) %in% c("edon","seccion")) # do not merge these columns
+## v91 <- merge(x = v91, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v91$munn <- NULL
+v94 <- merge(x = v94, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v94$munn <- NULL
+v97 <- merge(x = v97, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v97$munn <- NULL
 v00 <- merge(x = v00, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v00$munn <- NULL
 v03 <- merge(x = v03, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v03$munn <- NULL
 v06 <- merge(x = v06, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v06$munn <- NULL
@@ -569,6 +654,30 @@ ag.mun <- function(d=d, sel.c=sel.c){
     d <- d[-sel.r,]
     return(d)
 }
+## ##########
+## ## 1991 ##
+## ##########
+## d <- v91; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","parm","pdm","pfcrn","pps","prd","pt","pem","prt","efec")
+## d <- ag.mun(d,sel.c)
+## d$edosecn <- d$seccion <- NULL
+## v91m <- d
+##########
+## 1994 ##
+##########
+d <- v94; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
+d <- ag.mun(d,sel.c)
+d$edosecn <- d$seccion <- NULL
+v94m <- d
+##########
+## 1997 ##
+##########
+d <- v97; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
+d <- ag.mun(d,sel.c)
+d$edosecn <- d$seccion <- NULL
+v97m <- d
 ##########
 ## 2000 ##
 ##########
@@ -638,7 +747,9 @@ d$dmorenac <- as.numeric(d$dmorenac>0)
 d$edosecn <- d$seccion <- NULL
 v18m <- d
 #
-dim(v00); dim(v03); dim(v06); dim(v09); dim(v12); dim(v15); dim(v18); 
+# verify symmetric dimensionality
+## dim(v91m);
+dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); 
 # rename section-level aggregates to free v00 v03 etc for general use
 v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18;
 #
@@ -650,15 +761,21 @@ rm(v00,v03,v06,v09,v12,v15,v18)
 ## ## by choosing s, m, d...                           ## ##
 ## ###################################################### ##
 ############################################################
-agg <- c("m","s","d")[2]
+agg <- c("m","s","d")[1]
 if (agg=="m") {
-v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
+    ## v91 <- v91m;
+    v94 <- v94m; v97 <- v97m; 
+    v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
 }
 if (agg=="s") {
-v00 <- v00s; v03 <- v03s; v06 <- v06s; v09 <- v09s; v12 <- v12s; v15 <- v15s; v18 <- v18s;
+    ## v91 <- v91m;
+    v94 <- v94m; v97 <- v97m; 
+    v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
 }
 if (agg=="d") {
-v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v18 <- v18d;
+    ## v91 <- v91m;
+    v94 <- v94m; v97 <- v97m; 
+    v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
 }
 
 ###########################################
@@ -668,7 +785,10 @@ v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v1
 #
 # version 1: extend partial coalitions across the board
 # shares
-pan <- data.frame(v00 = ifelse(v00$efec==0, NA,  v00$panc / v00$efec),
+pan <- data.frame(## v91 = ifelse(v91$efec==0, NA,  v91$pan  / v91$efec),
+                  v94 = ifelse(v94$efec==0, NA,  v94$pan  / v94$efec),
+                  v97 = ifelse(v97$efec==0, NA,  v97$pan  / v97$efec),
+                  v00 = ifelse(v00$efec==0, NA,  v00$panc / v00$efec),
                   v03 = ifelse(v03$efec==0, NA,  v03$pan  / v03$efec),
                   v06 = ifelse(v06$efec==0, NA,  v06$pan  / v06$efec),
                   v09 = ifelse(v09$efec==0, NA,  v09$pan  / v09$efec),
@@ -677,7 +797,10 @@ pan <- data.frame(v00 = ifelse(v00$efec==0, NA,  v00$panc / v00$efec),
                   v18 = ifelse(v18$efec==0, NA, (v18$pan + v18$panc + v18$prd + v18$mc) / v18$efec))
 pan <- round(pan, 3)
 #
-pri <- data.frame(v00 = ifelse(v00$efec==0, NA,  v00$pri / v00$efec),
+pri <- data.frame(## v91 = ifelse(v91$efec==0, NA,  v91$pri  / v91$efec),
+                  v94 = ifelse(v94$efec==0, NA,  v94$pri  / v94$efec),
+                  v97 = ifelse(v97$efec==0, NA,  v97$pri  / v97$efec),
+                  v00 = ifelse(v00$efec==0, NA,  v00$pri / v00$efec),
                   v03 = ifelse(v03$efec==0, NA, (v03$pri + v03$pric + v03$pvem) / v03$efec),
                   v06 = ifelse(v06$efec==0, NA,  v06$pric / v06$efec),
                   v09 = ifelse(v09$efec==0, NA, (v09$pri + v09$pric + v09$pvem) / v09$efec),
@@ -686,7 +809,10 @@ pri <- data.frame(v00 = ifelse(v00$efec==0, NA,  v00$pri / v00$efec),
                   v18 = ifelse(v18$efec==0, NA, (v18$pri + v18$pric + v18$pvem + v18$pna) / v18$efec))
 pri <- round(pri, 3)
 #
-morena <- data.frame(v00 = ifelse(v00$efec==0, NA,  v00$prdc / v00$efec),
+morena <- data.frame(## v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
+                     v94 = ifelse(v94$efec==0, NA,  v94$prd  / v94$efec),
+                     v97 = ifelse(v97$efec==0, NA,  v97$prd  / v97$efec),
+                     v00 = ifelse(v00$efec==0, NA,  v00$prdc / v00$efec),
                      v03 = ifelse(v03$efec==0, NA, (v03$prd + v03$pt + v03$conve) / v03$efec),
                      v06 = ifelse(v06$efec==0, NA,  v06$prdc / v06$efec),
                      v09 = ifelse(v09$efec==0, NA, (v09$prd + v09$pt + v09$ptc + v09$conve) / v09$efec),
@@ -695,7 +821,10 @@ morena <- data.frame(v00 = ifelse(v00$efec==0, NA,  v00$prdc / v00$efec),
                      v18 = ifelse(v18$efec==0, NA, (v18$morena + v18$morenac + v18$pt + v18$pes) / v18$efec))
 morena <- round(morena, 3)
 #
-oth <- data.frame(v00 = ifelse(v00$efec==0, NA, (v00$pcd + v00$parm + v00$dsppn) / v00$efec),
+oth <- data.frame(## v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfcrn + v91$pps + v91$pem + v91$prt) / v91$efec),
+                  v94 = ifelse(v94$efec==0, NA, (v94$pps + v94$pfcrn + v94$parm + v94$uno.pdm + v94$pt + v94$pvem) / v94$efec),
+                  v97 = ifelse(v97$efec==0, NA, (v97$pc + v97$pt + v97$pvem + v97$pps + v97$pdm) / v97$efec),
+                  v00 = ifelse(v00$efec==0, NA, (v00$pcd + v00$parm + v00$dsppn) / v00$efec),
                   v03 = ifelse(v03$efec==0, NA, (v03$psn + v03$pas + v03$mp + v03$plm + v03$fc) / v03$efec),
                   v06 = ifelse(v06$efec==0, NA, (v06$pna + v06$asdc) / v06$efec),
                   v09 = ifelse(v09$efec==0, NA, (v09$pna + v09$psd) / v09$efec),
@@ -712,8 +841,8 @@ oth <- t(oth)
 extendCoal <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
 # loop over municipios
 for (i in 1:nrow(v00)){
-    #i <- 98 # debug
-    tmp <- data.frame(yr = seq(from=2000, to=2018, by=3),
+    #i <- 99 # debug
+    tmp <- data.frame(yr = seq(from=1994, to=2018, by=3),
                       pan = pan[,i],
                       pri = pri[,i],
                       morena = morena[,i],
@@ -737,47 +866,62 @@ for (i in 1:nrow(v00)){
 }
 #
 # datos para regresión de alfa
-yr.means <- data.frame(yr = seq(2000,2018,3),
-                       pan = rep(NA,7),
-                       pri = rep(NA,7),
-                       morena = rep(NA,7),
-                       oth = rep(NA,7))
+yr.means <- data.frame(yr = seq(1994,2018,3),
+                       pan = rep(NA,9),
+                       pri = rep(NA,9),
+                       morena = rep(NA,9),
+                       oth = rep(NA,9))
 cs <- function(x) colSums(x, na.rm=TRUE)
 #
-yr.means$pan[1]    <-  cs(v00)["panc"]                   / cs(v00)["efec"]
-yr.means$pri[1]    <-  cs(v00)["pri"]                    / cs(v00)["efec"]
-yr.means$morena[1] <-  cs(v00)["prdc"]                   / cs(v00)["efec"]
-yr.means$oth[1]    <- (cs(v00)["pcd"] + cs(v00)["parm"]) / cs(v00)["efec"]
+## yr.means$pan[1]    <-  cs(v91)["pan"]                                                      / cs(v91)["efec"]
+## yr.means$pri[1]    <-  cs(v91)["pri"]                                                      / cs(v91)["efec"]
+## yr.means$morena[1] <-  cs(v91)["prd"]                                                      / cs(v91)["efec"]
+## yr.means$oth[1]    <- (cs(v91)["efec"] - cs(v91)["pan"] - cs(v91)["pri"] - cs(v91)["pri"]) / cs(v91)["efec"]
 #
-yr.means$pan[2]    <-   cs(v03)["pan"]                                                                     / cs(v03)["efec"]
-yr.means$pri[2]    <-  (cs(v03)["pri"] + cs(v03)["pric"] + cs(v03)["pvem"])                                / cs(v03)["efec"]
-yr.means$morena[2] <-  (cs(v03)["prd"] + cs(v03)["pt"]   + cs(v03)["conve"])                               / cs(v03)["efec"]
-yr.means$oth[2]    <-  (cs(v03)["psn"] + cs(v03)["pas"]  + cs(v03)["mp"] + cs(v03)["plm"] + cs(v03)["fc"]) / cs(v03)["efec"]
+yr.means$pan[1]    <-  cs(v94)["pan"]                                                      / cs(v94)["efec"]
+yr.means$pri[1]    <-  cs(v94)["pri"]                                                      / cs(v94)["efec"]
+yr.means$morena[1] <-  cs(v94)["prd"]                                                      / cs(v94)["efec"]
+yr.means$oth[1]    <- (cs(v94)["efec"] - cs(v94)["pan"] - cs(v94)["pri"] - cs(v94)["prd"]) / cs(v94)["efec"]
 #
-yr.means$pan[3]    <-   cs(v06)["pan"]                    / cs(v06)["efec"]
-yr.means$pri[3]    <-   cs(v06)["pric"]                   / cs(v06)["efec"]
-yr.means$morena[3] <-   cs(v06)["prdc"]                   / cs(v06)["efec"]
-yr.means$oth[3]    <-  (cs(v06)["pna"] + cs(v06)["asdc"]) / cs(v06)["efec"]
+yr.means$pan[2]    <-  cs(v97)["pan"]                                                      / cs(v97)["efec"]
+yr.means$pri[2]    <-  cs(v97)["pri"]                                                      / cs(v97)["efec"]
+yr.means$morena[2] <-  cs(v97)["prd"]                                                      / cs(v97)["efec"]
+yr.means$oth[2]    <- (cs(v97)["efec"] - cs(v97)["pan"] - cs(v97)["pri"] - cs(v97)["prd"]) / cs(v97)["efec"]
 #
-yr.means$pan[4]    <-   cs(v09)["pan"]                                                        / cs(v09)["efec"]
-yr.means$pri[4]    <-  (cs(v09)["pri"] + cs(v09)["pric"] + cs(v09)["pvem"])                   / cs(v09)["efec"]
-yr.means$morena[4] <-  (cs(v09)["prd"] + cs(v09)["pt"]   + cs(v09)["ptc"] + cs(v09)["conve"]) / cs(v09)["efec"]
-yr.means$oth[4]    <-  (cs(v09)["pna"] + cs(v09)["psd"])                                      / cs(v09)["efec"]
+yr.means$pan[3]    <-  cs(v00)["panc"]                   / cs(v00)["efec"]
+yr.means$pri[3]    <-  cs(v00)["pri"]                    / cs(v00)["efec"]
+yr.means$morena[3] <-  cs(v00)["prdc"]                   / cs(v00)["efec"]
+yr.means$oth[3]    <- (cs(v00)["pcd"] + cs(v00)["parm"]) / cs(v00)["efec"]
 #
-yr.means$pan[5]    <-    cs(v12)["pan"]                                                    / cs(v12)["efec"]
-yr.means$pri[5]    <-   (cs(v12)["pri"] + cs(v12)["pric"] + cs(v12)["pvem"])               / cs(v12)["efec"]
-yr.means$morena[5] <-   (cs(v12)["prd"] + cs(v12)["prdc"] + cs(v12)["pt"] + cs(v12)["mc"]) / cs(v12)["efec"]
-yr.means$oth[5]    <-    cs(v12)["pna"]                                                    / cs(v12)["efec"]
+yr.means$pan[4]    <-   cs(v03)["pan"]                                                                     / cs(v03)["efec"]
+yr.means$pri[4]    <-  (cs(v03)["pri"] + cs(v03)["pric"] + cs(v03)["pvem"])                                / cs(v03)["efec"]
+yr.means$morena[4] <-  (cs(v03)["prd"] + cs(v03)["pt"]   + cs(v03)["conve"])                               / cs(v03)["efec"]
+yr.means$oth[4]    <-  (cs(v03)["psn"] + cs(v03)["pas"]  + cs(v03)["mp"] + cs(v03)["plm"] + cs(v03)["fc"]) / cs(v03)["efec"]
 #
-yr.means$pan[6]    <-    cs(v15)["pan"]                                                                           / cs(v15)["efec"]
-yr.means$pri[6]    <-   (cs(v15)["pri"] + cs(v15)["pric"] + cs(v15)["pvem"])                                      / cs(v15)["efec"]
-yr.means$morena[6] <-   (cs(v15)["prd"] + cs(v15)["prdc"]   + cs(v15)["pt"] + cs(v15)["morena"] + cs(v15)["pes"]) / cs(v15)["efec"]
-yr.means$oth[6]    <-   (cs(v15)["mc"] + cs(v15)["pna"] + cs(v15)["ph"] + cs(v15)["indep1"] + cs(v15)["indep2"])  / cs(v15)["efec"]
+yr.means$pan[5]    <-   cs(v06)["pan"]                    / cs(v06)["efec"]
+yr.means$pri[5]    <-   cs(v06)["pric"]                   / cs(v06)["efec"]
+yr.means$morena[5] <-   cs(v06)["prdc"]                   / cs(v06)["efec"]
+yr.means$oth[5]    <-  (cs(v06)["pna"] + cs(v06)["asdc"]) / cs(v06)["efec"]
 #
-yr.means$pan[7]    <-   (cs(v18)["pan"] + cs(v18)["panc"] + cs(v18)["prd"] + cs(v18)["mc"])       / cs(v18)["efec"]
-yr.means$pri[7]    <-   (cs(v18)["pri"] + cs(v18)["pric"] + cs(v18)["pvem"] + cs(v18)["pna"])     / cs(v18)["efec"]
-yr.means$morena[7] <-   (cs(v18)["morena"] + cs(v18)["morenac"] + cs(v18)["pt"] + cs(v18)["pes"]) / cs(v18)["efec"]
-yr.means$oth[7]    <-   (cs(v18)["indep1"] + cs(v18)["indep2"])                                   / cs(v18)["efec"]
+yr.means$pan[6]    <-   cs(v09)["pan"]                                                        / cs(v09)["efec"]
+yr.means$pri[6]    <-  (cs(v09)["pri"] + cs(v09)["pric"] + cs(v09)["pvem"])                   / cs(v09)["efec"]
+yr.means$morena[6] <-  (cs(v09)["prd"] + cs(v09)["pt"]   + cs(v09)["ptc"] + cs(v09)["conve"]) / cs(v09)["efec"]
+yr.means$oth[6]    <-  (cs(v09)["pna"] + cs(v09)["psd"])                                      / cs(v09)["efec"]
+#
+yr.means$pan[7]    <-    cs(v12)["pan"]                                                    / cs(v12)["efec"]
+yr.means$pri[7]    <-   (cs(v12)["pri"] + cs(v12)["pric"] + cs(v12)["pvem"])               / cs(v12)["efec"]
+yr.means$morena[7] <-   (cs(v12)["prd"] + cs(v12)["prdc"] + cs(v12)["pt"] + cs(v12)["mc"]) / cs(v12)["efec"]
+yr.means$oth[7]    <-    cs(v12)["pna"]                                                    / cs(v12)["efec"]
+#
+yr.means$pan[8]    <-    cs(v15)["pan"]                                                                           / cs(v15)["efec"]
+yr.means$pri[8]    <-   (cs(v15)["pri"] + cs(v15)["pric"] + cs(v15)["pvem"])                                      / cs(v15)["efec"]
+yr.means$morena[8] <-   (cs(v15)["prd"] + cs(v15)["prdc"]   + cs(v15)["pt"] + cs(v15)["morena"] + cs(v15)["pes"]) / cs(v15)["efec"]
+yr.means$oth[8]    <-   (cs(v15)["mc"] + cs(v15)["pna"] + cs(v15)["ph"] + cs(v15)["indep1"] + cs(v15)["indep2"])  / cs(v15)["efec"]
+#
+yr.means$pan[9]    <-   (cs(v18)["pan"] + cs(v18)["panc"] + cs(v18)["prd"] + cs(v18)["mc"])       / cs(v18)["efec"]
+yr.means$pri[9]    <-   (cs(v18)["pri"] + cs(v18)["pric"] + cs(v18)["pvem"] + cs(v18)["pna"])     / cs(v18)["efec"]
+yr.means$morena[9] <-   (cs(v18)["morena"] + cs(v18)["morenac"] + cs(v18)["pt"] + cs(v18)["pes"]) / cs(v18)["efec"]
+yr.means$oth[9]    <-   (cs(v18)["indep1"] + cs(v18)["indep2"])                                   / cs(v18)["efec"]
 #
 yr.means <- within(yr.means, mean.rpan    <- pan/pri)
 yr.means <- within(yr.means, mean.rmorena <- morena/pri)
@@ -832,7 +976,9 @@ non.nas <- which(is.na(non.nas)==FALSE)
 for (i in non.nas){
 #for (i in 1:nrow(v00)){
     #i <- 7729 # debug
-    message(sprintf("loop %s", i))
+    #i <- 100 # debug
+    message(sprintf("loop %s of %s", i, max(non.nas)))
+    # subset data
     data.tmp <- extendCoal[[i]]
     #
     ##################################
@@ -850,6 +996,8 @@ for (i in non.nas){
     vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
     vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
     vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
     #
     ## plug into results objects ##
     vhat.2015[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
@@ -858,9 +1006,12 @@ for (i in non.nas){
     regs.2015$oth[[i]]    <- reg.oth
     #
     data.tmp$vhat.morena <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # open slots for projections
+    data.tmp$bhat.morena <- data.tmp$bhat.pan <- NA # open slots for slope estimates
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
     data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
     #
     ##################################
     ## predict 2018 with last 5 els ##
@@ -877,6 +1028,8 @@ for (i in non.nas){
     vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
     vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
     vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
     #
     ## plug into results objects ##
     vhat.2018[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
@@ -887,6 +1040,8 @@ for (i in non.nas){
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
     data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
     #
     # ALTERNATIVE: exp(predict.lm(reg.pan,    newdata = new.d, interval = "confidence"))
     # #########################################################################
@@ -929,7 +1084,12 @@ for (i in non.nas){
     ########################################################
     ## optional: plug vhats alphas betas back into data   ##
     ########################################################
-    data.tmp$mean.rpan <- data.tmp$mean.rmorena <- data.tmp$mean.roth <- NULL # remove mean ratios
+    data.tmp <- within(data.tmp, {
+        mean.rpan <- mean.rmorena <- mean.roth <- NULL; # drop mean ratios
+        oth <- NULL; # drop compositional vote complement
+        betahat.oth <- NULL; # drop this beta
+        #betahat.pan <- betahat.morena <- betahat.oth <- NULL; # drop betas
+    })
     extendCoal[[i]] <- data.tmp
 }
 
@@ -986,6 +1146,10 @@ write.csv(extendCoal.2018,
 write.csv(extendCoal.2015,
           file = paste(wd, "data/dipfed2015se-vhat.csv", sep = ""),
           row.names = FALSE)
+# save regression objects
+save(mean.regs, file = paste(wd, "data/dipfed-se-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(regs.2015, file = paste(wd, "data/dipfed-se-regs-2015.RData", sep = ""), compress = "gzip")
+save(regs.2018, file = paste(wd, "data/dipfed-se-regs-2018.RData", sep = ""), compress = "gzip")
 
 dim(extendCoal.2018)
 
@@ -1002,24 +1166,24 @@ extendCoal.2015[1,]
 # morena vs pri core
 plot(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), type = "n", xlab = "Núcleo del PRI", ylab = "Residual de Morena en 2018")
 abline(h = 0, col = col.pri)
-points(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), pch = 20, cex = .15, col = rgb(.55,.27,.07, alpha = .3))
-fit <- lm((morena - vhat.morena) ~ poly(alphahat.pri,3), data = extendCoal.2018[non.nas])
+points(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), pch = 20, cex = .15, col = rgb(.55,.27,.07, alpha = .2))
+fit <- lm((morena - vhat.morena) ~ poly(alphahat.pri,3), data = extendCoal.2018[non.nas,])
 xx <- seq(from = 0, to = 1, by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pri=xx)), col = "black", lwd = 1.5)
 
 # morena vs pan core
 plot(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), type = "n", xlab = "Núcleo del PAN", ylab = "Residual de Morena en 2018")
 abline(h = 0, col = col.pan)
-points(x = extendCoal.2018$alphahat.pan, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), pch = 20, cex = 1.25, col = rgb(.55,.27,.07, alpha = .3))
-fit <- lm((morena - vhat.morena) ~ poly(alphahat.pan,2), data = extendCoal.2018)
+points(x = extendCoal.2018$alphahat.pan, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), pch = 20, cex = .15, col = rgb(.55,.27,.07, alpha = .2))
+fit <- lm((morena - vhat.morena) ~ poly(alphahat.pan,3), data = extendCoal.2018[non.nas,])
 xx <- seq(from = 0, to = 1, by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pan=xx)), col = "black", lwd = 1.5)
 
 
 plot(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), type = "n", xlab = "Núcleo del PRI", ylab = "Residual del Frente en 2018")
 abline(h = 0, col = "red")
-points(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$pan - extendCoal.2018$vhat.pan), pch = 20, cex = 1.25, col = rgb(.23,.28,.75, alpha = .3))
-fit <- lm((pan - vhat.pan) ~ poly(alphahat.pri,3), data = extendCoal.2018)
+points(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$pan - extendCoal.2018$vhat.pan), pch = 20, cex = .15, col = rgb(.23,.28,.75, alpha = .2))
+fit <- lm((pan - vhat.pan) ~ poly(alphahat.pri,3), data = extendCoal.2018[non.nas,])
 xx <- seq(from = 0, to = 1, by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pri=xx)), col = "black", lwd = 1.5)
 
