@@ -942,7 +942,8 @@ for (i in 1:nrow(v00)){
 ###############################
 ## código de las regresiones ##
 ###############################
-vhat.2018 <- vhat.2015 <- data.frame(pan    = rep(NA, nrow(v00)),
+vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <-
+        data.frame(pan    = rep(NA, nrow(v00)),
                                      pri    = rep(NA, nrow(v00)),
                                      morena = rep(NA, nrow(v00))) # will receive vote estimates
 #
@@ -957,10 +958,11 @@ tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
                                                        # regression per municipio, each used to
                                                        # predict votes in 2015 and 2018 
 #
-regs.2015 <- regs.2018 <- list(pan    = tmp,
-                               morena = tmp,
-                               oth    = tmp,
-                               readme = "No pri regs because DVs are pri-ratios")
+regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <-
+    list(pan    = tmp,
+         morena = tmp,
+         oth    = tmp,
+         readme = "No pri regs because DVs are pri-ratios")
 #
 mean.regs <- list(pan    = tmp,
                   morena = tmp,
@@ -974,12 +976,107 @@ non.nas <- unlist(non.nas)
 non.nas <- which(is.na(non.nas)==FALSE)
 #    
 for (i in non.nas){
-#for (i in 1:nrow(v00)){
     #i <- 7729 # debug
     #i <- 100 # debug
     message(sprintf("loop %s of %s", i, max(non.nas)))
     # subset data
     data.tmp <- extendCoal[[i]]
+    #
+    ## ##################################
+    ## ## predict 2006 with last 5 els ## ojo: v91 needed
+    ## ##################################
+    ## year <- 2006
+    ## reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    ## reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    ## reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    ## #
+    ## new.d <- data.frame(yr = year)
+    ## rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    ## rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    ## rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    ## vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    ## vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    ## vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    ## bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    ## bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
+    ## #
+    ## ## plug into results objects ##
+    ## vhat.2006[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    ## regs.2006$pan[[i]]    <- reg.pan
+    ## regs.2006$morena[[i]] <- reg.morena
+    ## regs.2006$oth[[i]]    <- reg.oth
+    ## #
+    ## data.tmp$vhat.morena <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # open slots for projections
+    ## data.tmp$bhat.morena <- data.tmp$bhat.pan <- NA # open slots for slope estimates
+    ## data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    ## data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    ## data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    ## data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    ## data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
+    #
+    ##################################
+    ## predict 2009 with last 5 els ##
+    ##################################
+    year <- 2009
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2009[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    regs.2009$pan[[i]]    <- reg.pan
+    regs.2009$morena[[i]] <- reg.morena
+    regs.2009$oth[[i]]    <- reg.oth
+    #
+    #                                                                    # DO THESE WHEN PREDICTING   #
+    #                                                                    # FIRST YEAR ONLY:           #
+    data.tmp$vhat.morena <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
+    data.tmp$bhat.morena <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
+    #
+    ##################################
+    ## predict 2012 with last 5 els ##
+    ##################################
+    year <- 2012
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2012[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    regs.2012$pan[[i]]    <- reg.pan
+    regs.2012$morena[[i]] <- reg.morena
+    regs.2012$oth[[i]]    <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
     #
     ##################################
     ## predict 2015 with last 5 els ##
@@ -1005,8 +1102,6 @@ for (i in non.nas){
     regs.2015$morena[[i]] <- reg.morena
     regs.2015$oth[[i]]    <- reg.oth
     #
-    data.tmp$vhat.morena <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # open slots for projections
-    data.tmp$bhat.morena <- data.tmp$bhat.pan <- NA # open slots for slope estimates
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
     data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
@@ -1092,64 +1187,61 @@ for (i in non.nas){
     })
     extendCoal[[i]] <- data.tmp
 }
+##############################################################################################
+## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
+##############################################################################################
 
-# generate data frame with 2018 values for export
-year <- 2018
-sel <- which(extendCoal[[1]]$yr==year) # which row reports year (symmetric in all other objects in list)
-tmp <- lapply(extendCoal, function(x) {
-    prune <- x[sel,] # keep selected row only
-    return(prune)
-}) # keep sel yr only in every municipio
-# spot NAs in list
-tmp.sel <- setdiff(1:length(extendCoal), non.nas)
-# fill with same-dim NA data.frame
-tmp.manip <- tmp[[non.nas[1]]]
-tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
-tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
-# turn into one dataframe
-tmp <- do.call("rbind", tmp)
-rownames(tmp) <- NULL
-if (agg=="m") sel.col <- c("edon","ife","inegi","disn")       # cols to merge when using municipios
-if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi","disn") # when using secciones
-tmp <- cbind(tmp, v00[,sel.col])
-rm(sel.col)
-#
-extendCoal.2018 <- tmp
-#
-year <- 2015
-sel <- which(extendCoal[[1]]$yr==year) # which row reports year (symmetric in all other objects in list)
-tmp <- lapply(extendCoal, function(x) {
-    prune <- x[sel,] # keep selected row only
-    return(prune)
-}) # keep sel yr only in every municipio
-# spot NAs in list
-tmp.sel <- setdiff(1:length(extendCoal), non.nas)
-# fill with same-dim NA data.frame
-tmp.manip <- tmp[[non.nas[1]]]
-tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
-tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
-# turn into one dataframe
-tmp <- do.call("rbind", tmp)
-rownames(tmp) <- NULL
-if (agg=="m") sel.col <- c("edon","ife","inegi","disn")       # cols to merge when using municipios
-if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi","disn") # when using secciones
-tmp <- cbind(tmp, v00[,sel.col])
-rm(sel.col)
-#
-extendCoal.2015 <- tmp
+##########################################################################
+## generate data frame with one year's predictions/estimates for export ##
+##########################################################################
+tmp.func <- function(year) {
+    #year <- 2009 # debug
+    sel <- which(extendCoal[[1]]$yr==year) # which row reports year (symmetric in all other objects in list)
+    tmp <- lapply(extendCoal, function(x) {
+        prune <- x[sel,] # keep selected row only
+        return(prune)
+    }) # keep sel yr only in every municipio
+    # spot NAs in list
+    tmp.sel <- setdiff(1:length(extendCoal), non.nas)
+    # fill with same-dim NA data.frame
+    tmp.manip <- tmp[[non.nas[1]]]
+    tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
+    tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
+    # turn into one dataframe
+    tmp <- do.call("rbind", tmp)
+    rownames(tmp) <- NULL
+    if (agg=="m") sel.col <- c("edon","ife","inegi")       # cols to merge when using municipios
+    if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi","disn") # when using secciones
+    tmp <- cbind(tmp, v00[,sel.col])
+    rm(sel.col)
+    return(tmp)
+}
+extendCoal.2009 <- tmp.func(year=2009)
+extendCoal.2012 <- tmp.func(year=2012)
+extendCoal.2015 <- tmp.func(year=2015)
+extendCoal.2018 <- tmp.func(year=2018)
 
 # save to disk
-write.csv(extendCoal.2018,
-          file = paste(wd, "data/dipfed2018se-vhat.csv", sep = ""),
+write.csv(extendCoal.2009,
+          file = paste(wd, "data/dipfed2009mu-vhat.csv", sep = ""),
+          row.names = FALSE)
+#
+write.csv(extendCoal.2012,
+          file = paste(wd, "data/dipfed2012mu-vhat.csv", sep = ""),
           row.names = FALSE)
 #
 write.csv(extendCoal.2015,
-          file = paste(wd, "data/dipfed2015se-vhat.csv", sep = ""),
+          file = paste(wd, "data/dipfed2015mu-vhat.csv", sep = ""),
           row.names = FALSE)
+#
+write.csv(extendCoal.2018,
+          file = paste(wd, "data/dipfed2018mu-vhat.csv", sep = ""),
+          row.names = FALSE)
+
 # save regression objects
-save(mean.regs, file = paste(wd, "data/dipfed-se-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(regs.2015, file = paste(wd, "data/dipfed-se-regs-2015.RData", sep = ""), compress = "gzip")
-save(regs.2018, file = paste(wd, "data/dipfed-se-regs-2018.RData", sep = ""), compress = "gzip")
+save(mean.regs, file = paste(wd, "data/dipfed-mu-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(regs.2015, file = paste(wd, "data/dipfed-mu-regs-2015.RData", sep = ""), compress = "gzip")
+save(regs.2018, file = paste(wd, "data/dipfed-mu-regs-2018.RData", sep = ""), compress = "gzip")
 
 dim(extendCoal.2018)
 
