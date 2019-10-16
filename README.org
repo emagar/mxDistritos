@@ -1,12 +1,12 @@
-#+TITLE: Recent Mexican election geography
+#+TITLE: Recent Mexican electoral geography
 #+AUTHOR: Eric Magar
-Last revision: 2019-10-04
+Last revision: 2019-10-16
 
 # Export to md: M-x org-md-export-to-markdown
 
-*>>> Under construction (around 2019-10-11) <<<*
+*>>> Under construction (expected completion end of Oct. 2019) <<<*
 
-* Description of /Recent Mexican federal election geography/ repository
+* Description of /Recent Mexican electoral geography/ repository
 
 - Author: Eric Magar
 - Email: emagar at itam dot mx
@@ -25,22 +25,21 @@ The repository contains maps of Mexican districts used to elect representatives 
     - `pan` = vote share won by the PAN.
     - `pri` = vote share won by the PRI+PVEM coalition.
     - `morena` = vote share won by the left and allies. The PRD and its PT ally's votes, MORENA's, and the PES's are aggregated (in order to ease comparison to the 2018 election, when Morena+PT+PES fielded joit candidates).  
-    - `oth` = vote share of minor candidates fielded by MC, PNA, PH, and independents. 
+    - `oth` = vote share of minor candidates fielded by MC, PNA, PH, and independents OMITTED (it is 1 - pan - pri - morena). 
     - `vhat` variables = vote share estimates from a linear prediction for the current year (`yr`) from the party's performance in five immediately previous federal diputado elections in the unit. Defining party i's vote share ratio to the PRI as r_{i,t} = v_{i,t} / v_{PRI,t}, the equation r_{i,t} = a + bt, t = (yr - 15, yr - 12, yr - 9, yr - 6, yr - 3) was estimated via OLS in each unit (municipality/sección) for this purpose. As in compositional variable analysis, \hat{v}_{i,t} = \hat{r}_{i,t} / (1 + \sum-over-i-not-pri r_{i,t}). See XXXX for details.
-      * `vhat.pan` = PAN's vote share estimate. 
-      * `vhat.pri` = PRI's vote share estimate. 
-      * `vhat.morena` = left's vote share estimate.
+      + `vhat.pan` = PAN's vote share estimate. 
+      + `vhat.pri` = PRI's vote share estimate. 
+      + `vhat.morena` = left's vote share estimate.
     - `bhat` variables = point estimates of the slope (b) coefficient from the regression described in the bullet above.     - `alphahat` variables = party core support estimate for the unit in 2000-2018 federal diputado elections. See XXXX for estimation details. 
-      * `bhat.pan` = PAN's slope estimate. 
-      * `bhat.morena` = left's slope estimate. 
-      * `bhat.pri` = PRI's slope estimate.
+      + `bhat.pan` = PAN's slope estimate. 
+      + `bhat.morena` = left's slope estimate. 
     - `alphahat` variables = vote share estimates from a linear prediction for the current year (`yr`) from the party's performance in five immediately previous federal diputado elections in the unit. The equation v_{i,t} = a + bt, t = (yr - 15, yr - 12, yr - 9, yr - 6, yr - 3) estimated via OLS in each unit (municipality/sección) for this purpose. Compositional variable specification used for estimation, see XXXX for details.
       * `alphahat.pan` = PAN's core support estimate. 
       * `alphahat.pri` = PRI's core support estimate.
       * `alphahat.morena` = left's core support estimate.
-    - `betahat.pan` = PAN's 
-    - `betahat.morena` = left's 
-    - `betahat.oth` = Other parties's 
+    - `betahat` variables = 
+      * `betahat.pan` = PAN's 
+      * `betahat.morena` = left's 
 - ~equivSecc/docsRedistReseccRemunic/~ = folder contains numerous documents prepared by INE/IFE explaining redistricting criteria, changes in sección delimitations (/reseccionamiento/), and changes in a state's municipalities.
 - ~equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv~ = historical record of /secciones electorales/ nationwide since 1994. Secciones, which do not traverse municipal borders, are the the basic building blocks for districting at both the federal and state levels (see Magar et al. 2017, fn. 9). Each row reports one sección (approx. 69,000 total) and the district it belonged to in four federal congressional district maps (maps inaugurated in 1979, 1997, 2006, and 2018). It also reports the district it would have belonged to in the 2013 map that was rejected prior to adoption. A small but important number of secciones suffered changes through time (the official term is /reseccionamiento/)---most frequently due to under- or over-population, but also after court rulings effecting modifications in state or municipal borders; see the `OBSERVACIONES` and its right-adjacent variables). For this reason, the dataset maps secciones-to-districts at each federal election since 1994.  
   + This dataset builds upon an excel sheet that IFE/INE distributes (included in the repository and listed next).
