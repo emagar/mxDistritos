@@ -16,11 +16,6 @@ The repository contains maps of Mexican districts used to elect representatives 
 * Files in the repository and how to cite them
 - ~code/elec-data-for-maps.r~ = code manipulates sección-level vote returns in federal deputy elections 1994--2018 for use in maps.
 - ~vhat~ files = electoral statistics for different years and units of aggregation calculated from federal diputado single-member district elections. Measures of interest are (a) the parties' vote shares in the unit-year; (b) the predicted vote share for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (c) estimates of each party's core support in the unit for the whole period; (d) number of times each party won the vote plurality/majority in the unit in the period (~code/elec-data-for-maps.r~ was used to prepare these files). 
-  + Note on coalitions: electoral alliances are extended nationwide and, in some cases, to other years for convenience in the analysis. Details for each party follow:
-    - Partido Acción Nacional (PAN) fielded candidates jointly with the Green party (PVEM) nationwide in 2000 and with the PRD and minor MC in select districts in 2018. The 2018 coalition was extended nationwide (i.e. PAN + PRD + MC votes added) for analysis. PAN did not ally in any other year in the period. 
-    - Partido Revolucionario Institucional (PRI) never allied until 2000. It then fielded joint candidates with the PVEM nationwide (in 2006) or in select districts (in 2003, 2009, 2012, and 2015). In 2018 it fielded joint candidates with the PVEM and the PNA in select districts. Partial alliances were extended nationwide for analysis. 
-    - The left is generically called MORENA, as its latest incarnation, the Movimiento de Regeneración Nacional which is a splinter from the Partido de la Revolución Democrática (PRD). The left's vote up to 1997 is the PRD's, which ran solo. In 2000 the PRD fielded joint candidates nationwide with Partido del Trabajo (PT), Movimiento Ciudadano (MC, then called Convergencia), and two now-extinct minor parties. From 2003 to 2012 the left is the sum of PRD, PT, and MC (an artificial sum in 2003 and 2009 for comparability). In 2015 the left is the sum of votes for the PRD, PT, MC, MORENA, and PES (only the first two fielded joint candidates in select districts). In 2018 the left is the sum of MORENA, PT, and PES which fielded joint candidates in most districts. 
-    - A residual "others" category sums the votes for parties other than those listed above for analysis. In 1991 the parties whose votes are summed are PARM, PDM, PFCRN, PPS, PEM, and PRT; in 1994 PPS, PFCRN, PARM, UNO-PDM, PT, and PVEM; in 1997 PC, PT, PVEM, PPS, and PDM; in 2000 PCD, PARM and DS; in 2003 PSN, PAS, MP, PLM, and FC; in 2006 PNA and ASDC; in 2009 PNA and PSD; in 2012 PNA only; in 2015 MC, PNA, PH, and a handful of independent candidates; and in 2018 a handful of independent candidates.  
   + Variables in the datasets:<<codebookElec>> most variables described here are included in every year and level of aggregation file. When this is not true, the corresponding file mentions the exception. 
     * `yr` = election year.
     * `edon` = state number 1:32.
@@ -29,25 +24,31 @@ The repository contains maps of Mexican districts used to elect representatives 
     * `pan` = vote share won by the PAN and allies, see the note on coalitions. 
     * `pri` = vote share won by the PRI and allies, see the note on coalitions. 
     * `morena` = vote share won by the left and allies, see the note on coalitions. 
-       - The PRD and its PT ally's votes, MORENA's, and the PES's are aggregated (in order to ease comparison to the 2018 election, when Morena+PT+PES fielded joit candidates).  
+      - The PRD and its PT ally's votes, MORENA's, and the PES's are aggregated (in order to ease comparison to the 2018 election, when Morena+PT+PES fielded joit candidates).  
     * (`oth` = vote share of candidates fielded minor parties is omitted, it is 1 - pan - pri - morena). 
       - by MC, PNA, PH, and independents
     * `vhat` variables = vote share predicted for the current year (`yr`) from a linear estimation of the party's performance in five immediately previous elections in the unit. Letting v_{i,t} denote party i's vote share in year t, the equation fitted with OLS in each unit looks thus: v_{i,t} = a + bt, t \in [yr - 15, yr - 12, yr - 9, yr - 6, yr - 3]. (A compositional variable specifiction was used, so the actual equation is slightly different, see XXXX for details.) The variable reports \hat{v}_{i,t=yr}, the point prediction for the current year.
       - As in compositional variable analysis, \hat{v}_{i,t} = \hat{r}_{i,t} / (1 + \sum-over-i-not-pri r_{i,t}). 
-      + `vhat.pan` = PAN's vote share estimate. 
-      + `vhat.pri` = PRI's vote share estimate. 
-      + `vhat.morena` = left's vote share estimate.
+      - `vhat.pan` = PAN's vote share estimate. 
+      - `vhat.pri` = PRI's vote share estimate. 
+      - `vhat.morena` = left's vote share estimate.
     * `bhat` variables = point estimates of the slope (b) coefficient from the regression described in the bullet above.     - `alphahat` variables = party core support estimate for the unit in 2000-2018 federal diputado elections. See XXXX for estimation details. 
       + `bhat.pan` = PAN's slope estimate. 
       + `bhat.morena` = left's slope estimate. 
     * `alphahat` variables = vote share estimates from a linear prediction for the current year (`yr`) from the party's performance in five immediately previous federal diputado elections in the unit. The equation v_{i,t} = a + bt, t = (yr - 15, yr - 12, yr - 9, yr - 6, yr - 3) estimated via OLS in each unit (municipality/sección) for this purpose. Compositional variable specification used for estimation, see XXXX for details.
-      * `alphahat.pan` = PAN's core support estimate. 
-      * `alphahat.pri` = PRI's core support estimate.
-      * `alphahat.morena` = left's core support estimate.
+      - `alphahat.pan` = PAN's core support estimate. 
+      - `alphahat.pri` = PRI's core support estimate.
+      - `alphahat.morena` = left's core support estimate.
     * `betahat` variables = 
-      * `betahat.pan` = PAN's 
-      * `betahat.morena` = left's 
+      + `betahat.pan` = PAN's 
+      + `betahat.morena` = left's 
   + Files available for year-levels of aggregation:
+    * 
+  + Note on coalitions: electoral alliances are extended nationwide and, in some cases, to other years for convenience in the analysis. Details for each party follow:
+    - Partido Acción Nacional (PAN) fielded candidates jointly with the Green party (PVEM) nationwide in 2000 and with the PRD and minor MC in select districts in 2018. The 2018 coalition was extended nationwide (i.e. PAN + PRD + MC votes added) for analysis. PAN did not ally in any other year in the period. 
+    - Partido Revolucionario Institucional (PRI) never allied until 2000. It then fielded joint candidates with the PVEM nationwide (in 2006) or in select districts (in 2003, 2009, 2012, and 2015). In 2018 it fielded joint candidates with the PVEM and the PNA in select districts. Partial alliances were extended nationwide for analysis. 
+    - The left is generically called MORENA, as its latest incarnation, the Movimiento de Regeneración Nacional which is a splinter from the Partido de la Revolución Democrática (PRD). The left's vote up to 1997 is the PRD's, which ran solo. In 2000 the PRD fielded joint candidates nationwide with Partido del Trabajo (PT), Movimiento Ciudadano (MC, then called Convergencia), and two now-extinct minor parties. From 2003 to 2012 the left is the sum of PRD, PT, and MC (an artificial sum in 2003 and 2009 for comparability). In 2015 the left is the sum of votes for the PRD, PT, MC, MORENA, and PES (only the first two fielded joint candidates in select districts). In 2018 the left is the sum of MORENA, PT, and PES which fielded joint candidates in most districts. 
+    - A residual "others" category sums the votes for parties other than those listed above for analysis. In 1991 the parties whose votes are summed are PARM, PDM, PFCRN, PPS, PEM, and PRT; in 1994 PPS, PFCRN, PARM, UNO-PDM, PT, and PVEM; in 1997 PC, PT, PVEM, PPS, and PDM; in 2000 PCD, PARM and DS; in 2003 PSN, PAS, MP, PLM, and FC; in 2006 PNA and ASDC; in 2009 PNA and PSD; in 2012 PNA only; in 2015 MC, PNA, PH, and a handful of independent candidates; and in 2018 a handful of independent candidates.  
 
 - ~data/dipfed2015mu-vhat.csv~ = 2015 federal diputado single-member district election statistics. The units are municipalities. Data are municipal aggregates of sección-level returns (i.e. votes from all secciones belonging to a given municipality are added up). The PRI fielded joint candidates with the Green party in some states only, as did the PRD with the PT; both coalitions are extended nationwide for convenience in the analysis (~code/elec-data-for-maps.r~ was used to prepare this file). 
   + Variables in the dataset:<<codebookElec>>
