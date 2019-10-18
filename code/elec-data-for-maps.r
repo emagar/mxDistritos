@@ -11,6 +11,7 @@ options(width = 140)
 # old #dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+
 # DROP #wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
 # cambiar por cartografía 2017 en /home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/shp/disfed2018
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
@@ -1256,46 +1257,6 @@ save(regs.2018, file = paste(wd, "data/dipfed-se-regs-2018.RData", sep = ""), co
 load(file = paste(wd, "data/dipfed-se-regs-2015.RData", sep = ""))
 summary.lm(regs.2015$morena[[1]])$coef[2,1]
 
-dim(extendCoal.2018)
-
-round(quantile(x = (extendCoal.2018$pan    - extendCoal.2018$vhat.pan)   , probs = seq(0,1,.1), na.rm = TRUE),3)
-round(quantile(x = (extendCoal.2018$pri    - extendCoal.2018$vhat.pri)   , probs = seq(0,1,.1), na.rm = TRUE),3)
-round(quantile(x = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), probs = seq(0,1,.1), na.rm = TRUE),3)
-
-col.pan <-    rgb(.18,.24,.73, alpha = .3) # moderate blue
-col.pri <-    rgb(.89,.17,.17, alpha = .3) # bright red
-col.morena <- rgb(.55,.27,.07, alpha = .3)
-
-extendCoal.2015[1,]
-
-# morena vs pri core
-plot(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), type = "n", xlab = "Núcleo del PRI", ylab = "Residual de Morena en 2018")
-abline(h = 0, col = col.pri)
-points(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), pch = 20, cex = .15, col = rgb(.55,.27,.07, alpha = .2))
-fit <- lm((morena - vhat.morena) ~ poly(alphahat.pri,3), data = extendCoal.2018[non.nas,])
-xx <- seq(from = 0, to = 1, by = .01)
-lines(xx, predict.lm(fit, data.frame(alphahat.pri=xx)), col = "black", lwd = 1.5)
-
-# morena vs pan core
-plot(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), type = "n", xlab = "Núcleo del PAN", ylab = "Residual de Morena en 2018")
-abline(h = 0, col = col.pan)
-points(x = extendCoal.2018$alphahat.pan, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), pch = 20, cex = .15, col = rgb(.55,.27,.07, alpha = .2))
-fit <- lm((morena - vhat.morena) ~ poly(alphahat.pan,3), data = extendCoal.2018[non.nas,])
-xx <- seq(from = 0, to = 1, by = .01)
-lines(xx, predict.lm(fit, data.frame(alphahat.pan=xx)), col = "black", lwd = 1.5)
-
-
-plot(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$morena - extendCoal.2018$vhat.morena), type = "n", xlab = "Núcleo del PRI", ylab = "Residual del Frente en 2018")
-abline(h = 0, col = "red")
-points(x = extendCoal.2018$alphahat.pri, y = (extendCoal.2018$pan - extendCoal.2018$vhat.pan), pch = 20, cex = .15, col = rgb(.23,.28,.75, alpha = .2))
-fit <- lm((pan - vhat.pan) ~ poly(alphahat.pri,3), data = extendCoal.2018[non.nas,])
-xx <- seq(from = 0, to = 1, by = .01)
-lines(xx, predict.lm(fit, data.frame(alphahat.pri=xx)), col = "black", lwd = 1.5)
-
-points((1:10) + 0.4, col = rgb(red = 0, green = 0, blue = 1, alpha = 0.5),
-       pch = 16, cex = 4)
-
-x
 
 
 # version 2: coalitions only in districts where they happened
