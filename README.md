@@ -41,7 +41,7 @@ The repository contains maps of Mexican districts used to elect representatives 
         -   \`pri\` = vote share won by the PRI and allies, see the note on coalitions.
         -   \`morena\` = vote share won by the left and allies, see the note on coalitions. 
             -   The PRD and its PT ally's votes, MORENA's, and the PES's are aggregated (in order to ease comparison to the 2018 election, when Morena+PT+PES fielded joit candidates).
-        -   (\`oth\` = vote share of candidates fielded minor parties is omitted, it is [[<https://www.codecogs.com/eqnedit.php?latex=\inline&space;1&space;-&space;pan&space;-&space;pri&space;-&space;morena>]\![]].)
+        -   (\`oth\` = vote share of candidates fielded minor parties is omitted, it is ![](https://latex.codecogs.com/svg.latex?\inline&space;1&space;-&space;pan&space;-&space;pri&space;-&space;morena]).)
             -   by MC, PNA, PH, and independents
         -   \`vhat\` variables = vote share predicted for the current year (\`yr\`) from a linear estimation of the party's performance in five immediately previous elections in the unit. Letting v<sub>i,t</sub> denote party i's vote share in year t, the equation fitted with OLS in each unit looks thus: v<sub>i,t</sub> = a + bt, t &isin; [yr - 15, yr - 12, yr - 9, yr - 6, yr - 3]. (A compositional variable specifiction was used, so the actual equation is slightly different, see XXXX for details.) The variable reports \hat{v}<sub>i,t=yr</sub>, the point prediction for the current year.
             -   As in compositional variable analysis, \hat{v}<sub>i,t</sub> = \hat{r}<sub>i,t</sub> / (1 + &sum;-over-i-not-pri r<sub>i,t</sub>).
