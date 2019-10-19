@@ -49,24 +49,51 @@ la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .1
     ## t(apply(grid,1,tern2cart)) -> grid.tern
     ## cbind(grid.tern[1:27,],grid.tern[28:54,]) -> grid
     ## apply(grid,1,function(x){segments(x0=x[1],y0=x[2],x1=x[3],y1=x[4],lty=2,col="grey80")})
-    # or 50-50 to 33-33-33 lines instead
-    a <- c(1,1,0)
-    b <- c(1,0,1)
-    c <- c(0,1,1)
-    d <- c(1,1,1)
-    grid <- data.frame(matrix(c(a,b,c,d),nrow=4,byrow=TRUE))
-    grid.tern <- t(apply(grid,1,tern2cart))
-    for (i in 1:3){
-        segments(x0=grid.tern[i,1],y0=grid.tern[i,2],x1=grid.tern[4,1],y1=grid.tern[4,2],lty=2,col="grey10")
-    }
-    # Plot points:
-    points(datos, pch = 20, cex = cex.pts, col = color)
-    #
     ## # axis labels
     ## paste(seq(10,90,by=10),"%")->lab
     ## text(grid.tern[9:1,],paste(lab,"\n(PAN)"),col="grey80",cex=0.7, pos=2)
     ## text(grid.tern[18:10,],paste(lab,"\n(PRI)"),col="grey80",cex=0.7, pos=4)
     ## text(grid.tern[27:19,],paste(lab,"\n(Morena)"),col="grey80",cex=0.7, pos=1)
+    # or 50-50 to 33-33-33 lines instead
+    ## a <- c(1,1,0)
+    ## b <- c(1,0,1)
+    ## c <- c(0,1,1)
+    ## d <- c(1,1,1)
+    ## grid <- data.frame(matrix(c(a,b,c,d),nrow=4,byrow=TRUE))
+    ## grid.tern <- t(apply(grid,1,tern2cart))
+    ## for (i in 1:3){
+    ##     segments(x0=grid.tern[i,1],y0=grid.tern[i,2],x1=grid.tern[4,1],y1=grid.tern[4,2],lty=2,col="grey10")
+    ## }
+    # or 10 percent bands
+    a <- c( 57.5,42.5,   0)
+    b <- c( 57.5,   0,42.5)
+    c <- c(130/3,85/3,85/3)
+    grid <- data.frame(matrix(c(a,b,c),nrow=3,byrow=TRUE))
+    grid.tern <- t(apply(grid,1,tern2cart))
+    for (i in 1:2){
+        #i <- 1 # debug
+        segments(x0=grid.tern[i,1],y0=grid.tern[i,2],x1=grid.tern[3,1],y1=grid.tern[3,2],lty=2,col="grey10")
+    }
+    a <- c(42.5, 57.5,   0)
+    b <- c(   0, 57.5,42.5)
+    c <- c(85/3,130/3,85/3)
+    grid <- data.frame(matrix(c(a,b,c),nrow=3,byrow=TRUE))
+    grid.tern <- t(apply(grid,1,tern2cart))
+    for (i in 1:2){
+        #i <- 1 # debug
+        segments(x0=grid.tern[i,1],y0=grid.tern[i,2],x1=grid.tern[3,1],y1=grid.tern[3,2],lty=2,col="grey10")
+    }
+    a <- c(42.5,   0, 57.5)
+    b <- c(   0,42.5, 57.5)
+    c <- c(85/3,85/3,130/3)
+    grid <- data.frame(matrix(c(a,b,c),nrow=3,byrow=TRUE))
+    grid.tern <- t(apply(grid,1,tern2cart))
+    for (i in 1:2){
+        #i <- 1 # debug
+        segments(x0=grid.tern[i,1],y0=grid.tern[i,2],x1=grid.tern[3,1],y1=grid.tern[3,2],lty=2,col="grey10")
+    }
+    # Plot points:
+    points(datos, pch = 20, cex = cex.pts, col = color)
 }
 
 ############################################################

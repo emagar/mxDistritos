@@ -1222,7 +1222,9 @@ extendCoal.2012 <- tmp.func(year=2012)
 extendCoal.2015 <- tmp.func(year=2015)
 extendCoal.2018 <- tmp.func(year=2018)
 
-# save to disk
+##################
+## save to disk ##
+##################
 write.csv(extendCoal.2009,
           file = paste(wd, "data/dipfed2009mu-vhat.csv", sep = ""),
           row.names = FALSE)
