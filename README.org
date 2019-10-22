@@ -7,12 +7,9 @@ Last revision: 2019-10-16
 *>>> Under construction (expected completion end of Oct. 2019) <<<*
 
 * Description of /Recent Mexican electoral geography/ repository
-
 - Author: Eric Magar
 - Email: emagar at itam dot mx
-
-The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [[https://cartografia.ife.org.mx/sige7/?cartografia][here]]). Data in this repo is prepared for mapping and preliminary/basic analysis.
-
+The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [[https://cartografia.ife.org.mx/sige7/?cartografia][here]]). Data in this repo is prepared for mapping and preliminary/basic statistical analysis.
 * Files in the repository and how to cite them
 - ~code/elec-data-for-maps.r~ = code manipulates sección-level vote returns in federal deputy elections 1994--2018 for use in maps.
 - ~vhat~ files = electoral statistics for different years and units of aggregation calculated from federal diputado single-member district elections. Measures of interest are (a) the parties' vote shares in the unit-year; (b) the predicted vote share for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (c) estimates of each party's core support in the unit for the whole period; (d) number of times each party won the vote plurality/majority in the unit in the period (~code/elec-data-for-maps.r~ was used to prepare these files). 
@@ -27,11 +24,13 @@ The repository contains maps of Mexican districts used to elect representatives 
       - The PRD and its PT ally's votes, MORENA's, and the PES's are aggregated (in order to ease comparison to the 2018 election, when Morena+PT+PES fielded joit candidates).  
     * (`oth` = vote share of candidates fielded minor parties is omitted, it is 1 - pan - pri - morena.)
       - by MC, PNA, PH, and independents
+    * `d.pan`, `d.pri`, `d.morena` = first differences, party's vote share change since last election (i.e., pan_{yr} - pan{yr-3} and so forth).
     * `vhat` variables = vote share predicted for the current year (`yr`) from a linear estimation of the party's performance in five immediately previous elections in the unit. Letting v_{i,t} denote party i's vote share in year t, the equation fitted with OLS in each unit looks thus: [[./graph/readme-math/5-yr.svg]]. (A compositional variable specifiction was used, so the actual equation is slightly different, see XXXX for details.) The variable reports [[./graph/readme-math/vhat.svg]], the point prediction for the current year.
       - `vhat.pan` = PAN's vote share estimate. 
       - `vhat.pri` = PRI's vote share estimate. 
       - `vhat.morena` = left's vote share estimate.
-    * `bhat` variables = point estimates of the slope (b) coefficient from the regression described in the bullet above.     - `alphahat` variables = party core support estimate for the unit in 2000-2018 federal diputado elections. See XXXX for estimation details. 
+    * `bhat` variables = point estimates of the slope (b) coefficient from the regression described in the bullet above.
+      - `alphahat` variables = party core support estimate for the unit in 2000-2018 federal diputado elections. See XXXX for estimation details. 
       + `bhat.pan` = PAN's slope estimate. 
       + `bhat.morena` = left's slope estimate. 
     * `alphahat` variables = vote share estimates from a linear prediction for the current year (`yr`) from the party's performance in five immediately previous federal diputado elections in the unit. The equation v_{i,t} = a + bt, t = (yr - 15, yr - 12, yr - 9, yr - 6, yr - 3) estimated via OLS in each unit (municipality/sección) for this purpose. Compositional variable specification used for estimation, see XXXX for details.

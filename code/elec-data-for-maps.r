@@ -352,7 +352,7 @@ d <- within(d, edo <- cabecera <- casn <- TIPO_CASILLA <- NULL)
 v18 <- d
 
 # clean
-rm(ag.sec,d,sel.c,sel.r)
+rm(d,sel.c,sel.r)
 
 ################################
 ## district winners 2006-2015 ##
@@ -983,6 +983,13 @@ for (i in non.nas){
     # subset data
     data.tmp <- extendCoal[[i]]
     #
+    # add first-differences
+    tmp.ln <- nrow(data.tmp)
+    data.tmp$d.pan    <- data.tmp$pan    - c(NA,data.tmp$pan   [-tmp.ln])
+    data.tmp$d.pri    <- data.tmp$pri    - c(NA,data.tmp$pri   [-tmp.ln])
+    data.tmp$d.morena <- data.tmp$morena - c(NA,data.tmp$morena[-tmp.ln])
+    rm(tmp.ln)
+    #
     ## ##################################
     ## ## predict 2006 with last 5 els ## ojo: v91 needed
     ## ##################################
@@ -1038,12 +1045,12 @@ for (i in non.nas){
     regs.2009$pan[[i]]    <- reg.pan
     regs.2009$morena[[i]] <- reg.morena
     regs.2009$oth[[i]]    <- reg.oth
-    #
+    #                                                                    ##############################
     #                                                                    # DO THESE WHEN PREDICTING   #
     #                                                                    # FIRST YEAR ONLY:           #
     data.tmp$vhat.morena <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
     data.tmp$bhat.morena <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
-    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
     data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan

@@ -1,3 +1,7 @@
+# workdir
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+
+
 ######################################################################
 ## Function transforming ternary into cartesian coordinates         ##
 ## https://stackoverflow.com/questions/11623602/shaded-triplot-in-r ##
@@ -96,6 +100,7 @@ la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .1
     points(datos, pch = 20, cex = cex.pts, col = color)
 }
 
+
 ############################################################
 ## ###################################################### ##
 ## ## Load data or use elec-data-for-maps to generate  ## ##
@@ -128,7 +133,7 @@ tri.color[tri.color==2] <- col.pri
 tri.color[tri.color==3] <- col.morena
 #pdf(file = paste(wd, "graph/triplot2018-v-mu.pdf", sep = ""))
 #png(file = paste(wd, "graph/triplot2018-v-mu.png", sep = ""))
-la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main = "Voto 2018 observado")
+la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main ="Observación 2018")
 #dev.off()
 
 # triplot predicted
@@ -140,7 +145,7 @@ tri.color[tri.color==2] <- col.pri
 tri.color[tri.color==3] <- col.morena
 #pdf(file = paste(wd, "graph/triplot2018-vhat-mu.pdf", sep = ""))
 #png(file = paste(wd, "graph/triplot2018-vhat-mu.png", sep = ""))
-la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main = "Voto 2018 pronosticado")
+la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main ="Pronóstico 2018")# expression(hat(v)[2018]))
 #dev.off()
 
 ##########
@@ -154,7 +159,7 @@ tri.color[tri.color==2] <- col.pri
 tri.color[tri.color==3] <- col.morena
 #pdf(file = paste(wd, "graph/triplot2015-v-mu.pdf", sep = ""))
 #png(file = paste(wd, "graph/triplot2015-v-mu.png", sep = ""))
-la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main = "Voto 2015 observado")
+la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main = "Observación 2015")
 #dev.off()
 
 # triplot predicted
@@ -166,7 +171,7 @@ tri.color[tri.color==2] <- col.pri
 tri.color[tri.color==3] <- col.morena
 #pdf(file = paste(wd, "graph/triplot2015-vhat-mu.pdf", sep = ""))
 #png(file = paste(wd, "graph/triplot2015-vhat-mu.png", sep = ""))
-la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main = "Voto 2015 pronosticado")
+la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main = "Pronóstico 2015")
 #dev.off()
 
 
@@ -212,6 +217,7 @@ la.ternera(datos = tmp, cex.pts = .2, color = tri.color, main = "Voto 2018 prono
 
 # data
 tmp <- extendCoal.2018
+dim(tmp)
 tmp <- tmp[-which(is.na(rowSums(tmp))==TRUE),] # drop NAs
 
 #####################
@@ -222,9 +228,12 @@ plot(x = tmp$alphahat.pri, y = (tmp$pri - tmp$vhat.pri), type = "n", xlab = "Tam
 abline(h = 0, col = "black", lty = 2)
 points(x = tmp$alphahat.pri, y = (tmp$pri - tmp$vhat.pri), pch = 20, cex = .15, col = col.pri)
 fit <- lm((pri - vhat.pri) ~ poly(alphahat.pri,3), data = tmp)
-xx <- seq(from = 0, to = 1, by = .01)
+lo.hi <- round(quantile(tmp$alphahat.pri, probs = c(.02,.98)),2)
+xx <- seq(from = lo.hi[1], to = lo.hi[2], by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pri=xx)), col = "black", lwd = 1.5)
 #dev.off()
+
+
 
 ########################
 ## morena vs pan core ##
@@ -234,7 +243,8 @@ plot(x = tmp$alphahat.pan, y = (tmp$morena - tmp$vhat.morena), type = "n", xlab 
 abline(h = 0, col = "black", lty = 2)
 points(x = tmp$alphahat.pan, y = (tmp$morena - tmp$vhat.morena), pch = 20, cex = .15, col = col.morena)
 fit <- lm((morena - vhat.morena) ~ poly(alphahat.pan,3), data = tmp)
-xx <- seq(from = 0, to = 1, by = .01)
+lo.hi <- round(quantile(tmp$alphahat.pan, probs = c(.02,.98)),2)
+xx <- seq(from = lo.hi[1], to = lo.hi[2], by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pan=xx)), col = "black", lwd = 1.5)
 #dev.off()
 
@@ -246,7 +256,8 @@ plot(x = tmp$alphahat.pri, y = (tmp$morena - tmp$vhat.morena), type = "n", xlab 
 abline(h = 0, col = "black", lty = 2)
 points(x = tmp$alphahat.pri, y = (tmp$morena - tmp$vhat.morena), pch = 20, cex = .15, col = col.morena)
 fit <- lm((morena - vhat.morena) ~ poly(alphahat.pri,3), data = tmp)
-xx <- seq(from = 0, to = 1, by = .01)
+lo.hi <- round(quantile(tmp$alphahat.pri, probs = c(.02,.98)),2)
+xx <- seq(from = lo.hi[1], to = lo.hi[2], by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pri=xx)), col = "black", lwd = 1.5)
 #dev.off()
 
@@ -258,7 +269,8 @@ plot(x = tmp$alphahat.morena, y = (tmp$morena - tmp$vhat.morena), type = "n", xl
 abline(h = 0, col = "black", lty = 2)
 points(x = tmp$alphahat.morena, y = (tmp$morena - tmp$vhat.morena), pch = 20, cex = .15, col = col.morena)
 fit <- lm((morena - vhat.morena) ~ poly(alphahat.morena,3), data = tmp)
-xx <- seq(from = 0, to = 1, by = .01)
+lo.hi <- round(quantile(tmp$alphahat.morena, probs = c(.02,.98)),2)
+xx <- seq(from = lo.hi[1], to = lo.hi[2], by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.morena=xx)), col = "black", lwd = 1.5)
 #dev.off()
 
@@ -270,7 +282,8 @@ plot(x = tmp$alphahat.pri, y = (tmp$pan - tmp$vhat.pan), type = "n", xlab = "Tam
 abline(h = 0, col = "black", lty = 2)
 points(x = tmp$alphahat.pri, y = (tmp$pan - tmp$vhat.pan), pch = 20, cex = .15, col = col.pan)
 fit <- lm((pan - vhat.pan) ~ poly(alphahat.pri,3), data = tmp)
-xx <- seq(from = 0, to = 1, by = .01)
+lo.hi <- round(quantile(tmp$alphahat.pri, probs = c(.02,.98)),2)
+xx <- seq(from = lo.hi[1], to = lo.hi[2], by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pri=xx)), col = "black", lwd = 1.5)
 #dev.off()
 
@@ -282,7 +295,8 @@ plot(x = tmp$alphahat.pan, y = (tmp$pan - tmp$vhat.pan), type = "n", xlab = "Tam
 abline(h = 0, col = "black", lty = 2)
 points(x = tmp$alphahat.pan, y = (tmp$pan - tmp$vhat.pan), pch = 20, cex = .15, col = col.pan)
 fit <- lm((pan - vhat.pan) ~ poly(alphahat.pan,3), data = tmp)
-xx <- seq(from = 0, to = 1, by = .01)
+lo.hi <- round(quantile(tmp$alphahat.pan, probs = c(.02,.98)),2)
+xx <- seq(from = lo.hi[1], to = lo.hi[2], by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pan=xx)), col = "black", lwd = 1.5)
 #dev.off()
 
