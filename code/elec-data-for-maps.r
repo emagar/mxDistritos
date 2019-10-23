@@ -752,9 +752,10 @@ v18m <- d
 ## dim(v91m);
 dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); 
 # rename section-level aggregates to free v00 v03 etc for general use
+v94s <- v94; v97s <- v97; 
 v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18;
 #
-rm(v00,v03,v06,v09,v12,v15,v18)
+rm(v94,v97,v00,v03,v06,v09,v12,v15,v18)
 
 ############################################################
 ## ###################################################### ##
@@ -762,7 +763,7 @@ rm(v00,v03,v06,v09,v12,v15,v18)
 ## ## by choosing s, m, d...                           ## ##
 ## ###################################################### ##
 ############################################################
-agg <- c("m","s","d")[1]
+agg <- c("m","s","d")[2]
 if (agg=="m") {
     ## v91 <- v91m;
     v94 <- v94m; v97 <- v97m; 
@@ -770,13 +771,13 @@ if (agg=="m") {
 }
 if (agg=="s") {
     ## v91 <- v91m;
-    v94 <- v94m; v97 <- v97m; 
-    v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
+    v94 <- v94s; v97 <- v97s; 
+    v00 <- v00s; v03 <- v03s; v06 <- v06s; v09 <- v09s; v12 <- v12s; v15 <- v15s; v18 <- v18s;
 }
 if (agg=="d") {
     ## v91 <- v91m;
-    v94 <- v94m; v97 <- v97m; 
-    v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
+    v94 <- v94d; v97 <- v97d; 
+    v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v18 <- v18d;
 }
 
 ###########################################
@@ -978,7 +979,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 #    
 for (i in non.nas){
     #i <- 7729 # debug
-    #i <- 100 # debug
+    #i <- 44508 # debug
     message(sprintf("loop %s of %s", i, max(non.nas)))
     # subset data
     data.tmp <- extendCoal[[i]]
@@ -1232,21 +1233,32 @@ extendCoal.2018 <- tmp.func(year=2018)
 ##################
 ## save to disk ##
 ##################
-write.csv(extendCoal.2009,
-          file = paste(wd, "data/dipfed2009mu-vhat.csv", sep = ""),
-          row.names = FALSE)
-#
-write.csv(extendCoal.2012,
-          file = paste(wd, "data/dipfed2012mu-vhat.csv", sep = ""),
-          row.names = FALSE)
-#
-write.csv(extendCoal.2015,
-          file = paste(wd, "data/dipfed2015mu-vhat.csv", sep = ""),
-          row.names = FALSE)
-#
-write.csv(extendCoal.2018,
-          file = paste(wd, "data/dipfed2018mu-vhat.csv", sep = ""),
-          row.names = FALSE)
+if (agg=="m") {
+    write.csv(extendCoal.2009,
+              file = paste(wd, "data/dipfed2009mu-vhat.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2012,
+              file = paste(wd, "data/dipfed2012mu-vhat.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2015,
+              file = paste(wd, "data/dipfed2015mu-vhat.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2018,
+              file = paste(wd, "data/dipfed2018mu-vhat.csv", sep = ""), row.names = FALSE)
+}
+if (agg=="s") {
+    write.csv(extendCoal.2009,
+              file = paste(wd, "data/dipfed2009se-vhat.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2012,
+              file = paste(wd, "data/dipfed2012se-vhat.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2015,
+              file = paste(wd, "data/dipfed2015se-vhat.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2018,
+              file = paste(wd, "data/dipfed2018se-vhat.csv", sep = ""), row.names = FALSE)
+}
 
 # save municipal regression objects
 save(mean.regs, file = paste(wd, "data/dipfed-mu-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
