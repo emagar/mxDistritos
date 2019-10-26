@@ -1,52 +1,108 @@
-    plot(NA, NA, xlim=c(0,1), ylim=c(0,sqrt(3)/2), asp=1, bty="n", axes=F, xlab="", ylab="", main = main)
-    segments(0,0,0.5,sqrt(3)/2)
-    segments(0.5,sqrt(3)/2,1,0)
-    segments(1,0,0,0)
-    # add vértice labels
-    add.lab(c("PAN","PRI","Morena"))
-    ## # add a grid:
-    ## a <- seq(0.9,0.1,by=-0.1)
-    ## b <- rep(0,9)
-    ## c <- seq(0.1,0.9,by=0.1)
-    ## grid <- data.frame(x=c(a, b, c, a, c, b),y=c(b, c, a, c, b, a),z=c(c, a, b, b, a, c))
-    ## t(apply(grid,1,tern2cart)) -> grid.tern
-    ## cbind(grid.tern[1:27,],grid.tern[28:54,]) -> grid
-    ## apply(grid,1,function(x){segments(x0=x[1],y0=x[2],x1=x[3],y1=x[4],lty=2,col="grey80")})
-    # or add 50-50 to 33-33-33 lines instead
-    a <- c(1,1,0)
-    b <- c(1,0,1)
-    c <- c(0,1,1)
-    d <- c(1,1,1)
-    grid <- data.frame(matrix(c(a,b,c,d),nrow=4,byrow=TRUE))
-    grid.tern <- t(apply(grid,1,tern2cart))
-    for (i in 1:3){
-        segments(x0=grid.tern[i,1],y0=grid.tern[i,2],x1=grid.tern[4,1],y1=grid.tern[4,2],lty=2,col="grey10")
-    }
-    # with 10 percent bands
-    a <- c(55,45,0)
-    b <- c(55,0,45)
-    c <- c(40,30,30)
-    grid <- data.frame(matrix(c(a,b,c),nrow=3,byrow=TRUE))
-    grid.tern <- t(apply(grid,1,tern2cart))
-    for (i in 1:2){
-        #i <- 1 # debug
-        segments(x0=grid.tern[i,1],y0=grid.tern[i,2],x1=grid.tern[3,1],y1=grid.tern[3,2],lty=2,col="grey60")
-    }
-    a <- c(45,55, 0)
-    b <- c( 0,55,45)
-    c <- c(30,40,30)
-    grid <- data.frame(matrix(c(a,b,c),nrow=3,byrow=TRUE))
-    grid.tern <- t(apply(grid,1,tern2cart))
-    for (i in 1:2){
-        #i <- 1 # debug
-        segments(x0=grid.tern[i,1],y0=grid.tern[i,2],x1=grid.tern[3,1],y1=grid.tern[3,2],lty=2,col="grey60")
-    }
-    a <- c(45, 0,55)
-    b <- c( 0,45,55)
-    c <- c(30,30,40)
-    grid <- data.frame(matrix(c(a,b,c),nrow=3,byrow=TRUE))
-    grid.tern <- t(apply(grid,1,tern2cart))
-    for (i in 1:2){
-        #i <- 1 # debug
-        segments(x0=grid.tern[i,1],y0=grid.tern[i,2],x1=grid.tern[3,1],y1=grid.tern[3,2],lty=2,col="grey60")
-    }
+add.split <- function(year.var = NA) {
+    #
+    if (year.var==1991) d <- v91
+    if (year.var==1994) d <- v94
+    if (year.var==1997) d <- v97
+    if (year.var==2000) d <- v00
+    if (year.var==2003) d <- v03
+    if (year.var==2006) d <- v06
+    if (year.var==2009) d <- v09
+    if (year.var==2012) d <- v12
+    if (year.var==2015) d <- v15
+    if (year.var==2018) d <- v18
+    #
+    sel.agg <- which(d$edon==info$edon & d$seccion %in% sel.to)
+    sel.col <- setdiff(colnames(d), c("edon","disn","seccion","munn","dunbaja","edosecn",
+                                      "d94","d97","d00","d03","d06","d09","d12","d15","d18")) # exclude ids (order-dependent)
+    #
+    # sum votes
+    totals <- colSums(d[sel.agg, sel.col])
+    # dummies
+    if (!is.na(totals["dpanc"])    & totals["dpanc"]>0)    totals["panc"]     <- 1
+    if (!is.na(totals["dpric"])    & totals["dpric"]>0)    totals["dpric"]    <- 1
+    if (!is.na(totals["dprdc"])    & totals["dprdc"]>0)    totals["dprdc"]    <- 1
+    if (!is.na(totals["dmorenac"]) & totals["dmorenac"]>0) totals["dmorenac"] <- 1
+    # paste them into eliminated sección
+    sel.target <- which(d$edon==info$edon & d$seccion==info$seccion)
+    d[sel.target,sel.col] <- totals;
+    d$dunbaja[sel.target] <- 1;  # indicates manipulation
+    #
+    # return manipulated data
+    if (year.var==1991) v91 <- d
+    if (year.var==1994) v94 <- d
+    if (year.var==1997) v97 <- d
+    if (year.var==2000) v00 <- d
+    if (year.var==2003) v03 <- d
+    if (year.var==2006) v06 <- d
+    if (year.var==2009) v09 <- d
+    if (year.var==2012) v12 <- d
+    if (year.var==2015) v15 <- d
+    if (year.var==2018) v18 <- d
+}
+
+# then run function
+
+if (year < 1994) {
+    add.split(1994);
+    add.split(1997);
+    add.split(2000);
+    add.split(2003);
+    add.split(2006);
+    add.split(2009);
+    add.split(2012);
+    add.split(2015);
+    add.split(2018);
+}
+if (year < 1997) {
+    add.split(1997);
+    add.split(2000);
+    add.split(2003);
+    add.split(2006);
+    add.split(2009);
+    add.split(2012);
+    add.split(2015);
+    add.split(2018);
+}
+if (year < 2000) {
+    add.split(2000);
+    add.split(2003);
+    add.split(2006);
+    add.split(2009);
+    add.split(2012);
+    add.split(2015);
+    add.split(2018);
+}
+if (year < 2003) {
+    add.split(2003);
+    add.split(2006);
+    add.split(2009);
+    add.split(2012);
+    add.split(2015);
+    add.split(2018);
+}
+if (year < 2006) {
+    add.split(2006);
+    add.split(2009);
+    add.split(2012);
+    add.split(2015);
+    add.split(2018);
+}
+if (year < 2009) {
+    add.split(2009);
+    add.split(2012);
+    add.split(2015);
+    add.split(2018);
+}
+if (year < 2012) {
+    add.split(2012);
+    add.split(2015);
+    add.split(2018);
+}
+if (year < 2015) {
+    add.split(2015);
+    add.split(2018);
+}
+if (year < 2018) {
+    add.split(2018);
+}
+    

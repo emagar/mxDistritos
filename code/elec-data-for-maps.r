@@ -532,13 +532,12 @@ rm(vot,etiq)
 
 # get equivalencias seccionales
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
-eq <- read.csv(tmp)
+eq <- read.csv(tmp, stringsAsFactors = FALSE)
 # get municipio info to merge into votes
 ##################################################################
 ## (pending: adapt secciones to 2017 shapefiles to avoid blanks ##
 ##################################################################
 muns <- eq[,c("edon","seccion","ife","inegi")]
-#muns <- eq[,c("edon","seccion","ife","inegi","mun")]
 
 # match yearly observations (secciones)
 #dim(v06); dim(v09); dim(v12); dim(v15) # something amiss in 2009?
@@ -756,6 +755,17 @@ v94s <- v94; v97s <- v97;
 v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18;
 #
 rm(v94,v97,v00,v03,v06,v09,v12,v15,v18)
+
+# debug
+save.image("tmp.RData")
+
+rm(list = ls())
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load("tmp.RData")
+
+# manipulate reseccionamiento cases to preserve them in analysis
+source(paste(wd, "code/resecc.r", sep = ""))
 
 ############################################################
 ## ###################################################### ##
@@ -1199,6 +1209,13 @@ for (i in non.nas){
 ##############################################################################################
 ## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
 ##############################################################################################
+
+use eq[sel.split,] to choose cases
+and plug a.hat b.hat alpha.hat beta.hat
+to "new" secciones
+x
+
+
 
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
