@@ -757,12 +757,14 @@ v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v1
 rm(v94,v97,v00,v03,v06,v09,v12,v15,v18)
 
 # debug
-save.image("tmp.RData")
+setwd(wd)
+save.image("data/too-big-4-github/tmp.RData")
 
 rm(list = ls())
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-setwd(dd)
-load("tmp.RData")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(wd)
+load("data/too-big-4-github/tmp.RData")
 
 # manipulate reseccionamiento cases to preserve them in analysis
 source(paste(wd, "code/resecc.r", sep = ""))
@@ -853,7 +855,7 @@ oth <- t(oth)
 extendCoal <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
 # loop over municipios
 for (i in 1:nrow(v00)){
-    #i <- 99 # debug
+    #i <- 81 # debug
     tmp <- data.frame(yr = seq(from=1994, to=2018, by=3),
                       pan = pan[,i],
                       pri = pri[,i],
@@ -862,28 +864,31 @@ for (i in 1:nrow(v00)){
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
-        tmp$pan[is.na(tmp$pan)] <- per.means["pan"];
-        tmp$pri[is.na(tmp$pri)] <- per.means["pri"];
+        tmp$pan   [is.na(tmp$pan)]    <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]    <- per.means["pri"];
         tmp$morena[is.na(tmp$morena)] <- per.means["morena"];
-        tmp$oth[is.na(tmp$oth)] <- per.means["oth"];
+        tmp$oth   [is.na(tmp$oth)]    <- per.means["oth"];
     }
     # add epsilon = 2*max(rounding error) to zeroes 
     if (length(tmp[tmp==0])>0){
         tmp[tmp==0] <- 0.001;
-        tmp[,2:5]
-        rowSums(tmp[,2:5])
-        tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3) # re-compute shares
     }
+    # re-compute shares
+    #tmp[,2:5] # debug
+    #rowSums(tmp[,2:5]) # debug
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # fill info to new list
     extendCoal[[i]] <- tmp
 }
 #
 # datos para regresión de alfa
 yr.means <- data.frame(yr = seq(1994,2018,3),
-                       pan = rep(NA,9),
-                       pri = rep(NA,9),
+                       pan    = rep(NA,9),
+                       pri    = rep(NA,9),
                        morena = rep(NA,9),
-                       oth = rep(NA,9))
-cs <- function(x) colSums(x, na.rm=TRUE)
+                       oth    = rep(NA,9))
+#cs <- function(x) colSums(x, na.rm=TRUE)
+cs <- function(x) colSums(x[x$dunbaja==0,], na.rm=TRUE) # drops secciones that received aggregates upon splitting
 #
 ## yr.means$pan[1]    <-  cs(v91)["pan"]                                                      / cs(v91)["efec"]
 ## yr.means$pri[1]    <-  cs(v91)["pri"]                                                      / cs(v91)["efec"]
@@ -925,9 +930,9 @@ yr.means$pri[7]    <-   (cs(v12)["pri"] + cs(v12)["pric"] + cs(v12)["pvem"])    
 yr.means$morena[7] <-   (cs(v12)["prd"] + cs(v12)["prdc"] + cs(v12)["pt"] + cs(v12)["mc"]) / cs(v12)["efec"]
 yr.means$oth[7]    <-    cs(v12)["pna"]                                                    / cs(v12)["efec"]
 #
-yr.means$pan[8]    <-    cs(v15)["pan"]                                                                           / cs(v15)["efec"]
-yr.means$pri[8]    <-   (cs(v15)["pri"] + cs(v15)["pric"] + cs(v15)["pvem"])                                      / cs(v15)["efec"]
-yr.means$morena[8] <-   (cs(v15)["prd"] + cs(v15)["prdc"]   + cs(v15)["pt"] + cs(v15)["morena"] + cs(v15)["pes"]) / cs(v15)["efec"]
+yr.means$pan[8]    <-    cs(v15)["pan"]                                      / cs(v15)["efec"]
+yr.means$pri[8]    <-   (cs(v15)["pri"] + cs(v15)["pric"] + cs(v15)["pvem"]) / cs(v15)["efec"]
+yr.means$morena[8] <-   (cs(v15)["prd"] + cs(v15)["prdc"] + cs(v15)["pt"] + cs(v15)["morena"] + cs(v15)["pes"]) / cs(v15)["efec"]
 yr.means$oth[8]    <-   (cs(v15)["mc"] + cs(v15)["pna"] + cs(v15)["ph"] + cs(v15)["indep1"] + cs(v15)["indep2"])  / cs(v15)["efec"]
 #
 yr.means$pan[9]    <-   (cs(v18)["pan"] + cs(v18)["panc"] + cs(v18)["prd"] + cs(v18)["mc"])       / cs(v18)["efec"]
@@ -946,6 +951,14 @@ for (i in 1:nrow(v00)){
     #i <- 2 # debug
     extendCoal[[i]] <- cbind(extendCoal[[i]], yr.means[,6:8])
 }
+
+save.image("data/too-big-4-github/tmp3.RData")
+
+rm(list = ls())
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(wd)
+load("data/too-big-4-github/tmp3.RData")
 
 ############################################################################
 ## should also try jags estimation to get post-sample of vhats and alphas ##
@@ -988,7 +1001,7 @@ non.nas <- unlist(non.nas)
 non.nas <- which(is.na(non.nas)==FALSE)
 #    
 for (i in non.nas){
-    #i <- 7729 # debug
+    #i <- 81 # debug
     #i <- 44508 # debug
     message(sprintf("loop %s of %s", i, max(non.nas)))
     # subset data
@@ -1209,6 +1222,27 @@ for (i in non.nas){
 ##############################################################################################
 ## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
 ##############################################################################################
+
+save.image("data/too-big-4-github/tmp2.RData")
+
+rm(list = ls())
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(wd)
+load("data/too-big-4-github/tmp2.RData")
+
+
+rm(v94,v97,v00,v03,v06,v09,v12,v15,v18)
+info <- eq[sel.split,c("edon","seccion","when","orig.dest")]
+info[1,]
+sel.from <- which(v12s$edon==info$edon[1] &
+             v12s$seccion==info$seccion[1])
+sel.to   <- which(v12s$edon==info$edon[1] &
+             v12s$seccion==594)
+from.tmp <- extendCoal[[sel.from]]
+to.tmp   <- extendCoal[[sel.to]]
+table(eq$when[sel.split])
+ls()
 
 use eq[sel.split,] to choose cases
 and plug a.hat b.hat alpha.hat beta.hat
