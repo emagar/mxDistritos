@@ -1235,13 +1235,20 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load("data/too-big-4-github/tmp2.RData")
 
+# adds manipulation indicator to all data frames in list
+extendCoal <- sapply(extendCoal, simplify = FALSE, function(x) {
+    x$dsplit <- 0
+    return(x)
+})
+extendCoal[[1]]
+
 sel.split <- which(eq$action=="split")
 info <- eq[sel.split, c("edon","seccion","orig.dest","when")]
 info$edosecn <- info$edon*10000+info$seccion
 tmp <- v00s$edon*10000+v00s$seccion
 sel.from <- which(tmp %in% info$edosecn)
 
-falta inficador de manipulación
+
 
 for (i in 1:length(sel.from)){
     #i <- 10 # debug
@@ -1264,7 +1271,11 @@ for (i in 1:length(sel.from)){
         # columns to manipulate
         sel.col <- c("vhat.pan","vhat.pri","vhat.morena","bhat.pan","bhat.morena", "alphahat.pan","alphahat.pri","alphahat.morena","betahat.pan","betahat.morena")
         reg.to[,sel.col] <- reg.from[,sel.col] # from -> to
-        extendCoal[[sel.to[j]]] <- reg.to  # return manipulated data
+        # indicate manipulation
+        sel.ind <- which(reg.to$yr > year) # elections after reseccionamiento
+        reg.to$dsplit[sel.ind] <- 1
+        # return manipulated data
+        extendCoal[[sel.to[j]]] <- reg.to
     }
 }
 
