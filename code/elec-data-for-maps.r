@@ -1225,9 +1225,10 @@ for (i in non.nas){
 
 # clean
 ls()
-rm(pan,pri,morena,oth,reg.pan,reg.morena,reg.oth,per.means,vhat.pan,vhat.pri,vhat.morena,bhat.pan,bhat.morena,bhat.oth,yr.means,year,sel.from,sel.to,new.d)
+betahat
+rm(pan,pri,morena,oth,reg.pan,reg.morena,reg.oth,per.means,vhat.pan,vhat.pri,vhat.morena,bhat.pan,bhat.morena,yr.means,year,sel.c,sel.to,new.d,sel.split,sel.drop,rhat.pan,rhat.morena,rhat.oth,i,info,muns,tmp,to.num)
 
-save.image("data/too-big-4-github/tmp2.RData")
+save.image("data/too-big-4-github/tmp2.RData",compress=FALSE)
 
 rm(list = ls())
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
@@ -1240,18 +1241,17 @@ extendCoal <- sapply(extendCoal, simplify = FALSE, function(x) {
     x$dsplit <- 0
     return(x)
 })
-extendCoal[[1]]
 
+# manipulate split secciones (adding aggregate regression results)
 sel.split <- which(eq$action=="split")
 info <- eq[sel.split, c("edon","seccion","orig.dest","when")]
 info$edosecn <- info$edon*10000+info$seccion
 tmp <- v00s$edon*10000+v00s$seccion
 sel.from <- which(tmp %in% info$edosecn)
-
-
-
+#
 for (i in 1:length(sel.from)){
-    #i <- 10 # debug
+    #i <- 1 # debug
+    message(sprintf("loop %s of %s", i, length(sel.from)))
     reg.from <- extendCoal[[sel.from[i]]] # counterfactual seccion with vhat alpha for aggregate post-split
     #
     # locate split's new secciones
@@ -1261,52 +1261,22 @@ for (i in 1:length(sel.from)){
     sel.to <- which(tmp %in% sel.to)
     #
     for (j in sel.to){ # loop over new secciones
-        #j <- 1 # debug
-        reg.to <- extendCoal[[sel.to[j]]]  # regression to manipulate
+        #j <- sel.to[1] # debug
+        reg.to <- extendCoal[[j]]  # regression to manipulate
         year <- info$when[i]               # year reseccionamiento
         sel.na <- which(reg.to$yr <= year) # elections before reseccionamiento 
-        within(reg.to[sel.na,], {
+        reg.to[sel.na,] <- within(reg.to[sel.na,], {
             pan <- pri <- morena <- d.pan <- d.pri <- d.morena <- NA; # drop mean vote used, use NAs
         })
         # columns to manipulate
         sel.col <- c("vhat.pan","vhat.pri","vhat.morena","bhat.pan","bhat.morena", "alphahat.pan","alphahat.pri","alphahat.morena","betahat.pan","betahat.morena")
         reg.to[,sel.col] <- reg.from[,sel.col] # from -> to
         # indicate manipulation
-        sel.ind <- which(reg.to$yr > year) # elections after reseccionamiento
-        reg.to$dsplit[sel.ind] <- 1
+        reg.to$dsplit[-sel.na] <- 1
         # return manipulated data
-        extendCoal[[sel.to[j]]] <- reg.to
+        extendCoal[[j]] <- reg.to
     }
 }
-
-        
-x
-
-steps
-1 select "from" 
-2 take a.hat b.hat alpha.hat beta.hat
-3 select "to" cases
-4 plug v.hat,  
-3 predict v.hat
-5 with vote
-
-rm(v94,v97,v00,v03,v06,v09,v12,v15,v18)
-info <- eq[sel.split,c("edon","seccion","when","orig.dest")]
-info[1,]
-sel.from <- which(v12s$edon==info$edon[1] &
-             v12s$seccion==info$seccion[1])
-sel.to   <- which(v12s$edon==info$edon[1] &
-             v12s$seccion==594)
-from.tmp <- extendCoal[[sel.from]]
-to.tmp   <- extendCoal[[sel.to]]
-table(eq$when[sel.split])
-ls()
-
-use eq[sel.split,] to choose cases
-and plug a.hat b.hat alpha.hat beta.hat
-to "new" secciones
-x
-
 
 
 ##########################################################################
@@ -1377,11 +1347,11 @@ save(regs.2015, file = paste(wd, "data/dipfed-mu-regs-2015.RData", sep = ""), co
 save(regs.2018, file = paste(wd, "data/dipfed-mu-regs-2018.RData", sep = ""), compress = "gzip")
 
 # save secciónregression objects
-save(mean.regs, file = paste(wd, "data/dipfed-se-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-#save(regs.2009, file = paste(wd, "data/dipfed-se-regs-2009.RData", sep = ""), compress = "gzip")
-#save(regs.2012, file = paste(wd, "data/dipfed-se-regs-2012.RData", sep = ""), compress = "gzip")
-save(regs.2015, file = paste(wd, "data/dipfed-se-regs-2015.RData", sep = ""), compress = "gzip")
-save(regs.2018, file = paste(wd, "data/dipfed-se-regs-2018.RData", sep = ""), compress = "gzip")
+save(mean.regs, file = paste(wd, "data/too-big-4-github/dipfed-se-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+#save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2009.RData", sep = ""), compress = "gzip")
+#save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2012.RData", sep = ""), compress = "gzip")
+save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2015.RData", sep = ""), compress = "gzip")
+save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2018.RData", sep = ""), compress = "gzip")
 
 # load regression object
 load(file = paste(wd, "data/dipfed-se-regs-2015.RData", sep = ""))
