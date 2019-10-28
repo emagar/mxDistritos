@@ -1223,6 +1223,10 @@ for (i in non.nas){
 ## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
 ##############################################################################################
 
+# clean
+ls()
+rm(pan,pri,morena,oth,reg.pan,reg.morena,reg.oth,per.means,vhat.pan,vhat.pri,vhat.morena,bhat.pan,bhat.morena,bhat.oth,yr.means,year,sel.from,sel.to,new.d)
+
 save.image("data/too-big-4-github/tmp2.RData")
 
 rm(list = ls())
@@ -1231,6 +1235,49 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load("data/too-big-4-github/tmp2.RData")
 
+sel.split <- which(eq$action=="split")
+info <- eq[sel.split, c("edon","seccion","orig.dest","when")]
+info$edosecn <- info$edon*10000+info$seccion
+tmp <- v00s$edon*10000+v00s$seccion
+sel.from <- which(tmp %in% info$edosecn)
+
+falta inficador de manipulación
+
+for (i in 1:length(sel.from)){
+    #i <- 10 # debug
+    reg.from <- extendCoal[[sel.from[i]]] # counterfactual seccion with vhat alpha for aggregate post-split
+    #
+    # locate split's new secciones
+    sel.to <- as.numeric(unlist(strsplit(info$orig.dest[i], ":")))
+    sel.to <- seq(from = sel.to[1], to = sel.to[2], by = 1)
+    sel.to <- v00s$edon[sel.from[i]] * 10000 + sel.to
+    sel.to <- which(tmp %in% sel.to)
+    #
+    for (j in sel.to){ # loop over new secciones
+        #j <- 1 # debug
+        reg.to <- extendCoal[[sel.to[j]]]  # regression to manipulate
+        year <- info$when[i]               # year reseccionamiento
+        sel.na <- which(reg.to$yr <= year) # elections before reseccionamiento 
+        within(reg.to[sel.na,], {
+            pan <- pri <- morena <- d.pan <- d.pri <- d.morena <- NA; # drop mean vote used, use NAs
+        })
+        # columns to manipulate
+        sel.col <- c("vhat.pan","vhat.pri","vhat.morena","bhat.pan","bhat.morena", "alphahat.pan","alphahat.pri","alphahat.morena","betahat.pan","betahat.morena")
+        reg.to[,sel.col] <- reg.from[,sel.col] # from -> to
+        extendCoal[[sel.to[j]]] <- reg.to  # return manipulated data
+    }
+}
+
+        
+x
+
+steps
+1 select "from" 
+2 take a.hat b.hat alpha.hat beta.hat
+3 select "to" cases
+4 plug v.hat,  
+3 predict v.hat
+5 with vote
 
 rm(v94,v97,v00,v03,v06,v09,v12,v15,v18)
 info <- eq[sel.split,c("edon","seccion","when","orig.dest")]
