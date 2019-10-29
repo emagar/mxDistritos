@@ -23,7 +23,7 @@ The repository contains maps of Mexican districts used to elect representatives 
     * `pan` = vote share won by the PAN and allies, see the [[noteCoal][note on coalitions]]. 
     * `pri` = vote share won by the PRI and allies, see the [[noteCoal][note on coalitions]].
     * `morena` = vote share won by the left and allies, see [[noteCoal][note on coalitions]].
-    * (`oth` = vote share of candidates fielded by minor parties is not reported. It is [[./graph/readme-math/one-minus.svg]] and therefore fully determined.)
+    * (`oth` = vote share of candidates fielded by minor parties is not reported. It is 1 -- pan -- pri -- morena and therefore fully determined.)
     * `d.pan`, `d.pri`, `d.morena` = first differences, party's vote share change since last election (i.e., pan_{yr} - pan_{yr-3} and so forth).
     * `vhat` variables = vote share predicted for the current year (`yr`) from a linear estimation of the party's performance in five immediately previous elections in the unit. Letting v_{i,t} denote party i's vote share in year t, the equation fitted with OLS in each unit looks thus: [[./graph/readme-math/5-yr.svg]]. (A compositional variable specifiction was used, so the actual equation is slightly different, see [[https://emagar.github.io/residuales-2018/][this post in Spanish]] for details.) The variable reports [[./graph/readme-math/vhat.svg]], the point prediction for the current year.
       - `vhat.pan` = PAN's vote share estimate. 
