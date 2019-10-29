@@ -629,6 +629,7 @@ v18 <- tmp.func(v18)
 rm(tmp,tmp.func) # clean
 
 # consolidate municipios
+# before secciones are manipulated to deal with reseccionamiento
 muns$edosecn <- muns$edon*10000 + muns$seccion
 # add municipio names to votes
 sel.drop <- which(colnames(muns) %in% c("edon","seccion")) # do not merge these columns
@@ -999,6 +1000,7 @@ mean.regs <- list(pan    = tmp,
 non.nas <- lapply(extendCoal, sum)
 non.nas <- unlist(non.nas)
 non.nas <- which(is.na(non.nas)==FALSE)
+tail(non.nas)
 #    
 for (i in non.nas){
     #i <- 81 # debug
@@ -1225,20 +1227,11 @@ for (i in non.nas){
 
 # clean
 ls()
-betahat
 rm(pan,pri,morena,oth,reg.pan,reg.morena,reg.oth,per.means,vhat.pan,vhat.pri,vhat.morena,bhat.pan,bhat.morena,yr.means,year,sel.c,sel.to,new.d,sel.split,sel.drop,rhat.pan,rhat.morena,rhat.oth,i,info,muns,tmp,to.num)
-
-save.image("data/too-big-4-github/tmp2.RData",compress=FALSE)
-
-rm(list = ls())
-dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
-setwd(wd)
-load("data/too-big-4-github/tmp2.RData")
 
 # adds manipulation indicator to all data frames in list
 extendCoal <- sapply(extendCoal, simplify = FALSE, function(x) {
-    x$dsplit <- 0
+    x$new <- x$split <- 0;
     return(x)
 })
 
@@ -1250,7 +1243,7 @@ tmp <- v00s$edon*10000+v00s$seccion
 sel.from <- which(tmp %in% info$edosecn)
 #
 for (i in 1:length(sel.from)){
-    #i <- 1 # debug
+    #i <- 66 # debug
     message(sprintf("loop %s of %s", i, length(sel.from)))
     reg.from <- extendCoal[[sel.from[i]]] # counterfactual seccion with vhat alpha for aggregate post-split
     #
@@ -1272,10 +1265,14 @@ for (i in 1:length(sel.from)){
         sel.col <- c("vhat.pan","vhat.pri","vhat.morena","bhat.pan","bhat.morena", "alphahat.pan","alphahat.pri","alphahat.morena","betahat.pan","betahat.morena")
         reg.to[,sel.col] <- reg.from[,sel.col] # from -> to
         # indicate manipulation
-        reg.to$dsplit[-sel.na] <- 1
+        reg.to$new[-sel.na] <- year
         # return manipulated data
         extendCoal[[j]] <- reg.to
     }
+    # indicate manipulation
+    reg.from$split[-sel.na] <- year
+    # return manipulated data
+    extendCoal[[sel.from[i]]] <- reg.from
 }
 
 
@@ -1299,7 +1296,7 @@ tmp.func <- function(year) {
     tmp <- do.call("rbind", tmp)
     rownames(tmp) <- NULL
     if (agg=="m") sel.col <- c("edon","ife","inegi")       # cols to merge when using municipios
-    if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi","disn") # when using secciones
+    if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi") # when using secciones
     tmp <- cbind(tmp, v00[,sel.col])
     rm(sel.col)
     return(tmp)
@@ -1308,6 +1305,13 @@ extendCoal.2009 <- tmp.func(year=2009)
 extendCoal.2012 <- tmp.func(year=2012)
 extendCoal.2015 <- tmp.func(year=2015)
 extendCoal.2018 <- tmp.func(year=2018)
+rm(extendCoal.2015)
+
+# drop some columns
+extendCoal.2009 <- within(extendCoal.2009, yr <- edosecn <- NULL)
+extendCoal.2012 <- within(extendCoal.2012, yr <- edosecn <- NULL)
+extendCoal.2015 <- within(extendCoal.2015, yr <- edosecn <- NULL)
+extendCoal.2018 <- within(extendCoal.2018, yr <- edosecn <- NULL)
 
 ##################
 ## save to disk ##
@@ -1346,7 +1350,7 @@ save(regs.2012, file = paste(wd, "data/dipfed-mu-regs-2012.RData", sep = ""), co
 save(regs.2015, file = paste(wd, "data/dipfed-mu-regs-2015.RData", sep = ""), compress = "gzip")
 save(regs.2018, file = paste(wd, "data/dipfed-mu-regs-2018.RData", sep = ""), compress = "gzip")
 
-# save secciónregression objects
+# save sección regression objects
 save(mean.regs, file = paste(wd, "data/too-big-4-github/dipfed-se-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 #save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2009.RData", sep = ""), compress = "gzip")
 #save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2012.RData", sep = ""), compress = "gzip")
