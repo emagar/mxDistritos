@@ -209,14 +209,6 @@ d$dptc <- as.numeric(d$dptc>0)
 table(d$dpric, useNA = "always")
 table(d$dptc, useNA = "always")
 #
-## Drop
-## # need coalition votes only
-## d$pric <- (d$pri + d$pvem + d$pripvem) * d$dpric; d$pripvem <- NULL
-## d$pri <- d$pri * (1 - d$dpric)
-## d$pvem <- d$pvem * (1 - d$dpric)
-## d$ptc <- (d$pt + d$conve + d$ptconve) * d$dptc; d$ptconve <- NULL
-## d$pt <- d$conve <- d$ptconve <- NULL
-#
 d <- within(d, circun <- edo <- cabecera <- munn <- casilla <- status <- tepjf <- NULL)
 v09 <- d
 #
@@ -265,13 +257,6 @@ d$dprdc <- as.numeric(d$dprdc>0)
 table(d$dpric, useNA = "always")
 table(d$dprdc, useNA = "always")
 #
-## DROP
-## # need coalition votes only
-## d$pric <- (d$pri + d$pvem + d$pric) * d$dpric;
-## d$pri <- d$pri * (1 - d$dpric)
-## d$pvem <- d$pvem * (1 - d$dpric)
-## d$prdc <- (d$prd + d$pt + d$mc + d$prdc) * d$dprdc;
-#
 # clean
 d <- within(d, casilla <- TIPO_CASILLA <- ESTATUS_ACTA <- NULL)
 v12 <- d
@@ -303,14 +288,6 @@ sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
-## DROP
-## # need coalition votes only
-## d$pric <- (d$pri + d$pvem + d$pric) * d$dpric
-## d$pri <- d$pri * (1 - d$dpric)
-## d$pvem <- d$pvem * (1 - d$dpric)
-## d$prdc <- (d$prd + d$pt   + d$prdc)   * d$dprdc
-## d$prd <- d$prd * (1 - d$dprdc)
-## d$pt <- d$pt * (1 - d$dprdc)
 # clean
 d <- within(d, ord <- ID_CASILLA <- TIPO_CASILLA <- EXT_CONTIGUA <- OBSERVACIONES <- NULL)
 v15 <- d
@@ -534,9 +511,6 @@ rm(vot,etiq)
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 # get municipio info to merge into votes
-##################################################################
-## (pending: adapt secciones to 2017 shapefiles to avoid blanks ##
-##################################################################
 muns <- eq[,c("edon","seccion","ife","inegi")]
 
 # match yearly observations (secciones)
@@ -1352,8 +1326,8 @@ save(regs.2018, file = paste(wd, "data/dipfed-mu-regs-2018.RData", sep = ""), co
 
 # save sección regression objects
 save(mean.regs, file = paste(wd, "data/too-big-4-github/dipfed-se-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-#save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2009.RData", sep = ""), compress = "gzip")
-#save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2012.RData", sep = ""), compress = "gzip")
+save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2009.RData", sep = ""), compress = "gzip")
+save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2012.RData", sep = ""), compress = "gzip")
 save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2015.RData", sep = ""), compress = "gzip")
 save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2018.RData", sep = ""), compress = "gzip")
 
