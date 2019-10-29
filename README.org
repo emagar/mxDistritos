@@ -23,14 +23,14 @@ The repository contains maps of Mexican districts used to elect representatives 
     * `pan` = vote share won by the PAN and allies, see the [[noteCoal][note on coalitions]]. 
     * `pri` = vote share won by the PRI and allies, see the [[noteCoal][note on coalitions]].
     * `morena` = vote share won by the left and allies, see [[noteCoal][note on coalitions]].
-    * (`oth` = vote share of candidates fielded minor parties is omitted, it is $1 - pan - pri - morena$.)
+    * (`oth` = vote share of candidates fielded minor parties is omitted, it is [[./graph/readme-math/one-minus.svg]].)
     * `d.pan`, `d.pri`, `d.morena` = first differences, party's vote share change since last election (i.e., pan_{yr} - pan_{yr-3} and so forth).
     * `vhat` variables = vote share predicted for the current year (`yr`) from a linear estimation of the party's performance in five immediately previous elections in the unit. Letting v_{i,t} denote party i's vote share in year t, the equation fitted with OLS in each unit looks thus: [[./graph/readme-math/5-yr.svg]]. (A compositional variable specifiction was used, so the actual equation is slightly different, see [[https://emagar.github.io/residuales-2018/][this post in Spanish]] for details.) The variable reports [[./graph/readme-math/vhat.svg]], the point prediction for the current year.
       - `vhat.pan` = PAN's vote share estimate. 
       - `vhat.pri` = PRI's vote share estimate. 
       - `vhat.morena` = left's vote share estimate.
     * `bhat` variables = point estimates of the slope (b) coefficient from the regression described in the bullet above.
-      - `alphahat` variables = party core support estimate for the unit in 2000-2018 federal diputado elections. See XXXX for estimation details. 
+      - `alphahat` variables = party core support estimate for the unit in 2000--2018 federal diputado elections. See XXXX for estimation details. 
       + `bhat.pan` = PAN's slope estimate. 
       + `bhat.morena` = left's slope estimate. 
     * `alphahat` variables = vote share estimates from a linear prediction for the current year (`yr`) from the party's performance in five immediately previous federal diputado elections in the unit. The equation v_{i,t} = a + bt, t = (yr - 15, yr - 12, yr - 9, yr - 6, yr - 3) estimated via OLS in each unit (municipality/sección) for this purpose. Compositional variable specification used for estimation, see [[https://emagar.github.io/residuales-2018/][this post in Spanish]] for details.
