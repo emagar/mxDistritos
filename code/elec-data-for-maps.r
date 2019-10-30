@@ -742,7 +742,7 @@ setwd(wd)
 load("data/too-big-4-github/tmp.RData")
 
 # manipulate reseccionamiento cases to preserve them in analysis
-source(paste(wd, "code/resecc.r", sep = ""))
+source(paste(wd, "code/resecc-deal-with-splits.r", sep = ""))
 
 ############################################################
 ## ###################################################### ##
