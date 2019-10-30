@@ -4,8 +4,6 @@ Last revision: 2019-10-30
 
 # Export to md: M-x org-md-export-to-markdown
 
-*>>> Under construction (expected completion end of Oct. 2019) <<<*
-
 * Description of /Recent Mexican electoral geography/ repository
 - Author: Eric Magar
 - Email: emagar at itam dot mx
@@ -29,8 +27,8 @@ Election data at two geographic levels were used: the units of observation in th
   + This dataset consolidates and extends excel sheets that IFE/INE distributes periodically. 
   + *Citation for this dataset*: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, /Political Geography/ 57(1):1-12. 
 ** Comparative maps (shapefiles etc.)
-- ~mapasComparados/~ =
-- ~redisProcess/~ =
+- ~mapasComparados/~ = *DESCRIPTION UNDER CONSTRUCTION*
+- ~redisProcess/~ = *DESCRIPTION UNDER CONSTRUCTION*
 ** Descriptive plots and literature
 - ~graph/~ = folder with descriptive plots of some of the measures distributed here. 
 - ~graph/readme-math~ = images used to render math equations across this ~README.md~ file. Ignore them. 
@@ -86,10 +84,10 @@ Electoral alliances are extended nationwide and, in some cases, to other years f
   - ~data/dipfed2015mu-vhat.csv~ = 2015 federal diputado single-member district election statistics. The units are municipalities. Data are municipal aggregates of sección-level returns (i.e. votes from all secciones belonging to a given municipality are added up). The PRI fielded joint candidates with the Green party in some states only, as did the PRD with the PT; both coalitions are extended nationwide for convenience in the analysis (~code/elec-data-for-maps.r~ was used to prepare this file). 
   - Variables in the dataset:<<codebookElec>>
 * Acknowledgements
-I acknowledge financial support from the Asociación Mexicana de Cultura A.C. and CONACYT's Sistema Nacional de Investigadores. Files distributed here systematize data from the [[https://ine.mx][Instituto Nacional Electoral]], I am sincerely grateful for their excellent work producing and distributing election results and associated metadata. I am responsible for mistakes and shortcomings in the data. 
-* below are elements to copy/emulate in this readme file
-  + *Citation for this dataset*: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, /Political Geography/ 57(1):1-12. 
-  + *Citation for this dataset*: Eric Magar (2012) Gubernatorial Coattails in Mexican Congressional Elections, /The Journal of Politics/ 74(2):383-399.
-- ~data/prdf2006-on.csv~
-- +~datosBrutos/~ = large directory containing primary sources+ (dropped from repo due to large size... [[mailto:emagar@itam.mx][mail me]] if you need this).
+I acknowledge financial support from the Asociación Mexicana de Cultura A.C. and CONACYT's Sistema Nacional de Investigadores. Files distributed here systematize/analyze a gigntic volume of data from the [[https://ine.mx][Instituto Nacional Electoral]], I am sincerely grateful for their excellent work producing and distributing election results, maps, and associated metadata. I am responsible for mistakes and shortcomings in the data. 
+# * below are elements to copy/emulate in this readme file
+#   + *Citation for this dataset*: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, /Political Geography/ 57(1):1-12. 
+#   + *Citation for this dataset*: Eric Magar (2012) Gubernatorial Coattails in Mexican Congressional Elections, /The Journal of Politics/ 74(2):383-399.
+# - ~data/prdf2006-on.csv~
+# - +~datosBrutos/~ = large directory containing primary sources+ (dropped from repo due to large size... [[mailto:emagar@itam.mx][mail me]] if you need this).
 
