@@ -28,6 +28,10 @@ Election data at two geographic levels were used: the units of observation in th
   + *Citation for this dataset*: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, /Political Geography/ 57(1):1-12. 
 ** Comparative maps (shapefiles etc.)
 - ~mapasComparados/~ = *DESCRIPTION UNDER CONSTRUCTION*
+- ~mapasComparados/fed/shp/disfed2006~ = contains one folder per state with IFE/INE-produced 2006 federal district digital maps in shapefile format. Maps include polygons for federal single-member diputado districts (~DISTRITO~), state borders (~ENTIDAD~), municipalities (~MUNICIPIO~), secciones electorales (~SECCION~), and polling places (~CASILLA~). The 2006 map was used in the 2006, 2009, 2012, and 2015 congressional races. 
+- ~mapasComparados/fed/shp/disfed2018~ = contains one folder per state with IFE/INE-produced 2018 federal district digital maps in shapefile format. Maps include polygons for federal single-member diputado districts (~DISTRITO~), state borders (~ENTIDAD~), municipalities (~MUNICIPIO~), and secciones electorales (~SECCION~). The 2018 map was used in the 2018 congressional races. 
+- ~mapasComparados/loc/shp/0code/dissolveSecciones.r~ = code to generate state legislative district maps. 
+- ~mapasComparados/loc/shp~ = contains folders with states' legislative district digital maps in shapefile format. District polygons were prepared by dissolving the borders of municipalities and secciones electorales belonging to each district. Two sets of polygons are included for each state: the map that was last used in the 2012--2014 state legislative races and the map that the 2015--2017 redistricting redrew for each state. (A few states include additional sets of polygons.) 
 - ~redisProcess/~ = *DESCRIPTION UNDER CONSTRUCTION*
 ** Descriptive plots and literature
 - ~graph/~ = folder with descriptive plots of some of the measures distributed here. 
