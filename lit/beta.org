@@ -1,0 +1,17 @@
+Classic Capital Asset Pricing Model
+https://www.investopedia.com/articles/06/capm.asp
+
+r = R_f + \beta (R_m - R_f)
+
+where 
+
+r = portfolio's expected return rate
+R_f = risk-free return rate
+R_m = return of the market portfolio
+
+
+Volatility
+
+1) standard deviation
+2) Bollinger bands = moving average +/- one standard deviation
+3) beta measures volatility relative to wider market

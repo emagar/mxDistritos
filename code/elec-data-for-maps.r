@@ -3,12 +3,11 @@
 ## retrieves electoral info from data in another repository: github.com/emagar/elecRturns
 
 ## esto prepara los datos electorales para mapear los distritos de cada estado.
-## el contenido queda guardado en una archivo de datos.
+## el contenido queda guardado en un archivo de datos.
 ## sólo tiene que correrse en caso de cambios.
 rm(list=ls())
 options(width = 140)
 #
-# old #dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/")
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 
@@ -750,7 +749,7 @@ source(paste(wd, "code/resecc-deal-with-splits.r", sep = ""))
 ## ## by choosing s, m, d...                           ## ##
 ## ###################################################### ##
 ############################################################
-agg <- c("m","s","d")[2]
+agg <- c("m","s","d")[1]
 if (agg=="m") {
     ## v91 <- v91m;
     v94 <- v94m; v97 <- v97m; 
@@ -821,6 +820,21 @@ oth <- data.frame(## v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfc
                   v15 = ifelse(v15$efec==0, NA, (v15$mc + v15$pna + v15$ph + v15$indep1 + v15$indep2) / v15$efec),
                   v18 = ifelse(v18$efec==0, NA, (v18$indep1 + v18$indep2) / v18$efec))
 oth <- round(oth, 3)
+#
+# get unit winners: will output winmun or winsec depending on agg
+source(paste(wd, "code/get-winners.r", sep = ""))
+head(winner)
+# save first part of output
+if (agg=="m") {
+    write.csv(winner,
+              file = paste(wd, "data/dipfed-mu-win.csv", sep = ""), row.names = FALSE)
+}
+if (agg=="s") {
+    write.csv(winner,
+              file = paste(wd, "data/dipfed-se-win.csv", sep = ""), row.names = FALSE)
+}
+x
+#
 # transpose to plug columns into new data.frames
 pan <- t(pan)
 pri <- t(pri)
