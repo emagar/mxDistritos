@@ -821,7 +821,7 @@ oth <- data.frame(## v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfc
                   v18 = ifelse(v18$efec==0, NA, (v18$indep1 + v18$indep2) / v18$efec))
 oth <- round(oth, 3)
 #
-# get unit winners: will output winmun or winsec depending on agg
+# get unit winners: will output object winner for chosen agg
 source(paste(wd, "code/get-winners.r", sep = ""))
 head(winner)
 # save first part of output

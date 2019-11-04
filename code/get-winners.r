@@ -3,7 +3,8 @@
 ## to determine municipal and district  ##
 ## winners in each year                 ##
 ##########################################
-# unit winners
+
+# unit winners and margin
 if (agg=="m") {
     winner <- v94[,c("edon","inegi","ife")] # will receive data
 }
@@ -17,7 +18,9 @@ v <- data.frame(pan    = pan   [,1],
                 oth    = oth   [,1])
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
-winner$w94 <- l[,1]
+v <- sortBy(target = v, By = v)
+winner$w94  <- l[,1]
+winner$mg94 <- as.numeric(v[,1]) - as.numeric(v[,2])
 message("1994 done")
 # 1997
 v <- data.frame(pan    = pan   [,2],
@@ -26,7 +29,9 @@ v <- data.frame(pan    = pan   [,2],
                 oth    = oth   [,2])
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
-winner$w97 <- l[,1]
+v <- sortBy(target = v, By = v)
+winner$w97  <- l[,1]
+winner$mg97 <- as.numeric(v[,1]) - as.numeric(v[,2])
 message("1997 done")
 # 2000
 v <- data.frame(pan    = pan   [,3],
@@ -35,7 +40,9 @@ v <- data.frame(pan    = pan   [,3],
                 oth    = oth   [,3])
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
-winner$w00 <- l[,1]
+v <- sortBy(target = v, By = v)
+winner$w00  <- l[,1]
+winner$mg00 <- as.numeric(v[,1]) - as.numeric(v[,2])
 message("2000 done")
 # 2003
 v <- data.frame(pan    = pan   [,4],
@@ -44,7 +51,9 @@ v <- data.frame(pan    = pan   [,4],
                 oth    = oth   [,4])
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
-winner$w03 <- l[,1]
+v <- sortBy(target = v, By = v)
+winner$w03  <- l[,1]
+winner$mg03 <- as.numeric(v[,1]) - as.numeric(v[,2])
 message("2003 done")
 # 2006
 v <- data.frame(pan    = pan   [,5],
@@ -53,7 +62,9 @@ v <- data.frame(pan    = pan   [,5],
                 oth    = oth   [,5])
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
-winner$w06 <- l[,1]
+v <- sortBy(target = v, By = v)
+winner$w06  <- l[,1]
+winner$mg06 <- as.numeric(v[,1]) - as.numeric(v[,2])
 message("2006 done")
 # 2009
 v <- data.frame(pan    = pan   [,6],
@@ -62,7 +73,9 @@ v <- data.frame(pan    = pan   [,6],
                 oth    = oth   [,6])
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
-winner$w09 <- l[,1]
+v <- sortBy(target = v, By = v)
+winner$w09  <- l[,1]
+winner$mg09 <- as.numeric(v[,1]) - as.numeric(v[,2])
 message("2009 done")
 # 2012
 v <- data.frame(pan    = pan   [,7],
@@ -71,7 +84,9 @@ v <- data.frame(pan    = pan   [,7],
                 oth    = oth   [,7])
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
-winner$w12 <- l[,1]
+v <- sortBy(target = v, By = v)
+winner$w12  <- l[,1]
+winner$mg12 <- as.numeric(v[,1]) - as.numeric(v[,2])
 message("2012 done")
 # 2015
 v <- data.frame(pan    = pan   [,8],
@@ -80,7 +95,9 @@ v <- data.frame(pan    = pan   [,8],
                 oth    = oth   [,8])
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
-winner$w15 <- l[,1]
+v <- sortBy(target = v, By = v)
+winner$w15  <- l[,1]
+winner$mg15 <- as.numeric(v[,1]) - as.numeric(v[,2])
 message("2015 done")
 # 2018
 v <- data.frame(pan    = pan   [,9],
@@ -89,7 +106,9 @@ v <- data.frame(pan    = pan   [,9],
                 oth    = oth   [,9])
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
-winner$w18 <- l[,1]
+v <- sortBy(target = v, By = v)
+winner$w18  <- l[,1]
+winner$mg18 <- as.numeric(v[,1]) - as.numeric(v[,2])
 message("2018 done")
 #
 # clean
