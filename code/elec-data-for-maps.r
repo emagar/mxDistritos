@@ -749,7 +749,7 @@ source(paste(wd, "code/resecc-deal-with-splits.r", sep = ""))
 ## ## by choosing s, m, d...                           ## ##
 ## ###################################################### ##
 ############################################################
-agg <- c("m","s","d")[1]
+agg <- c("m","s","d")[2]
 if (agg=="m") {
     ## v91 <- v91m;
     v94 <- v94m; v97 <- v97m; 
@@ -833,7 +833,7 @@ if (agg=="s") {
     write.csv(winner,
               file = paste(wd, "data/dipfed-se-win.csv", sep = ""), row.names = FALSE)
 }
-x
+
 #
 # transpose to plug columns into new data.frames
 pan <- t(pan)
