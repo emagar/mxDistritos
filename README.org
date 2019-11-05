@@ -1,6 +1,6 @@
 #+TITLE: Recent Mexican electoral geography
 #+AUTHOR: Eric Magar
-Last revision: 2019-10-30
+Last revision: 2019-11-05
 
 # Export to md: M-x org-md-export-to-markdown
 
@@ -9,7 +9,7 @@ Last revision: 2019-10-30
 - Email: emagar at itam dot mx
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [[https://cartografia.ife.org.mx/sige7/?cartografia][here]]). Data in this repo is prepared for mapping and preliminary/basic statistical analysis.
 * Files in the repository and how to cite them
-You are free to download and modify the data (see the LICENSE document) provided you give proper credit to this source. Unless otherwise noted next to the file descriptor, the cite is Eric Magar (2019) Recent Mexican electoral geography repository, [[https://github.com/emagar/mxDistritos]].
+You are free to download and modify the data (see the LICENSE document) provided you give proper credit to this source. Unless otherwise noted below the file descriptor, the cite is Eric Magar (2019) Recent Mexican electoral geography repository, [[https://github.com/emagar/mxDistritos]].
 ** Measures of recent party performance for use in maps 
 *** Code
 - ~code/elec-data-for-maps.r~ <<elec-code>> = code manipulates polling place vote returns in federal deputy elections 1994--2018 for use in maps. Data are aggregated up to the municipal- and sección-levels for analysis.
@@ -17,10 +17,14 @@ You are free to download and modify the data (see the LICENSE document) provided
 - ~code/resecc-deal-with-splits.r~ = code to re-aggregate split oversized secciones in order to preserve time-series in the analysis (invoked within ~elec-data-for-maps.r~).
 - ~code/triplots-etc.r~ = code to plot recent party performance quantities (plots saved in ~graph/~ folder). 
 *** Data
-# More measures: number of times unit has been relocated by a party in 1997,2006,2013,2018 (Trelles); more on unit volatility (emm), ENP/Molinar?
-Measures of federal deputy election at two geographic levels are distributed: the units of observation in this set of files are municipalities (files with ~municipio~ in name) or secciones electorales (files with ~seccion~ in name). Quantities of interest are available for 2009, 2012, 2015, and 2018. Variable descriptions [[codebookElec][here]].
+# More measures: 
+# 1. n times unit has been moved by a party in 1997,2006,2013,2018 (Trelles); 
+# 2. turnout (lisnom not complete); 
+# 3. more on unit volatility (emm), 
+# 4. ENP/Molinar?
+Measures of federal deputy elections at two geographic levels are distributed: municipalities (files with ~municipio~ in name) and secciones electorales (files with ~seccion~ in name). Quantities of interest are available for 2009, 2012, 2015, and 2018. Variable descriptions [[codebookElec][here]]. 
 - ~data/*vhat.csv~ files = electoral statistics calculated from federal diputado single-member district elections. Measures of interest are (a) the parties' vote shares in the unit-year; (b) the change in vote share in the unit-year since last election; (c) the predicted vote share for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (d) estimates of each party's core support in the unit for the whole period (~code/elec-data-for-maps.r~ was used to prepare these files). 
-- ~data/*win.csv~ files = More measures of interest: (a) unit-year winners in the period (i.e., party with most votes); (b) margins of victory in the unit-year (i.e., winner's vote share minus runner-up's vote share); (c) the frequency each party won the unit between 1994 and 2018 (~code/get-winners.r~ was used to prepare these files). 
+- ~data/*win.csv~ files = more measures of interest: (a) unit-year winners in the period (i.e., party with most votes); (b) margins of victory in the unit-year (i.e., winner's vote share minus runner-up's vote share); (c) the frequency each party won the unit between 1994 and 2018 (~code/get-winners.r~ was used to prepare these files). 
 - ~data/*mu-regs*.RData~ files = summary statistics of yearly federal deputy municipal-level regressions in [[https://www.r-project.org/][R]] format. (Regression coefficient estimates were used to predict vote shares reported in ~vhat~ files.) Reading each file into an R environment imports a list with three objects named ~pan~, ~morena~, and ~oth~. Each object is a sub-list with [[./graph/readme-math/about-2500.svg]] class 'lm' objects, one for each regression fitted. [[https://emagar.github.io/residuales-2018/][This post in Spanish]] elaborates the method. 
 - ~data/*mu-mean-regs.RData~ = summary statistics of 1994--2018 federal deputy municipal-level regressions in [[https://www.r-project.org/][R]] format. (Regression coefficient estimates were used to estimate party core support in each municipality reported in ~vhat~ files.) Reading each file into an R environment imports a list with three objects named ~pan~, ~morena~, and ~oth~. Each object is a sub-list with [[./graph/readme-math/about-2500.svg]] class 'lm' objects, one for each regression fitted. [[https://emagar.github.io/residuales-2018/][This post in Spanish]] elaborates the method.
 - (~data/dipfed-se-regs*.RData~ and ~data/dipfed-se-mean-regs.RData~ files = sección-level regression summary statistics *not included* in repository due to large size ([[./graph/readme-math/about-66k.svg]] regressions per party-year). Files are available upon [[mailto:emagar@gmail.com][request]].)
@@ -30,7 +34,7 @@ Measures of federal deputy election at two geographic levels are distributed: th
 - ~equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv~ and ~.xlsx~ = historical record of /secciones electorales/ nationwide since 1994 in comma-separated and excel format, respectively. Secciones, which do not traverse municipal borders, are the basic building blocks for districting at both the federal and state levels (see Magar et al. 2017, fn. 9). Each row reports one sección (approx. 69,000 total) and the district it belonged to in four federal congressional district maps (maps inaugurated in 1979, 1997, 2006, and 2018). It also reports the district it would have belonged to in the 2013 map that was rejected prior to adoption. A small but important number of secciones suffered changes through time (the official term is /reseccionamiento/)---most frequently due to under- or over-population, but also after court rulings modifying state or municipal borders; see the `OBSERVACIONES` and its right-adjacent variables). For this reason, the dataset maps secciones-to-districts at each federal election since 1994.  
   + This dataset consolidates and extends excel sheets that IFE/INE distributes periodically. 
   + *Citation for this dataset*: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, /Political Geography/ 57(1):1-12. 
-** Comparative maps (shapefiles etc.)
+** Comparative maps and shapefiles
 - ~mapasComparados/~ = *DESCRIPTION UNDER CONSTRUCTION*
 - ~mapasComparados/fed/shp/disfed2006~ = contains one folder per state with IFE/INE-produced 2006 federal district digital maps in shapefile format. Maps include polygons for federal single-member diputado districts (~DISTRITO~), state borders (~ENTIDAD~), municipalities (~MUNICIPIO~), secciones electorales (~SECCION~), and polling places (~CASILLA~). The 2006 map was used in the 2006, 2009, 2012, and 2015 congressional races. 
 - ~mapasComparados/fed/shp/disfed2018~ = contains one folder per state with IFE/INE-produced 2018 federal district digital maps in shapefile format. Maps include polygons for federal single-member diputado districts (~DISTRITO~), state borders (~ENTIDAD~), municipalities (~MUNICIPIO~), and secciones electorales (~SECCION~). The 2018 map was used in the 2018 congressional races. 
