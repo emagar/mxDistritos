@@ -837,11 +837,11 @@ source(paste(wd, "code/get-winners.r", sep = ""))
 # save first part of output
 if (agg=="m") {
     write.csv(winner,
-              file = paste(wd, "data/dipfed-mu-win.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed-municipio-win.csv", sep = ""), row.names = FALSE)
 }
 if (agg=="s") {
     write.csv(winner,
-              file = paste(wd, "data/dipfed-se-win.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed-seccion-win.csv", sep = ""), row.names = FALSE)
 }
 
 ###########################################
@@ -1371,47 +1371,47 @@ extendCoal.2018 <- within(extendCoal.2018, yr <- edosecn <- NULL)
 ##################
 if (agg=="m") {
     write.csv(extendCoal.2009,
-              file = paste(wd, "data/dipfed2009mu-vhat.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed2009municipio-vhat.csv", sep = ""), row.names = FALSE)
     #
     write.csv(extendCoal.2012,
-              file = paste(wd, "data/dipfed2012mu-vhat.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed2012municipio-vhat.csv", sep = ""), row.names = FALSE)
     #
     write.csv(extendCoal.2015,
-              file = paste(wd, "data/dipfed2015mu-vhat.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed2015municipio-vhat.csv", sep = ""), row.names = FALSE)
     #
     write.csv(extendCoal.2018,
-              file = paste(wd, "data/dipfed2018mu-vhat.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed2018municipio-vhat.csv", sep = ""), row.names = FALSE)
 }
 if (agg=="s") {
     write.csv(extendCoal.2009,
-              file = paste(wd, "data/dipfed2009se-vhat.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed2009seccion-vhat.csv", sep = ""), row.names = FALSE)
     #
     write.csv(extendCoal.2012,
-              file = paste(wd, "data/dipfed2012se-vhat.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed2012seccion-vhat.csv", sep = ""), row.names = FALSE)
     #
     write.csv(extendCoal.2015,
-              file = paste(wd, "data/dipfed2015se-vhat.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed2015seccion-vhat.csv", sep = ""), row.names = FALSE)
     #
     write.csv(extendCoal.2018,
-              file = paste(wd, "data/dipfed2018se-vhat.csv", sep = ""), row.names = FALSE)
+              file = paste(wd, "data/dipfed2018seccion-vhat.csv", sep = ""), row.names = FALSE)
 }
 
 # save municipal regression objects
-save(mean.regs, file = paste(wd, "data/dipfed-mu-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(regs.2009, file = paste(wd, "data/dipfed-mu-regs-2009.RData", sep = ""), compress = "gzip")
-save(regs.2012, file = paste(wd, "data/dipfed-mu-regs-2012.RData", sep = ""), compress = "gzip")
-save(regs.2015, file = paste(wd, "data/dipfed-mu-regs-2015.RData", sep = ""), compress = "gzip")
-save(regs.2018, file = paste(wd, "data/dipfed-mu-regs-2018.RData", sep = ""), compress = "gzip")
+save(mean.regs, file = paste(wd, "data/dipfed-municipio-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(regs.2009, file = paste(wd, "data/dipfed-municipio-regs-2009.RData", sep = ""), compress = "gzip")
+save(regs.2012, file = paste(wd, "data/dipfed-municipio-regs-2012.RData", sep = ""), compress = "gzip")
+save(regs.2015, file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""), compress = "gzip")
+save(regs.2018, file = paste(wd, "data/dipfed-municipio-regs-2018.RData", sep = ""), compress = "gzip")
 
 # save sección regression objects
-save(mean.regs, file = paste(wd, "data/too-big-4-github/dipfed-se-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2009.RData", sep = ""), compress = "gzip")
-save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2012.RData", sep = ""), compress = "gzip")
-save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2015.RData", sep = ""), compress = "gzip")
-save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-se-regs-2018.RData", sep = ""), compress = "gzip")
+save(mean.regs, file = paste(wd, "data/too-big-4-github/dipfed-seccion-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2009.RData", sep = ""), compress = "gzip")
+save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2012.RData", sep = ""), compress = "gzip")
+save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2015.RData", sep = ""), compress = "gzip")
+save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2018.RData", sep = ""), compress = "gzip")
 
 # load regression object
-load(file = paste(wd, "data/dipfed-se-regs-2015.RData", sep = ""))
+load(file = paste(wd, "data/dipfed-seccion-regs-2015.RData", sep = ""))
 summary.lm(regs.2015$morena[[1]])$coef[2,1]
 
 
