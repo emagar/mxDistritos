@@ -844,8 +844,6 @@ if (agg=="s") {
               file = paste(wd, "data/dipfed-se-win.csv", sep = ""), row.names = FALSE)
 }
 
-
-
 ###########################################
 ## prepare manipulated party objects     ##
 ## for time-series and alpha regressions ##
