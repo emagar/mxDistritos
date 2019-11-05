@@ -11,11 +11,13 @@ The repository contains maps of Mexican districts used to elect representatives 
 * Files in the repository and how to cite them
 You are free to download and modify the data (see the LICENSE document) provided you give proper credit to this source. Unless otherwise noted next to the file descriptor, the cite is Eric Magar (2019) Recent Mexican electoral geography repository, [[https://github.com/emagar/mxDistritos]].
 ** Measures of recent party performance for use in maps 
-Election data at two geographic levels were used: the units of observation in this set of files are municipalities (files with ~mu~ in name) or secciones electorales (files with ~se~ in name). Quantities of interest are available for 2009, 2012, 2015, and 2018.
+*** Code
 - ~code/elec-data-for-maps.r~ <<elec-code>> = code manipulates polling place vote returns in federal deputy elections 1994--2018 for use in maps. Data are aggregated up to the municipal- and sección-levels for analysis.
 - ~code/get-winners.r~ = code with sub-routine to produce unit winners (invoked within ~elec-data-for-maps.r~).
 - ~code/resecc-deal-with-splits.r~ = code to re-aggregate split oversized secciones in order to preserve time-series in the analysis (invoked within ~elec-data-for-maps.r~).
 - ~code/triplots-etc.r~ = code to plot recent party performance quantities (plots saved in ~graph/~ folder). 
+*** Data
+Election data at two geographic levels were used: the units of observation in this set of files are municipalities (files with ~mu~ in name) or secciones electorales (files with ~se~ in name). Quantities of interest are available for 2009, 2012, 2015, and 2018.
 - ~data/dipfed*-vhat.csv~ files = electoral statistics calculated from federal diputado single-member district elections. Measures of interest are (a) the parties' vote shares in the unit-year; (b) the change in vote share in the unit-year since last election; (c) the predicted vote share for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (d) estimates of each party's core support in the unit for the whole period (~code/elec-data-for-maps.r~ was used to prepare these files). 
 - ~data/dipfed-*-win.csv~ files = More measures of interest: (a) unit-year winners in the period (i.e., party with most votes); (b) margins of victory in the unit-year (i.e., winner's vote share minus runner-up's vote share); (c) the frequency each party won the unit between 1994 and 2018 (~code/get-winners.r~ was used to prepare these files). 
 # More measures: number of times unit has been relocated by a party in 1997,2006,2013,2018; unit volatility, ENP/Molinar?
