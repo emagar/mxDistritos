@@ -89,6 +89,8 @@ sel.r <- grep("Anulada", d$STATUS) # casillas anuladas
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
+## coalition dummies
+d <- within(d, dpanc <- dpric <- dprdc <- 0)
 # clean
 d <- within(d, casilla <- STATUS <- ID_ELEC <- NULL)
 v94 <- d
@@ -106,6 +108,8 @@ sel.r <- grep("MR", d$STATUS) # casillas anuladas
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
+## coalition dummies
+d <- within(d, dpanc <- dpric <- dprdc <- 0)
 # clean
 d <- within(d, casilla <- STATUS <- ID_ELEC <- NULL)
 v97 <- d
@@ -128,6 +132,7 @@ d <- ag.sec(d, sel.c)
 # district coalition dummies
 d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpanc <- as.numeric(d$dpanc>0)
+d$dpric <- 0
 d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dprdc <- as.numeric(d$dprdc>0)
 table(d$dpanc, useNA = "always")
@@ -153,10 +158,17 @@ d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 # district coalition dummies
+d$dpanc <- 0
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpric <- as.numeric(d$dpric>0)
 table(d$dpric, useNA = "always")
-#
+d$dprdc <- 0
+# aggregate coalitions where present for correct winner assesment
+sel <- which(d$dpric==1)
+d[sel,] <- within(d[sel,], {
+    pric <- pri + pric + pvem;
+    pri <- pvem <- 0
+})
 # clean
 d <- within(d, casilla <- status <- ID_ELEC <- NULL)
 v03 <- d
@@ -178,6 +190,11 @@ sel.r <- grep("Anulada|No ", d$status) # casillas anuladas no instaladas
 d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
+## coalition dummies
+d <- within(d, {
+    dpanc <- 0;
+    dpric <- dprdc <- 1
+})
 # clean
 d <- within(d, casilla <- ID_ELEC <- ord <- status <- nota <- valid <- NULL)
 v06 <- d
@@ -201,13 +218,21 @@ d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 # district coalition dummies
+d$dpanc <- 0
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- 0
 d$dptc <- ave(d$ptc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)   # if >0 will infer district coalition
 d$dptc <- as.numeric(d$dptc>0)
 table(d$dpric, useNA = "always")
 table(d$dptc, useNA = "always")
-#
+# aggregate coalitions where present for correct winner assesment
+sel <- which(d$dpric==1)
+d[sel,] <- within(d[sel,], {
+    pric <- pri + pric + pvem;
+    pri <- pvem <- 0
+})
+# clean
 d <- within(d, circun <- edo <- cabecera <- munn <- casilla <- status <- tepjf <- NULL)
 v09 <- d
 #
@@ -242,20 +267,30 @@ sel.c <-            c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","ef
 d <- to.num(d,sel.c) # clean data
 d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + pric + prdc)
 d <- within(d, tot <- nul <- nr <- NULL)
-#
 # recode status
 table(d$ESTATUS_ACTA) # missing codebook, quizás 3 y 4 que sólo tienen NAs sean anulados/noentregados o algo así
 d[which(d$ESTATUS_ACTA==3),]
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
-#
+# coalition dummies
+d$dpanc <- 0
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)   # if >0 will infer district coalition
 d$dprdc <- as.numeric(d$dprdc>0)
 table(d$dpric, useNA = "always")
 table(d$dprdc, useNA = "always")
-#
+# aggregate coalitions where present for correct winner assesment
+sel <- which(d$dpric==1)
+d[sel,] <- within(d[sel,], {
+    pric <- pri + pric + pvem;
+    pri <- pvem <- 0
+})
+sel <- which(d$dprdc==1)
+d[sel,] <- within(d[sel,], {
+    prdc <- prd + prdc + pt + mc;
+    prd <- pt <- mc <- 0
+})
 # clean
 d <- within(d, casilla <- TIPO_CASILLA <- ESTATUS_ACTA <- NULL)
 v12 <- d
@@ -276,12 +311,25 @@ d <- to.num(d,sel.c) # clean data
 d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + morena + ph + pes + pric + prdc + indep1 + indep2)
 d <- within(d, tot <- nul <- nr <- NULL)
 #
+d$dpanc <- 0
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dprdc <- as.numeric(d$dprdc>0)
+d$morenac <- 0
 table(d$dpric, useNA = "always")
 table(d$dprdc, useNA = "always")
+# aggregate coalitions where present for correct winner assesment
+sel <- which(d$dpric==1)
+d[sel,] <- within(d[sel,], {
+    pric <- pri + pric + pvem;
+    pri <- pvem <- 0
+})
+sel <- which(d$dprdc==1)
+d[sel,] <- within(d[sel,], {
+    prdc <- prd + prdc + pt;
+    prd <- pt <- 0
+})
 #
 sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
 d[sel.r,sel.c] <- 0 # anuladas to 0
@@ -318,6 +366,22 @@ d$dmorenac <- as.numeric(d$dmorenac>0)
 table(d$dpanc, useNA = "always")
 table(d$dpric, useNA = "always")
 table(d$dmorenac, useNA = "always")
+# aggregate coalitions where present for correct winner assesment
+sel <- which(d$dpanc==1)
+d[sel,] <- within(d[sel,], {
+    panc <- pan + panc + prd + mc;
+    pan <- prd <- mc <- 0
+})
+sel <- which(d$dpric==1)
+d[sel,] <- within(d[sel,], {
+    pric <- pri + pric + pvem + pna;
+    pri <- pvem <- pna <- 0
+})
+sel <- which(d$dmorenac==1)
+d[sel,] <- within(d[sel,], {
+    morenac <- morena + morenac + pt + pes;
+    morena <- pt  <- pes <- 0
+})
 #
 # sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
 #d[sel.r,sel.c] <- 0 # anuladas to 0
@@ -766,6 +830,22 @@ if (agg=="d") {
     v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v18 <- v18d;
 }
 
+#
+# get unit winners and margins: will output object winner for chosen agg
+source(paste(wd, "code/get-winners.r", sep = ""))
+#head(winner)
+# save first part of output
+if (agg=="m") {
+    write.csv(winner,
+              file = paste(wd, "data/dipfed-mu-win.csv", sep = ""), row.names = FALSE)
+}
+if (agg=="s") {
+    write.csv(winner,
+              file = paste(wd, "data/dipfed-se-win.csv", sep = ""), row.names = FALSE)
+}
+
+
+
 ###########################################
 ## prepare manipulated party objects     ##
 ## for time-series and alpha regressions ##
@@ -820,19 +900,6 @@ oth <- data.frame(## v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfc
                   v15 = ifelse(v15$efec==0, NA, (v15$mc + v15$pna + v15$ph + v15$indep1 + v15$indep2) / v15$efec),
                   v18 = ifelse(v18$efec==0, NA, (v18$indep1 + v18$indep2) / v18$efec))
 oth <- round(oth, 3)
-#
-# get unit winners: will output object winner for chosen agg
-source(paste(wd, "code/get-winners.r", sep = ""))
-head(winner)
-# save first part of output
-if (agg=="m") {
-    write.csv(winner,
-              file = paste(wd, "data/dipfed-mu-win.csv", sep = ""), row.names = FALSE)
-}
-if (agg=="s") {
-    write.csv(winner,
-              file = paste(wd, "data/dipfed-se-win.csv", sep = ""), row.names = FALSE)
-}
 
 #
 # transpose to plug columns into new data.frames
