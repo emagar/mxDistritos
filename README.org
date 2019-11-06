@@ -18,10 +18,12 @@ You are free to download and modify the data (see the LICENSE document) provided
 - ~code/triplots-etc.r~ = code to plot recent party performance quantities (plots saved in ~graph/~ folder). 
 *** Data
 # More measures: 
+# 0. Add efec for each year
 # 1. n times unit has been moved by a party in 1997,2006,2013,2018 (Trelles); 
 # 2. turnout (lisnom not complete); 
 # 3. more on unit volatility (emm), 
 # 4. ENP/Molinar?
+# 5. DSI (for distric-level measures)
 Measures of federal deputy elections at two geographic levels are distributed: municipalities (files with ~municipio~ in name) and secciones electorales (files with ~seccion~ in name). Quantities of interest are available for 2009, 2012, 2015, and 2018. Variable descriptions [[codebookElec][here]]. 
 - ~data/*vhat.csv~ files = electoral statistics calculated from federal diputado single-member district elections. Measures of interest are (a) the parties' vote shares in the unit-year; (b) the change in vote share in the unit-year since last election; (c) the predicted vote share for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (d) estimates of each party's core support in the unit for the whole period (~code/elec-data-for-maps.r~ was used to prepare these files). 
 - ~data/*win.csv~ files = more measures of interest: (a) unit-year winners in the period (i.e., party with most votes); (b) margins of victory in the unit-year (i.e., winner's vote share minus runner-up's vote share); (c) the frequency each party won the unit between 1994 and 2018 (~code/get-winners.r~ was used to prepare these files). 
@@ -41,6 +43,8 @@ Measures of federal deputy elections at two geographic levels are distributed: m
 - ~mapasComparados/loc/shp/0code/dissolveSecciones.r~ = code to generate state legislative district maps. 
 - ~mapasComparados/loc/shp~ = contains folders with states' legislative district digital maps in shapefile format. District polygons were prepared by dissolving the borders of municipalities and secciones electorales belonging to each district. Two sets of polygons are included for each state: the map that was last used in the 2012--2014 state legislative races and the map that the 2015--2017 redistricting redrew for each state. (A few states include additional sets of polygons.) 
 - ~redisProcess/~ = *DESCRIPTION UNDER CONSTRUCTION*
+- ~redisProcess/ineRedist2017/deJsonConEtiquetas/fed/~ = one comma-separated file for each state describing the federal redistricting process in 2017 (how the 2018 map was made). Each file lists the district that each sección electoral belongs to in different versions of the map: the machine-generated first blueprint (escenario1); the second version that incorporated a first round of party proposals (escenario2); the final map that was submitted for approval by the Election Board's Council General after a second round of party proposals (escenario3); and the full set of proposals that state and national parties made to the blueprint and the second version of the map (e.g. in file ~jalFed.csv~, morena_clv1 is MORENA's Aguascalientes state ("l" for local) chapter's proposal to the first blueprint; pan_cnv2 is the national ("n" for nacional) PAN's  proposal to the second version of the map; and so forth.) 
+- ~redisProcess/ineRedist2017/deJsonConEtiquetas/loc/~ = one comma-separated file for each state describing the state redistricting processes in 2015--17. Files have the same format as those above. 
 ** Descriptive plots and literature
 - ~graph/~ = folder with descriptive plots of some of the measures distributed here. 
 - ~graph/readme-math~ = images used to render math equations across this ~README.md~ file. Ignore them. 
