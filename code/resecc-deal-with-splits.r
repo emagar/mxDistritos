@@ -1,5 +1,9 @@
-# code to re-construct some re-seccionamiento cases
-# invoked from elec-data-for-maps
+#############################################################
+## ####################################################### ##
+## ## code to re-construct some re-seccionamiento cases ## ##
+## ## invoked from elec-data-for-maps                   ## ##
+## ####################################################### ##
+#############################################################
 
 # handle split cases --- since sección "dada de baja", can easily reaggregate votes after 
 # split's year w/o causing trouble, sección unused afterwards
