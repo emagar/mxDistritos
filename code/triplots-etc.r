@@ -100,6 +100,14 @@ la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .1
     points(datos, pch = 20, cex = cex.pts, col = color)
 }
 
+##################
+## party colors ##
+##################
+col.pan <-    rgb(.18,.24,.73, alpha = .2) # moderate blue
+col.pri <-    rgb(.89,.17,.17, alpha = .2) # bright red
+col.morena <- rgb(.55,.27,.07, alpha = .2)
+
+
 
 ############################################################
 ## ###################################################### ##
@@ -110,18 +118,16 @@ la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .1
 #####################
 ## municipio-level ##
 #####################
-extendCoal.2015 <- read.csv(file = paste(wd, "data/dipfed2015mu-vhat.csv", sep = ""), stringsAsFactors = FALSE)
-extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed2018mu-vhat.csv", sep = ""), stringsAsFactors = FALSE)
+extendCoal.2015 <- read.csv(file = paste(wd, "data/dipfed2015municipio-vhat.csv", sep = ""), stringsAsFactors = FALSE)
+extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed2018municipio-vhat.csv", sep = ""), stringsAsFactors = FALSE)
 
 
-##################
-## party colors ##
-##################
-col.pan <-    rgb(.18,.24,.73, alpha = .2) # moderate blue
-col.pri <-    rgb(.89,.17,.17, alpha = .2) # bright red
-col.morena <- rgb(.55,.27,.07, alpha = .2)
-
-
+####################
+## ############## ##
+## ## triplots ## ##
+## ############## ##
+####################
+#
 ##########
 ## 2018 ##
 ##########
@@ -178,7 +184,7 @@ la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main = "Pronóstico 2015
 ###################
 ## sección-level ##
 ###################
-extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed2018se-vhat.csv", sep = ""), stringsAsFactors = FALSE)
+extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed2018seccion-vhat.csv", sep = ""), stringsAsFactors = FALSE)
 
 ##########
 ## 2018 ##
@@ -298,6 +304,25 @@ fit <- lm((pan - vhat.pan) ~ poly(alphahat.pan,3), data = tmp)
 lo.hi <- round(quantile(tmp$alphahat.pan, probs = c(.02,.98)),2)
 xx <- seq(from = lo.hi[1], to = lo.hi[2], by = .01)
 lines(xx, predict.lm(fit, data.frame(alphahat.pan=xx)), col = "black", lwd = 1.5)
+#dev.off()
+
+
+###################
+## alpha vs beta ##
+###################
+d <- read.csv(file = paste(wd, "data/dipfed2015seccion-vhat.csv", sep = ""), stringsAsFactors = FALSE)
+head(d)
+
+#png(file = paste(wd, "graph/tmp.png", sep = ""))
+plot(d$alphahat.pan, d$betahat.pan, type = "n")
+abline(h=0, lty = 2)
+points(x = d$alphahat.pan, y = d$betahat.pan, pch = 20, cex = .15, col = col.pan)
+#dev.off()
+
+#png(file = paste(wd, "graph/tmp.png", sep = ""))
+plot(d$alphahat.morena, d$betahat.morena, type = "n")
+abline(h=0, lty = 2)
+points(x = d$alphahat.morena, y = d$betahat.morena, pch = 20, cex = .15, col = col.morena)
 #dev.off()
 
 

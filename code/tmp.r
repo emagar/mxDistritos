@@ -1,37 +1,12 @@
-# version 1: extend partial coalitions across the board
-# consolidate coalition share
+rm(list=ls())
+options(width = 140)
+#
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(wd)
 
 
-## ##########
-## ## 1991 ##
-## ##########
-##########
-## 1994 ##
-##########
-##########
-## 1997 ##
-##########
-##########
-## 2000 ##
-##########
-##########
-## 2003 ##
-##########
-##########
-## 2006 ##
-##########
-##########
-## 2009 ##
-##########
-##########
-## 2012 ##
-##########
-##########
-## 2015 ##
-##########
-##########
-## 2018 ##
-##########
+
+
 
 
 1. necesito generalizar dpanc dpric dprdc para todos los años

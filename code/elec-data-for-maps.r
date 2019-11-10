@@ -53,27 +53,21 @@ to.num <- function(d = d, sel.c = sel.c){
 ## ## read seccion-level data ## ##
 ## ############################# ##
 ###################################
-## out because missing tons of secciones (n max = 653) GET CASILLA DATA AGAIN
 ## ##########
 ## ## 1991 ##
 ## ##########
 ## d <- read.csv("dip1991.csv", header=TRUE, stringsAsFactors=FALSE)
-## colnames(d) <- tolower(colnames(d))
-## colnames(d)[colnames(d)=="secc"] <- "seccion"
-## colnames(d)[colnames(d)=="distrito"] <- "disn"
-## colnames(d)[colnames(d)=="id_ent"] <- "edon"
-## colnames(d)[colnames(d)=="id_mpio"] <- "munn"
 ## d <- d[order(d$edon, d$seccion),]
-## sel.c <-            c("pan","pri","parm","pdm","pfcrn","pps","prd","pt","pem","prt","efec")
+## sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
 ## d <- to.num(d,sel.c) # clean data
-## d <- within(d, efec <- pan + pri + parm + pdm + pfcrn + pps + prd + pt + pem + prt)
-## d <- within(d, total <- nulos <- no_reg <- validos <- link <- NULL)
-## sel.r <- grep("Anulada", d$status) # casillas anuladas
+## d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + pdm + prt + pem + pt)
+## sel.r <- grep("Anulada", d$estatus) # casillas anuladas
 ## d[sel.r,sel.c] <- 0 # anuladas to 0
+## d <- within(d, tot <- nul <- nr <- estatus <- NULL)
 ## ## aggregate seccion-level votes ##
-##  <- ag.sec(d, sel.c)
+## d <- ag.sec(d, sel.c)
 ## # clean
-## d <- within(d, casilla <- status <- id_elec <- NULL)
+## d <- within(d, casilla <- NULL)
 ## v91 <- d
 #
 ##########
@@ -575,13 +569,14 @@ tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 # get municipio info to merge into votes
 muns <- eq[,c("edon","seccion","ife","inegi")]
+eq[1,]
 
 # match yearly observations (secciones)
 #dim(v06); dim(v09); dim(v12); dim(v15) # something amiss in 2009?
-
 ## v91 <- within(v91, {
 ##     edosecn <- edon*10000 + seccion;
-##     d91     <- 1;})
+##     d91     <- 1;
+## })
 v94 <- within(v94, {
     edosecn <- edon*10000 + seccion;
     d94     <- 1;
@@ -618,12 +613,12 @@ v18 <- within(v18, {
     edosecn <- edon*10000 + seccion;
     d18    <- 1;
 })
-# dummies d00 to d18 indicate if seccion exists each year
-#tmp <- merge(x=v91[,c("edosecn","d91")], y=v94[,c("edosecn","d94")], by = "edosecn", all = TRUE)
+# dummies d91 to d18 indicate if seccion exists each year
+## tmp <- merge(x=v91[,c("edosecn","d91")], y=v94[,c("edosecn","d94")], by = "edosecn", all = TRUE)
+## tmp <- merge(x=tmp,                      y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
 tmp <- merge(x=v94[,c("edosecn","d94")], y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v00[,c("edosecn","d00")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
-#tmp <- merge(x=v00[,c("edosecn","d00")], y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v06[,c("edosecn","d06")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v09[,c("edosecn","d09")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v12[,c("edosecn","d12")], by = "edosecn", all = TRUE)
@@ -665,12 +660,14 @@ v15 <- tmp.func(v15)
 v18 <- tmp.func(v18)
 rm(tmp,tmp.func) # clean
 
-# consolidate municipios
-# before secciones are manipulated to deal with reseccionamiento
+###################################################
+## consolidate municipios before secciones       ##
+## are manipulated to deal with reseccionamiento ##
+###################################################
 muns$edosecn <- muns$edon*10000 + muns$seccion
 # add municipio names to votes
 sel.drop <- which(colnames(muns) %in% c("edon","seccion")) # do not merge these columns
-## v91 <- merge(x = v91, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v91$munn <- NULL
+# v91 <- merge(x = v91, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v91$munn <- NULL
 v94 <- merge(x = v94, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v94$munn <- NULL
 v97 <- merge(x = v97, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v97$munn <- NULL
 v00 <- merge(x = v00, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v00$munn <- NULL
@@ -696,7 +693,7 @@ ag.mun <- function(d=d, sel.c=sel.c){
 ## ## 1991 ##
 ## ##########
 ## d <- v91; d[is.na(d)] <- 0
-## sel.c <- c("pan","pri","parm","pdm","pfcrn","pps","prd","pt","pem","prt","efec")
+## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
 ## d <- ag.mun(d,sel.c)
 ## d$edosecn <- d$seccion <- NULL
 ## v91m <- d
@@ -789,10 +786,46 @@ v18m <- d
 ## dim(v91m);
 dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); 
 # rename section-level aggregates to free v00 v03 etc for general use
+## v91s <- v91;
 v94s <- v94; v97s <- v97; 
 v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18;
 #
-rm(v94,v97,v00,v03,v06,v09,v12,v15,v18)
+rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
+
+################################################################################
+## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly ##
+## Until that is fixed, this aggregates municipios in an ad-hoc fashion to    ##
+## re-do v91m properly                                                        ##
+################################################################################
+## d <- read.csv("dip1991.csv", header=TRUE, stringsAsFactors=FALSE)
+## d <- d[order(d$edon, d$seccion),]
+## sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+## d <- to.num(d,sel.c) # clean data
+## d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + pdm + prt + pem + pt)
+## sel.r <- grep("Anulada", d$estatus) # casillas anuladas
+## d[sel.r,sel.c] <- 0 # anuladas to 0
+## d <- within(d, tot <- nul <- nr <- estatus <- NULL)
+## ## aggregate municipio-level votes ##
+## sel.c <- which(colnames(d) %in% sel.c); # extract indices
+## for (i in sel.c){
+##     #i <- sel.c[1] #debug
+##     d[,i] <- ave(d[,i], as.factor(paste(d$edon, d$mun)), FUN=sum, na.rm=TRUE)
+## }
+## sel.r <- which(duplicated(as.factor(paste(d$edon, d$mun)))==TRUE)
+## d <- d[-sel.r,]
+## # clean
+## d <- within(d, disn <- seccion <- casilla <- NULL)
+## # export to process so that municipios appear in same order as remainder of v..m files
+## # write.csv(d, file = "tmp91.csv", row.names=FALSE)
+# load manipulated version
+d <- read.csv("../municipios/dipfed1991.csv", header=TRUE, stringsAsFactors=FALSE)
+v91m <- d
+
+# merge mun to eq and export
+d <- d[,c("edon","inegi","ife","mun","mun2","nota")]
+eq2 <- merge(x=eq, y=d, all=TRUE)
+d[1,]
+
 
 # debug
 setwd(wd)
