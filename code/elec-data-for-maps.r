@@ -569,7 +569,6 @@ tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 # get municipio info to merge into votes
 muns <- eq[,c("edon","seccion","ife","inegi")]
-eq[1,]
 
 # match yearly observations (secciones)
 #dim(v06); dim(v09); dim(v12); dim(v15) # something amiss in 2009?
@@ -683,9 +682,11 @@ v18 <- merge(x = v18, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y 
 #################################################
 ag.mun <- function(d=d, sel.c=sel.c){
     for (i in 1:length(sel.c)){
-        d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$inegi, FUN=sum, na.rm=TRUE)
+        # d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$inegi, FUN=sum, na.rm=TRUE) # use inegi codes
+        d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$ife, FUN=sum, na.rm=TRUE) # use ife codes
     }
-    sel.r <- which(duplicated(d$edon*1000+d$inegi)==TRUE)
+    # sel.r <- which(duplicated(d$edon*1000+d$inegi)==TRUE) # use inegi codes
+    sel.r <- which(duplicated(d$edon*1000+d$ife)==TRUE) # use ife codes
     d <- d[-sel.r,]
     return(d)
 }
@@ -792,16 +793,6 @@ v09m <- within(v09m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18
 v12m <- within(v12m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
 v15m <- within(v15m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
 v18m <- within(v18m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
-#
-# verify symmetric dimensionality
-## dim(v91m);
-dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); 
-# rename section-level aggregates to free v00 v03 etc for general use
-## v91s <- v91;
-v94s <- v94; v97s <- v97; 
-v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18;
-#
-rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
 
 ################################################################################
 ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly ##
@@ -829,11 +820,17 @@ rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
 ## # export to process so that municipios appear in same order as remainder of v..m files
 ## # write.csv(d, file = "tmp91.csv", row.names=FALSE)
 # load manipulated version
-d <- read.csv("../municipios/dipfed1991.csv", header=TRUE, stringsAsFactors=FALSE)
-dim(d)
-v94m[1,]
+d <- read.csv(paste(dd, "../municipios/dipfed1991.csv", sep = ""), header=TRUE, stringsAsFactors=FALSE)
 v91m <- d
 
+# verify symmetric dimensionality
+dim(v91m); dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); 
+# rename section-level aggregates to free v00 v03 etc for general use
+## v91s <- v91;
+v94s <- v94; v97s <- v97; 
+v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18;
+#
+rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
 
 # debug
 setwd(wd)
@@ -895,7 +892,7 @@ if (agg=="s") {
 #
 # version 1: extend partial coalitions across the board
 # shares
-pan <- data.frame(## v91 = ifelse(v91$efec==0, NA,  v91$pan  / v91$efec),
+pan <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pan  / v91$efec),
                   v94 = ifelse(v94$efec==0, NA,  v94$pan  / v94$efec),
                   v97 = ifelse(v97$efec==0, NA,  v97$pan  / v97$efec),
                   v00 = ifelse(v00$efec==0, NA,  v00$panc / v00$efec),
@@ -907,7 +904,7 @@ pan <- data.frame(## v91 = ifelse(v91$efec==0, NA,  v91$pan  / v91$efec),
                   v18 = ifelse(v18$efec==0, NA, (v18$pan + v18$panc + v18$prd + v18$mc) / v18$efec))
 pan <- round(pan, 3)
 #
-pri <- data.frame(## v91 = ifelse(v91$efec==0, NA,  v91$pri  / v91$efec),
+pri <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pri  / v91$efec),
                   v94 = ifelse(v94$efec==0, NA,  v94$pri  / v94$efec),
                   v97 = ifelse(v97$efec==0, NA,  v97$pri  / v97$efec),
                   v00 = ifelse(v00$efec==0, NA,  v00$pri / v00$efec),
@@ -919,7 +916,7 @@ pri <- data.frame(## v91 = ifelse(v91$efec==0, NA,  v91$pri  / v91$efec),
                   v18 = ifelse(v18$efec==0, NA, (v18$pri + v18$pric + v18$pvem + v18$pna) / v18$efec))
 pri <- round(pri, 3)
 #
-morena <- data.frame(## v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
+morena <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
                      v94 = ifelse(v94$efec==0, NA,  v94$prd  / v94$efec),
                      v97 = ifelse(v97$efec==0, NA,  v97$prd  / v97$efec),
                      v00 = ifelse(v00$efec==0, NA,  v00$prdc / v00$efec),
@@ -931,7 +928,7 @@ morena <- data.frame(## v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
                      v18 = ifelse(v18$efec==0, NA, (v18$morena + v18$morenac + v18$pt + v18$pes) / v18$efec))
 morena <- round(morena, 3)
 #
-oth <- data.frame(## v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfcrn + v91$pps + v91$pem + v91$prt) / v91$efec),
+oth <- data.frame(v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfcrn + v91$pps + v91$pem + v91$prt) / v91$efec),
                   v94 = ifelse(v94$efec==0, NA, (v94$pps + v94$pfcrn + v94$parm + v94$uno.pdm + v94$pt + v94$pvem) / v94$efec),
                   v97 = ifelse(v97$efec==0, NA, (v97$pc + v97$pt + v97$pvem + v97$pps + v97$pdm) / v97$efec),
                   v00 = ifelse(v00$efec==0, NA, (v00$pcd + v00$parm + v00$dsppn) / v00$efec),
@@ -943,7 +940,7 @@ oth <- data.frame(## v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfc
                   v18 = ifelse(v18$efec==0, NA, (v18$indep1 + v18$indep2) / v18$efec))
 oth <- round(oth, 3)
 #
-efec <- data.frame(## v91 = v91$efec,
+efec <- data.frame(v91 = v91$efec,
                    v94 = v94$efec,
                    v97 = v97$efec,
                    v00 = v00$efec,
@@ -966,7 +963,7 @@ extendCoal <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.fra
 # loop over municipios/secciones
 for (i in 1:nrow(v00)){
     #i <- 81 # debug
-    tmp <- data.frame(yr = seq(from=1994, to=2018, by=3),
+    tmp <- data.frame(yr = seq(from=1991, to=2018, by=3),
                       pan = pan[,i],
                       pri = pri[,i],
                       morena = morena[,i],
@@ -993,63 +990,63 @@ for (i in 1:nrow(v00)){
 }
 #
 # datos para regresión de alfa
-yr.means <- data.frame(yr = seq(1994,2018,3),
-                       pan    = rep(NA,9),
-                       pri    = rep(NA,9),
-                       morena = rep(NA,9),
-                       oth    = rep(NA,9))
+yr.means <- data.frame(yr = seq(1991,2018,3),
+                       pan    = rep(NA,10),
+                       pri    = rep(NA,10),
+                       morena = rep(NA,10),
+                       oth    = rep(NA,10))
 #cs <- function(x) colSums(x, na.rm=TRUE)
 cs <- function(x) colSums(x[x$dunbaja==0,], na.rm=TRUE) # drops secciones that received aggregates upon splitting
 #
-## yr.means$pan[1]    <-  cs(v91s)["pan"]                                                         / cs(v91s)["efec"]
-## yr.means$pri[1]    <-  cs(v91s)["pri"]                                                         / cs(v91s)["efec"]
-## yr.means$morena[1] <-  cs(v91s)["prd"]                                                         / cs(v91s)["efec"]
-## yr.means$oth[1]    <- (cs(v91s)["efec"] - cs(v91s)["pan"] - cs(v91s)["pri"] - cs(v91s)["pri"]) / cs(v91s)["efec"]
+yr.means$pan   [1] <-  cs(v91s)["pan"]                                                         / cs(v91s)["efec"]
+yr.means$pri   [1] <-  cs(v91s)["pri"]                                                         / cs(v91s)["efec"]
+yr.means$morena[1] <-  cs(v91s)["prd"]                                                         / cs(v91s)["efec"]
+yr.means$oth   [1] <- (cs(v91s)["efec"] - cs(v91s)["pan"] - cs(v91s)["pri"] - cs(v91s)["prd"]) / cs(v91s)["efec"]
 #
-yr.means$pan[1]    <-  cs(v94s)["pan"]                                                         / cs(v94s)["efec"]
-yr.means$pri[1]    <-  cs(v94s)["pri"]                                                         / cs(v94s)["efec"]
-yr.means$morena[1] <-  cs(v94s)["prd"]                                                         / cs(v94s)["efec"]
-yr.means$oth[1]    <- (cs(v94s)["efec"] - cs(v94s)["pan"] - cs(v94s)["pri"] - cs(v94s)["prd"]) / cs(v94s)["efec"]
+yr.means$pan   [2] <-  cs(v94s)["pan"]                                                         / cs(v94s)["efec"]
+yr.means$pri   [2] <-  cs(v94s)["pri"]                                                         / cs(v94s)["efec"]
+yr.means$morena[2] <-  cs(v94s)["prd"]                                                         / cs(v94s)["efec"]
+yr.means$oth   [2] <- (cs(v94s)["efec"] - cs(v94s)["pan"] - cs(v94s)["pri"] - cs(v94s)["prd"]) / cs(v94s)["efec"]
+#                
+yr.means$pan   [3] <-  cs(v97s)["pan"]                                                         / cs(v97s)["efec"]
+yr.means$pri   [3] <-  cs(v97s)["pri"]                                                         / cs(v97s)["efec"]
+yr.means$morena[3] <-  cs(v97s)["prd"]                                                         / cs(v97s)["efec"]
+yr.means$oth   [3] <- (cs(v97s)["efec"] - cs(v97s)["pan"] - cs(v97s)["pri"] - cs(v97s)["prd"]) / cs(v97s)["efec"]
+#                
+yr.means$pan   [4] <-  cs(v00s)["panc"]                    / cs(v00s)["efec"]
+yr.means$pri   [4] <-  cs(v00s)["pri"]                     / cs(v00s)["efec"]
+yr.means$morena[4] <-  cs(v00s)["prdc"]                    / cs(v00s)["efec"]
+yr.means$oth   [4] <- (cs(v00s)["pcd"] + cs(v00s)["parm"]) / cs(v00s)["efec"]
+#                
+yr.means$pan   [5] <-   cs(v03s)["pan"]                                                                         / cs(v03s)["efec"]
+yr.means$pri   [5] <-  (cs(v03s)["pri"] + cs(v03s)["pric"] + cs(v03s)["pvem"])                                  / cs(v03s)["efec"]
+yr.means$morena[5] <-  (cs(v03s)["prd"] + cs(v03s)["pt"]   + cs(v03s)["conve"])                                 / cs(v03s)["efec"]
+yr.means$oth   [5] <-  (cs(v03s)["psn"] + cs(v03s)["pas"]  + cs(v03s)["mp"] + cs(v03s)["plm"] + cs(v03s)["fc"]) / cs(v03s)["efec"]
+#                
+yr.means$pan   [6] <-   cs(v06s)["pan"]                     / cs(v06s)["efec"]
+yr.means$pri   [6] <-   cs(v06s)["pric"]                    / cs(v06s)["efec"]
+yr.means$morena[6] <-   cs(v06s)["prdc"]                    / cs(v06s)["efec"]
+yr.means$oth   [6] <-  (cs(v06s)["pna"] + cs(v06s)["asdc"]) / cs(v06s)["efec"]
+#                
+yr.means$pan   [7] <-   cs(v09s)["pan"]                                                           / cs(v09s)["efec"]
+yr.means$pri   [7] <-  (cs(v09s)["pri"] + cs(v09s)["pric"] + cs(v09s)["pvem"])                    / cs(v09s)["efec"]
+yr.means$morena[7] <-  (cs(v09s)["prd"] + cs(v09s)["pt"]   + cs(v09s)["ptc"] + cs(v09s)["conve"]) / cs(v09s)["efec"]
+yr.means$oth   [7] <-  (cs(v09s)["pna"] + cs(v09s)["psd"])                                        / cs(v09s)["efec"]
+#                
+yr.means$pan   [8] <-    cs(v12s)["pan"]                                                       / cs(v12s)["efec"]
+yr.means$pri   [8] <-   (cs(v12s)["pri"] + cs(v12s)["pric"] + cs(v12s)["pvem"])                / cs(v12s)["efec"]
+yr.means$morena[8] <-   (cs(v12s)["prd"] + cs(v12s)["prdc"] + cs(v12s)["pt"] + cs(v12s)["mc"]) / cs(v12s)["efec"]
+yr.means$oth   [8] <-    cs(v12s)["pna"]                                                       / cs(v12s)["efec"]
+#                
+yr.means$pan   [9] <-    cs(v15s)["pan"]                                                                                / cs(v15s)["efec"]
+yr.means$pri   [9] <-   (cs(v15s)["pri"] + cs(v15s)["pric"] + cs(v15s)["pvem"])                                         / cs(v15s)["efec"]
+yr.means$morena[9] <-   (cs(v15s)["prd"] + cs(v15s)["prdc"] + cs(v15s)["pt"] + cs(v15s)["morena"] + cs(v15s)["pes"])    / cs(v15s)["efec"]
+yr.means$oth   [9] <-   (cs(v15s)["mc"]  + cs(v15s)["pna"]  + cs(v15s)["ph"] + cs(v15s)["indep1"] + cs(v15s)["indep2"]) / cs(v15s)["efec"]
 #
-yr.means$pan[2]    <-  cs(v97s)["pan"]                                                         / cs(v97s)["efec"]
-yr.means$pri[2]    <-  cs(v97s)["pri"]                                                         / cs(v97s)["efec"]
-yr.means$morena[2] <-  cs(v97s)["prd"]                                                         / cs(v97s)["efec"]
-yr.means$oth[2]    <- (cs(v97s)["efec"] - cs(v97s)["pan"] - cs(v97s)["pri"] - cs(v97s)["prd"]) / cs(v97s)["efec"]
-#
-yr.means$pan[3]    <-  cs(v00s)["panc"]                    / cs(v00s)["efec"]
-yr.means$pri[3]    <-  cs(v00s)["pri"]                     / cs(v00s)["efec"]
-yr.means$morena[3] <-  cs(v00s)["prdc"]                    / cs(v00s)["efec"]
-yr.means$oth[3]    <- (cs(v00s)["pcd"] + cs(v00s)["parm"]) / cs(v00s)["efec"]
-#
-yr.means$pan[4]    <-   cs(v03s)["pan"]                                                                         / cs(v03s)["efec"]
-yr.means$pri[4]    <-  (cs(v03s)["pri"] + cs(v03s)["pric"] + cs(v03s)["pvem"])                                  / cs(v03s)["efec"]
-yr.means$morena[4] <-  (cs(v03s)["prd"] + cs(v03s)["pt"]   + cs(v03s)["conve"])                                 / cs(v03s)["efec"]
-yr.means$oth[4]    <-  (cs(v03s)["psn"] + cs(v03s)["pas"]  + cs(v03s)["mp"] + cs(v03s)["plm"] + cs(v03s)["fc"]) / cs(v03s)["efec"]
-#
-yr.means$pan[5]    <-   cs(v06s)["pan"]                     / cs(v06s)["efec"]
-yr.means$pri[5]    <-   cs(v06s)["pric"]                    / cs(v06s)["efec"]
-yr.means$morena[5] <-   cs(v06s)["prdc"]                    / cs(v06s)["efec"]
-yr.means$oth[5]    <-  (cs(v06s)["pna"] + cs(v06s)["asdc"]) / cs(v06s)["efec"]
-#
-yr.means$pan[6]    <-   cs(v09s)["pan"]                                                           / cs(v09s)["efec"]
-yr.means$pri[6]    <-  (cs(v09s)["pri"] + cs(v09s)["pric"] + cs(v09s)["pvem"])                    / cs(v09s)["efec"]
-yr.means$morena[6] <-  (cs(v09s)["prd"] + cs(v09s)["pt"]   + cs(v09s)["ptc"] + cs(v09s)["conve"]) / cs(v09s)["efec"]
-yr.means$oth[6]    <-  (cs(v09s)["pna"] + cs(v09s)["psd"])                                        / cs(v09s)["efec"]
-#
-yr.means$pan[7]    <-    cs(v12s)["pan"]                                                       / cs(v12s)["efec"]
-yr.means$pri[7]    <-   (cs(v12s)["pri"] + cs(v12s)["pric"] + cs(v12s)["pvem"])                / cs(v12s)["efec"]
-yr.means$morena[7] <-   (cs(v12s)["prd"] + cs(v12s)["prdc"] + cs(v12s)["pt"] + cs(v12s)["mc"]) / cs(v12s)["efec"]
-yr.means$oth[7]    <-    cs(v12s)["pna"]                                                       / cs(v12s)["efec"]
-#
-yr.means$pan[8]    <-    cs(v15s)["pan"]                                                                                / cs(v15s)["efec"]
-yr.means$pri[8]    <-   (cs(v15s)["pri"] + cs(v15s)["pric"] + cs(v15s)["pvem"])                                         / cs(v15s)["efec"]
-yr.means$morena[8] <-   (cs(v15s)["prd"] + cs(v15s)["prdc"] + cs(v15s)["pt"] + cs(v15s)["morena"] + cs(v15s)["pes"])    / cs(v15s)["efec"]
-yr.means$oth[8]    <-   (cs(v15s)["mc"]  + cs(v15s)["pna"]  + cs(v15s)["ph"] + cs(v15s)["indep1"] + cs(v15s)["indep2"]) / cs(v15s)["efec"]
-#
-yr.means$pan[9]    <-   (cs(v18s)["pan"]    + cs(v18s)["panc"]    + cs(v18s)["prd"]  + cs(v18s)["mc"])  / cs(v18s)["efec"]
-yr.means$pri[9]    <-   (cs(v18s)["pri"]    + cs(v18s)["pric"]    + cs(v18s)["pvem"] + cs(v18s)["pna"]) / cs(v18s)["efec"]
-yr.means$morena[9] <-   (cs(v18s)["morena"] + cs(v18s)["morenac"] + cs(v18s)["pt"]   + cs(v18s)["pes"]) / cs(v18s)["efec"]
-yr.means$oth[9]    <-   (cs(v18s)["indep1"] + cs(v18s)["indep2"])                                       / cs(v18s)["efec"]
+yr.means$pan   [10] <-   (cs(v18s)["pan"]    + cs(v18s)["panc"]    + cs(v18s)["prd"]  + cs(v18s)["mc"])  / cs(v18s)["efec"]
+yr.means$pri   [10] <-   (cs(v18s)["pri"]    + cs(v18s)["pric"]    + cs(v18s)["pvem"] + cs(v18s)["pna"]) / cs(v18s)["efec"]
+yr.means$morena[10] <-   (cs(v18s)["morena"] + cs(v18s)["morenac"] + cs(v18s)["pt"]   + cs(v18s)["pes"]) / cs(v18s)["efec"]
+yr.means$oth   [10] <-   (cs(v18s)["indep1"] + cs(v18s)["indep2"])                                       / cs(v18s)["efec"]
 #
 yr.means <- within(yr.means, mean.rpan    <- pan/pri)
 yr.means <- within(yr.means, mean.rmorena <- morena/pri)
