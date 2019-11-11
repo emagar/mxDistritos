@@ -18,15 +18,17 @@ if (agg=="s") {
 ##########
 ## 1991 ##
 ##########
-## sel.c <- c("pan","pri","parm","pdm","pfcrn","pps","prd","pt","pem","prt")
-## v <- v91[,sel.c]
-## v <- v / rowSums(v)
-## l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
-## l <- sortBy(target = l, By = v)
-## v <- sortBy(target = v, By = v)
-## winner$w91  <- l[,1]
-## winner$mg91 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
-## message("1991 done")
+if (agg=="m") { # secc data not ready yet
+    sel.c <- c("pan","pri","parm","pdm","pfcrn","pps","prd","pt","pem","prt")
+    v <- v91[,sel.c]
+    v <- v / rowSums(v)
+    l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
+    l <- sortBy(target = l, By = v)
+    v <- sortBy(target = v, By = v)
+    winner$w91  <- l[,1]
+    winner$mg91 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
+    message("1991 done")
+}
 ##########
 ## 1994 ##
 ##########

@@ -782,6 +782,17 @@ d$dmorenac <- as.numeric(d$dmorenac>0)
 d$edosecn <- d$seccion <- NULL
 v18m <- d
 #
+## drop seccion dummies
+v94m <- within(v94m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v97m <- within(v97m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v00m <- within(v00m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v03m <- within(v03m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v06m <- within(v06m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v09m <- within(v09m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v12m <- within(v12m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v15m <- within(v15m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v18m <- within(v18m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+#
 # verify symmetric dimensionality
 ## dim(v91m);
 dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); 
@@ -819,12 +830,9 @@ rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
 ## # write.csv(d, file = "tmp91.csv", row.names=FALSE)
 # load manipulated version
 d <- read.csv("../municipios/dipfed1991.csv", header=TRUE, stringsAsFactors=FALSE)
+dim(d)
+v94m[1,]
 v91m <- d
-
-# merge mun to eq and export
-d <- d[,c("edon","inegi","ife","mun","mun2","nota")]
-eq2 <- merge(x=eq, y=d, all=TRUE)
-d[1,]
 
 
 # debug
@@ -849,9 +857,9 @@ source(paste(wd, "code/resecc-deal-with-splits.r", sep = ""))
 ## ## by choosing s, m, d...                           ## ##
 ## ###################################################### ##
 ############################################################
-agg <- c("m","s","d")[2]
+agg <- c("m","s","d")[1]
 if (agg=="m") {
-    ## v91 <- v91m;
+    v91 <- v91m;
     v94 <- v94m; v97 <- v97m; 
     v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
 }
