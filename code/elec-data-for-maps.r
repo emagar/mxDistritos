@@ -1291,6 +1291,7 @@ for (i in non.nas){
     reg.morena <- lm(formula = log(morena/pri) ~ mean.rmorena, data = data.tmp)
     reg.oth    <- lm(formula = log(oth/pri)    ~ mean.roth, data = data.tmp)
     #
+    # point prediction alpha with mean at zero 
     new.d <- data.frame(mean.rpan = 0)
     rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
     new.d <- data.frame(mean.rmorena = 0)
