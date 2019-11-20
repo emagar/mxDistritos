@@ -58,7 +58,7 @@ getSec <- function(edo=NA, edon=NA, jsonFile=NA){
 ########################################
 # aqui empieza la manipulacion Federal #
 ########################################
-edon <- 17 # 1:32
+edon <- 20 # 1:32
 edo <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")[edon]
 #dd <- "/home/eric/Desktop/data/elecs/MXelsCalendGovt/redistrict/ineJson/pruebas"
 dd1 <- paste(path, "fed/e1/", edo, sep = "")
@@ -189,6 +189,25 @@ head(output)
 #colnames(output) <- c("edon","seccion","munn","dis71.20.157cg","dis71.20.157")
 
 output <- merge(x = e1, y = output, by = c("edon","seccion","munn"), all = TRUE)
+
+# oax needs further manipulation
+if (edon==20){
+    sel <- which(output$seccion==0) # select obs where district is reported for munn only
+    for (s in 1:length(sel)){
+        #s <- 2 # debug
+        sel.m <- which(output$munn==output$munn[s])
+        output$dis62.20.157[sel.m] <- output$dis62.20.157[s]
+        output$dis62.20.37 [sel.m] <- output$dis62.20.37 [s]
+        output$dis62.20.39 [sel.m] <- output$dis62.20.39 [s]
+        output$dis62.20.38 [sel.m] <- output$dis62.20.38 [s]
+        output$dis62.20.32 [sel.m] <- output$dis62.20.32 [s]
+        output$dis62.20.41 [sel.m] <- output$dis62.20.41 [s]
+        output$dis62.20.33 [sel.m] <- output$dis62.20.33 [s]
+        output$dis62.20.35 [sel.m] <- output$dis62.20.35 [s]
+        output$dis62.20.36 [sel.m] <- output$dis62.20.36 [s]
+        output$dis71.20.157[sel.m] <- output$dis71.20.157[s]
+    }
+}
 
 write.csv(output, file = paste(path, edo, "Fed.csv", sep = ""), row.names = FALSE); rm(e1)
 
