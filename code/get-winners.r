@@ -150,15 +150,15 @@ winner$nwin.pan <- rowSums(tmp)
 tmp <- winner[,grep("^w[0-9]", colnames(winner))]
 tmp <- ifelse(tmp=="pri" | tmp=="pric", 1, 0)
 winner$nwin.pri <- rowSums(tmp)
-#morena
+#left
 tmp <- winner[,grep("^w[0-9]", colnames(winner))]
 sel.r <- which(tmp[,"w18"]=="prd")
-tmp[sel.r,"w18"] <- "panc" # rename prd in 2018 to not count it as morena's here
+tmp[sel.r,"w18"] <- "panc" # rename prd in 2018 to not count it as left's here
 tmp <- ifelse(tmp=="prd" | tmp=="prdc" | tmp=="morena" | tmp=="morenac", 1, 0)
-winner$nwin.morena <- rowSums(tmp)
+winner$nwin.left <- rowSums(tmp)
 #oth
 tmp <- winner[,grep("^w[0-9]", colnames(winner))]
-winner <- within(winner, nwin.oth <- ncol(tmp) - nwin.pan - nwin.pri - nwin.morena)
+winner <- within(winner, nwin.oth <- ncol(tmp) - nwin.pan - nwin.pri - nwin.left)
 
 ## # rename output
 ## if (agg=="m") {

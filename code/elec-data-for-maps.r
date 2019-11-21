@@ -883,7 +883,7 @@ write.csv(v12s, file = paste(wd, "data/dipfed-seccion-vraw-2012.csv", sep = ""),
 write.csv(v15s, file = paste(wd, "data/dipfed-seccion-vraw-2015.csv", sep = ""), row.names = FALSE)
 write.csv(v18s, file = paste(wd, "data/dipfed-seccion-vraw-2018.csv", sep = ""), row.names = FALSE)
 
-# reload data restoring dropped columns
+# reload data to restore dropped columns
 rm(list = ls())
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
@@ -964,7 +964,7 @@ pri <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pri  / v91$efec),
                   v18 = ifelse(v18$efec==0, NA, (v18$pri + v18$pric + v18$pvem + v18$pna) / v18$efec))
 pri <- round(pri, 3)
 #
-morena <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
+left <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
                      v94 = ifelse(v94$efec==0, NA,  v94$prd  / v94$efec),
                      v97 = ifelse(v97$efec==0, NA,  v97$prd  / v97$efec),
                      v00 = ifelse(v00$efec==0, NA,  v00$prdc / v00$efec),
@@ -974,7 +974,7 @@ morena <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
                      v12 = ifelse(v12$efec==0, NA, (v12$prd + v12$prdc + v12$pt + v12$mc)  / v12$efec),
                      v15 = ifelse(v15$efec==0, NA, (v15$prd + v15$prdc + v15$pt + v15$morena + v15$pes) / v15$efec),
                      v18 = ifelse(v18$efec==0, NA, (v18$morena + v18$morenac + v18$pt + v18$pes) / v18$efec))
-morena <- round(morena, 3)
+left <- round(left, 3)
 #
 oth <- data.frame(v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfcrn + v91$pps + v91$pem + v91$prt) / v91$efec),
                   v94 = ifelse(v94$efec==0, NA, (v94$pps + v94$pfcrn + v94$parm + v94$uno.pdm + v94$pt + v94$pvem) / v94$efec),
@@ -1003,7 +1003,7 @@ efec <- data.frame(v91 = v91$efec,
 # transpose to plug columns into new data.frames
 pan <- t(pan)
 pri <- t(pri)
-morena <- t(morena)
+left <- t(left)
 oth <- t(oth)
 efec <- t(efec)
 #
@@ -1014,16 +1014,16 @@ for (i in 1:nrow(v00)){
     tmp <- data.frame(yr = seq(from=1991, to=2018, by=3),
                       pan = pan[,i],
                       pri = pri[,i],
-                      morena = morena[,i],
+                      left = left[,i],
                       oth = oth[,i],
                       efec = efec[,i])
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
-        tmp$pan   [is.na(tmp$pan)]    <- per.means["pan"];
-        tmp$pri   [is.na(tmp$pri)]    <- per.means["pri"];
-        tmp$morena[is.na(tmp$morena)] <- per.means["morena"];
-        tmp$oth   [is.na(tmp$oth)]    <- per.means["oth"];
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
     }
     # add epsilon = 2*max(rounding error) to zeroes 
     if (length(tmp[tmp==0])>0){
@@ -1039,7 +1039,7 @@ for (i in 1:nrow(v00)){
 yr.means <- data.frame(yr = seq(1991,2018,3),
                        pan    = rep(NA,10),
                        pri    = rep(NA,10),
-                       morena = rep(NA,10),
+                       left   = rep(NA,10),
                        oth    = rep(NA,10))
 #cs <- function(x) colSums(x, na.rm=TRUE)
 if (agg=="s"){
@@ -1050,56 +1050,56 @@ if (agg=="s"){
 #
 yr.means$pan   [1] <-  cs(v91)["pan"]                                                      / cs(v91)["efec"]
 yr.means$pri   [1] <-  cs(v91)["pri"]                                                      / cs(v91)["efec"]
-yr.means$morena[1] <-  cs(v91)["prd"]                                                      / cs(v91)["efec"]
+yr.means$left  [1] <-  cs(v91)["prd"]                                                      / cs(v91)["efec"]
 yr.means$oth   [1] <- (cs(v91)["efec"] - cs(v91)["pan"] - cs(v91)["pri"] - cs(v91)["prd"]) / cs(v91)["efec"]
 #
 yr.means$pan   [2] <-  cs(v94s)["pan"]                                                         / cs(v94s)["efec"]
 yr.means$pri   [2] <-  cs(v94s)["pri"]                                                         / cs(v94s)["efec"]
-yr.means$morena[2] <-  cs(v94s)["prd"]                                                         / cs(v94s)["efec"]
+yr.means$left  [2] <-  cs(v94s)["prd"]                                                         / cs(v94s)["efec"]
 yr.means$oth   [2] <- (cs(v94s)["efec"] - cs(v94s)["pan"] - cs(v94s)["pri"] - cs(v94s)["prd"]) / cs(v94s)["efec"]
 #                
 yr.means$pan   [3] <-  cs(v97s)["pan"]                                                         / cs(v97s)["efec"]
 yr.means$pri   [3] <-  cs(v97s)["pri"]                                                         / cs(v97s)["efec"]
-yr.means$morena[3] <-  cs(v97s)["prd"]                                                         / cs(v97s)["efec"]
+yr.means$left  [3] <-  cs(v97s)["prd"]                                                         / cs(v97s)["efec"]
 yr.means$oth   [3] <- (cs(v97s)["efec"] - cs(v97s)["pan"] - cs(v97s)["pri"] - cs(v97s)["prd"]) / cs(v97s)["efec"]
 #                
 yr.means$pan   [4] <-  cs(v00s)["panc"]                    / cs(v00s)["efec"]
 yr.means$pri   [4] <-  cs(v00s)["pri"]                     / cs(v00s)["efec"]
-yr.means$morena[4] <-  cs(v00s)["prdc"]                    / cs(v00s)["efec"]
+yr.means$left  [4] <-  cs(v00s)["prdc"]                    / cs(v00s)["efec"]
 yr.means$oth   [4] <- (cs(v00s)["pcd"] + cs(v00s)["parm"]) / cs(v00s)["efec"]
 #                
 yr.means$pan   [5] <-   cs(v03s)["pan"]                                                                         / cs(v03s)["efec"]
 yr.means$pri   [5] <-  (cs(v03s)["pri"] + cs(v03s)["pric"] + cs(v03s)["pvem"])                                  / cs(v03s)["efec"]
-yr.means$morena[5] <-  (cs(v03s)["prd"] + cs(v03s)["pt"]   + cs(v03s)["conve"])                                 / cs(v03s)["efec"]
+yr.means$left  [5] <-  (cs(v03s)["prd"] + cs(v03s)["pt"]   + cs(v03s)["conve"])                                 / cs(v03s)["efec"]
 yr.means$oth   [5] <-  (cs(v03s)["psn"] + cs(v03s)["pas"]  + cs(v03s)["mp"] + cs(v03s)["plm"] + cs(v03s)["fc"]) / cs(v03s)["efec"]
 #                
 yr.means$pan   [6] <-   cs(v06s)["pan"]                     / cs(v06s)["efec"]
 yr.means$pri   [6] <-   cs(v06s)["pric"]                    / cs(v06s)["efec"]
-yr.means$morena[6] <-   cs(v06s)["prdc"]                    / cs(v06s)["efec"]
+yr.means$left  [6] <-   cs(v06s)["prdc"]                    / cs(v06s)["efec"]
 yr.means$oth   [6] <-  (cs(v06s)["pna"] + cs(v06s)["asdc"]) / cs(v06s)["efec"]
 #                
 yr.means$pan   [7] <-   cs(v09s)["pan"]                                                           / cs(v09s)["efec"]
 yr.means$pri   [7] <-  (cs(v09s)["pri"] + cs(v09s)["pric"] + cs(v09s)["pvem"])                    / cs(v09s)["efec"]
-yr.means$morena[7] <-  (cs(v09s)["prd"] + cs(v09s)["pt"]   + cs(v09s)["ptc"] + cs(v09s)["conve"]) / cs(v09s)["efec"]
+yr.means$left  [7] <-  (cs(v09s)["prd"] + cs(v09s)["pt"]   + cs(v09s)["ptc"] + cs(v09s)["conve"]) / cs(v09s)["efec"]
 yr.means$oth   [7] <-  (cs(v09s)["pna"] + cs(v09s)["psd"])                                        / cs(v09s)["efec"]
 #                
 yr.means$pan   [8] <-    cs(v12s)["pan"]                                                       / cs(v12s)["efec"]
 yr.means$pri   [8] <-   (cs(v12s)["pri"] + cs(v12s)["pric"] + cs(v12s)["pvem"])                / cs(v12s)["efec"]
-yr.means$morena[8] <-   (cs(v12s)["prd"] + cs(v12s)["prdc"] + cs(v12s)["pt"] + cs(v12s)["mc"]) / cs(v12s)["efec"]
+yr.means$left  [8] <-   (cs(v12s)["prd"] + cs(v12s)["prdc"] + cs(v12s)["pt"] + cs(v12s)["mc"]) / cs(v12s)["efec"]
 yr.means$oth   [8] <-    cs(v12s)["pna"]                                                       / cs(v12s)["efec"]
 #                
 yr.means$pan   [9] <-    cs(v15s)["pan"]                                                                                / cs(v15s)["efec"]
 yr.means$pri   [9] <-   (cs(v15s)["pri"] + cs(v15s)["pric"] + cs(v15s)["pvem"])                                         / cs(v15s)["efec"]
-yr.means$morena[9] <-   (cs(v15s)["prd"] + cs(v15s)["prdc"] + cs(v15s)["pt"] + cs(v15s)["morena"] + cs(v15s)["pes"])    / cs(v15s)["efec"]
+yr.means$left  [9] <-   (cs(v15s)["prd"] + cs(v15s)["prdc"] + cs(v15s)["pt"] + cs(v15s)["morena"] + cs(v15s)["pes"])    / cs(v15s)["efec"]
 yr.means$oth   [9] <-   (cs(v15s)["mc"]  + cs(v15s)["pna"]  + cs(v15s)["ph"] + cs(v15s)["indep1"] + cs(v15s)["indep2"]) / cs(v15s)["efec"]
 #
 yr.means$pan   [10] <-   (cs(v18s)["pan"]    + cs(v18s)["panc"]    + cs(v18s)["prd"]  + cs(v18s)["mc"])  / cs(v18s)["efec"]
 yr.means$pri   [10] <-   (cs(v18s)["pri"]    + cs(v18s)["pric"]    + cs(v18s)["pvem"] + cs(v18s)["pna"]) / cs(v18s)["efec"]
-yr.means$morena[10] <-   (cs(v18s)["morena"] + cs(v18s)["morenac"] + cs(v18s)["pt"]   + cs(v18s)["pes"]) / cs(v18s)["efec"]
+yr.means$left  [10] <-   (cs(v18s)["morena"] + cs(v18s)["morenac"] + cs(v18s)["pt"]   + cs(v18s)["pes"]) / cs(v18s)["efec"]
 yr.means$oth   [10] <-   (cs(v18s)["indep1"] + cs(v18s)["indep2"])                                       / cs(v18s)["efec"]
 #
 yr.means <- within(yr.means, mean.rpan    <- pan/pri)
-yr.means <- within(yr.means, mean.rmorena <- morena/pri)
+yr.means <- within(yr.means, mean.rleft   <- left/pri)
 yr.means <- within(yr.means, mean.roth    <- oth/pri)
 #
 yr.means[,2:8] <- round(yr.means[,2:8], 3)
@@ -1128,14 +1128,14 @@ load("data/too-big-4-github/tmp3.RData")
 ###############################
 vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <- vhat.2006 <- 
         data.frame(pan    = rep(NA, nrow(v00)),
-                                     pri    = rep(NA, nrow(v00)),
-                                     morena = rep(NA, nrow(v00))) # will receive vote estimates
+                   pri  = rep(NA, nrow(v00)),
+                   left = rep(NA, nrow(v00))) # will receive vote estimates
 #
 alphahat <- data.frame(pan    = rep(NA, nrow(v00)),
                        pri    = rep(NA, nrow(v00)),
-                       morena = rep(NA, nrow(v00))) # will receive municipio's alphas
+                       left   = rep(NA, nrow(v00))) # will receive municipio's alphas
 betahat <- data.frame(pan    = rep(NA, nrow(v00)),
-                      morena = rep(NA, nrow(v00)),
+                      left   = rep(NA, nrow(v00)),
                       oth    = rep(NA, nrow(v00))) # will receive municipio's betas (none for pri)
 #
 tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
@@ -1144,12 +1144,12 @@ tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
 #
 regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <-
     list(pan    = tmp,
-         morena = tmp,
+         left   = tmp,
          oth    = tmp,
          readme = "No pri regs because DVs are pri-ratios")
 #
 mean.regs <- list(pan    = tmp,
-                  morena = tmp,
+                  left   = tmp,
                   oth    = tmp,
                   readme = "No pri regs bec DVs are pri-ratios")
 
@@ -1171,201 +1171,201 @@ for (i in non.nas){
     tmp.ln <- nrow(data.tmp)
     data.tmp$d.pan    <- data.tmp$pan    - c(NA,data.tmp$pan   [-tmp.ln])
     data.tmp$d.pri    <- data.tmp$pri    - c(NA,data.tmp$pri   [-tmp.ln])
-    data.tmp$d.morena <- data.tmp$morena - c(NA,data.tmp$morena[-tmp.ln])
+    data.tmp$d.left   <- data.tmp$left   - c(NA,data.tmp$left  [-tmp.ln])
     rm(tmp.ln)
     #
     ##################################
     ## predict 2006 with last 5 els ## ojo: v91 needed
     ##################################
     year <- 2006
-    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-    reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
     #
     new.d <- data.frame(yr = year)
     rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
-    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
     rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
-    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left + rhat.oth), 3)
     bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
-    bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
     #
     ## plug into results objects ##
-    vhat.2006[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    vhat.2006[i,] <- c(vhat.pan, vhat.pri, vhat.left)
     regs.2006$pan[[i]]    <- reg.pan
-    regs.2006$morena[[i]] <- reg.morena
+    regs.2006$left[[i]]   <- reg.left
     regs.2006$oth[[i]]    <- reg.oth
     #
-    data.tmp$vhat.morena <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # open slots for projections
-    data.tmp$bhat.morena <- data.tmp$bhat.pan <- NA # open slots for slope estimates
+    data.tmp$vhat.left <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # open slots for projections
+    data.tmp$bhat.left <- data.tmp$bhat.pan <- NA # open slots for slope estimates
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
-    data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
-    data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left
     #
     ##################################
     ## predict 2009 with last 5 els ##
     ##################################
     year <- 2009
-    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-    reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
     #
     new.d <- data.frame(yr = year)
     rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
-    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
     rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
-    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
     bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
-    bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
     #
     ## plug into results objects ##
-    vhat.2009[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    vhat.2009[i,] <- c(vhat.pan, vhat.pri, vhat.left)
     regs.2009$pan[[i]]    <- reg.pan
-    regs.2009$morena[[i]] <- reg.morena
+    regs.2009$left[[i]]   <- reg.left
     regs.2009$oth[[i]]    <- reg.oth
     #                                                                    ##############################
     #                                                                    # DO THESE WHEN PREDICTING   #
     #                                                                    # FIRST YEAR ONLY:           #
-    data.tmp$vhat.morena <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
-    data.tmp$bhat.morena <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
+    data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
+    data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
-    data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
-    data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left
     #
     ##################################
     ## predict 2012 with last 5 els ##
     ##################################
     year <- 2012
     reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-    reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left <-   lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
     reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
     #
     new.d <- data.frame(yr = year)
     rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
-    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
     rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
-    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
     bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
-    bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
     #
     ## plug into results objects ##
-    vhat.2012[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    vhat.2012[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
     regs.2012$pan[[i]]    <- reg.pan
-    regs.2012$morena[[i]] <- reg.morena
+    regs.2012$left[[i]]   <- reg.left  
     regs.2012$oth[[i]]    <- reg.oth
     #
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
-    data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
-    data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
     #
     ##################################
     ## predict 2015 with last 5 els ##
     ##################################
     year <- 2015
     reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-    reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
     reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
     #
     new.d <- data.frame(yr = year)
     rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
-    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
     rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
-    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
     bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
-    bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
     #
     ## plug into results objects ##
-    vhat.2015[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    vhat.2015[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
     regs.2015$pan[[i]]    <- reg.pan
-    regs.2015$morena[[i]] <- reg.morena
+    regs.2015$left[[i]] <- reg.left  
     regs.2015$oth[[i]]    <- reg.oth
     #
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
-    data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
-    data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
     #
     ##################################
     ## predict 2018 with last 5 els ##
     ##################################
     year <- 2018
     reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-    reg.morena <- lm(formula = log(morena/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
     reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
     #
     new.d <- data.frame(yr = year)
     rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
-    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
     rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
-    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
     bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
-    bhat.morena <- round(summary.lm(reg.morena)$coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
     #
     ## plug into results objects ##
-    vhat.2018[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    vhat.2018[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
     regs.2018$pan   [[i]] <- reg.pan
-    regs.2018$morena[[i]] <- reg.morena
+    regs.2018$left  [[i]] <- reg.left  
     regs.2018$oth   [[i]] <- reg.oth
     #
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
-    data.tmp$vhat.morena[data.tmp$yr==year] <- vhat.morena
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
-    data.tmp$bhat.morena[data.tmp$yr==year] <- bhat.morena
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
     #
     # ALTERNATIVE: exp(predict.lm(reg.pan,    newdata = new.d, interval = "confidence"))
     # #########################################################################
     ## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
     #########################################################################
     reg.pan    <- lm(formula = log(pan/pri)    ~ mean.rpan, data = data.tmp)
-    reg.morena <- lm(formula = log(morena/pri) ~ mean.rmorena, data = data.tmp)
+    reg.left   <- lm(formula = log(left  /pri) ~ mean.rleft  , data = data.tmp)
     reg.oth    <- lm(formula = log(oth/pri)    ~ mean.roth, data = data.tmp)
     #
     # point prediction alpha with mean at zero 
     new.d <- data.frame(mean.rpan = 0)
     rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
-    new.d <- data.frame(mean.rmorena = 0)
-    rhat.morena <- exp(predict.lm(reg.morena, newdata = new.d))#, interval = "confidence")
+    new.d <- data.frame(mean.rleft   = 0)
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
     new.d <- data.frame(mean.roth = 0)
     rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
-    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
-    vhat.morena <- round(rhat.morena / (1 + rhat.pan + rhat.morena + rhat.oth), 3)
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
     #
-    #c(vhat.pan, vhat.pri, vhat.morena, 1-vhat.pan-vhat.pri-vhat.morena)
-    alphahat[i,] <- c(vhat.pan, vhat.pri, vhat.morena)
+    #c(vhat.pan, vhat.pri, vhat.left, 1-vhat.pan-vhat.pri-vhat.left)
+    alphahat[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
     betahat[i,1] <- coef(reg.pan)   [2]
-    betahat[i,2] <- coef(reg.morena)[2]
+    betahat[i,2] <- coef(reg.left  )[2]
     betahat[i,3] <- coef(reg.oth)   [2]
     mean.regs$pan   [[i]] <- reg.pan
-    mean.regs$morena[[i]] <- reg.morena
+    mean.regs$left  [[i]] <- reg.left  
     mean.regs$oth   [[i]] <- reg.oth
     #
     # add alphas and betas for whole period
-    data.tmp$alphahat.morena <- data.tmp$alphahat.pri <- data.tmp$alphahat.pan <- NA # open slots for alphas
-    data.tmp$betahat.morena <- data.tmp$betahat.pan <- NA # open slots for betas
+    data.tmp$alphahat.left   <- data.tmp$alphahat.pri <- data.tmp$alphahat.pan <- NA # open slots for alphas
+    data.tmp$betahat.left   <- data.tmp$betahat.pan <- NA # open slots for betas
     data.tmp$alphahat.pan    <- alphahat$pan   [i]
     data.tmp$alphahat.pri    <- alphahat$pri   [i]
-    data.tmp$alphahat.morena <- alphahat$morena[i]
+    data.tmp$alphahat.left   <- alphahat$left  [i]
     data.tmp$betahat.pan    <- betahat$pan   [i]
-    data.tmp$betahat.morena <- betahat$morena[i]
+    data.tmp$betahat.left   <- betahat$left  [i]
     data.tmp$betahat.oth    <- betahat$oth   [i]
     data.tmp <- round(data.tmp,3)
     #
@@ -1373,10 +1373,10 @@ for (i in non.nas){
     ## optional: plug vhats alphas betas back into data   ##
     ########################################################
     data.tmp <- within(data.tmp, {
-        mean.rpan <- mean.rmorena <- mean.roth <- NULL; # drop mean ratios
+        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
         oth <- NULL; # drop compositional vote complement
         betahat.oth <- NULL; # drop this beta
-        #betahat.pan <- betahat.morena <- betahat.oth <- NULL; # drop betas
+        #betahat.pan <- betahat.left   <- betahat.oth <- NULL; # drop betas
     })
     extendCoal[[i]] <- data.tmp
 }
@@ -1386,7 +1386,7 @@ for (i in non.nas){
 
 # clean
 ls()
-rm(pan,pri,morena,oth,reg.pan,reg.morena,reg.oth,per.means,vhat.pan,vhat.pri,vhat.morena,bhat.pan,bhat.morena,yr.means,year,sel.c,sel.to,new.d,sel.split,sel.drop,rhat.pan,rhat.morena,rhat.oth,i,info,muns,tmp,to.num)
+rm(pan,pri,left  ,oth,reg.pan,reg.left  ,reg.oth,per.means,vhat.pan,vhat.pri,vhat.left  ,bhat.pan,bhat.left  ,yr.means,year,sel.c,sel.to,new.d,sel.split,sel.drop,rhat.pan,rhat.left  ,rhat.oth,i,info,muns,tmp,to.num)
 
 # adds manipulation indicator to all data frames in list
 if (agg=="s") {
@@ -1423,10 +1423,10 @@ if (agg=="s") {
             year <- info$when[i]               # year reseccionamiento
             sel.na <- which(reg.to$yr <= year) # elections before reseccionamiento 
             reg.to[sel.na,] <- within(reg.to[sel.na,], {
-                pan <- pri <- morena <- d.pan <- d.pri <- d.morena <- NA; # drop mean vote used, use NAs
+                pan <- pri <- left   <- d.pan <- d.pri <- d.left   <- NA; # drop mean vote used, use NAs
             })
             # columns to manipulate
-            sel.col <- c("vhat.pan","vhat.pri","vhat.morena","bhat.pan","bhat.morena", "alphahat.pan","alphahat.pri","alphahat.morena","betahat.pan","betahat.morena")
+            sel.col <- c("vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left", "alphahat.pan","alphahat.pri","alphahat.left  ","betahat.pan","betahat.left")
             reg.to[,sel.col] <- reg.from[,sel.col] # from -> to
             # indicate manipulation
             reg.to$new[-sel.na] <- year
@@ -1471,7 +1471,7 @@ extendCoal.2009 <- tmp.func(year=2009)
 extendCoal.2012 <- tmp.func(year=2012)
 extendCoal.2015 <- tmp.func(year=2015)
 extendCoal.2018 <- tmp.func(year=2018)
-rm(extendCoal.2015)
+#rm(extendCoal.2015)
 
 # drop some columns
 extendCoal.2006 <- within(extendCoal.2006, yr <- edosecn <- NULL)
@@ -1530,18 +1530,18 @@ save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2018
 
 # load regression object
 load(file = paste(wd, "data/dipfed-seccion-regs-2015.RData", sep = ""))
-summary.lm(regs.2015$morena[[1]])$coef[2,1]
+summary.lm(regs.2015$left[[1]])$coef[2,1]
 
 
 
 # version 2: coalitions only in districts where they happened
-## morenaRealm <- data.frame(v00 = v00m$prdc / v00m$efec,
-##                           v03 = v03m$prd / v03m$efec,
-##                           v06 = v06m$prdc / v06m$efec,
-##                           v09 = v09m$prd / v09m$efec,
-##                           v12 = v12m$prdc / v12m$efec,
-##                           v15 = (v15m$prd * (1 - v15m$dprdc) + v15m$prdc * v15m$dprdc + v15m$morena) / v15m$efec,
-##                           v18 = (v18m$morena * (1 - v18m$dmorenac) + v18m$morenac * v18m$dmorenac) / v18m$efec)
+## leftRealm <- data.frame(v00 = v00m$prdc / v00m$efec,
+##                         v03 = v03m$prd / v03m$efec,
+##                         v06 = v06m$prdc / v06m$efec,
+##                         v09 = v09m$prd / v09m$efec,
+##                         v12 = v12m$prdc / v12m$efec,
+##                         v15 = (v15m$prd * (1 - v15m$dprdc) + v15m$prdc * v15m$dprdc + v15m$morena) / v15m$efec,
+##                         v18 = (v18m$morena * (1 - v18m$dmorenac) + v18m$morenac * v18m$dmorenac) / v18m$efec)
 ## esto no jala, parece que morena!=0 cuando dmorenac==1
 ## morenaRealm[1,]
 # version 3: party's own vote plus proportional part of coal
