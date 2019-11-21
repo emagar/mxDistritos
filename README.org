@@ -1,6 +1,6 @@
 #+TITLE: Recent Mexican electoral geography
 #+AUTHOR: Eric Magar
-Last revision: 2019-11-13
+Last revision: 2019-11-21
 
 # Export to md: M-x org-md-export-to-markdown
 
