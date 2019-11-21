@@ -22,10 +22,11 @@ You are free to download and modify the data (see the LICENSE document) provided
 # 2. turnout (lisnom not complete); 
 # 3. more on unit volatility (emm), 
 # 4. ENP/Molinar?
-# 5. DSI (for distric-level measures)
+# 5. DSI (for district-level measures)
 Measures of federal deputy elections at two geographic levels are distributed: municipalities (files with ~municipio~ in name) and secciones electorales (files with ~seccion~ in name). Quantities of interest are available for 2006, 2009, 2012, 2015, and 2018. Variable descriptions [[codebookElec][here]]. 
-- ~data/*-vhat-*.csv~ files = electoral statistics calculated from federal diputado single-member district elections. Measures of interest are (a) the parties' *vote shares* in the unit-year; (b) the *change* in vote share in the unit-year since last election; (c) the *predicted vote share* for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (d) estimates of each *party's core support* in the unit for the whole period; (e) estimates of each *party's beta volatility* in the unit for the whole period (~code/elec-data-for-maps.r~ was used to prepare these files; 2006 unavailable at sección level due to data missing comparable sección IDs for 1991). 
+- ~data/*-vhat-*.csv~ files = electoral statistics calculated from federal diputado single-member district elections 2006--2018. Measures of interest are (a) the parties' *vote shares* in the unit-year; (b) the *change* in vote share in the unit-year since last election; (c) the *predicted vote share* for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (d) estimates of each *party's core support* in the unit for the whole period; (e) estimates of each *party's beta volatility* in the unit for the whole period (~code/elec-data-for-maps.r~ was used to prepare these files; 2006 unavailable at sección level due to data missing comparable sección IDs for 1991). 
 - ~data/*-win.csv~ files = more measures of interest: (a) unit-year *winners* in the period (i.e., party with most votes); (b) *margins* of victory in the unit-year (i.e., winner's vote share minus runner-up's vote share); (c) the *frequency of party victories* in the unit between 1994 and 2018 (~code/get-winners.r~ was used to prepare these files). 
+- ~data/*-vraw-*.csv~ files = unmanipulated (raw) votes received by parties in federal diputado single-member district elections 1991--2018. Unlike ~vhat~ files, which simplify the field of parties by adding up the votes of minor parties, this file reports them individually when they did not coalesce with a major party (~code/elec-data-for-maps.r~ was used to prepare these files; 1991 unavailable at sección level due to data missing comparable sección IDs).
 - ~data/*-municipio-regs-*.RData~ files = summary statistics of yearly federal deputy municipal-level regressions in [[https://www.r-project.org/][R]] format. (Regression coefficient estimates were used to predict vote shares reported in ~vhat~ files.) Reading each file into an R environment imports a list with three objects named ~pan~, ~morena~, and ~oth~. Each object is a sub-list with [[./graph/readme-math/about-2500.svg]] class 'lm' objects, one for each regression fitted. [[https://emagar.github.io/residuales-2018-english/][This post]] elaborates the method. 
 - ~data/*-municipio-mean-regs.RData~ = summary statistics of 1994--2018 federal deputy municipal-level regressions in [[https://www.r-project.org/][R]] format. (Regression coefficient estimates were used to estimate party core support and beta volatility in each municipality reported in ~vhat~ files.) Reading each file into an R environment imports a list with three objects named ~pan~, ~morena~, and ~oth~. Each object is a sub-list with [[./graph/readme-math/about-2500.svg]] class 'lm' objects, one for each regression fitted. [[https://emagar.github.io/residuales-2018-english/][This post]] elaborates the method.
 - (~data/dipfed-seccion-regs-*.RData~ and ~data/dipfed-seccion-mean-regs.RData~ files = sección-level regression summary statistics *not included* in repository due to large size ([[./graph/readme-math/about-66k.svg]] regressions per party-year). Files are available upon [[mailto:emagar@gmail.com][request]].)
@@ -59,7 +60,8 @@ Variables are not necessarily included in every dataset distributed.
 - ~inegi~ = municipality identifier used by INEGI (census bureau).
 - ~ife~ = municipality identifier used by IFE/INE (election board).
 - ~mun~ = municipality's name.
-** Vote returns and party performance
+** Vote returns and party performance (in ~vhat~ files)
+~vhat~ files report vote shares and simplify the party field to three major competitors and a residual `others` category.
 - ~pan~ = vote share won by the PAN and allies, see the [[noteCoal][note on parties and coalitions]]. 
 - ~pri~ = vote share won by the PRI and allies, see the [[noteCoal][note on parties and coalitions]].
 - ~morena~ = vote share won by the left and allies, see [[noteCoal][note on parties and coalitions]].
@@ -76,6 +78,17 @@ Variables are not necessarily included in every dataset distributed.
 - ~n.win.pri~ = number of times the PRI (with or without coalition partners) finished first in the unit between 1994 and 2018.  
 - ~n.win.morena~ = number of times the left finished first in the unit between 1994 and 2018. Up to 2012, this was the PRD (with or without coalition partners). In 2018, this was MORENA (with or without coalition partners). In 2015, it was either (with or without coalition partners).
 - ~n.win.oth~ = number of time some party or coalition other than those listed above finished first in the unit between 1994 and 2018.  
+** Vote returns (in ~vraw~ files)
+~vraw~ files report absolute votes for *all* parties in the congressional race). 
+- ~edon~, ~seccion~, ~ife~, ~inegi~ = unit identifiers (see above).
+- ~disn~ = federal district the unit belongs to in the current congressional election.
+- ~d94~, ~d97~, ~d00~, ~d03~, ~d06~, ~d09~, ~d12~, ~d15~, and ~d18~ = dummies equal 1 if the sección was utilized, in the 1994, 1997, ..., 2018 congressional elections, respectively; equal 0 otherwise. Indicates [[https://portalanterior.ine.mx/archivos3/portal/historico/recursos/IFE-v2/DS/DS-CG/DS-SesionesCG/CG-acuerdos/2016/08_Agosto/CGor201608-26/CGor201608-26-ap-6-x1.pdf][/reseccionamiento/]]. Only included in the 1994 file to economize on redundancy. 
+- ~efec~ = valid votes in the unit (total votes cast for parties minus void and null ballots).
+- ~lisnom~ = total registered voters (/lista nominal/) in the unit. Available for selected years only.
+- ~pan~, ~pri~, ~prd~, and ~morena~ = votes cast for major parties running without partners in the district the unit belongs to.
+- ~panc~, ~pric~, ~prdc~, and ~morenac~ = votes cast for major parties and their allied partner(s) in the district the unit belongs to.
+- ~dpanc~, ~dpric~, ~dprdc~, and ~dmorenac~ = dummy equal 1 if the major party allied (fielded a joint candidate) with partners in the district the unit belongs to; equal 0 otherwise.
+- Remainder columns report votes cast for minor parties. 
 ** Redistricting and /reseccionamiento/
 - ~split~ = equals 0 for secciones that remained unchanged in the period, otherwise indicates the year sección was split into smaller units due to oversize. Estimation of some of the quantities reported involved re-aggregating new units into their oversized parent sección in order to preserve the full vote returns time series. See [[elec-code][code]] for details. 
 - ~new~ = equals 0 for secciones that remained unchanged in the period, otherwise indicates the year sección was created by splitting an oversized sección into smaller units. Estimation of some of the quantities reported involved re-aggregating these smaller units into their oversized parent in order to preserve the full vote returns time series. See [[elec-code][code]] for details.
