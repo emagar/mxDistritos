@@ -1471,7 +1471,7 @@ extendCoal.2009 <- tmp.func(year=2009)
 extendCoal.2012 <- tmp.func(year=2012)
 extendCoal.2015 <- tmp.func(year=2015)
 extendCoal.2018 <- tmp.func(year=2018)
-#rm(extendCoal.2015)
+#rm(extendCoal.2015) # clean memory
 
 # drop some columns
 extendCoal.2006 <- within(extendCoal.2006, yr <- edosecn <- NULL)
