@@ -5,20 +5,17 @@ path <- "/home/eric/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/ifeR
 ########################################################
 ## Function to process all party proposals in state e ##
 ########################################################
-get.pty.props <- function(estado = NA){
-    #edon <- 2  #debug
-    edon <- estado
+get.pty.props <- function(estado = NA, escenario = 1){
+    #edon <- 1; esc <- 2  #debug
+    edon <- estado; esc <- escenario
     edo <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")[edon]
-    #dd1   <- paste(path, "1erEscenario2013/", edo, sep = "")
-    dd1pp <- paste(path, "1erEscenarioComentariosPartidos/", edo, "/Escenarios/", sep = "")
-    #dd2   <- paste(path, "2oEscenario/", edo, sep = "")
-    #dd2pp <- paste(path, "2oEscenarioComentariosPartidos/", edo, sep = "")
-    #dd3   <- paste(path, "3erEscenario/",      sep = "")
-    setwd(dd1pp)
+    if (escenario==1) dd <- paste(path, "1erEscenarioComentariosPartidos/", edo, "/Escenarios/", sep = "")
+    if (escenario==2) dd <- paste(path, "2oEscenarioComentariosPartidos/", edo, "/Escenarios/", sep = "")
+    setwd(dd)
     #
     # explore directory
     files.tmp <- list.files()
-    sel <- grep("tmp", files.tmp)
+    sel <- grep("tmp|_DS_Store", files.tmp)
     if (length(sel)>0) files.tmp <- files.tmp[-sel] # drop tmp from list if present
     #
     # select/subset edon rows in dat for manipulation
@@ -28,7 +25,7 @@ get.pty.props <- function(estado = NA){
     for (i in 1:length(files.tmp)){ # loop over available party proposals
         #i <- 4 # debug
         sel.file <- files.tmp[i];
-        ptyn <- sub(pattern = "[A-Za-z_áéíóú]+_[0-9]{1}_([0-9]+)_[0-9]+.zip", replacement = "\\1", sel.file)
+        ptyn <- sub(pattern = "[A-Za-z_¦üáéíóú]+_[0-9]{1}_([0-9]+)_[0-9]+.zip", replacement = "\\1", sel.file)
         #
         # determine party authoring the proposal
         if (ptyn=="19")  next # pty <- "e"; # DIRECCION DE CARTOGRAFIA (DCE) --- original escenario
@@ -61,7 +58,7 @@ get.pty.props <- function(estado = NA){
         #head(tmp); # debug
         #
         # column to manipulate
-        target.col <- grep(pty, colnames(dat.tmp))
+        target.col <- grep(paste(pty,esc,sep=""), colnames(dat.tmp))
         #
         # handle seccion==0 cases, ie. full municipios 
         sel.zero <- which(tmp$seccion==0) # select obs where district is reported for munn only
@@ -108,13 +105,13 @@ for (e in 1:32){
     #e <- 1
     edon <- e # 1:32
     edo <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")[edon]
-    dd1   <- paste(path, "1erEscenario2013/", edo, sep = "")
+    dd   <- paste(path, "1erEscenario2013/", edo, sep = "")
     ## dd1pp <- paste(path, "1erEscenarioComentariosPartidos/", edo, sep = "")
     ## dd2   <- paste(path, "2oEscenario/", edo, sep = "")
     ## dd2pp <- paste(path, "2oEscenarioComentariosPartidos/", edo, sep = "")
     ## dd3   <- paste(path, "3erEscenario/",      sep = "")
     #
-    setwd(dd1)
+    setwd(dd)
     #
     tmp <- read.csv(file = "escenario.dat.ife", sep = "\t", header = FALSE)
     colnames(tmp) <- c("edon","e1","munn","seccion")
@@ -147,20 +144,77 @@ tmp <- as.data.frame(tmp)
 colnames(tmp) <- paste(props,1,sep="") # rename proposal columns
 dat <- cbind(dat, tmp) # paste to data
 
-dat <- get.pty.props(estado=2)
-
 for (e in 1:32){
     message(sprintf("loop %s of %s", e, 32))
     #e <- 32 # 1:32
     dat <- get.pty.props(estado=e)
 }
-warnings()
 
 dat[1,]
-table(dat$e1==dat$pan.cnv1)
+table(dat$e1==dat$pan.clv1)
 
-write.csv(output, file = paste(path, edo, "Fed.csv", sep = ""), row.names = FALSE); rm(e1)
+#################
+## escenario 2 ##
+#################
+dd   <- paste(path, "2oEscenario/", sep = "")
+setwd(dd)
+#
+e2 <- read.csv(file = "2oEscenario.csv", header = TRUE)
+colnames(e2) <- c("edon","e2","munn","seccion")
+#
+e2  <- within(e2, ife <- edon*1000 + munn) # add ife municipio code
+head(e2)
+#
+# handle seccion!=0 cases
+sel.zero <- which(e2$seccion==0) # select obs where district is reported for munn only
+dat <- merge(x = dat, y = e2[-sel.zero,c("edon","seccion","e2")], by = c("edon","seccion"), all = TRUE)
+#dim(dat)
+# handle seccion==0 cases, ie. full municipios 
+for (m in sel.zero){
+    #m <- sel.zero[2] # debug
+    sel.m <- which(dat$ife==e2$ife[m])   # indices with same municipio number as seccion==0 cases
+    dat$e2[sel.m] <- e2$e2[m]  # plug district number to those indices
+}
+rm(e,e2,m,sel.m,sel.zero,tmp)
 
+#################################
+## escenario 2 party proposals ##
+#################################
+#
+# ADD COLUMNS TO dat WITH ABOVE NAMES AND e1 INFO
+tmp <- matrix(dat$e2, length(dat$e2), length(props)) # repeat e1 as many times as there are proposing parties
+tmp <- as.data.frame(tmp)
+colnames(tmp) <- paste(props,2,sep="") # rename proposal columns
+dat <- cbind(dat, tmp) # paste to data
+
+for (e in 1:32){
+    message(sprintf("loop %s of %s", e, 32))
+    #e <- 16 # 1:32
+    dat <- get.pty.props(estado=e, escenario=2)
+}
+
+dat[1,]
+table(dat$e2==dat$pri.cnv2)
+
+colnames(dat)[which(colnames(dat)=="e1")] <- "escenario1"
+colnames(dat)[which(colnames(dat)=="e2")] <- "escenario2"
+colnames(dat)[which(colnames(dat)=="e3")] <- "escenario3"
+
+# move escenario 3 to end
+sel <- which(colnames(dat)=="escenario3")
+tmp <- dat[,sel]
+dat <- dat[,-sel]
+dat$escenario3 <- tmp
+dat[1,]
+
+# export state by state
+dd <- "/home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/redisProcess/maps-with-all-proposals/2013/"
+setwd(dd)
+for (e in 1:32){
+    edo <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")[e]
+    dat.tmp <- dat[which(dat$edon==e),]
+    write.csv(dat.tmp, file = paste(edo, "Fed.csv", sep = ""), row.names = FALSE)
+}
 
 
 

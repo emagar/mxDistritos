@@ -3,6 +3,7 @@ data/too-big-4-github/*.*
 
 # temp unzipped files
 redisProcess/ifeRedist2013/1erEscenarioComentariosPartidos/*/Escenarios/tmp/*.*
+redisProcess/ifeRedist2013/2oEscenarioComentariosPartidos/*/Escenarios/tmp/*.*
 
 # backups
 *.bak
