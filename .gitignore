@@ -1,6 +1,12 @@
 # files too large for github stored here
 data/too-big-4-github/*.*
 
+# temp unzipped files
+redisProcess/ifeRedist2013/1erEscenarioComentariosPartidos/*/Escenarios/tmp/*.*
+
+# backups
+*.bak
+
 # History files
 .Rhistory
 .Rapp.history
