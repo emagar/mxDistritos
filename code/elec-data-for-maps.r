@@ -794,6 +794,9 @@ v12m <- within(v12m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18
 v15m <- within(v15m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
 v18m <- within(v18m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
 
+
+
+
 ################################################################################
 ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly ##
 ## Until that is fixed, this aggregates municipios in an ad-hoc fashion to    ##
@@ -1546,6 +1549,70 @@ summary.lm(regs.2015$left[[1]])$coef[2,1]
 ## morenaRealm[1,]
 # version 3: party's own vote plus proportional part of coal
 ## morenaBrkm
+
+
+##############################################################################################
+## which municipios (or secciones within) have been relocated by parties in 2005 2013 2017? ##
+##############################################################################################
+e <- 2
+y <- 2013
+edo <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")[e]
+tmp <- read.csv(paste("redisProcess/maps-with-all-proposals/", y, "/", edo, "Fed.csv", sep = ""), stringsAsFactors = FALSE)
+colnames(tmp)
+
+moves <- tmp
+
+work <- tmp[,grep("1", colnames(tmp))] # get escenario 1 columns
+
+
+tmp.w <- work[,grep("pan.*1", colnames(work))] # get pan's counteroffers
+if (ncol(tmp.w)>0){
+    tmp.w <- tmp.w - work$escenario1 # get differences
+    tmp.w[tmp.w!=0] <- 1 # make dummy
+    dpanmoved <- rowSums(tmp.w)
+}
+#
+tmp.w <- work[,grep("pri.*1", colnames(work))] # get pri's counteroffers
+if (ncol(tmp.w)>0){
+    tmp.w <- tmp.w - work$escenario1 # get differences
+    tmp.w[tmp.w!=0] <- 1 # make dummy
+    dprimoved <- rowSums(tmp.w)
+}
+#
+tmp.w <- work[,grep("prd.*1", colnames(work))] # get prd's counteroffers
+if (ncol(tmp.w)>0){
+    tmp.w <- tmp.w - work$escenario1 # get differences
+    tmp.w[tmp.w!=0] <- 1 # make dummy
+    dprdmoved <- rowSums(tmp.w)
+}
+#
+tmp.w <- work[,grep("morena.*1", colnames(work))] # get morena's counteroffers
+if (ncol(tmp.w)>0){
+    tmp.w <- tmp.w - work$escenario1 # get differences
+    tmp.w[tmp.w!=0] <- 1 # make dummy
+    dmorenamoved <- rowSums(tmp.w)
+}
+#
+tmp.w <- work # get everyone's counteroffers
+if (ncol(tmp.w)>0){
+    tmp.w <- tmp.w - work$escenario1 # get differences
+    tmp.w[tmp.w!=0] <- 1 # make dummy
+    dmoved <- rowSums(tmp.w)
+}
+
+
+
+table(morena.w)
+
+colnames(tmp)[e1]
+
+tmp <- as.data.frame(matrix(1:9, nrow=3, ncol=3)) - c(1,0,1)
+x
+
+summary(eq)
+colnames(eq)
+x
+
 
 
 # check these
