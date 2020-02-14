@@ -27,6 +27,7 @@ if (agg=="m") { # secc data not ready yet
     v <- sortBy(target = v, By = v)
     winner$w91  <- l[,1]
     winner$mg91 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
+    winner$w91[is.na(winner$mg91)] <- NA
     message("1991 done")
 }
 ##########
@@ -145,20 +146,20 @@ rm(v,l)
 #pan
 tmp <- winner[,grep("^w[0-9]", colnames(winner))]
 tmp <- ifelse(tmp=="pan" | tmp=="panc", 1, 0)
-winner$nwin.pan <- rowSums(tmp)
+winner$nwin.pan <- rowSums(tmp, na.rm=TRUE)
 #pri
 tmp <- winner[,grep("^w[0-9]", colnames(winner))]
 tmp <- ifelse(tmp=="pri" | tmp=="pric", 1, 0)
-winner$nwin.pri <- rowSums(tmp)
+winner$nwin.pri <- rowSums(tmp, na.rm=TRUE)
 #left
 tmp <- winner[,grep("^w[0-9]", colnames(winner))]
 sel.r <- which(tmp[,"w18"]=="prd")
 tmp[sel.r,"w18"] <- "panc" # rename prd in 2018 to not count it as left's here
 tmp <- ifelse(tmp=="prd" | tmp=="prdc" | tmp=="morena" | tmp=="morenac", 1, 0)
-winner$nwin.left <- rowSums(tmp)
+winner$nwin.left <- rowSums(tmp, na.rm=TRUE)
 #oth
 tmp <- winner[,grep("^w[0-9]", colnames(winner))]
-winner <- within(winner, nwin.oth <- ncol(tmp) - nwin.pan - nwin.pri - nwin.left)
+winner <- within(winner, nwin.oth <- ncol(tmp) - nwin.pan - nwin.pri - nwin.left) # pbm: assigns NAs as oth victory
 
 ## # rename output
 ## if (agg=="m") {

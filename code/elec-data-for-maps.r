@@ -1200,9 +1200,12 @@ for (i in non.nas){
     regs.2006$pan[[i]]    <- reg.pan
     regs.2006$left[[i]]   <- reg.left
     regs.2006$oth[[i]]    <- reg.oth
-    #
-    data.tmp$vhat.left <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # open slots for projections
-    data.tmp$bhat.left <- data.tmp$bhat.pan <- NA # open slots for slope estimates
+    #                                                                    ##############################
+    #                                                                    # DO THESE WHEN PREDICTING   #
+    #                                                                    # FIRST YEAR ONLY:           #
+    data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
+    data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
     data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
@@ -1232,11 +1235,11 @@ for (i in non.nas){
     regs.2009$pan[[i]]    <- reg.pan
     regs.2009$left[[i]]   <- reg.left
     regs.2009$oth[[i]]    <- reg.oth
-    #                                                                    ##############################
-    #                                                                    # DO THESE WHEN PREDICTING   #
-    #                                                                    # FIRST YEAR ONLY:           #
-    data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
-    data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
+    ## #                                                                    ##############################
+    ## #                                                                    # DO THESE WHEN PREDICTING   #
+    ## #                                                                    # FIRST YEAR ONLY:           #
+    ## data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
+    ## data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
     data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
@@ -1442,7 +1445,6 @@ if (agg=="s") {
         extendCoal[[sel.from[i]]] <- reg.from
     }
 }
-
 
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
