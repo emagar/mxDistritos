@@ -659,6 +659,7 @@ v15 <- tmp.func(v15)
 v18 <- tmp.func(v18)
 rm(tmp,tmp.func) # clean
 
+
 ###################################################
 ## consolidate municipios before secciones       ##
 ## are manipulated to deal with reseccionamiento ##
@@ -677,16 +678,91 @@ v12 <- merge(x = v12, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y 
 v15 <- merge(x = v15, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
 v18 <- merge(x = v18, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
 
+
+###########################################################################################################
+## These objects will receive new municipios' vote manipulations, which otherwise aggregate incorrectly. ##
+## There is an excel example of fixes in reelec/code/example-new-munic-manip.ods                         ##
+###########################################################################################################
+eq.new <- eq[which(eq$dmunchg==1),]      # dmunchg indicates new municipios only, not parents
+sel.c <- grep("^mun[0-9]+",colnames(eq)) # select munyyyy columns
+tmp <- as.matrix(eq.new[,sel.c])
+tmp <- as.vector(tmp)
+tmp <- unique(tmp)                       # vector with all parents and children
+sel.r <- which(eq$ife %in% tmp)
+# subset new municipios and their parents' secciones
+eq.new <- eq[sel.r,]
+# fill parents (dmunchg==0) munyyyy columns with ife 
+eq.new[eq.new$dmunchg==0,sel.c] <- eq.new$ife[eq.new$dmunchg==0]
+# re-compute edosecn as in v94, v97 etc
+eq.new <- within(eq.new, edosecn <- edon*10000 + seccion)
+# shave useless cols
+eq.new <- eq.new[,-grep("^dis[0-9]+$", colnames(eq.new))]
+#eq.new <- eq.new[,-grep("OBSERVACIONES|action|fr.to|orig.dest|when|color|coment", colnames(eq.new))]
+eq.new <- eq.new[,-grep("action|fr.to|orig.dest|when|color|coment", colnames(eq.new))]
+eq.new <- eq.new[,-grep("ord|^edo.?$|^mun.?$|inegi|ife|seccion", colnames(eq.new))]
+#
+# include manipulated ife in vote data
+tmp <- eq.new[,  c("edosecn","dmunchg","mun1994")] # subset 1994 col
+colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
+v94manip <- merge(x = v94, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
+tmp <- eq.new[,  c("edosecn","dmunchg","mun1997")] # subset 1997 col
+colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
+v97manip <- merge(x = v97, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
+tmp <- eq.new[,  c("edosecn","dmunchg","mun2000")] # subset 2000 colv
+colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
+v00manip <- merge(x = v00, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
+tmp <- eq.new[,  c("edosecn","dmunchg","mun2003")] # subset 2003 col
+colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
+v03manip <- merge(x = v03, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
+tmp <- eq.new[,  c("edosecn","dmunchg","mun2006")] # subset 2006 col
+colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
+v06manip <- merge(x = v06, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
+tmp <- eq.new[,  c("edosecn","dmunchg","mun2009")] # subset 2009 col
+colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
+v09manip <- merge(x = v09, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
+tmp <- eq.new[,  c("edosecn","dmunchg","mun2012")] # subset 2012 col
+colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
+v12manip <- merge(x = v12, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
+tmp <- eq.new[,  c("edosecn","dmunchg","mun2015")] # subset 2015 col
+colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
+v15manip <- merge(x = v15, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
+tmp <- eq.new[,  c("edosecn","dmunchg","mun2018")] # subset 2018 col
+colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
+v18manip <- merge(x = v18, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
+# replace ife with manipulated version
+homog <- function(x){
+    within(x, {
+        ife <- ife.y;
+        ife.x <- ife.y <- dmunchg <- NULL
+        inegi <- NULL # no longer valid
+        edon <- as.integer(edosecn/10000) # this eliminates missing edons
+        }
+    )
+}
+v94manip <- homog(v94manip)
+v97manip <- homog(v97manip)
+v00manip <- homog(v00manip)
+v03manip <- homog(v03manip)
+v06manip <- homog(v06manip)
+v09manip <- homog(v09manip)
+v12manip <- homog(v12manip)
+v15manip <- homog(v15manip)
+v18manip <- homog(v18manip)
+rm(homog)
+
+
 #################################################
 ## function to aggregate municipio-level votes ##
 #################################################
 ag.mun <- function(d=d, sel.c=sel.c){
     for (i in 1:length(sel.c)){
         # d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$inegi, FUN=sum, na.rm=TRUE) # use inegi codes
-        d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$ife, FUN=sum, na.rm=TRUE) # use ife codes
+        # d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$ife, FUN=sum, na.rm=TRUE) # use ife codes
+        d[,sel.c[i]] <- ave(d[,sel.c[i]],              d$ife, FUN=sum, na.rm=TRUE) # use ife codes
     }
     # sel.r <- which(duplicated(d$edon*1000+d$inegi)==TRUE) # use inegi codes
-    sel.r <- which(duplicated(d$edon*1000+d$ife)==TRUE) # use ife codes
+    # sel.r <- which(duplicated(d$edon*1000+d$ife)==TRUE) # use ife codes
+    sel.r <- which(duplicated(d$ife)==TRUE) # use ife codes
     d <- d[-sel.r,]
     return(d)
 }
@@ -794,7 +870,149 @@ v12m <- within(v12m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18
 v15m <- within(v15m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
 v18m <- within(v18m, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
 
-
+#
+##########################################
+## AGGREGATE MANIPULATED NEW MUNICIPIOS ##
+##########################################
+# select secciones in eq.new in any v94:v18
+sel <-        which(eq.new$edosecn %in% v94$edosecn)
+sel <- c(sel, which(eq.new$edosecn %in% v97$edosecn))
+sel <- c(sel, which(eq.new$edosecn %in% v00$edosecn))
+sel <- c(sel, which(eq.new$edosecn %in% v03$edosecn))
+sel <- c(sel, which(eq.new$edosecn %in% v06$edosecn))
+sel <- c(sel, which(eq.new$edosecn %in% v09$edosecn))
+sel <- c(sel, which(eq.new$edosecn %in% v12$edosecn))
+sel <- c(sel, which(eq.new$edosecn %in% v15$edosecn))
+sel <- c(sel, which(eq.new$edosecn %in% v18$edosecn))
+sel <- unique(sel)
+# following eq.new secciones not in any v94:v18
+eq.new$OBSERVACIONES[-sel] # all are new/dropped secciones, why not in any v..?
+#
+## ################
+## ## 1991 manip ##
+## ################
+## d <- v91manip;
+## d <- merge(x=d, y=tmp, by=c("edosecn","ife"), all=TRUE, sort=TRUE)
+## d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+## d <- ag.mun(d,sel.c)
+## d$edosecn <- d$seccion <- NULL
+## v91manip <- d
+################
+## 1994 manip ##
+################
+d <- v94manip; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
+d <- ag.mun(d,sel.c)
+d$edosecn <- d$seccion <- NULL
+v94manip <- d
+################
+## 1997 manip ##
+################
+d <- v97manip; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
+d <- ag.mun(d,sel.c)
+d$edosecn <- d$seccion <- NULL
+v97manip <- d
+################
+## 2000 manip ##
+################
+d <- v00manip; d[is.na(d)] <- 0
+sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
+d <- ag.mun(d,sel.c)
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- NULL
+v00manip <- d
+################
+## 2003 manip ##
+################
+d <- v03manip; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
+d <- ag.mun(d,sel.c)
+d$dpric <- as.numeric(d$dpric>0)
+d$edosecn <- d$seccion <- NULL
+v03manip <- d
+################
+## 2006 manip ##
+################
+d <- v06manip; d[is.na(d)] <- 0
+sel.c <- c("pan","pric","prdc","pna","asdc","efec")
+d <- ag.mun(d,sel.c)
+d$edosecn <- d$seccion <- NULL
+v06manip <- d
+################
+## 2009 manip ##
+################
+d <- v09manip; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
+d <- ag.mun(d,sel.c)
+d$dpric <- as.numeric(d$dpric>0)
+d$dptc <- as.numeric(d$dptc>0)
+d$edosecn <- d$seccion <- NULL
+v09manip <- d
+################
+## 2012 manip ##
+################
+d <- v12manip; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
+d <- ag.mun(d,sel.c)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- NULL
+v12manip <- d
+################
+## 2015 manip ##
+################
+d <- v15manip; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
+d <- ag.mun(d,sel.c)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- NULL
+v15manip <- d
+################
+## 2018 manip ##
+################
+d <- v18manip; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- NULL
+v18manip <- d
+#
+## drop seccion dummies
+v94manip <- within(v94manip, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v97manip <- within(v97manip, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v00manip <- within(v00manip, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v03manip <- within(v03manip, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v06manip <- within(v06manip, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v09manip <- within(v09manip, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v12manip <- within(v12manip, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v15manip <- within(v15manip, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v18manip <- within(v18manip, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+#
+# tmp will add missing municipios to each v..manip object (to produce square matrix)
+tmp <- c(v94manip$ife, v97manip$ife, v00manip$ife, v03manip$ife, v06manip$ife, v09manip$ife, v12manip$ife, v15manip$ife, v18manip$ife)
+tmp <- unique(tmp)
+tmp <- tmp[order(tmp)]
+tmp <- data.frame(ife=tmp)
+homog <- function(x){
+    x <- merge(x, tmp, by = "ife", all = TRUE, sort = TRUE)
+    return(x)
+}
+v94manip <- homog(v94manip)
+v97manip <- homog(v97manip)
+v00manip <- homog(v00manip)
+v03manip <- homog(v03manip)
+v06manip <- homog(v06manip)
+v09manip <- homog(v09manip)
+v12manip <- homog(v12manip)
+v15manip <- homog(v15manip)
+v18manip <- homog(v18manip)
+rm(homog)
 
 
 ################################################################################
@@ -829,6 +1047,7 @@ v91m <- d
 
 # verify symmetric dimensionality
 dim(v91m); dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); 
+           dim(v94manip); dim(v97manip); dim(v00manip); dim(v03manip); dim(v06manip); dim(v09manip); dim(v12manip); dim(v15manip); dim(v18manip); 
 # rename section-level aggregates to free v00 v03 etc for general use
 ## v91s <- v91;
 v94s <- v94; v97s <- v97; 
@@ -838,7 +1057,7 @@ rm(v94,v97,v00,v03,v06,v09,v12,v15,v18)
 
 # debug
 setwd(wd)
-save.image("data/too-big-4-github/tmp.RData")
+save.image("data/too-big-4-github/tmp.RData") # to restore later
 
 # drop columns before saving raw vote municipio files
 v91m <- within(v91m, ord <- munn <- NULL)
@@ -852,6 +1071,8 @@ v12m <- within(v12m, disn <- dpanc <- dpric <- dprdc <- NULL)
 v15m <- within(v15m, disn <- dpanc <- dpric <- dprdc <- dmorenac <- NULL)
 v18m <- within(v18m, disn <- dpanc <- dpric <- dmorenac <- NULL)
 #
+
+# 15ago2020: these are wrong for parents of new municipios, need manipulation
 write.csv(v91m, file = paste(wd, "data/dipfed-municipio-vraw-1991.csv", sep = ""), row.names = FALSE)
 write.csv(v94m, file = paste(wd, "data/dipfed-municipio-vraw-1994.csv", sep = ""), row.names = FALSE)
 write.csv(v97m, file = paste(wd, "data/dipfed-municipio-vraw-1997.csv", sep = ""), row.names = FALSE)
@@ -1551,6 +1772,7 @@ summary.lm(regs.2015$left[[1]])$coef[2,1]
 ## morenaRealm[1,]
 # version 3: party's own vote plus proportional part of coal
 ## morenaBrkm
+
 
 
 ##############################################################################################
