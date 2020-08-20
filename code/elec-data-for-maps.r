@@ -677,7 +677,7 @@ v09 <- merge(x = v09, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y 
 v12 <- merge(x = v12, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v12$munn <- NULL
 v15 <- merge(x = v15, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
 v18 <- merge(x = v18, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
-
+rm(muns)
 
 ###########################################################################################################
 ## These objects will receive new municipios' vote manipulations, which otherwise aggregate incorrectly. ##
@@ -1644,14 +1644,30 @@ write.csv(v12s, file = paste(wd, "data/dipfed-seccion-vraw-2012.csv", sep = ""),
 write.csv(v15s, file = paste(wd, "data/dipfed-seccion-vraw-2015.csv", sep = ""), row.names = FALSE)
 write.csv(v18s, file = paste(wd, "data/dipfed-seccion-vraw-2018.csv", sep = ""), row.names = FALSE)
 
-# reload data to restore unmanipulated vote files 
+# save municipal winners with correct manipulated data for new municipalities
+# v.. needed to work with winner script
+v91 <- v91m;
+v94 <- v94m; v97 <- v97m; v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
+# get unit winners and margins: will output object winner for chosen agg
+agg <- "m"
+source(paste(wd, "code/get-winners.r", sep = ""))
+head(winner)
+# save first part of output
+write.csv(winner,
+          file = paste(wd, "data/dipfed-municipio-win.csv", sep = ""), row.names = FALSE)
+
+
+######################################################
+## reload data to restore unmanipulated vote files  ##
+######################################################
 rm(list = ls())
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load("data/too-big-4-github/tmp.RData")
 
-eric  x
+# clean
+rm(ag.mun,ag.sec,d,sel,sel1,sel2,sel.c,sel.drop,sel.r,target.ife,tmp,to.num,treat.yrs)
 
 ####################################################################
 ## manipulate reseccionamiento cases to preserve them in analysis ##
@@ -1686,7 +1702,7 @@ if (agg=="d") {
 # get unit winners and margins: will output object winner for chosen agg
 source(paste(wd, "code/get-winners.r", sep = ""))
 #head(winner)
-# save first part of output
+# save first part of output <-- OJO 20ago2020 ESTO TIENE ERRORES EN NUEVOS MUNICIPIOS, HAY QUE MANIPULAR ANTES DE GUARDAR
 if (agg=="m") {
     write.csv(winner,
               file = paste(wd, "data/dipfed-municipio-win.csv", sep = ""), row.names = FALSE)
