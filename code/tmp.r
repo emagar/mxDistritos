@@ -13,58 +13,25 @@
 2. [DONE] merge mun94 into v94, mun97 into v97...
 3. [DONE] agg municpios: v94m... (non manip)
 4. [DONE] agg municpios: v94manip...
-5. list all secciones needing new mun manip in any year 1994:2018 (so that v..manip all have same nrows)
-6. fix/save mun data
-7. regress vhat for non-manip and manip data
-8. using yrchg, identify 5 obs that need replacement
-9. save m regs
+5. consolidate square vmanip matrix 
+6. list all secciones needing new mun manip in any year 1994:2018 (so that v..manip all have same nrows)
+7. fix/save mun data
+8. regress vhat for non-manip and manip data
+9. using yrchg, identify 5 obs that need replacement
+10. save m regs
 
    
 #######################
 
-# select secciones in eq.new in any v94:v18
-sel <-        which(eq.new$edosecn %in% v94$edosecn)
-sel <- c(sel, which(eq.new$edosecn %in% v97$edosecn))
-sel <- c(sel, which(eq.new$edosecn %in% v00$edosecn))
-sel <- c(sel, which(eq.new$edosecn %in% v03$edosecn))
-sel <- c(sel, which(eq.new$edosecn %in% v06$edosecn))
-sel <- c(sel, which(eq.new$edosecn %in% v09$edosecn))
-sel <- c(sel, which(eq.new$edosecn %in% v12$edosecn))
-sel <- c(sel, which(eq.new$edosecn %in% v15$edosecn))
-sel <- c(sel, which(eq.new$edosecn %in% v18$edosecn))
-sel <- unique(sel)
-# following eq.new secciones not in any v94:v18
-eq.new$OBSERVACIONES[-sel] # all are new/dropped secciones, why not in any v..?
-# this will add missing obs to each v..manip object
-tmp <- data.frame(edosecn=eq.new$edosecn[sel],ife=eq.new$mun1994[sel])
-#
-d <- v94manip; d <- merge(x=d, y=tmp, by=c("edosecn","ife"),all=TRUE)
-d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- ag.mun(d,sel.c)
-d$edosecn <- d$seccion <- NULL
-v94manip <- d
-
-
-dim(v94manip)
-dim(v97manip)
-dim(v00manip)
-dim(v03manip)
-dim(v06manip)
-dim(v09manip)
-dim(v12manip)
-dim(v15manip)
-dim(v18manip)
-
+ls()
 tmp <- eq.new[,  c("edosecn","dmunchg","mun1994")] # subset 1994 col
 colnames(tmp) <- c("edosecn","dmunchg","ife")      # rename ife
 v94manip <- merge(x = v94, y = tmp, by = "edosecn", all.x = FALSE, all.y = TRUE)
 v94manip[1,]
 
-eric  x
 # identify first federal election after municipio was created in a dataframe
 # (parent and child need manipulation) 
-tmp <- function(x){ # function to add rows)
+tmp <- function(x){ # function to add rows
     x <- matrix(x, nrow=1)
     return(x)
     }
@@ -179,12 +146,492 @@ treat.yrs <- rbind(treat.yrs, tmp(c(32057,2003,"child", 48)))
 treat.yrs <- rbind(treat.yrs, tmp(c(32047,2009,"parent",49)))
 treat.yrs <- rbind(treat.yrs, tmp(c(32058,2009,"child", 49)))
 colnames(treat.yrs) <- c("ife","yr.chg","childparent","dyad")
+# remove factors
+treat.yrs <- as.matrix(treat.yrs)
+treat.yrs <- data.frame(treat.yrs, stringsAsFactors = FALSE)
+# make numeric
+treat.yrs$ife <- as.numeric(treat.yrs$ife)
+treat.yrs$yr.chg <- as.numeric(treat.yrs$yr.chg)
+treat.yrs$dyad <- as.numeric(treat.yrs$dyad)
 
-table(treat.yrs$yr.chg)
-sel1 <- which(treat.yrs$yr.chg==1997)
-v18manip[1:5,]
+# save all to restore after saving raw votes manipulated to fix wrong mun aggregates)
+setwd(wd)
+save.image("data/too-big-4-github/tmp.RData") 
+
+# manipulate mun votes for export
+v94m <- v94m[order(v94m$ife),]; v94manip <- v94manip[order(v94manip$ife),] # sort
+v97m <- v97m[order(v97m$ife),]; v97manip <- v97manip[order(v97manip$ife),] # sort
+v00m <- v00m[order(v00m$ife),]; v00manip <- v00manip[order(v00manip$ife),] # sort
+v03m <- v03m[order(v03m$ife),]; v03manip <- v03manip[order(v03manip$ife),] # sort
+v06m <- v06m[order(v06m$ife),]; v06manip <- v06manip[order(v06manip$ife),] # sort
+v09m <- v09m[order(v09m$ife),]; v09manip <- v09manip[order(v09manip$ife),] # sort
+v12m <- v12m[order(v12m$ife),]; v12manip <- v12manip[order(v12manip$ife),] # sort
+v15m <- v15m[order(v15m$ife),]; v15manip <- v15manip[order(v15manip$ife),] # sort
+v18m <- v18m[order(v18m$ife),]; v18manip <- v18manip[order(v18manip$ife),] # sort
+##############
+## for 1994 ##
+##############
+sel <- which(treat.yrs$yr.chg==1997)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+sel1 <- which(v94m$ife     %in% target.ife)
+sel2 <- which(v94manip$ife %in% target.ife)
+if (length(grep(FALSE,v94m$ife[sel1]==v94manip$ife[sel2]))==0){
+    #table(v94m$ife[sel1]==v94manip$ife[sel2]) # debug
+    #v94m[sel1[1],] # debug
+    #v94manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","dpanc","dpric","dprdc")
+    v94m[sel1,sel.c] <- v94manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+###################
+## for 1994 1997 ##
+###################
+sel <- which(treat.yrs$yr.chg==2000)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+sel1 <- which(v94m$ife     %in% target.ife)
+sel2 <- which(v94manip$ife %in% target.ife)
+if (length(grep(FALSE,v94m$ife[sel1]==v94manip$ife[sel2]))==0){
+    #table(v94m$ife[sel1]==v94manip$ife[sel2]) # debug
+    #v94m[sel1[1],] # debug
+    #v94manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","dpanc","dpric","dprdc")
+    v94m[sel1,sel.c] <- v94manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v97m$ife     %in% target.ife)
+sel2 <- which(v97manip$ife %in% target.ife)
+if (length(grep(FALSE,v97m$ife[sel1]==v97manip$ife[sel2]))==0){
+    #table(v97m$ife[sel1]==v97manip$ife[sel2]) # debug
+    #v97m[sel1[1],] # debug
+    #v97manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","dpanc","dpric","dprdc")
+    v97m[sel1,sel.c] <- v97manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+########################
+## for 1994 1997 2000 ##
+########################
+sel <- which(treat.yrs$yr.chg==2003)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+sel1 <- which(v94m$ife     %in% target.ife)
+sel2 <- which(v94manip$ife %in% target.ife)
+if (length(grep(FALSE,v94m$ife[sel1]==v94manip$ife[sel2]))==0){
+    #table(v94m$ife[sel1]==v94manip$ife[sel2]) # debug
+    #v94m[sel1[1],] # debug
+    #v94manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","dpanc","dpric","dprdc")
+    v94m[sel1,sel.c] <- v94manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v97m$ife     %in% target.ife)
+sel2 <- which(v97manip$ife %in% target.ife)
+if (length(grep(FALSE,v97m$ife[sel1]==v97manip$ife[sel2]))==0){
+    #table(v97m$ife[sel1]==v97manip$ife[sel2]) # debug
+    #v97m[sel1[1],] # debug
+    #v97manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","dpanc","dpric","dprdc")
+    v97m[sel1,sel.c] <- v97manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v00m$ife     %in% target.ife)
+sel2 <- which(v00manip$ife %in% target.ife)
+if (length(grep(FALSE,v00m$ife[sel1]==v00manip$ife[sel2]))==0){
+    #table(v00m$ife[sel1]==v00manip$ife[sel2]) # debug
+    #v00m[sel1[1],] # debug
+    #v00manip[sel2[1],] # debug
+    sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dpric","dprdc")
+    v00m[sel1,sel.c] <- v00manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+#############################
+## for 1994 1997 2000 2003 ##
+#############################
+sel <- which(treat.yrs$yr.chg==2006)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+sel1 <- which(v94m$ife     %in% target.ife)
+sel2 <- which(v94manip$ife %in% target.ife)
+if (length(grep(FALSE,v94m$ife[sel1]==v94manip$ife[sel2]))==0){
+    #table(v94m$ife[sel1]==v94manip$ife[sel2]) # debug
+    #v94m[sel1[1],] # debug
+    #v94manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","dpanc","dpric","dprdc")
+    v94m[sel1,sel.c] <- v94manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v97m$ife     %in% target.ife)
+sel2 <- which(v97manip$ife %in% target.ife)
+if (length(grep(FALSE,v97m$ife[sel1]==v97manip$ife[sel2]))==0){
+    #table(v97m$ife[sel1]==v97manip$ife[sel2]) # debug
+    #v97m[sel1[1],] # debug
+    #v97manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","dpanc","dpric","dprdc")
+    v97m[sel1,sel.c] <- v97manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v00m$ife     %in% target.ife)
+sel2 <- which(v00manip$ife %in% target.ife)
+if (length(grep(FALSE,v00m$ife[sel1]==v00manip$ife[sel2]))==0){
+    #table(v00m$ife[sel1]==v00manip$ife[sel2]) # debug
+    #v00m[sel1[1],] # debug
+    #v00manip[sel2[1],] # debug
+    sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dpric","dprdc")
+    v00m[sel1,sel.c] <- v00manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v03m$ife     %in% target.ife)
+sel2 <- which(v03manip$ife %in% target.ife)
+if (length(grep(FALSE,v03m$ife[sel1]==v03manip$ife[sel2]))==0){
+    #table(v03m$ife[sel1]==v03manip$ife[sel2]) # debug
+    #v03m[sel1[1],] # debug
+    #v03manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric","efec","dpanc","dpric","dprdc")
+    v03m[sel1,sel.c] <- v03manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+##################################
+## for 1994 1997 2000 2003 2006 ##
+##################################
+sel <- which(treat.yrs$yr.chg==2009)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+sel1 <- which(v94m$ife     %in% target.ife)
+sel2 <- which(v94manip$ife %in% target.ife)
+if (length(grep(FALSE,v94m$ife[sel1]==v94manip$ife[sel2]))==0){
+    #table(v94m$ife[sel1]==v94manip$ife[sel2]) # debug
+    #v94m[sel1[1],] # debug
+    #v94manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","dpanc","dpric","dprdc")
+    v94m[sel1,sel.c] <- v94manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v97m$ife     %in% target.ife)
+sel2 <- which(v97manip$ife %in% target.ife)
+if (length(grep(FALSE,v97m$ife[sel1]==v97manip$ife[sel2]))==0){
+    #table(v97m$ife[sel1]==v97manip$ife[sel2]) # debug
+    #v97m[sel1[1],] # debug
+    #v97manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","dpanc","dpric","dprdc")
+    v97m[sel1,sel.c] <- v97manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v00m$ife     %in% target.ife)
+sel2 <- which(v00manip$ife %in% target.ife)
+if (length(grep(FALSE,v00m$ife[sel1]==v00manip$ife[sel2]))==0){
+    #table(v00m$ife[sel1]==v00manip$ife[sel2]) # debug
+    #v00m[sel1[1],] # debug
+    #v00manip[sel2[1],] # debug
+    sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dpric","dprdc")
+    v00m[sel1,sel.c] <- v00manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v03m$ife     %in% target.ife)
+sel2 <- which(v03manip$ife %in% target.ife)
+if (length(grep(FALSE,v03m$ife[sel1]==v03manip$ife[sel2]))==0){
+    #table(v03m$ife[sel1]==v03manip$ife[sel2]) # debug
+    #v03m[sel1[1],] # debug
+    #v03manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric","efec","dpanc","dpric","dprdc")
+    v03m[sel1,sel.c] <- v03manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v06m$ife     %in% target.ife)
+sel2 <- which(v06manip$ife %in% target.ife)
+if (length(grep(FALSE,v06m$ife[sel1]==v06manip$ife[sel2]))==0){
+    #table(v06m$ife[sel1]==v06manip$ife[sel2]) # debug
+    #v06m[sel1[1],] # debug
+    #v06manip[sel2[1],] # debug
+    sel.c <- c("pan","pric","prdc","pna","asdc","efec","dpanc","dpric","dprdc")
+    v06m[sel1,sel.c] <- v06manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+## #######################################
+## ## for 1994 1997 2000 2003 2006 2009 ##
+## #######################################
+## # OJO: no new municipalities in 2012
+#
+############################################
+## for 1994 1997 2000 2003 2006 2009 2012 ##
+############################################
+sel <- which(treat.yrs$yr.chg==2015)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+sel1 <- which(v94m$ife     %in% target.ife)
+sel2 <- which(v94manip$ife %in% target.ife)
+if (length(grep(FALSE,v94m$ife[sel1]==v94manip$ife[sel2]))==0){
+    #table(v94m$ife[sel1]==v94manip$ife[sel2]) # debug
+    #v94m[sel1[1],] # debug
+    #v94manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","dpanc","dpric","dprdc")
+    v94m[sel1,sel.c] <- v94manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v97m$ife     %in% target.ife)
+sel2 <- which(v97manip$ife %in% target.ife)
+if (length(grep(FALSE,v97m$ife[sel1]==v97manip$ife[sel2]))==0){
+    #table(v97m$ife[sel1]==v97manip$ife[sel2]) # debug
+    #v97m[sel1[1],] # debug
+    #v97manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","dpanc","dpric","dprdc")
+    v97m[sel1,sel.c] <- v97manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v00m$ife     %in% target.ife)
+sel2 <- which(v00manip$ife %in% target.ife)
+if (length(grep(FALSE,v00m$ife[sel1]==v00manip$ife[sel2]))==0){
+    #table(v00m$ife[sel1]==v00manip$ife[sel2]) # debug
+    #v00m[sel1[1],] # debug
+    #v00manip[sel2[1],] # debug
+    sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dpric","dprdc")
+    v00m[sel1,sel.c] <- v00manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v03m$ife     %in% target.ife)
+sel2 <- which(v03manip$ife %in% target.ife)
+if (length(grep(FALSE,v03m$ife[sel1]==v03manip$ife[sel2]))==0){
+    #table(v03m$ife[sel1]==v03manip$ife[sel2]) # debug
+    #v03m[sel1[1],] # debug
+    #v03manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric","efec","dpanc","dpric","dprdc")
+    v03m[sel1,sel.c] <- v03manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v06m$ife     %in% target.ife)
+sel2 <- which(v06manip$ife %in% target.ife)
+if (length(grep(FALSE,v06m$ife[sel1]==v06manip$ife[sel2]))==0){
+    #table(v06m$ife[sel1]==v06manip$ife[sel2]) # debug
+    #v06m[sel1[1],] # debug
+    #v06manip[sel2[1],] # debug
+    sel.c <- c("pan","pric","prdc","pna","asdc","efec","dpanc","dpric","dprdc")
+    v06m[sel1,sel.c] <- v06manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v09m$ife     %in% target.ife)
+sel2 <- which(v09manip$ife %in% target.ife)
+if (length(grep(FALSE,v09m$ife[sel1]==v09manip$ife[sel2]))==0){
+    #table(v09m$ife[sel1]==v09manip$ife[sel2]) # debug
+    #v09m[sel1[1],] # debug
+    #v09manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pvem","pt","conve","pna","psd","pric","ptc","efec","dpanc","dpric","dprdc","dptc","lisnom")
+    v09m[sel1,sel.c] <- v09manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v12m$ife     %in% target.ife)
+sel2 <- which(v12manip$ife %in% target.ife)
+if (length(grep(FALSE,v12m$ife[sel1]==v12manip$ife[sel2]))==0){
+    #table(v12m$ife[sel1]==v12manip$ife[sel2]) # debug
+    #v12m[sel1[1],] # debug
+    #v12manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","dpanc","dpric","dprdc")
+    v12m[sel1,sel.c] <- v12manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+#################################################
+## for 1994 1997 2000 2003 2006 2009 2012 2015 ##
+#################################################
+sel <- which(treat.yrs$yr.chg==2018)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+sel1 <- which(v94m$ife     %in% target.ife)
+sel2 <- which(v94manip$ife %in% target.ife)
+if (length(grep(FALSE,v94m$ife[sel1]==v94manip$ife[sel2]))==0){
+    #table(v94m$ife[sel1]==v94manip$ife[sel2]) # debug
+    #v94m[sel1[1],] # debug
+    #v94manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","dpanc","dpric","dprdc")
+    v94m[sel1,sel.c] <- v94manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v97m$ife     %in% target.ife)
+sel2 <- which(v97manip$ife %in% target.ife)
+if (length(grep(FALSE,v97m$ife[sel1]==v97manip$ife[sel2]))==0){
+    #table(v97m$ife[sel1]==v97manip$ife[sel2]) # debug
+    #v97m[sel1[1],] # debug
+    #v97manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","dpanc","dpric","dprdc")
+    v97m[sel1,sel.c] <- v97manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v00m$ife     %in% target.ife)
+sel2 <- which(v00manip$ife %in% target.ife)
+if (length(grep(FALSE,v00m$ife[sel1]==v00manip$ife[sel2]))==0){
+    #table(v00m$ife[sel1]==v00manip$ife[sel2]) # debug
+    #v00m[sel1[1],] # debug
+    #v00manip[sel2[1],] # debug
+    sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dpric","dprdc")
+    v00m[sel1,sel.c] <- v00manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v03m$ife     %in% target.ife)
+sel2 <- which(v03manip$ife %in% target.ife)
+if (length(grep(FALSE,v03m$ife[sel1]==v03manip$ife[sel2]))==0){
+    #table(v03m$ife[sel1]==v03manip$ife[sel2]) # debug
+    #v03m[sel1[1],] # debug
+    #v03manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric","efec","dpanc","dpric","dprdc")
+    v03m[sel1,sel.c] <- v03manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v06m$ife     %in% target.ife)
+sel2 <- which(v06manip$ife %in% target.ife)
+if (length(grep(FALSE,v06m$ife[sel1]==v06manip$ife[sel2]))==0){
+    #table(v06m$ife[sel1]==v06manip$ife[sel2]) # debug
+    #v06m[sel1[1],] # debug
+    #v06manip[sel2[1],] # debug
+    sel.c <- c("pan","pric","prdc","pna","asdc","efec","dpanc","dpric","dprdc")
+    v06m[sel1,sel.c] <- v06manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v09m$ife     %in% target.ife)
+sel2 <- which(v09manip$ife %in% target.ife)
+if (length(grep(FALSE,v09m$ife[sel1]==v09manip$ife[sel2]))==0){
+    #table(v09m$ife[sel1]==v09manip$ife[sel2]) # debug
+    #v09m[sel1[1],] # debug
+    #v09manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pvem","pt","conve","pna","psd","pric","ptc","efec","dpanc","dpric","dprdc","dptc","lisnom")
+    v09m[sel1,sel.c] <- v09manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v12m$ife     %in% target.ife)
+sel2 <- which(v12manip$ife %in% target.ife)
+if (length(grep(FALSE,v12m$ife[sel1]==v12manip$ife[sel2]))==0){
+    #table(v12m$ife[sel1]==v12manip$ife[sel2]) # debug
+    #v12m[sel1[1],] # debug
+    #v12manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","dpanc","dpric","dprdc")
+    v12m[sel1,sel.c] <- v12manip[sel2,sel.c]
+v12m[sel1,]
+v12manip[sel2,]
+} else {
+    print("ERROR: dest != orig")
+}
+#
+sel1 <- which(v15m$ife     %in% target.ife)
+sel2 <- which(v15manip$ife %in% target.ife)
+if (length(grep(FALSE,v15m$ife[sel1]==v15manip$ife[sel2]))==0){
+    #table(v15m$ife[sel1]==v15manip$ife[sel2]) # debug
+    #v15m[sel1[1],] # debug
+    #v15manip[sel2[1],] # debug
+    sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","dpanc","dpric","dprdc","dmorenac","lisnom")
+    v15m[sel1,sel.c] <- v15manip[sel2,sel.c]
+} else {
+    print("ERROR: dest != orig")
+}
+
+# drop columns before saving raw vote municipio files
+v91m <- within(v91m, ord <- munn <- NULL)
+v94m <- within(v94m, disn <- dpanc <- dpric <- dprdc <- NULL)
+v97m <- within(v97m, disn <- dpanc <- dpric <- dprdc <- NULL)
+v00m <- within(v00m, disn <- dpanc <- dpric <- dprdc <- NULL)
+v03m <- within(v03m, disn <- dpanc <- dpric <- dprdc <- NULL)
+v06m <- within(v06m, disn <- dpanc <- dpric <- dprdc <- NULL)
+v09m <- within(v09m, disn <- dpanc <- dpric <- dprdc <- dptc <- NULL)
+v12m <- within(v12m, disn <- dpanc <- dpric <- dprdc <- NULL)
+v15m <- within(v15m, disn <- dpanc <- dpric <- dprdc <- dmorenac <- NULL)
+v18m <- within(v18m, disn <- dpanc <- dpric <- dmorenac <- NULL)
+#
+
+# saves fixed mun raw aggregates
+write.csv(v91m, file = paste(wd, "data/dipfed-municipio-vraw-1991.csv", sep = ""), row.names = FALSE)
+write.csv(v94m, file = paste(wd, "data/dipfed-municipio-vraw-1994.csv", sep = ""), row.names = FALSE)
+write.csv(v97m, file = paste(wd, "data/dipfed-municipio-vraw-1997.csv", sep = ""), row.names = FALSE)
+write.csv(v00m, file = paste(wd, "data/dipfed-municipio-vraw-2000.csv", sep = ""), row.names = FALSE)
+write.csv(v03m, file = paste(wd, "data/dipfed-municipio-vraw-2003.csv", sep = ""), row.names = FALSE)
+write.csv(v06m, file = paste(wd, "data/dipfed-municipio-vraw-2006.csv", sep = ""), row.names = FALSE)
+write.csv(v09m, file = paste(wd, "data/dipfed-municipio-vraw-2009.csv", sep = ""), row.names = FALSE)
+write.csv(v12m, file = paste(wd, "data/dipfed-municipio-vraw-2012.csv", sep = ""), row.names = FALSE)
+write.csv(v15m, file = paste(wd, "data/dipfed-municipio-vraw-2015.csv", sep = ""), row.names = FALSE)
+write.csv(v18m, file = paste(wd, "data/dipfed-municipio-vraw-2018.csv", sep = ""), row.names = FALSE)
+
+# drop columns before saving raw vote seccion files
+#v91s <- within(v91s, munn <- NULL)
+v94s <- within(v94s, edosecn <- dpanc <- dpric <- dprdc <- NULL)
+v97s <- within(v97s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- dpanc <- dpric <- dprdc <- NULL)
+v00s <- within(v00s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v03s <- within(v03s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v06s <- within(v06s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v09s <- within(v09s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v12s <- within(v12s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v15s <- within(v15s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+v18s <- within(v18s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- NULL)
+#
+#write.csv(v91s, file = paste(wd, "data/dipfed-seccion-vraw-1991.csv", sep = ""), row.names = FALSE)
+write.csv(v94s, file = paste(wd, "data/dipfed-seccion-vraw-1994.csv", sep = ""), row.names = FALSE)
+write.csv(v97s, file = paste(wd, "data/dipfed-seccion-vraw-1997.csv", sep = ""), row.names = FALSE)
+write.csv(v00s, file = paste(wd, "data/dipfed-seccion-vraw-2000.csv", sep = ""), row.names = FALSE)
+write.csv(v03s, file = paste(wd, "data/dipfed-seccion-vraw-2003.csv", sep = ""), row.names = FALSE)
+write.csv(v06s, file = paste(wd, "data/dipfed-seccion-vraw-2006.csv", sep = ""), row.names = FALSE)
+write.csv(v09s, file = paste(wd, "data/dipfed-seccion-vraw-2009.csv", sep = ""), row.names = FALSE)
+write.csv(v12s, file = paste(wd, "data/dipfed-seccion-vraw-2012.csv", sep = ""), row.names = FALSE)
+write.csv(v15s, file = paste(wd, "data/dipfed-seccion-vraw-2015.csv", sep = ""), row.names = FALSE)
+write.csv(v18s, file = paste(wd, "data/dipfed-seccion-vraw-2018.csv", sep = ""), row.names = FALSE)
+
+# reload data to restore unmanipulated vote files 
+rm(list = ls())
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(wd)
+load("data/too-big-4-github/tmp.RData")
+
+
+
+
 x
 
+table(treat.yrs$yr.chg, useNA = "always")
+x
 ################
 
 dim(eq.new)
