@@ -9,7 +9,7 @@ Last revision: 2020-08-20
 - Email: emagar at itam dot mx
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [[https://cartografia.ife.org.mx/sige7/?cartografia][here]]). Data in this repo is prepared for mapping and preliminary/basic statistical analysis.
 * Recent changes
-- 2020-08-20: Fixed vote aggregates for new municipalities. 
+- 2020-08-20: Fixed raw vote aggregates and winners for new municipalities. Problem affected split municipality in years before the creation of the new unit.  
 * Files in the repository and how to cite them
 You are free to download and modify the data (see the LICENSE document) provided you give proper credit to this source. Unless otherwise noted below the file descriptor, the cite is Eric Magar (2019) Recent Mexican electoral geography repository, [[https://github.com/emagar/mxDistritos]].
 ** Measures of recent party performance for use in maps 

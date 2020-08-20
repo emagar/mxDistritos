@@ -750,7 +750,6 @@ v15manip <- homog(v15manip)
 v18manip <- homog(v18manip)
 rm(homog)
 
-
 #################################################
 ## function to aggregate municipio-level votes ##
 #################################################
@@ -1014,6 +1013,14 @@ v15manip <- homog(v15manip)
 v18manip <- homog(v18manip)
 rm(homog)
 
+# create a v91manip by subsetting parent/child municipios only (drop this when seccion-level data for 1991 available)
+d <- read.csv(paste(dd, "../municipios/dipfed1991.csv", sep = ""), header=TRUE, stringsAsFactors=FALSE)
+d$mun <- d$munn <- d$ord <- NULL
+tmp <- v94manip; tmp[,-which(colnames(tmp)=="ife")] <- NULL # keep these municipios only
+d <- merge(x = tmp, y = d, by = "ife", all.x = TRUE, all.y = FALSE)
+d <- d[order(d$ife),]
+v91manip <- d
+
 
 ################################################################################
 ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly ##
@@ -1047,7 +1054,7 @@ v91m <- d
 
 # verify symmetric dimensionality
 dim(v91m); dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); 
-           dim(v94manip); dim(v97manip); dim(v00manip); dim(v03manip); dim(v06manip); dim(v09manip); dim(v12manip); dim(v15manip); dim(v18manip); 
+dim(v91manip); dim(v94manip); dim(v97manip); dim(v00manip); dim(v03manip); dim(v06manip); dim(v09manip); dim(v12manip); dim(v15manip); dim(v18manip); 
 # rename section-level aggregates to free v00 v03 etc for general use
 ## v91s <- v91;
 v94s <- v94; v97s <- v97; 
@@ -1700,13 +1707,11 @@ if (agg=="d") {
 
 #
 # get unit winners and margins: will output object winner for chosen agg
-source(paste(wd, "code/get-winners.r", sep = ""))
+if (agg=="s"|agg=="d") { # done for municipalities above, with manipulated data
+    source(paste(wd, "code/get-winners.r", sep = ""))
+}
 #head(winner)
 # save first part of output <-- OJO 20ago2020 ESTO TIENE ERRORES EN NUEVOS MUNICIPIOS, HAY QUE MANIPULAR ANTES DE GUARDAR
-if (agg=="m") {
-    write.csv(winner,
-              file = paste(wd, "data/dipfed-municipio-win.csv", sep = ""), row.names = FALSE)
-}
 if (agg=="s") {
     write.csv(winner,
               file = paste(wd, "data/dipfed-seccion-win.csv", sep = ""), row.names = FALSE)
@@ -1889,6 +1894,7 @@ for (i in 1:nrow(v00)){
     extendCoal[[i]] <- cbind(extendCoal[[i]], yr.means[,6:8])
 }
 
+
 save.image("data/too-big-4-github/tmp3.RData")
 
 rm(list = ls())
@@ -2016,7 +2022,7 @@ for (i in non.nas){
     ## #                                                                    # FIRST YEAR ONLY:           #
     ## data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
     ## data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
-    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                     ##############################
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
     data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
