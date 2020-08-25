@@ -171,7 +171,7 @@
 7,7089,7090,"pri",0.567,"prd",0.126,"prd",0.1,"pri",0.072,"pan",0.017,"pric",0.014,"pric",0.068,"pric",0.098,"pric",0.404,"morenac",0.552,1,6,3,0
 7,7090,7091,"pri",0.107,"pri",0.196,"pri",0.363,"pri",0.189,"prd",0.004,"pric",0.124,"pric",0.1,"pric",0.137,"pric",0.711,"pric",0.054,0,9,1,0
 7,7091,7092,"pri",0.913,"pri",0.489,"pri",0.318,"panc",0.06,"pan",0.066,"prdc",0,"pan",0.105,"pric",0.11,"pric",0.404,"morenac",0.33,3,5,2,0
-7,7092,7093,"pri",0.894,"pri",0.541,"pri",0.492,"pri",0.251,"pri",0.044,"pric",0.167,"pan",0.47,"pric",0.471,"pric",0.828,"pric",0,1,9,0,0
+7,7092,7093,"pri",0.894,"pri",0.494,"pri",0.475,"pri",0.305,"pri",0.137,"pric",0.188,"pan",0.424,"pric",0.382,"pric",0.848,"pric",0,1,9,0,0
 7,7093,7094,"pri",0.538,"pri",0.164,"pri",0.675,"pri",0.17,"pri",0.055,"pric",0.322,"pric",0.259,"pric",0.457,"pric",0.773,"morenac",0.177,0,9,1,0
 7,7094,7095,"pri",0.501,"pri",0.145,"pri",0.576,"pri",0.407,"pri",0.551,"pric",0.21,"pric",0.268,"pric",0.52,"pric",0.889,"morenac",0.2,0,9,1,0
 7,7096,7096,"pri",0.701,"pri",0.051,"pri",0.743,"prdc",0.026,"pri",0.11,"pric",0.208,"prd",0.114,"pric",0.416,"pric",0.802,"pric",0.58,0,8,2,0
@@ -198,7 +198,7 @@
 7,7118,7117,NA,NA,"pan",NA,"pan",NA,"panc",NA,"pri",0.535,"pric",0.131,"prd",0.042,"pan",NA,"pric",0.782,"pric",0.173,4,4,1,1
 7,7119,7118,NA,NA,"pan",NA,"pan",NA,"panc",NA,"pri",0.511,"pric",0.429,"pric",0.173,"pric",0.556,"pric",0.95,"morenac",0.196,3,5,1,1
 7,7123,7120,NA,NA,"pan",NA,"pan",NA,"panc",NA,"pan",NA,"pan",NA,"pan",NA,"pan",NA,"pric",0.702,"morenac",0.454,7,1,1,1
-7,7124,7121,NA,NA,"pri",0.442,"pri",0.456,"pri",0.382,"pri",0.297,"pric",0.214,"pan",0.354,"pric",0.254,"pric",0.874,"pric",0.147,1,8,0,1
+7,7124,7121,NA,NA,"pan",NA,"pan",NA,"panc",NA,"pan",NA,"pan",NA,"pan",NA,"pan",NA,"pan",NA,"pric",0.147,8,1,0,1
 7,7122,7122,NA,NA,"pan",NA,"pan",NA,"panc",NA,"pan",NA,"pan",NA,"pan",NA,"pan",NA,"pric",0.656,"morenac",0.119,7,1,1,1
 7,7120,7123,NA,NA,"pan",NA,"pan",NA,"panc",NA,"pan",NA,"pan",NA,"pan",NA,"pan",NA,"pan",NA,"pric",0.196,8,1,0,1
 7,7121,7124,NA,NA,"pan",NA,"pan",NA,"panc",NA,"pan",NA,"pan",NA,"pan",NA,"pan",NA,"pan",NA,"pric",0.847,8,1,0,1

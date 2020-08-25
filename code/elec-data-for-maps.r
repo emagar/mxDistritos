@@ -1016,10 +1016,13 @@ rm(homog)
 # create a v91manip by subsetting parent/child municipios only (drop this when seccion-level data for 1991 available)
 d <- read.csv(paste(dd, "../municipios/dipfed1991.csv", sep = ""), header=TRUE, stringsAsFactors=FALSE)
 d$mun <- d$munn <- d$ord <- NULL
-tmp <- v94manip; tmp[,-which(colnames(tmp)=="ife")] <- NULL # keep these municipios only
+tmp <- v94manip; tmp[,-which(colnames(tmp)=="ife")] <- NULL             # keep these municipios only
+## tmp2 <- data.frame(ife = c(1001,1010,1011,3003,3005,15026,15040,15122)) # plus these new for 1994--they dont need manipulation
+## tmp <- rbind(tmp,tmp2)
 d <- merge(x = tmp, y = d, by = "ife", all.x = TRUE, all.y = FALSE)
 d <- d[order(d$ife),]
 v91manip <- d
+# OJO: absent 1991 seccion level vote, can't fix vhat-2009 in parents of muns created in 1994 
 
 
 ################################################################################
@@ -1069,115 +1072,178 @@ tmp <- function(x){ # function to add rows
     return(x)
     }
 treat.yrs <- data.frame()
-treat.yrs <- rbind(treat.yrs, tmp(c( 2004,2000,"parent",1)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 2005,2000,"child", 1)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 4006,1997,"parent",2)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 4011,1997,"child", 2)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 4003,2000,"parent",3)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 4010,2000,"child", 3)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7049,2003,"parent",4)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7118,2003,"child", 4)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7082,2003,"parent",5)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7117,2003,"child", 5)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7008,2003,"parent",6)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7116,2003,"child", 6)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7108,2015,"parent",7)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7122,2015,"child", 7)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7026,2003,"parent",8)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7112,2003,"child", 8)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7059,2003,"parent",9)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7113,2003,"child", 9)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7115,2003,"child", 9)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7052,2003,"parent",10)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7114,2003,"child", 10)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7002,2015,"parent",11)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7120,2015,"child", 11)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7081,2018,"parent",12)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7123,2018,"child", 12)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7071,2018,"parent",13)))
-treat.yrs <- rbind(treat.yrs, tmp(c( 7124,2018,"child", 13)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12073,1997,"parent",14)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12076,1997,"child", 14)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12013,2006,"parent",15)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12023,2006,"parent",15)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12080,2006,"child", 15)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12044,2009,"parent",16)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12079,2009,"child", 16)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12013,2009,"parent-again",17)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12081,2009,"child", 17)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12028,2009,"parent",18)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12077,2009,"child", 18)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12042,2009,"parent",19)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12053,2009,"parent",19)))
-treat.yrs <- rbind(treat.yrs, tmp(c(12078,2009,"child", 19)))
-treat.yrs <- rbind(treat.yrs, tmp(c(14008,2006,"parent",20)))
-treat.yrs <- rbind(treat.yrs, tmp(c(14125,2006,"child", 20)))
-treat.yrs <- rbind(treat.yrs, tmp(c(15083,2003,"parent",21)))
-treat.yrs <- rbind(treat.yrs, tmp(c(15123,2003,"child", 21)))
-treat.yrs <- rbind(treat.yrs, tmp(c(15075,2003,"parent",22)))
-treat.yrs <- rbind(treat.yrs, tmp(c(15124,2003,"child", 22)))
-treat.yrs <- rbind(treat.yrs, tmp(c(15045,2006,"parent",23)))
-treat.yrs <- rbind(treat.yrs, tmp(c(15125,2006,"child", 23)))
-treat.yrs <- rbind(treat.yrs, tmp(c(23002,1997,"parent",24)))
-treat.yrs <- rbind(treat.yrs, tmp(c(23008,1997,"child", 24)))
-treat.yrs <- rbind(treat.yrs, tmp(c(23003,2009,"parent",25)))
-treat.yrs <- rbind(treat.yrs, tmp(c(23009,2009,"child", 25)))
-treat.yrs <- rbind(treat.yrs, tmp(c(23007,2015,"parent",26)))
-treat.yrs <- rbind(treat.yrs, tmp(c(23010,2015,"child", 26)))
-treat.yrs <- rbind(treat.yrs, tmp(c(23001,2018,"parent",27)))
-treat.yrs <- rbind(treat.yrs, tmp(c(23011,2018,"child", 27)))
-treat.yrs <- rbind(treat.yrs, tmp(c(24037,1997,"parent",28)))
-treat.yrs <- rbind(treat.yrs, tmp(c(24058,1997,"child", 28)))
-treat.yrs <- rbind(treat.yrs, tmp(c(24010,1997,"parent",29)))
-treat.yrs <- rbind(treat.yrs, tmp(c(24057,1997,"child", 29)))
-treat.yrs <- rbind(treat.yrs, tmp(c(26063,1997,"parent",30)))
-treat.yrs <- rbind(treat.yrs, tmp(c(26071,1997,"child", 30)))
-treat.yrs <- rbind(treat.yrs, tmp(c(26061,1997,"parent",31)))
-treat.yrs <- rbind(treat.yrs, tmp(c(26072,1997,"child", 31)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29020,1997,"parent",32)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29060,1997,"child", 32)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29030,1997,"parent",33)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29054,1997,"child", 33)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29055,1997,"child", 33)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29010,1997,"parent",34)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29051,1997,"child", 34)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29052,1997,"child", 34)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29032,1997,"parent",35)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29053,1997,"child", 35)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29056,1997,"child", 35)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29038,1997,"parent",36)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29050,1997,"child", 36)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29029,1997,"parent",37)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29047,1997,"child", 37)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29049,1997,"child", 37)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29044,1997,"parent",38)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29048,1997,"child", 38)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29059,1997,"child", 38)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29040,1997,"parent",39)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29057,1997,"child", 39)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29015,1997,"parent",40)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29058,1997,"child", 40)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29023,1997,"parent",41)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29045,1997,"child", 41)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29022,1997,"parent",42)))
-treat.yrs <- rbind(treat.yrs, tmp(c(29046,1997,"child", 42)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30047,1997,"parent",43)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30208,1997,"child", 43)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30105,1997,"parent",44)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30150,1997,"parent",44)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30210,1997,"child", 44)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30072,1997,"parent",45)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30093,1997,"parent",45)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30109,1997,"parent",45)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30209,1997,"child", 45)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30103,2006,"parent",46)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30211,2006,"child", 46)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30131,2006,"parent",47)))
-treat.yrs <- rbind(treat.yrs, tmp(c(30212,2006,"child", 47)))
-treat.yrs <- rbind(treat.yrs, tmp(c(32017,2003,"parent",48)))
-treat.yrs <- rbind(treat.yrs, tmp(c(32057,2003,"child", 48)))
-treat.yrs <- rbind(treat.yrs, tmp(c(32047,2009,"parent",49)))
-treat.yrs <- rbind(treat.yrs, tmp(c(32058,2009,"child", 49)))
+##
+#treat.yrs <- rbind(treat.yrs, tmp(c( 1001,1994,"parent",1))) # need seccion-level 1991 to manipulate these
+#treat.yrs <- rbind(treat.yrs, tmp(c( 1010,1994,"child", 1))) # need seccion-level 1991 to manipulate these
+#treat.yrs <- rbind(treat.yrs, tmp(c( 1011,1994,"child", 1))) # need seccion-level 1991 to manipulate these
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 2004,2000,"parent",2))) # TIJUANA
+treat.yrs <- rbind(treat.yrs, tmp(c( 2005,2000,"child", 2))) # PLAYAS DE ROSARITO
+##
+#treat.yrs <- rbind(treat.yrs, tmp(c( 3003,1994,"parent",3))) # need seccion-level 1991 to manipulate these
+#treat.yrs <- rbind(treat.yrs, tmp(c( 3005,1994,"child", 3))) # need seccion-level 1991 to manipulate these
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 4006,1997,"parent",4))) # HOPELCHEN
+treat.yrs <- rbind(treat.yrs, tmp(c( 4011,1997,"child", 4))) # CALAKMUL
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 4003,2000,"parent",5))) # CARMEN
+treat.yrs <- rbind(treat.yrs, tmp(c( 4010,2000,"child", 5))) # ESCARCEGA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7049,2003,"parent",6))) # LARRAINZAR
+treat.yrs <- rbind(treat.yrs, tmp(c( 7118,2003,"child", 6))) # SANTIAGO EL PINAR
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7082,2003,"parent",7))) # SIMOJOVEL
+treat.yrs <- rbind(treat.yrs, tmp(c( 7117,2003,"child", 7))) # SAN ANDRES DURAZNAL
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7008,2003,"parent",8))) # ANGEL ALBINO CORZO
+treat.yrs <- rbind(treat.yrs, tmp(c( 7116,2003,"child", 8))) # MONTECRISTO DE GUERRERO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7108,2015,"parent",9))) # VILLA CORZO
+treat.yrs <- rbind(treat.yrs, tmp(c( 7122,2015,"child", 9))) # EL PARRAL
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7026,2003,"parent",10))) # CHENALHO
+treat.yrs <- rbind(treat.yrs, tmp(c( 7112,2003,"child", 10))) # ALDAMA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7059,2003,"parent",11))) # OCOSINGO
+treat.yrs <- rbind(treat.yrs, tmp(c( 7113,2003,"child", 11))) # BENEMERITO DE LAS AMERICAS
+treat.yrs <- rbind(treat.yrs, tmp(c( 7115,2003,"child", 11))) # MARQUES DE COMILLAS
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7052,2003,"parent",12))) # LAS MARGARITAS
+treat.yrs <- rbind(treat.yrs, tmp(c( 7114,2003,"child", 12))) # MARAVILLA TENEJAPA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7002,2015,"parent",13))) # ACALA
+treat.yrs <- rbind(treat.yrs, tmp(c( 7120,2015,"child", 13))) # EMILIANO ZAPATA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7093,2018,"parent",14))) # TECPATAN
+treat.yrs <- rbind(treat.yrs, tmp(c( 7121,2018,"child", 14))) # MEZCALAPA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7081,2018,"parent",15))) # SILTEPEC
+treat.yrs <- rbind(treat.yrs, tmp(c( 7123,2018,"child", 15))) # CAPITAN LUIS ANGEL VIDAL
+#
+treat.yrs <- rbind(treat.yrs, tmp(c( 7071,2018,"parent",16))) # PUEBLO NUEVO SOLISTLAHUACAN
+treat.yrs <- rbind(treat.yrs, tmp(c( 7124,2018,"child", 16))) # RINCON CHAMULA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(12073,1997,"parent",17))) # ZAPOTITLAN TABLAS
+treat.yrs <- rbind(treat.yrs, tmp(c(12076,1997,"child", 17))) # ACATEPEC
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(12013,2006,"parent",18))) # AZOYU
+treat.yrs <- rbind(treat.yrs, tmp(c(12023,2006,"parent",18))) # CUAJINICUALAPA
+treat.yrs <- rbind(treat.yrs, tmp(c(12080,2006,"child", 18))) # MARQUELIA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(12044,2009,"parent",19))) # METLATONOC
+treat.yrs <- rbind(treat.yrs, tmp(c(12079,2009,"child", 19))) # COCHOAPA EL GRANDE
+#
+#treat.yrs <- rbind(treat.yrs, tmp(c(12013,2009,"parent-again",20))) # AZOYU
+treat.yrs <- rbind(treat.yrs, tmp(c(12081,2009,"child", 20))) # JUCHITAN
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(12028,2009,"parent",21))) # CHILAPA DE ALVAREZ
+treat.yrs <- rbind(treat.yrs, tmp(c(12077,2009,"child", 21))) # JOSE JOAQUIN DE HERRERA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(12042,2009,"parent",22))) # MALINALTEPEC
+treat.yrs <- rbind(treat.yrs, tmp(c(12053,2009,"parent",22))) # SAN LUIS ACATLAN
+treat.yrs <- rbind(treat.yrs, tmp(c(12078,2009,"child", 22))) # ILIATENCO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(14008,2006,"parent",23))) # ARANDAS
+treat.yrs <- rbind(treat.yrs, tmp(c(14125,2006,"child", 23))) # SAN IGNACIO CERRO GORDO
+##
+#treat.yrs <- rbind(treat.yrs, tmp(c(15026,1994,"parent",24))) # need seccion-level 1991 to manipulate these
+#treat.yrs <- rbind(treat.yrs, tmp(c(15040,1994,"parent",24))) # need seccion-level 1991 to manipulate these
+#treat.yrs <- rbind(treat.yrs, tmp(c(15122,1994,"child", 24))) # need seccion-level 1991 to manipulate these
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(15083,2003,"parent",25))) # TEJUPILCO
+treat.yrs <- rbind(treat.yrs, tmp(c(15123,2003,"child", 25))) # LUVIANOS
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(15075,2003,"parent",26))) # SAN FELIPE DEL PROGRESO
+treat.yrs <- rbind(treat.yrs, tmp(c(15124,2003,"child", 26))) # SAN JOSE DEL RINCON
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(15045,2006,"parent",27))) # JALTENCO
+treat.yrs <- rbind(treat.yrs, tmp(c(15125,2006,"child", 27))) # TONATITLA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(23002,1997,"parent",28))) # COZUMEL
+treat.yrs <- rbind(treat.yrs, tmp(c(23008,1997,"child", 28))) # SOLIDARIDAD
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(23003,2009,"parent",29))) # FELIPE CARRILLO PUERTO
+treat.yrs <- rbind(treat.yrs, tmp(c(23009,2009,"child", 29))) # TULUM
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(23007,2015,"parent",30))) # OTHON P BLANCO
+treat.yrs <- rbind(treat.yrs, tmp(c(23010,2015,"child", 30))) # BACALAR
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(23001,2018,"parent",31))) # BENITO JUAREZ
+treat.yrs <- rbind(treat.yrs, tmp(c(23011,2018,"child", 31))) # PUERTO MORELOS
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(24037,1997,"parent",32))) # TAMAZUNCHALE
+treat.yrs <- rbind(treat.yrs, tmp(c(24058,1997,"child", 32))) # MATLAPA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(24010,1997,"parent",33))) # CIUDAD DEL MAIZ
+treat.yrs <- rbind(treat.yrs, tmp(c(24057,1997,"child", 33))) # EL NARANJO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(26063,1997,"parent",34))) # ETCHOJOA
+treat.yrs <- rbind(treat.yrs, tmp(c(26071,1997,"child", 34))) # BENITO JUAREZ
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(26061,1997,"parent",35))) # GUAYMAS
+treat.yrs <- rbind(treat.yrs, tmp(c(26072,1997,"child", 35))) # SAN IGNACIO RIO MUERTO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29020,1997,"parent",36))) # SANCTORUM DE LAZARO CARDENAS
+treat.yrs <- rbind(treat.yrs, tmp(c(29060,1997,"child", 36))) # BENITO JUAREZ
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29030,1997,"parent",37))) # TERRENATE
+treat.yrs <- rbind(treat.yrs, tmp(c(29054,1997,"child", 37))) # EMILIANO ZAPATA
+treat.yrs <- rbind(treat.yrs, tmp(c(29055,1997,"child", 37))) # LARARO CARDENAS
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29010,1997,"parent",38))) # CHIAUTEMPAN
+treat.yrs <- rbind(treat.yrs, tmp(c(29051,1997,"child", 38))) # SAN FRANCISCO TETLANOHCAN
+treat.yrs <- rbind(treat.yrs, tmp(c(29052,1997,"child", 38))) # LA MAGDALENA TLALTELULCO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29032,1997,"parent",39))) # TETLATLAHUCA
+treat.yrs <- rbind(treat.yrs, tmp(c(29053,1997,"child", 39))) # SAN DAMIAN TEXOLOC
+treat.yrs <- rbind(treat.yrs, tmp(c(29056,1997,"child", 39))) # SAN JERONIMO ZACUALPAN
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29038,1997,"parent",40))) # TZOMPANTEPEC
+treat.yrs <- rbind(treat.yrs, tmp(c(29050,1997,"child", 40))) # SAN JOSE TEACALCO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29029,1997,"parent",41))) # TEPEYANCO
+treat.yrs <- rbind(treat.yrs, tmp(c(29047,1997,"child", 41))) # SAN JUAN HUACTZINCO
+treat.yrs <- rbind(treat.yrs, tmp(c(29049,1997,"child", 41))) # SANTA ISABEL XILOXOXTLA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29044,1997,"parent",42))) # ZACATELCO
+treat.yrs <- rbind(treat.yrs, tmp(c(29048,1997,"child", 42))) # SANTA CATARINA AYOMETLA
+treat.yrs <- rbind(treat.yrs, tmp(c(29059,1997,"child", 42))) # SAN LORENZO AXOCOMANITLA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29040,1997,"parent",43))) # XALTOCAN
+treat.yrs <- rbind(treat.yrs, tmp(c(29057,1997,"child", 43))) # SAN LUCAS TECOPILCO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29015,1997,"parent",44))) # IXTACUIXTLA DE MARIANO MATAMOROS
+treat.yrs <- rbind(treat.yrs, tmp(c(29058,1997,"child", 44))) # SANTA ANA NOPALUCAN
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29023,1997,"parent",45))) # NATIVITAS
+treat.yrs <- rbind(treat.yrs, tmp(c(29045,1997,"child", 45))) # SANTA APOLONIA TEACALCO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(29022,1997,"parent",46))) # ACUAMANALA DE MIGUEL HIDALGO
+treat.yrs <- rbind(treat.yrs, tmp(c(29046,1997,"child", 46))) # SANTA CRUZ QUILEHTLA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(30047,1997,"parent",47))) # COSAMALOAPAN DE CARPIO
+treat.yrs <- rbind(treat.yrs, tmp(c(30208,1997,"child", 47))) # CARLOS A. CARRILLO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(30105,1997,"parent",48))) # MECAYAPAN
+treat.yrs <- rbind(treat.yrs, tmp(c(30150,1997,"parent",48))) # SOTEAPAN
+treat.yrs <- rbind(treat.yrs, tmp(c(30210,1997,"child", 48))) # TATAHUICAPAN DE JUAREZ
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(30072,1997,"parent",49))) # HIDALGOTITLAN
+treat.yrs <- rbind(treat.yrs, tmp(c(30093,1997,"parent",49))) # JESUS CARRANZA
+treat.yrs <- rbind(treat.yrs, tmp(c(30109,1997,"parent",49))) # MINATITLAN
+treat.yrs <- rbind(treat.yrs, tmp(c(30209,1997,"child", 49))) # UXPANAPA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(30103,2006,"parent",50))) # MARTINEZ DE LA TORRE
+treat.yrs <- rbind(treat.yrs, tmp(c(30211,2006,"child", 50))) # SAN RAFAEL
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(30131,2006,"parent",51))) # PLAYA VICENTE
+treat.yrs <- rbind(treat.yrs, tmp(c(30212,2006,"child", 51))) # SANTIAGO SOCHIAPA
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(32017,2003,"parent",52))) # GUADALUPE
+treat.yrs <- rbind(treat.yrs, tmp(c(32057,2003,"child", 52))) # TRANCOSO
+#
+treat.yrs <- rbind(treat.yrs, tmp(c(32047,2009,"parent",53))) # TEUL DE GONZALEZ ORTEGA
+treat.yrs <- rbind(treat.yrs, tmp(c(32058,2009,"child", 53))) # SANTA MARIA DE LA PAZ
 colnames(treat.yrs) <- c("ife","yr.chg","childparent","dyad")
 # remove factors
 treat.yrs <- as.matrix(treat.yrs)
@@ -1192,6 +1258,7 @@ setwd(wd)
 save.image("data/too-big-4-github/tmp.RData") 
 
 # manipulate mun votes for export
+v91m <- v91m[order(v91m$ife),]; v91manip <- v91manip[order(v91manip$ife),] # sort
 v94m <- v94m[order(v94m$ife),]; v94manip <- v94manip[order(v94manip$ife),] # sort
 v97m <- v97m[order(v97m$ife),]; v97manip <- v97manip[order(v97manip$ife),] # sort
 v00m <- v00m[order(v00m$ife),]; v00manip <- v00manip[order(v00manip$ife),] # sort
@@ -1674,7 +1741,7 @@ setwd(wd)
 load("data/too-big-4-github/tmp.RData")
 
 # clean
-rm(ag.mun,ag.sec,d,sel,sel1,sel2,sel.c,sel.drop,sel.r,target.ife,tmp,to.num,treat.yrs)
+rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,tmp,to.num)
 
 ####################################################################
 ## manipulate reseccionamiento cases to preserve them in analysis ##
@@ -1893,7 +1960,6 @@ for (i in 1:nrow(v00)){
     #i <- 2 # debug
     extendCoal[[i]] <- cbind(extendCoal[[i]], yr.means[,6:8])
 }
-
 
 save.image("data/too-big-4-github/tmp3.RData")
 
@@ -2171,10 +2237,426 @@ for (i in non.nas){
 ##############################################################################################
 ## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
 ##############################################################################################
+#
+# clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
+rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
 
-# clean
-ls()
-rm(pan,pri,left  ,oth,reg.pan,reg.left  ,reg.oth,per.means,vhat.pan,vhat.pri,vhat.left  ,bhat.pan,bhat.left  ,yr.means,year,sel.c,sel.to,new.d,sel.split,sel.drop,rhat.pan,rhat.left  ,rhat.oth,i,info,muns,tmp,to.num)
+##############################################################
+## ESTIMATE MANIPULATED MUNICIPAL REGRESSIONS (NEW MUN FIX) ##
+##############################################################
+if (agg=="m") {
+    v91 <- v91manip; # change with v91manip when 1991 seccion-level data available
+    v94 <- v94manip; v97 <- v97manip; 
+    v00 <- v00manip; v03 <- v03manip; v06 <- v06manip; v09 <- v09manip; v12 <- v12manip; v15 <- v15manip; v18 <- v18manip;
+}
+###########################################
+## prepare manipulated party objects     ##
+## for time-series and alpha regressions ##
+###########################################
+#
+# version 1: extend partial coalitions across the board
+# shares
+pan <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pan  / v91$efec),
+                  v94 = ifelse(v94$efec==0, NA,  v94$pan  / v94$efec),
+                  v97 = ifelse(v97$efec==0, NA,  v97$pan  / v97$efec),
+                  v00 = ifelse(v00$efec==0, NA,  v00$panc / v00$efec),
+                  v03 = ifelse(v03$efec==0, NA,  v03$pan  / v03$efec),
+                  v06 = ifelse(v06$efec==0, NA,  v06$pan  / v06$efec),
+                  v09 = ifelse(v09$efec==0, NA,  v09$pan  / v09$efec),
+                  v12 = ifelse(v12$efec==0, NA,  v12$pan  / v12$efec),
+                  v15 = ifelse(v15$efec==0, NA,  v15$pan  / v15$efec),
+                  v18 = ifelse(v18$efec==0, NA, (v18$pan + v18$panc + v18$prd + v18$mc) / v18$efec))
+pan <- round(pan, 3)
+#
+pri <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pri  / v91$efec),
+                  v94 = ifelse(v94$efec==0, NA,  v94$pri  / v94$efec),
+                  v97 = ifelse(v97$efec==0, NA,  v97$pri  / v97$efec),
+                  v00 = ifelse(v00$efec==0, NA,  v00$pri / v00$efec),
+                  v03 = ifelse(v03$efec==0, NA, (v03$pri + v03$pric + v03$pvem) / v03$efec),
+                  v06 = ifelse(v06$efec==0, NA,  v06$pric / v06$efec),
+                  v09 = ifelse(v09$efec==0, NA, (v09$pri + v09$pric + v09$pvem) / v09$efec),
+                  v12 = ifelse(v12$efec==0, NA, (v12$pri + v12$pric + v12$pvem) / v12$efec),
+                  v15 = ifelse(v15$efec==0, NA, (v15$pri + v15$pric + v15$pvem) / v15$efec),
+                  v18 = ifelse(v18$efec==0, NA, (v18$pri + v18$pric + v18$pvem + v18$pna) / v18$efec))
+pri <- round(pri, 3)
+#
+left <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
+                     v94 = ifelse(v94$efec==0, NA,  v94$prd  / v94$efec),
+                     v97 = ifelse(v97$efec==0, NA,  v97$prd  / v97$efec),
+                     v00 = ifelse(v00$efec==0, NA,  v00$prdc / v00$efec),
+                     v03 = ifelse(v03$efec==0, NA, (v03$prd + v03$pt + v03$conve) / v03$efec),
+                     v06 = ifelse(v06$efec==0, NA,  v06$prdc / v06$efec),
+                     v09 = ifelse(v09$efec==0, NA, (v09$prd + v09$pt + v09$ptc + v09$conve) / v09$efec),
+                     v12 = ifelse(v12$efec==0, NA, (v12$prd + v12$prdc + v12$pt + v12$mc)  / v12$efec),
+                     v15 = ifelse(v15$efec==0, NA, (v15$prd + v15$prdc + v15$pt + v15$morena + v15$pes) / v15$efec),
+                     v18 = ifelse(v18$efec==0, NA, (v18$morena + v18$morenac + v18$pt + v18$pes) / v18$efec))
+left <- round(left, 3)
+#
+oth <- data.frame(v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfcrn + v91$pps + v91$pem + v91$prt) / v91$efec),
+                  v94 = ifelse(v94$efec==0, NA, (v94$pps + v94$pfcrn + v94$parm + v94$uno.pdm + v94$pt + v94$pvem) / v94$efec),
+                  v97 = ifelse(v97$efec==0, NA, (v97$pc + v97$pt + v97$pvem + v97$pps + v97$pdm) / v97$efec),
+                  v00 = ifelse(v00$efec==0, NA, (v00$pcd + v00$parm + v00$dsppn) / v00$efec),
+                  v03 = ifelse(v03$efec==0, NA, (v03$psn + v03$pas + v03$mp + v03$plm + v03$fc) / v03$efec),
+                  v06 = ifelse(v06$efec==0, NA, (v06$pna + v06$asdc) / v06$efec),
+                  v09 = ifelse(v09$efec==0, NA, (v09$pna + v09$psd) / v09$efec),
+                  v12 = ifelse(v12$efec==0, NA,  v12$pna / v12$efec),
+                  v15 = ifelse(v15$efec==0, NA, (v15$mc + v15$pna + v15$ph + v15$indep1 + v15$indep2) / v15$efec),
+                  v18 = ifelse(v18$efec==0, NA, (v18$indep1 + v18$indep2) / v18$efec))
+oth <- round(oth, 3)
+#
+efec <- data.frame(v91 = v91$efec,
+                   v94 = v94$efec,
+                   v97 = v97$efec,
+                   v00 = v00$efec,
+                   v03 = v03$efec,
+                   v06 = v06$efec,
+                   v09 = v09$efec,
+                   v12 = v12$efec,
+                   v15 = v15$efec,
+                   v18 = v18$efec)
+#
+# transpose to plug columns into new data.frames
+pan <- t(pan)
+pri <- t(pri)
+left <- t(left)
+oth <- t(oth)
+efec <- t(efec)
+#
+extendCoalmanip <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
+# loop over municipios/secciones
+for (i in 1:nrow(v00)){
+    #i <- 81 # debug
+    tmp <- data.frame(yr = seq(from=1991, to=2018, by=3),
+                      pan = pan[,i],
+                      pri = pri[,i],
+                      left = left[,i],
+                      oth = oth[,i],
+                      efec = efec[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+    }
+    # add epsilon = 2*max(rounding error) to zeroes 
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # fill info to new list
+    extendCoalmanip[[i]] <- tmp
+}
+# datos para regresión de alfa
+# son los mismos que para las regresiones con v..m
+# [... skipped many lines of code here...]
+# plug into data
+for (i in 1:nrow(v00)){
+    #i <- 2 # debug
+    extendCoalmanip[[i]] <- cbind(extendCoalmanip[[i]], yr.means[,6:8])
+}
+#
+###############################
+## código de las regresiones ##
+###############################
+vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <- vhat.2006 <- 
+        data.frame(pan    = rep(NA, nrow(v00)),
+                   pri  = rep(NA, nrow(v00)),
+                   left = rep(NA, nrow(v00))) # will receive vote estimates
+#
+alphahat <- data.frame(pan    = rep(NA, nrow(v00)),
+                       pri    = rep(NA, nrow(v00)),
+                       left   = rep(NA, nrow(v00))) # will receive municipio's alphas
+betahat <- data.frame(pan    = rep(NA, nrow(v00)),
+                      left   = rep(NA, nrow(v00)),
+                      oth    = rep(NA, nrow(v00))) # will receive municipio's betas (none for pri)
+#
+tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
+                                                       # regression per municipio, each used to
+                                                       # predict votes in 2015 and 2018 
+#
+regs.2006manip <- regs.2009manip <- regs.2012manip <- regs.2015manip <- regs.2018manip <-
+    list(pan    = tmp,
+         left   = tmp,
+         oth    = tmp,
+         readme = "No pri regs because DVs are pri-ratios")
+#
+mean.regsmanip <- list(pan    = tmp,
+                       left   = tmp,
+                       oth    = tmp,
+                       readme = "No pri regs bec DVs are pri-ratios")
+#
+# drop list elements that still have NAs from loop
+# (happens with some secciones)
+non.nas <- lapply(extendCoalmanip, sum)
+non.nas <- unlist(non.nas)
+non.nas <- which(is.na(non.nas)==FALSE)
+tail(non.nas)
+#    
+for (i in non.nas){
+    #i <- 81 # debug
+    #i <- 44508 # debug
+    message(sprintf("loop %s of %s", i, max(non.nas)))
+    # subset data
+    data.tmp <- extendCoalmanip[[i]]
+    #
+    # add first-differences
+    tmp.ln <- nrow(data.tmp)
+    data.tmp$d.pan    <- data.tmp$pan    - c(NA,data.tmp$pan   [-tmp.ln])
+    data.tmp$d.pri    <- data.tmp$pri    - c(NA,data.tmp$pri   [-tmp.ln])
+    data.tmp$d.left   <- data.tmp$left   - c(NA,data.tmp$left  [-tmp.ln])
+    rm(tmp.ln)
+    #
+    ##################################
+    ## predict 2006 with last 5 els ## ojo: v91 needed
+    ##################################
+    year <- 2006
+    reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2006[i,] <- c(vhat.pan, vhat.pri, vhat.left)
+    regs.2006manip$pan[[i]]    <- reg.pan
+    regs.2006manip$left[[i]]   <- reg.left
+    regs.2006manip$oth[[i]]    <- reg.oth
+    #                                                                    ##############################
+    #                                                                    # DO THESE WHEN PREDICTING   #
+    #                                                                    # FIRST YEAR ONLY:           #
+    data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
+    data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left
+    #
+    ##################################
+    ## predict 2009 with last 5 els ##
+    ##################################
+    year <- 2009
+    reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2009[i,] <- c(vhat.pan, vhat.pri, vhat.left)
+    regs.2009manip$pan[[i]]    <- reg.pan
+    regs.2009manip$left[[i]]   <- reg.left
+    regs.2009manip$oth[[i]]    <- reg.oth
+    ## #                                                                    ##############################
+    ## #                                                                    # DO THESE WHEN PREDICTING   #
+    ## #                                                                    # FIRST YEAR ONLY:           #
+    ## data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
+    ## data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                     ##############################
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left
+    #
+    ##################################
+    ## predict 2012 with last 5 els ##
+    ##################################
+    year <- 2012
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left <-   lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2012[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2012manip$pan[[i]]    <- reg.pan
+    regs.2012manip$left[[i]]   <- reg.left  
+    regs.2012manip$oth[[i]]    <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
+    #
+    ##################################
+    ## predict 2015 with last 5 els ##
+    ##################################
+    year <- 2015
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2015[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2015$pan[[i]]    <- reg.pan
+    regs.2015$left[[i]] <- reg.left  
+    regs.2015$oth[[i]]    <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
+    #
+    ##################################
+    ## predict 2018 with last 5 els ##
+    ##################################
+    year <- 2018
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2018[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2018manip$pan   [[i]] <- reg.pan
+    regs.2018manip$left  [[i]] <- reg.left  
+    regs.2018manip$oth   [[i]] <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
+    #
+    # ALTERNATIVE: exp(predict.lm(reg.pan,    newdata = new.d, interval = "confidence"))
+    # #########################################################################
+    ## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
+    #########################################################################
+    reg.pan    <- lm(formula = log(pan/pri)    ~ mean.rpan, data = data.tmp)
+    reg.left   <- lm(formula = log(left  /pri) ~ mean.rleft  , data = data.tmp)
+    reg.oth    <- lm(formula = log(oth/pri)    ~ mean.roth, data = data.tmp)
+    #
+    # point prediction alpha with mean at zero 
+    new.d <- data.frame(mean.rpan = 0)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    new.d <- data.frame(mean.rleft   = 0)
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    new.d <- data.frame(mean.roth = 0)
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    #
+    #c(vhat.pan, vhat.pri, vhat.left, 1-vhat.pan-vhat.pri-vhat.left)
+    alphahat[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    betahat[i,1] <- coef(reg.pan)   [2]
+    betahat[i,2] <- coef(reg.left  )[2]
+    betahat[i,3] <- coef(reg.oth)   [2]
+    mean.regsmanip$pan   [[i]] <- reg.pan
+    mean.regsmanip$left  [[i]] <- reg.left  
+    mean.regsmanip$oth   [[i]] <- reg.oth
+    #
+    # add alphas and betas for whole period
+    data.tmp$alphahat.left   <- data.tmp$alphahat.pri <- data.tmp$alphahat.pan <- NA # open slots for alphas
+    data.tmp$betahat.left   <- data.tmp$betahat.pan <- NA # open slots for betas
+    data.tmp$alphahat.pan    <- alphahat$pan   [i]
+    data.tmp$alphahat.pri    <- alphahat$pri   [i]
+    data.tmp$alphahat.left   <- alphahat$left  [i]
+    data.tmp$betahat.pan    <- betahat$pan   [i]
+    data.tmp$betahat.left   <- betahat$left  [i]
+    data.tmp$betahat.oth    <- betahat$oth   [i]
+    data.tmp <- round(data.tmp,3)
+    #
+    ########################################################
+    ## optional: plug vhats alphas betas back into data   ##
+    ########################################################
+    data.tmp <- within(data.tmp, {
+        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
+        oth <- NULL; # drop compositional vote complement
+        betahat.oth <- NULL; # drop this beta
+        #betahat.pan <- betahat.left   <- betahat.oth <- NULL; # drop betas
+    })
+    extendCoalmanip[[i]] <- data.tmp
+}
+##############################################################################################
+## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
+##############################################################################################
+
+# clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
+rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
+# more cleaning
+rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
+rm(pan,pri,left,oth,efec)
+rm(agg,add.split,cs,sel.split)
+rm(i,info,new.d,non.nas,per.means,year)
+rm(yr.means)
+rm(tmp,data.tmp)
+
+save.image("data/too-big-4-github/tmp4.RData")
+
+rm(list = ls())
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(wd)
+load("data/too-big-4-github/tmp4.RData")
+
+
+################################
+## FIX TWICE SPLIT MUNICIPIOS ##
+################################
+
+# read estimates (produced externally with script code/script-to-fix-twice-split-muns.r)
+load(file = paste(wd, "data/regs-to-fix-twice-split-muns.RData", sep = "/"))
+
+
+##############################################
+## REPLACE WRONG REGRESSION ESTIMATES       ##
+## KEEPING THE TRUE VOTE RETURNS INSTEAD    ##
+## OF MANIPULATIONS TO GET ESTIMATES RIGHT  ##
+##############################################
+
+eric  x
+
 
 # adds manipulation indicator to all data frames in list
 if (agg=="s") {
