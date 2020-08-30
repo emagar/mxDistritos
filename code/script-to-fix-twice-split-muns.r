@@ -353,9 +353,9 @@ for (i in non.nas){
     #
     ## plug into results objects ##
     vhat.2015[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
-    regs.2015$pan[[i]]    <- reg.pan
-    regs.2015$left[[i]] <- reg.left  
-    regs.2015$oth[[i]]    <- reg.oth
+    regs.2015manip2$pan[[i]]    <- reg.pan
+    regs.2015manip2$left[[i]] <- reg.left  
+    regs.2015manip2$oth[[i]]    <- reg.oth
     #
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
@@ -457,7 +457,7 @@ rm(yr.means)
 rm(tmp,data.tmp)
 
 # save fix to import into elec-data-for-maps.r
-save(extendCoalmanip2, regs.2006manip2, regs.2009manip2, regs.2012manip2, regs.2018manip2,
+save(extendCoalmanip2, regs.2006manip2, regs.2009manip2, regs.2012manip2, regs.2015manip2, regs.2018manip2,
      mean.regsmanip2, file = paste(wd, "data/regs-to-fix-twice-split-muns.RData", sep = "/"))
 
 #######################

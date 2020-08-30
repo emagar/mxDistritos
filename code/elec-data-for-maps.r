@@ -1077,174 +1077,174 @@ treat.yrs <- data.frame()
 #treat.yrs <- rbind(treat.yrs, tmp(c( 1010,1994,"child", 1))) # need seccion-level 1991 to manipulate these
 #treat.yrs <- rbind(treat.yrs, tmp(c( 1011,1994,"child", 1))) # need seccion-level 1991 to manipulate these
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 2004,2000,"parent",2))) # TIJUANA
-treat.yrs <- rbind(treat.yrs, tmp(c( 2005,2000,"child", 2))) # PLAYAS DE ROSARITO
+treat.yrs <- rbind(treat.yrs, tmp(c( 2004,2000,"parent","TIJUANA",2))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 2005,2000,"child","PLAYAS DE ROSARITO", 2))) # 
 ##
 #treat.yrs <- rbind(treat.yrs, tmp(c( 3003,1994,"parent",3))) # need seccion-level 1991 to manipulate these
 #treat.yrs <- rbind(treat.yrs, tmp(c( 3005,1994,"child", 3))) # need seccion-level 1991 to manipulate these
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 4006,1997,"parent",4))) # HOPELCHEN
-treat.yrs <- rbind(treat.yrs, tmp(c( 4011,1997,"child", 4))) # CALAKMUL
+treat.yrs <- rbind(treat.yrs, tmp(c( 4006,1997,"parent","HOPELCHEN",4))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 4011,1997,"child","CALAKMUL", 4))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 4003,2000,"parent",5))) # CARMEN
-treat.yrs <- rbind(treat.yrs, tmp(c( 4010,2000,"child", 5))) # ESCARCEGA
+treat.yrs <- rbind(treat.yrs, tmp(c( 4003,2000,"parent","CARMEN",5))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 4010,2000,"child","ESCARCEGA", 5))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7049,2003,"parent",6))) # LARRAINZAR
-treat.yrs <- rbind(treat.yrs, tmp(c( 7118,2003,"child", 6))) # SANTIAGO EL PINAR
+treat.yrs <- rbind(treat.yrs, tmp(c( 7049,2003,"parent","LARRAINZAR",6))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7118,2003,"child","SANTIAGO EL PINAR", 6))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7082,2003,"parent",7))) # SIMOJOVEL
-treat.yrs <- rbind(treat.yrs, tmp(c( 7117,2003,"child", 7))) # SAN ANDRES DURAZNAL
+treat.yrs <- rbind(treat.yrs, tmp(c( 7082,2003,"parent","SIMOJOVEL",7))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7117,2003,"child","SAN ANDRES DURAZNAL", 7))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7008,2003,"parent",8))) # ANGEL ALBINO CORZO
-treat.yrs <- rbind(treat.yrs, tmp(c( 7116,2003,"child", 8))) # MONTECRISTO DE GUERRERO
+treat.yrs <- rbind(treat.yrs, tmp(c( 7008,2003,"parent","ANGEL ALBINO CORZO",8))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7116,2003,"child","MONTECRISTO DE GUERRERO", 8))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7108,2015,"parent",9))) # VILLA CORZO
-treat.yrs <- rbind(treat.yrs, tmp(c( 7122,2015,"child", 9))) # EL PARRAL
+treat.yrs <- rbind(treat.yrs, tmp(c( 7108,2015,"parent","VILLA CORZO",9))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7122,2015,"child","EL PARRAL", 9))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7026,2003,"parent",10))) # CHENALHO
-treat.yrs <- rbind(treat.yrs, tmp(c( 7112,2003,"child", 10))) # ALDAMA
+treat.yrs <- rbind(treat.yrs, tmp(c( 7026,2003,"parent","CHENALHO",10))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7112,2003,"child","ALDAMA", 10))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7059,2003,"parent",11))) # OCOSINGO
-treat.yrs <- rbind(treat.yrs, tmp(c( 7113,2003,"child", 11))) # BENEMERITO DE LAS AMERICAS
-treat.yrs <- rbind(treat.yrs, tmp(c( 7115,2003,"child", 11))) # MARQUES DE COMILLAS
+treat.yrs <- rbind(treat.yrs, tmp(c( 7059,2003,"parent","OCOSINGO",11))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7113,2003,"child","BENEMERITO DE LAS AMERICAS", 11))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7115,2003,"child","MARQUES DE COMILLAS", 11))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7052,2003,"parent",12))) # LAS MARGARITAS
-treat.yrs <- rbind(treat.yrs, tmp(c( 7114,2003,"child", 12))) # MARAVILLA TENEJAPA
+treat.yrs <- rbind(treat.yrs, tmp(c( 7052,2003,"parent","LAS MARGARITAS",12))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7114,2003,"child","MARAVILLA TENEJAPA", 12))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7002,2015,"parent",13))) # ACALA
-treat.yrs <- rbind(treat.yrs, tmp(c( 7120,2015,"child", 13))) # EMILIANO ZAPATA
+treat.yrs <- rbind(treat.yrs, tmp(c( 7002,2015,"parent","ACALA",13))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7120,2015,"child","EMILIANO ZAPATA", 13))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7093,2018,"parent",14))) # TECPATAN
-treat.yrs <- rbind(treat.yrs, tmp(c( 7121,2018,"child", 14))) # MEZCALAPA
+treat.yrs <- rbind(treat.yrs, tmp(c( 7093,2018,"parent","TECPATAN",14))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7121,2018,"child","MEZCALAPA", 14))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7081,2018,"parent",15))) # SILTEPEC
-treat.yrs <- rbind(treat.yrs, tmp(c( 7123,2018,"child", 15))) # CAPITAN LUIS ANGEL VIDAL
+treat.yrs <- rbind(treat.yrs, tmp(c( 7081,2018,"parent","SILTEPEC",15))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7123,2018,"child","CAPITAN LUIS ANGEL VIDAL", 15))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c( 7071,2018,"parent",16))) # PUEBLO NUEVO SOLISTLAHUACAN
-treat.yrs <- rbind(treat.yrs, tmp(c( 7124,2018,"child", 16))) # RINCON CHAMULA
+treat.yrs <- rbind(treat.yrs, tmp(c( 7071,2018,"parent","PUEBLO NUEVO SOLISTLAHUACAN",16))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c( 7124,2018,"child","RINCON CHAMULA", 16))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(12073,1997,"parent",17))) # ZAPOTITLAN TABLAS
-treat.yrs <- rbind(treat.yrs, tmp(c(12076,1997,"child", 17))) # ACATEPEC
+treat.yrs <- rbind(treat.yrs, tmp(c(12073,1997,"parent","ZAPOTITLAN TABLAS",17))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(12076,1997,"child","ACATEPEC", 17))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(12013,2006,"parent",18))) # AZOYU
-treat.yrs <- rbind(treat.yrs, tmp(c(12023,2006,"parent",18))) # CUAJINICUALAPA
-treat.yrs <- rbind(treat.yrs, tmp(c(12080,2006,"child", 18))) # MARQUELIA
+treat.yrs <- rbind(treat.yrs, tmp(c(12013,2006,"parent","AZOYU",18))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(12023,2006,"parent","CUAJINICUALAPA",18))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(12080,2006,"child","MARQUELIA", 18))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(12044,2009,"parent",19))) # METLATONOC
-treat.yrs <- rbind(treat.yrs, tmp(c(12079,2009,"child", 19))) # COCHOAPA EL GRANDE
+treat.yrs <- rbind(treat.yrs, tmp(c(12044,2009,"parent","METLATONOC",19))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(12079,2009,"child","COCHOAPA EL GRANDE", 19))) # 
 #
-#treat.yrs <- rbind(treat.yrs, tmp(c(12013,2009,"parent-again",20))) # AZOYU
-treat.yrs <- rbind(treat.yrs, tmp(c(12081,2009,"child", 20))) # JUCHITAN
+#treat.yrs <- rbind(treat.yrs, tmp(c(12013,2009,"parent-again",20))) # AZOYU no need to double, will be dealt with by hand
+treat.yrs <- rbind(treat.yrs, tmp(c(12081,2009,"child","JUCHITAN", 20))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(12028,2009,"parent",21))) # CHILAPA DE ALVAREZ
-treat.yrs <- rbind(treat.yrs, tmp(c(12077,2009,"child", 21))) # JOSE JOAQUIN DE HERRERA
+treat.yrs <- rbind(treat.yrs, tmp(c(12028,2009,"parent","CHILAPA DE ALVAREZ",21))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(12077,2009,"child","JOSE JOAQUIN DE HERRERA", 21))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(12042,2009,"parent",22))) # MALINALTEPEC
-treat.yrs <- rbind(treat.yrs, tmp(c(12053,2009,"parent",22))) # SAN LUIS ACATLAN
-treat.yrs <- rbind(treat.yrs, tmp(c(12078,2009,"child", 22))) # ILIATENCO
+treat.yrs <- rbind(treat.yrs, tmp(c(12042,2009,"parent","MALINALTEPEC",22))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(12053,2009,"parent","SAN LUIS ACATLAN",22))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(12078,2009,"child","ILIATENCO", 22))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(14008,2006,"parent",23))) # ARANDAS
-treat.yrs <- rbind(treat.yrs, tmp(c(14125,2006,"child", 23))) # SAN IGNACIO CERRO GORDO
+treat.yrs <- rbind(treat.yrs, tmp(c(14008,2006,"parent","ARANDAS",23))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(14125,2006,"child","SAN IGNACIO CERRO GORDO", 23))) # 
 ##
 #treat.yrs <- rbind(treat.yrs, tmp(c(15026,1994,"parent",24))) # need seccion-level 1991 to manipulate these
 #treat.yrs <- rbind(treat.yrs, tmp(c(15040,1994,"parent",24))) # need seccion-level 1991 to manipulate these
 #treat.yrs <- rbind(treat.yrs, tmp(c(15122,1994,"child", 24))) # need seccion-level 1991 to manipulate these
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(15083,2003,"parent",25))) # TEJUPILCO
-treat.yrs <- rbind(treat.yrs, tmp(c(15123,2003,"child", 25))) # LUVIANOS
+treat.yrs <- rbind(treat.yrs, tmp(c(15083,2003,"parent","TEJUPILCO",25))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(15123,2003,"child","LUVIANOS", 25))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(15075,2003,"parent",26))) # SAN FELIPE DEL PROGRESO
-treat.yrs <- rbind(treat.yrs, tmp(c(15124,2003,"child", 26))) # SAN JOSE DEL RINCON
+treat.yrs <- rbind(treat.yrs, tmp(c(15075,2003,"parent","SAN FELIPE DEL PROGRESO",26))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(15124,2003,"child","SAN JOSE DEL RINCON", 26))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(15045,2006,"parent",27))) # JALTENCO
-treat.yrs <- rbind(treat.yrs, tmp(c(15125,2006,"child", 27))) # TONATITLA
+treat.yrs <- rbind(treat.yrs, tmp(c(15045,2006,"parent","JALTENCO",27))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(15125,2006,"child","TONATITLA", 27))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(23002,1997,"parent",28))) # COZUMEL
-treat.yrs <- rbind(treat.yrs, tmp(c(23008,1997,"child", 28))) # SOLIDARIDAD
+treat.yrs <- rbind(treat.yrs, tmp(c(23002,1997,"parent","COZUMEL",28))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(23008,1997,"child","SOLIDARIDAD", 28))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(23003,2009,"parent",29))) # FELIPE CARRILLO PUERTO
-treat.yrs <- rbind(treat.yrs, tmp(c(23009,2009,"child", 29))) # TULUM
+treat.yrs <- rbind(treat.yrs, tmp(c(23003,2009,"parent","FELIPE CARRILLO PUERTO",29))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(23009,2009,"child","TULUM", 29))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(23007,2015,"parent",30))) # OTHON P BLANCO
-treat.yrs <- rbind(treat.yrs, tmp(c(23010,2015,"child", 30))) # BACALAR
+treat.yrs <- rbind(treat.yrs, tmp(c(23007,2015,"parent","OTHON P BLANCO",30))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(23010,2015,"child","BACALAR", 30))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(23001,2018,"parent",31))) # BENITO JUAREZ
-treat.yrs <- rbind(treat.yrs, tmp(c(23011,2018,"child", 31))) # PUERTO MORELOS
+treat.yrs <- rbind(treat.yrs, tmp(c(23001,2018,"parent","BENITO JUAREZ",31))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(23011,2018,"child","PUERTO MORELOS", 31))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(24037,1997,"parent",32))) # TAMAZUNCHALE
-treat.yrs <- rbind(treat.yrs, tmp(c(24058,1997,"child", 32))) # MATLAPA
+treat.yrs <- rbind(treat.yrs, tmp(c(24037,1997,"parent","TAMAZUNCHALE",32))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(24058,1997,"child","MATLAPA", 32))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(24010,1997,"parent",33))) # CIUDAD DEL MAIZ
-treat.yrs <- rbind(treat.yrs, tmp(c(24057,1997,"child", 33))) # EL NARANJO
+treat.yrs <- rbind(treat.yrs, tmp(c(24010,1997,"parent","CIUDAD DEL MAIZ",33))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(24057,1997,"child","EL NARANJO", 33))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(26063,1997,"parent",34))) # ETCHOJOA
-treat.yrs <- rbind(treat.yrs, tmp(c(26071,1997,"child", 34))) # BENITO JUAREZ
+treat.yrs <- rbind(treat.yrs, tmp(c(26063,1997,"parent","ETCHOJOA",34))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(26071,1997,"child","BENITO JUAREZ", 34))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(26061,1997,"parent",35))) # GUAYMAS
-treat.yrs <- rbind(treat.yrs, tmp(c(26072,1997,"child", 35))) # SAN IGNACIO RIO MUERTO
+treat.yrs <- rbind(treat.yrs, tmp(c(26061,1997,"parent","GUAYMAS",35))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(26072,1997,"child","SAN IGNACIO RIO MUERTO", 35))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29020,1997,"parent",36))) # SANCTORUM DE LAZARO CARDENAS
-treat.yrs <- rbind(treat.yrs, tmp(c(29060,1997,"child", 36))) # BENITO JUAREZ
+treat.yrs <- rbind(treat.yrs, tmp(c(29020,1997,"parent","SANCTORUM DE LAZARO CARDENAS",36))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29060,1997,"child","BENITO JUAREZ", 36))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29030,1997,"parent",37))) # TERRENATE
-treat.yrs <- rbind(treat.yrs, tmp(c(29054,1997,"child", 37))) # EMILIANO ZAPATA
-treat.yrs <- rbind(treat.yrs, tmp(c(29055,1997,"child", 37))) # LARARO CARDENAS
+treat.yrs <- rbind(treat.yrs, tmp(c(29030,1997,"parent","TERRENATE",37))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29054,1997,"child","EMILIANO ZAPATA", 37))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29055,1997,"child","LARARO CARDENAS", 37))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29010,1997,"parent",38))) # CHIAUTEMPAN
-treat.yrs <- rbind(treat.yrs, tmp(c(29051,1997,"child", 38))) # SAN FRANCISCO TETLANOHCAN
-treat.yrs <- rbind(treat.yrs, tmp(c(29052,1997,"child", 38))) # LA MAGDALENA TLALTELULCO
+treat.yrs <- rbind(treat.yrs, tmp(c(29010,1997,"parent","CHIAUTEMPAN",38))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29051,1997,"child","SAN FRANCISCO TETLANOHCAN", 38))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29052,1997,"child","LA MAGDALENA TLALTELULCO", 38))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29032,1997,"parent",39))) # TETLATLAHUCA
-treat.yrs <- rbind(treat.yrs, tmp(c(29053,1997,"child", 39))) # SAN DAMIAN TEXOLOC
-treat.yrs <- rbind(treat.yrs, tmp(c(29056,1997,"child", 39))) # SAN JERONIMO ZACUALPAN
+treat.yrs <- rbind(treat.yrs, tmp(c(29032,1997,"parent","TETLATLAHUCA",39))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29053,1997,"child","SAN DAMIAN TEXOLOC", 39))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29056,1997,"child","SAN JERONIMO ZACUALPAN", 39))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29038,1997,"parent",40))) # TZOMPANTEPEC
-treat.yrs <- rbind(treat.yrs, tmp(c(29050,1997,"child", 40))) # SAN JOSE TEACALCO
+treat.yrs <- rbind(treat.yrs, tmp(c(29038,1997,"parent","TZOMPANTEPEC",40))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29050,1997,"child","SAN JOSE TEACALCO", 40))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29029,1997,"parent",41))) # TEPEYANCO
-treat.yrs <- rbind(treat.yrs, tmp(c(29047,1997,"child", 41))) # SAN JUAN HUACTZINCO
-treat.yrs <- rbind(treat.yrs, tmp(c(29049,1997,"child", 41))) # SANTA ISABEL XILOXOXTLA
+treat.yrs <- rbind(treat.yrs, tmp(c(29029,1997,"parent","TEPEYANCO",41))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29047,1997,"child","SAN JUAN HUACTZINCO", 41))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29049,1997,"child","SANTA ISABEL XILOXOXTLA", 41))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29044,1997,"parent",42))) # ZACATELCO
-treat.yrs <- rbind(treat.yrs, tmp(c(29048,1997,"child", 42))) # SANTA CATARINA AYOMETLA
-treat.yrs <- rbind(treat.yrs, tmp(c(29059,1997,"child", 42))) # SAN LORENZO AXOCOMANITLA
+treat.yrs <- rbind(treat.yrs, tmp(c(29044,1997,"parent","ZACATELCO",42))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29048,1997,"child","SANTA CATARINA AYOMETLA", 42))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29059,1997,"child","SAN LORENZO AXOCOMANITLA", 42))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29040,1997,"parent",43))) # XALTOCAN
-treat.yrs <- rbind(treat.yrs, tmp(c(29057,1997,"child", 43))) # SAN LUCAS TECOPILCO
+treat.yrs <- rbind(treat.yrs, tmp(c(29040,1997,"parent","XALTOCAN",43))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29057,1997,"child","SAN LUCAS TECOPILCO", 43))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29015,1997,"parent",44))) # IXTACUIXTLA DE MARIANO MATAMOROS
-treat.yrs <- rbind(treat.yrs, tmp(c(29058,1997,"child", 44))) # SANTA ANA NOPALUCAN
+treat.yrs <- rbind(treat.yrs, tmp(c(29015,1997,"parent","IXTACUIXTLA DE MARIANO MATAMOROS",44))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29058,1997,"child","SANTA ANA NOPALUCAN", 44))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29023,1997,"parent",45))) # NATIVITAS
-treat.yrs <- rbind(treat.yrs, tmp(c(29045,1997,"child", 45))) # SANTA APOLONIA TEACALCO
+treat.yrs <- rbind(treat.yrs, tmp(c(29023,1997,"parent","NATIVITAS",45))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29045,1997,"child","SANTA APOLONIA TEACALCO", 45))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(29022,1997,"parent",46))) # ACUAMANALA DE MIGUEL HIDALGO
-treat.yrs <- rbind(treat.yrs, tmp(c(29046,1997,"child", 46))) # SANTA CRUZ QUILEHTLA
+treat.yrs <- rbind(treat.yrs, tmp(c(29022,1997,"parent","ACUAMANALA DE MIGUEL HIDALGO",46))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(29046,1997,"child","SANTA CRUZ QUILEHTLA", 46))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(30047,1997,"parent",47))) # COSAMALOAPAN DE CARPIO
-treat.yrs <- rbind(treat.yrs, tmp(c(30208,1997,"child", 47))) # CARLOS A. CARRILLO
+treat.yrs <- rbind(treat.yrs, tmp(c(30047,1997,"parent","COSAMALOAPAN DE CARPIO",47))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(30208,1997,"child","CARLOS A. CARRILLO", 47))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(30105,1997,"parent",48))) # MECAYAPAN
-treat.yrs <- rbind(treat.yrs, tmp(c(30150,1997,"parent",48))) # SOTEAPAN
-treat.yrs <- rbind(treat.yrs, tmp(c(30210,1997,"child", 48))) # TATAHUICAPAN DE JUAREZ
+treat.yrs <- rbind(treat.yrs, tmp(c(30105,1997,"parent","MECAYAPAN",48))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(30150,1997,"parent","SOTEAPAN",48))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(30210,1997,"child","TATAHUICAPAN DE JUAREZ", 48))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(30072,1997,"parent",49))) # HIDALGOTITLAN
-treat.yrs <- rbind(treat.yrs, tmp(c(30093,1997,"parent",49))) # JESUS CARRANZA
-treat.yrs <- rbind(treat.yrs, tmp(c(30109,1997,"parent",49))) # MINATITLAN
-treat.yrs <- rbind(treat.yrs, tmp(c(30209,1997,"child", 49))) # UXPANAPA
+treat.yrs <- rbind(treat.yrs, tmp(c(30072,1997,"parent","HIDALGOTITLAN",49))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(30093,1997,"parent","JESUS CARRANZA",49))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(30109,1997,"parent","MINATITLAN",49))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(30209,1997,"child","UXPANAPA", 49))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(30103,2006,"parent",50))) # MARTINEZ DE LA TORRE
-treat.yrs <- rbind(treat.yrs, tmp(c(30211,2006,"child", 50))) # SAN RAFAEL
+treat.yrs <- rbind(treat.yrs, tmp(c(30103,2006,"parent","MARTINEZ DE LA TORRE",50))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(30211,2006,"child","SAN RAFAEL", 50))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(30131,2006,"parent",51))) # PLAYA VICENTE
-treat.yrs <- rbind(treat.yrs, tmp(c(30212,2006,"child", 51))) # SANTIAGO SOCHIAPA
+treat.yrs <- rbind(treat.yrs, tmp(c(30131,2006,"parent","PLAYA VICENTE",51))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(30212,2006,"child","SANTIAGO SOCHIAPA", 51))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(32017,2003,"parent",52))) # GUADALUPE
-treat.yrs <- rbind(treat.yrs, tmp(c(32057,2003,"child", 52))) # TRANCOSO
+treat.yrs <- rbind(treat.yrs, tmp(c(32017,2003,"parent","GUADALUPE",52))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(32057,2003,"child","TRANCOSO", 52))) # 
 #
-treat.yrs <- rbind(treat.yrs, tmp(c(32047,2009,"parent",53))) # TEUL DE GONZALEZ ORTEGA
-treat.yrs <- rbind(treat.yrs, tmp(c(32058,2009,"child", 53))) # SANTA MARIA DE LA PAZ
-colnames(treat.yrs) <- c("ife","yr.chg","childparent","dyad")
+treat.yrs <- rbind(treat.yrs, tmp(c(32047,2009,"parent","TEUL DE GONZALEZ ORTEGA",53))) # 
+treat.yrs <- rbind(treat.yrs, tmp(c(32058,2009,"child","SANTA MARIA DE LA PAZ", 53))) # 
+colnames(treat.yrs) <- c("ife","yr.chg","childparent","mun","dyad")
 # remove factors
 treat.yrs <- as.matrix(treat.yrs)
 treat.yrs <- data.frame(treat.yrs, stringsAsFactors = FALSE)
@@ -1771,7 +1771,6 @@ if (agg=="d") {
     v94 <- v94d; v97 <- v97d; 
     v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v18 <- v18d;
 }
-
 #
 # get unit winners and margins: will output object winner for chosen agg
 if (agg=="s"|agg=="d") { # done for municipalities above, with manipulated data
@@ -1849,7 +1848,6 @@ efec <- data.frame(v91 = v91$efec,
                    v12 = v12$efec,
                    v15 = v15$efec,
                    v18 = v18$efec)
-
 #
 # transpose to plug columns into new data.frames
 pan <- t(pan)
@@ -1859,6 +1857,8 @@ oth <- t(oth)
 efec <- t(efec)
 #
 extendCoal <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
+if (agg=="m") names(extendCoal) <- v00$ife
+if (agg=="s") names(extendCoal) <- v00$edon*10000 + v00$seccion # untested
 # loop over municipios/secciones
 for (i in 1:nrow(v00)){
     #i <- 81 # debug
@@ -1882,6 +1882,9 @@ for (i in 1:nrow(v00)){
     }
     # re-compute shares
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
     # fill info to new list
     extendCoal[[i]] <- tmp
 }
@@ -1969,6 +1972,7 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load("data/too-big-4-github/tmp3.RData")
 
+
 #################################################################################################
 ## - should also try jags estimation to get post-sample of vhats and alphas                    ##
 ## - report mg effect of unit change in bar(v) at year's level instead of betahat (cf. Linzer) ##
@@ -1990,8 +1994,11 @@ betahat <- data.frame(pan    = rep(NA, nrow(v00)),
                       oth    = rep(NA, nrow(v00))) # will receive municipio's betas (none for pri)
 #
 tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
-                                                       # regression per municipio, each used to
-                                                       # predict votes in 2015 and 2018 
+                                   # regression per municipio, each used to
+                                   # predict votes in 2006:2018 
+# add names
+if (agg=="m") names(tmp) <- v00$ife
+if (agg=="s") names(tmp) <- v00$edon*10000 + v00$seccion # untested
 #
 regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <-
     list(pan    = tmp,
@@ -2003,7 +2010,6 @@ mean.regs <- list(pan    = tmp,
                   left   = tmp,
                   oth    = tmp,
                   readme = "No pri regs bec DVs are pri-ratios")
-
 # drop list elements that still have NAs from loop
 # (happens with some secciones)
 non.nas <- lapply(extendCoal, sum)
@@ -2117,6 +2123,17 @@ for (i in non.nas){
     regs.2012$pan[[i]]    <- reg.pan
     regs.2012$left[[i]]   <- reg.left  
     regs.2012$oth[[i]]    <- reg.oth
+    # add unit id to name to list element
+    if (agg=="m"){
+        names(regs.2012$pan) [i] <- extendCoal[[i]]$ife[1]
+        names(regs.2012$left)[i] <- extendCoal[[i]]$ife[1]
+        names(regs.2012$oth) [i] <- extendCoal[[i]]$ife[1]
+    }
+    if (agg=="s"){
+        names(regs.2012$pan) [i] <- extendCoal[[i]]$edosecn[1]
+        names(regs.2012$left)[i] <- extendCoal[[i]]$edosecn[1]
+        names(regs.2012$oth) [i] <- extendCoal[[i]]$edosecn[1]
+    }
     #
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
@@ -2244,11 +2261,13 @@ rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left
 ##############################################################
 ## ESTIMATE MANIPULATED MUNICIPAL REGRESSIONS (NEW MUN FIX) ##
 ##############################################################
+#agg <- "m"
 if (agg=="m") {
-    v91 <- v91manip; # change with v91manip when 1991 seccion-level data available
+    v91 <- v91manip; # change with true v91manip when 1991 seccion-level data available
     v94 <- v94manip; v97 <- v97manip; 
     v00 <- v00manip; v03 <- v03manip; v06 <- v06manip; v09 <- v09manip; v12 <- v12manip; v15 <- v15manip; v18 <- v18manip;
 }
+#
 ###########################################
 ## prepare manipulated party objects     ##
 ## for time-series and alpha regressions ##
@@ -2323,9 +2342,11 @@ oth <- t(oth)
 efec <- t(efec)
 #
 extendCoalmanip <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
+if (agg=="m") names(extendCoalmanip) <- v00$ife
+if (agg=="s") names(extendCoalmanip) <- v00$edon*10000 + v00$seccion # untested
 # loop over municipios/secciones
 for (i in 1:nrow(v00)){
-    #i <- 81 # debug
+    #i <- 60 # debug
     tmp <- data.frame(yr = seq(from=1991, to=2018, by=3),
                       pan = pan[,i],
                       pri = pri[,i],
@@ -2346,6 +2367,9 @@ for (i in 1:nrow(v00)){
     }
     # re-compute shares
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
     # fill info to new list
     extendCoalmanip[[i]] <- tmp
 }
@@ -2374,8 +2398,11 @@ betahat <- data.frame(pan    = rep(NA, nrow(v00)),
                       oth    = rep(NA, nrow(v00))) # will receive municipio's betas (none for pri)
 #
 tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
-                                                       # regression per municipio, each used to
-                                                       # predict votes in 2015 and 2018 
+                                   # regression per municipio, each used to
+                                   # predict votes in 2006:2018 
+# add names
+if (agg=="m") names(tmp) <- v00$ife
+if (agg=="s") names(tmp) <- v00$edon*10000 + v00$seccion # untested
 #
 regs.2006manip <- regs.2009manip <- regs.2012manip <- regs.2015manip <- regs.2018manip <-
     list(pan    = tmp,
@@ -2624,13 +2651,6 @@ for (i in non.nas){
 
 # clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
 rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
-# more cleaning
-rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
-rm(pan,pri,left,oth,efec)
-rm(agg,add.split,cs,sel.split)
-rm(i,info,new.d,non.nas,per.means,year)
-rm(yr.means)
-rm(tmp,data.tmp)
 
 save.image("data/too-big-4-github/tmp4.RData")
 
@@ -2640,22 +2660,350 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load("data/too-big-4-github/tmp4.RData")
 
-
-################################
-## FIX TWICE SPLIT MUNICIPIOS ##
-################################
-
-# read estimates (produced externally with script code/script-to-fix-twice-split-muns.r)
-load(file = paste(wd, "data/regs-to-fix-twice-split-muns.RData", sep = "/"))
-
-
 ##############################################
 ## REPLACE WRONG REGRESSION ESTIMATES       ##
 ## KEEPING THE TRUE VOTE RETURNS INSTEAD    ##
 ## OF MANIPULATIONS TO GET ESTIMATES RIGHT  ##
 ##############################################
+#
+## # debug routine
+## sel1 <- which(names(extendCoal)=="24037")
+## sel2 <- which(names(extendCoalmanip)=="24037")
+## sel3 <- which(v94m$ife==24037|v94m$ife==24058)
+## sel4 <- which(v94manip$ife==24037|v94manip$ife==24058)
+## extendCoal[[sel1]]$pan
+## extendCoalmanip[[sel2]]$pan
+## v94m[sel3,]
+## v94manip[sel4,]
+## v97m[sel3,]
+## v97manip[sel4,]
+## dim(v94)
 
-eric  x
+################################################
+## chg 1997                                   ##
+## ########                                   ##
+## 2006 <- 1991manip 1994manip 1997 2000 2003 ##
+## 2009 <- 1994manip 1997 2000 2003 2006      ##
+## 2012 <- 1997 2000 2003 2006 2009           ##
+## 2015 <- 2000 2003 2006 2009 2012           ##
+## 2018 <- 2003 2006 2009 2012 2015           ##
+################################################
+sel <- which(treat.yrs$yr.chg==1997)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        #names(regs.2006$pan)[sel1]      # debug
+        #names(regs.2006manip$pan)[sel2] # debug
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
+        regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
+        regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
+        regs.2009$pan [[sel1]] <- regs.2009manip$pan [[sel2]]
+        regs.2009$left[[sel1]] <- regs.2009manip$left[[sel2]]
+        regs.2009$oth [[sel1]] <- regs.2009manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+#        
+##############
+## chg 2000 ##
+##############
+## 2006 <- 1991manip 1994manip 1997manip 2000 2003
+## 2009 <- 1994manip 1997manip 2000 2003 2006
+## 2012 <- 1997manip 2000 2003 2006 2009
+## 2015 <- 2000 2003 2006 2009 2012
+## 2018 <- 2003 2006 2009 2012 2015
+sel <- which(treat.yrs$yr.chg==2000)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        #names(regs.2006$pan)[sel1]      # debug
+        #names(regs.2006manip$pan)[sel2] # debug
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
+        regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
+        regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
+        regs.2009$pan [[sel1]] <- regs.2009manip$pan [[sel2]]
+        regs.2009$left[[sel1]] <- regs.2009manip$left[[sel2]]
+        regs.2009$oth [[sel1]] <- regs.2009manip$oth [[sel2]]
+        regs.2012$pan [[sel1]] <- regs.2012manip$pan [[sel2]]
+        regs.2012$left[[sel1]] <- regs.2012manip$left[[sel2]]
+        regs.2012$oth [[sel1]] <- regs.2012manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+#
+##############
+## chg 2003 ##
+##############
+## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003
+## 2009 <- 1994manip 1997manip 2000manip 2003 2006
+## 2012 <- 1997manip 2000manip 2003 2006 2009
+## 2015 <- 2000manip 2003 2006 2009 2012
+## 2018 <- 2003 2006 2009 2012 2015
+sel <- which(treat.yrs$yr.chg==2003)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        #names(regs.2006$pan)[sel1]      # debug
+        #names(regs.2006manip$pan)[sel2] # debug
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
+        regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
+        regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
+        regs.2009$pan [[sel1]] <- regs.2009manip$pan [[sel2]]
+        regs.2009$left[[sel1]] <- regs.2009manip$left[[sel2]]
+        regs.2009$oth [[sel1]] <- regs.2009manip$oth [[sel2]]
+        regs.2012$pan [[sel1]] <- regs.2012manip$pan [[sel2]]
+        regs.2012$left[[sel1]] <- regs.2012manip$left[[sel2]]
+        regs.2012$oth [[sel1]] <- regs.2012manip$oth [[sel2]]
+        regs.2015$pan [[sel1]] <- regs.2015manip$pan [[sel2]]
+        regs.2015$left[[sel1]] <- regs.2015manip$left[[sel2]]
+        regs.2015$oth [[sel1]] <- regs.2015manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+#
+##############
+## chg 2006 ##
+##############
+## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003manip
+## 2009 <- 1994manip 1997manip 2000manip 2003manip 2006
+## 2012 <- 1997manip 2000manip 2003manip 2006 2009
+## 2015 <- 2000manip 2003manip 2006 2009 2012
+## 2018 <- 2003manip 2006 2009 2012 2015
+sel <- which(treat.yrs$yr.chg==2006)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        #names(regs.2006$pan)[sel1]      # debug
+        #names(regs.2006manip$pan)[sel2] # debug
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
+        regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
+        regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
+        regs.2009$pan [[sel1]] <- regs.2009manip$pan [[sel2]]
+        regs.2009$left[[sel1]] <- regs.2009manip$left[[sel2]]
+        regs.2009$oth [[sel1]] <- regs.2009manip$oth [[sel2]]
+        regs.2012$pan [[sel1]] <- regs.2012manip$pan [[sel2]]
+        regs.2012$left[[sel1]] <- regs.2012manip$left[[sel2]]
+        regs.2012$oth [[sel1]] <- regs.2012manip$oth [[sel2]]
+        regs.2015$pan [[sel1]] <- regs.2015manip$pan [[sel2]]
+        regs.2015$left[[sel1]] <- regs.2015manip$left[[sel2]]
+        regs.2015$oth [[sel1]] <- regs.2015manip$oth [[sel2]]
+        regs.2018$pan [[sel1]] <- regs.2018manip$pan [[sel2]]
+        regs.2018$left[[sel1]] <- regs.2018manip$left[[sel2]]
+        regs.2018$oth [[sel1]] <- regs.2018manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+#
+##############
+## chg 2009 ##
+##############
+## 2006 <- 1991 1994 1997 2000 2003
+## 2009 <- 1994manip 1997manip 2000manip 2003manip 2006manip
+## 2012 <- 1997manip 2000manip 2003manip 2006manip 2009
+## 2015 <- 2000manip 2003manip 2006manip 2009 2012
+## 2018 <- 2003manip 2006manip 2009 2012 2015
+sel <- which(treat.yrs$yr.chg==2009)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        #names(regs.2006$pan)[sel1]      # debug
+        #names(regs.2006manip$pan)[sel2] # debug
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        regs.2009$pan [[sel1]] <- regs.2009manip$pan [[sel2]]
+        regs.2009$left[[sel1]] <- regs.2009manip$left[[sel2]]
+        regs.2009$oth [[sel1]] <- regs.2009manip$oth [[sel2]]
+        regs.2012$pan [[sel1]] <- regs.2012manip$pan [[sel2]]
+        regs.2012$left[[sel1]] <- regs.2012manip$left[[sel2]]
+        regs.2012$oth [[sel1]] <- regs.2012manip$oth [[sel2]]
+        regs.2015$pan [[sel1]] <- regs.2015manip$pan [[sel2]]
+        regs.2015$left[[sel1]] <- regs.2015manip$left[[sel2]]
+        regs.2015$oth [[sel1]] <- regs.2015manip$oth [[sel2]]
+        regs.2018$pan [[sel1]] <- regs.2018manip$pan [[sel2]]
+        regs.2018$left[[sel1]] <- regs.2018manip$left[[sel2]]
+        regs.2018$oth [[sel1]] <- regs.2018manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+#
+##############
+## chg 2012 ##
+##############
+## 2006 <- 1991 1994 1997 2000 2003
+## 2009 <- 1994 1997 2000 2003 2006
+## 2012 <- 1997manip 2000manip 2003manip 2006manip 2009manip
+## 2015 <- 2000manip 2003manip 2006manip 2009manip 2012
+## 2018 <- 2003manip 2006manip 2009manip 2012 2015
+sel <- which(treat.yrs$yr.chg==2012)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        #names(regs.2006$pan)[sel1]      # debug
+        #names(regs.2006manip$pan)[sel2] # debug
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        regs.2012$pan [[sel1]] <- regs.2012manip$pan [[sel2]]
+        regs.2012$left[[sel1]] <- regs.2012manip$left[[sel2]]
+        regs.2012$oth [[sel1]] <- regs.2012manip$oth [[sel2]]
+        regs.2015$pan [[sel1]] <- regs.2015manip$pan [[sel2]]
+        regs.2015$left[[sel1]] <- regs.2015manip$left[[sel2]]
+        regs.2015$oth [[sel1]] <- regs.2015manip$oth [[sel2]]
+        regs.2018$pan [[sel1]] <- regs.2018manip$pan [[sel2]]
+        regs.2018$left[[sel1]] <- regs.2018manip$left[[sel2]]
+        regs.2018$oth [[sel1]] <- regs.2018manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+#
+###############################################################
+## chg 2015                                                  ##
+## ########                                                  ##
+## 2006 <- 1991 1994 1997 2000 2003                          ##
+## 2009 <- 1994 1997 2000 2003 2006                          ##
+## 2012 <- 1997 2000 2003 2006 2009                          ##
+## 2015 <- 2000manip 2003manip 2006manip 2009manip 2012manip ##
+## 2018 <- 2003manip 2006manip 2009manip 2012manip 2015      ##
+###############################################################
+sel <- which(treat.yrs$yr.chg==2015)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        #names(regs.2006$pan)[sel1]      # debug
+        #names(regs.2006manip$pan)[sel2] # debug
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        regs.2015$pan [[sel1]] <- regs.2015manip$pan [[sel2]]
+        regs.2015$left[[sel1]] <- regs.2015manip$left[[sel2]]
+        regs.2015$oth [[sel1]] <- regs.2015manip$oth [[sel2]]
+        regs.2018$pan [[sel1]] <- regs.2018manip$pan [[sel2]]
+        regs.2018$left[[sel1]] <- regs.2018manip$left[[sel2]]
+        regs.2018$oth [[sel1]] <- regs.2018manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+#
+###############################################################
+## chg 2018                                                  ##
+## ########                                                  ##
+## 2006 <- 1991 1994 1997 2000 2003                          ##
+## 2009 <- 1994 1997 2000 2003 2006                          ##
+## 2012 <- 1997 2000 2003 2006 2009                          ##
+## 2015 <- 2000 2003 2006 2009 2012                          ##
+## 2018 <- 2003manip 2006manip 2009manip 2012manip 2015manip ##
+###############################################################
+sel <- which(treat.yrs$yr.chg==2018)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        #names(regs.2006$pan)[sel1]      # debug
+        #names(regs.2006manip$pan)[sel2] # debug
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        regs.2018$pan [[sel1]] <- regs.2018manip$pan [[sel2]]
+        regs.2018$left[[sel1]] <- regs.2018manip$left[[sel2]]
+        regs.2018$oth [[sel1]] <- regs.2018manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+#
+################################
+## FIX TWICE SPLIT MUNICIPIOS ##
+################################
+#
+# read estimates (produced externally with script code/script-to-fix-twice-split-muns.r)
+load(file = paste(wd, "data/regs-to-fix-twice-split-muns.RData", sep = "/"))
+###############################################################
+## chg 2006                                                  ##
+## ########                                                  ##
+## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003manip ##
+###############################################################
+target.ife <- 12013 # azoyu
+for (i in 1:length(sel)){
+    #i <- 1 # debug
+    sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+    sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+    #names(regs.2006$pan)[sel1]      # debug
+    #names(regs.2006manip$pan)[sel2] # debug
+    extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+    regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
+    regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
+    regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
+    #need to figure if mean.regsmanip should also be used---manips input skipped
+}
+#
+####################################################################
+## chg 2009                                                       ##
+## ########                                                       ##
+## 2009 <- 1994manip2 1997manip2 2000manip2 2003manip2 2006manip2 ##
+## 2012 <- 1997manip2 2000manip2 2003manip2 2006manip2 2009       ##
+## 2015 <- 2000manip2 2003manip2 2006manip2 2009 2012             ##
+## 2018 <- 2003manip2 2006manip2 2009 2012 2015                   ##
+####################################################################
+sel <- which(treat.yrs$yr.chg==2009)
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        #names(regs.2006$pan)[sel1]      # debug
+        #names(regs.2006manip$pan)[sel2] # debug
+        extendCoal[[sel1]] <- extendCoalmanip2
+        regs.2009$pan [[sel1]] <- regs.2009manip2$pan 
+        regs.2009$left[[sel1]] <- regs.2009manip2$left
+        regs.2009$oth [[sel1]] <- regs.2009manip2$oth 
+        regs.2012$pan [[sel1]] <- regs.2012manip2$pan 
+        regs.2012$left[[sel1]] <- regs.2012manip2$left
+        regs.2012$oth [[sel1]] <- regs.2012manip2$oth 
+        regs.2015$pan [[sel1]] <- regs.2015manip2$pan 
+        regs.2015$left[[sel1]] <- regs.2015manip2$left
+        regs.2015$oth [[sel1]] <- regs.2015manip2$oth 
+        regs.2018$pan [[sel1]] <- regs.2018manip2$pan 
+        regs.2018$left[[sel1]] <- regs.2018manip2$left
+        regs.2018$oth [[sel1]] <- regs.2018manip2$oth 
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+#
+# clean
+ls()
+rm(v91manip, v94manip, v97manip, v00manip, v03manip, v06manip, v09manip, v12manip, v15manip, v18manip,
+   regs.2006manip, regs.2009manip, regs.2012manip, regs.2015manip, regs.2018manip, mean.regsmanip,
+   regs.2006manip2, regs.2009manip2, regs.2012manip2, regs.2015manip2, regs.2018manip2, mean.regsmanip2,
+   extendCoalmanip, extendCoalmanip2)
+rm(sel,sel1,sel2,sel.c,sel.to,target.ife,i)
+
+# more cleaning
+rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
+rm(pan,pri,left,oth,efec)
+rm(add.split,cs,sel.split)
+rm(i,info,new.d,non.nas,per.means,year)
+rm(yr.means)
+rm(tmp,data.tmp)
+
 
 
 # adds manipulation indicator to all data frames in list
@@ -2710,14 +3058,17 @@ if (agg=="s") {
     }
 }
 
+help(lapply)
+extendCoal[[1]][sel,]
+eric  x
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
 ##########################################################################
 tmp.func <- function(year) {
     #year <- 2009 # debug
     sel <- which(extendCoal[[1]]$yr==year) # which row reports year (symmetric in all other objects in list)
-    tmp <- lapply(extendCoal, function(x) {
-        prune <- x[sel,] # keep selected row only
+    tmp <- lapply(extendCoal, FUN = function(X) {
+        prune <- X[sel,] # keep selected row only
         return(prune)
     }) # keep sel yr only in every municipio
     # spot NAs in list
