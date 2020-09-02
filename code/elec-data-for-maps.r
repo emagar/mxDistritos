@@ -1857,8 +1857,8 @@ oth <- t(oth)
 efec <- t(efec)
 #
 extendCoal <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
-if (agg=="m") names(extendCoal) <- paste("m",v00$ife, sep="")
-if (agg=="s") names(extendCoal) <- paste("s",v00$edon*10000 + v00$seccion, sep="") # untested
+if (agg=="m") names(extendCoal) <- v00$ife
+if (agg=="s") names(extendCoal) <- v00$edon*10000 + v00$seccion # untested
 # loop over municipios/secciones
 for (i in 1:nrow(v00)){
     #i <- 81 # debug
@@ -1997,8 +1997,8 @@ tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
                                    # regression per municipio, each used to
                                    # predict votes in 2006:2018 
 # add names
-if (agg=="m") names(tmp) <- paste("m", v00$ife, sep="")
-if (agg=="s") names(tmp) <- paste("s", v00$edon*10000 + v00$seccion, sep="") # untested
+if (agg=="m") names(tmp) <- v00$ife
+if (agg=="s") names(tmp) <- v00$edon*10000 + v00$seccion # untested
 #
 regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <-
     list(pan    = tmp,
@@ -2342,8 +2342,8 @@ oth <- t(oth)
 efec <- t(efec)
 #
 extendCoalmanip <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
-if (agg=="m") names(extendCoalmanip) <- paste("m", v00$ife, sep="")
-if (agg=="s") names(extendCoalmanip) <- paste("s", v00$edon*10000 + v00$seccion, sep="") # untested
+if (agg=="m") names(extendCoalmanip) <- v00$ife
+if (agg=="s") names(extendCoalmanip) <- v00$edon*10000 + v00$seccion # untested
 # loop over municipios/secciones
 for (i in 1:nrow(v00)){
     #i <- 60 # debug
@@ -2401,8 +2401,8 @@ tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
                                    # regression per municipio, each used to
                                    # predict votes in 2006:2018 
 # add names
-if (agg=="m") names(tmp) <- paste("m", v00$ife, sep="")
-if (agg=="s") names(tmp) <- paste("s", v00$edon*10000 + v00$seccion, sep="") # untested
+if (agg=="m") names(tmp) <- v00$ife
+if (agg=="s") names(tmp) <- v00$edon*10000 + v00$seccion # untested
 #
 regs.2006manip <- regs.2009manip <- regs.2012manip <- regs.2015manip <- regs.2018manip <-
     list(pan    = tmp,
@@ -2650,7 +2650,7 @@ for (i in non.nas){
 ##############################################################################################
 
 # clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
-extendCoalmanip[1]
+extendCoalmanip[[1]]
 rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
 
 save.image("data/too-big-4-github/tmp4.RData")
@@ -2698,17 +2698,11 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 44 # debug
-        sel1 <- which(names(extendCoal)      %in% paste("m", target.ife[i], sep = ""))
-        sel2 <- which(names(extendCoalmanip) %in% paste("m", target.ife[i], sep = ""))
+        sel1 <- which(names(extendCoal)      %in% target.ife[i])
+        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
-        #
-        tmp1 <- extendCoalmanip[[sel2]]
-        tmp.names <- names(tmp1)
-        tmp1 <- as.data.frame(tmp1)
-        names(tmp1) <- tmp.names
-        extendCoal[[sel1]] <- tmp1
-        ## extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
         regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
         regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
         regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
@@ -2732,17 +2726,11 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% paste("m", target.ife[i], sep = ""))
-        sel2 <- which(names(extendCoalmanip) %in% paste("m", target.ife[i], sep = ""))
+        sel1 <- which(names(extendCoal)      %in% target.ife[i])
+        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
-        #
-        tmp1 <- extendCoalmanip[[sel2]]
-        tmp.names <- names(tmp1[[1]][[1]])
-        tmp1 <- as.data.frame(tmp1)
-        names(tmp1) <- tmp.names
-        extendCoal[[sel1]] <- tmp1
-        ## extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
         regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
         regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
         regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
@@ -2769,17 +2757,11 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% paste("m", target.ife[i], sep = ""))
-        sel2 <- which(names(extendCoalmanip) %in% paste("m", target.ife[i], sep = ""))
+        sel1 <- which(names(extendCoal)      %in% target.ife[i])
+        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
-        #
-        tmp1 <- extendCoalmanip[[sel2]]
-        tmp.names <- names(tmp1[[1]][[1]])
-        tmp1 <- as.data.frame(tmp1)
-        names(tmp1) <- tmp.names
-        extendCoal[[sel1]] <- tmp1
-        ## extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
         regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
         regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
         regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
@@ -2809,17 +2791,11 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% paste("m", target.ife[i], sep = ""))
-        sel2 <- which(names(extendCoalmanip) %in% paste("m", target.ife[i], sep = ""))
+        sel1 <- which(names(extendCoal)      %in% target.ife[i])
+        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
-        #
-        tmp1 <- extendCoalmanip[[sel2]]
-        tmp.names <- names(tmp1[[1]][[1]])
-        tmp1 <- as.data.frame(tmp1)
-        names(tmp1) <- tmp.names
-        extendCoal[[sel1]] <- tmp1
-        ## extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
         regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
         regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
         regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
@@ -2852,17 +2828,11 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% paste("m", target.ife[i], sep = ""))
-        sel2 <- which(names(extendCoalmanip) %in% paste("m", target.ife[i], sep = ""))
+        sel1 <- which(names(extendCoal)      %in% target.ife[i])
+        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
-        #
-        tmp1 <- extendCoalmanip[[sel2]]
-        tmp.names <- names(tmp1[[1]][[1]])
-        tmp1 <- as.data.frame(tmp1)
-        names(tmp1) <- tmp.names
-        extendCoal[[sel1]] <- tmp1
-        ## extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
         regs.2009$pan [[sel1]] <- regs.2009manip$pan [[sel2]]
         regs.2009$left[[sel1]] <- regs.2009manip$left[[sel2]]
         regs.2009$oth [[sel1]] <- regs.2009manip$oth [[sel2]]
@@ -2892,17 +2862,11 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% paste("m", target.ife[i], sep = ""))
-        sel2 <- which(names(extendCoalmanip) %in% paste("m", target.ife[i], sep = ""))
+        sel1 <- which(names(extendCoal)      %in% target.ife[i])
+        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
-        #
-        tmp1 <- extendCoalmanip[[sel2]]
-        tmp.names <- names(tmp1[[1]][[1]])
-        tmp1 <- as.data.frame(tmp1)
-        names(tmp1) <- tmp.names
-        extendCoal[[sel1]] <- tmp1
-        ## extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
         regs.2012$pan [[sel1]] <- regs.2012manip$pan [[sel2]]
         regs.2012$left[[sel1]] <- regs.2012manip$left[[sel2]]
         regs.2012$oth [[sel1]] <- regs.2012manip$oth [[sel2]]
@@ -2930,17 +2894,11 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% paste("m", target.ife[i], sep = ""))
-        sel2 <- which(names(extendCoalmanip) %in% paste("m", target.ife[i], sep = ""))
+        sel1 <- which(names(extendCoal)      %in% target.ife[i])
+        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
-        #
-        tmp1 <- extendCoalmanip[[sel2]]
-        tmp.names <- names(tmp1[[1]][[1]])
-        tmp1 <- as.data.frame(tmp1)
-        names(tmp1) <- tmp.names
-        extendCoal[[sel1]] <- tmp1
-        ## extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
         regs.2015$pan [[sel1]] <- regs.2015manip$pan [[sel2]]
         regs.2015$left[[sel1]] <- regs.2015manip$left[[sel2]]
         regs.2015$oth [[sel1]] <- regs.2015manip$oth [[sel2]]
@@ -2965,17 +2923,11 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% paste("m", target.ife[i], sep = ""))
-        sel2 <- which(names(extendCoalmanip) %in% paste("m", target.ife[i], sep = ""))
+        sel1 <- which(names(extendCoal)      %in% target.ife[i])
+        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
-        #
-        tmp1 <- extendCoalmanip[[sel2]]
-        tmp.names <- names(tmp1[[1]][[1]])
-        tmp1 <- as.data.frame(tmp1)
-        names(tmp1) <- tmp.names
-        extendCoal[[sel1]] <- tmp1
-        ## extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+        extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
         regs.2018$pan [[sel1]] <- regs.2018manip$pan [[sel2]]
         regs.2018$left[[sel1]] <- regs.2018manip$left[[sel2]]
         regs.2018$oth [[sel1]] <- regs.2018manip$oth [[sel2]]
@@ -3002,13 +2954,7 @@ for (i in 1:length(sel)){
     sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
     #names(regs.2006$pan)[sel1]      # debug
     #names(regs.2006manip$pan)[sel2] # debug
-    #
-    tmp1 <- extendCoalmanip[[sel2]]
-    tmp.names <- names(tmp1[[1]][[1]])
-    tmp1 <- as.data.frame(tmp1)
-    names(tmp1) <- tmp.names
-    extendCoal[[sel1]] <- tmp1
-    ## extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+    extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
     regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
     regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
     regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
@@ -3023,8 +2969,8 @@ for (i in 1:length(sel)){
 ## 2015 <- 2000manip2 2003manip2 2006manip2 2009 2012             ##
 ## 2018 <- 2003manip2 2006manip2 2009 2012 2015                   ##
 ####################################################################
-sel <- which(treat.yrs$yr.chg==2009)
-target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+# 2sep2020 THIS SEEMS WRONG SHOULD DROP #sel <- which(treat.yrs$yr.chg==2009)
+# 2sep2020 THIS SEEMS WRONG SHOULD DROP #target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug

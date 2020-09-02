@@ -27,8 +27,6 @@ summary(extendCoal.bis)
 
 
 
-summary(extendCoal.bis)
-
 tmp1 <- list(A = data.frame(n=1:3, x=c("a","b","c"), y = c(1,0,0)),
              B = data.frame(n=1:3, x=c("d","e","f"), y = c(0,1,0)))
 tmp1[1]
