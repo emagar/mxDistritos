@@ -2698,8 +2698,8 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 44 # debug
-        sel1 <- which(names(extendCoal)      %in% target.ife[i])
-        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
         extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
@@ -2726,8 +2726,8 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% target.ife[i])
-        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
+        sel1 <- which(names(as.numeric(extendCoal))      %in% target.ife[i])
+        sel2 <- which(names(as.numeric(extendCoalmanip)) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
         extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
@@ -2757,8 +2757,8 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% target.ife[i])
-        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
         extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
@@ -2791,8 +2791,8 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% target.ife[i])
-        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
         extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
@@ -2828,8 +2828,8 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% target.ife[i])
-        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
         extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
@@ -2862,8 +2862,8 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% target.ife[i])
-        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
         extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
@@ -2894,8 +2894,8 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% target.ife[i])
-        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
         extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
@@ -2923,8 +2923,8 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(extendCoal)      %in% target.ife[i])
-        sel2 <- which(names(extendCoalmanip) %in% target.ife[i])
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
         extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
@@ -2977,13 +2977,7 @@ if (length(sel)>0){
         sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
-        #
-        tmp1 <- extendCoalmanip2
-        tmp.names <- names(tmp1[[1]][[1]])
-        tmp1 <- as.data.frame(tmp1)
-        names(tmp1) <- tmp.names
-        extendCoal[[sel1]] <- tmp1
-        ## extendCoal[[sel1]] <- extendCoalmanip2
+        extendCoal[[sel1]] <- extendCoalmanip2
         regs.2009$pan [[sel1]] <- regs.2009manip2$pan 
         regs.2009$left[[sel1]] <- regs.2009manip2$left
         regs.2009$oth [[sel1]] <- regs.2009manip2$oth 
