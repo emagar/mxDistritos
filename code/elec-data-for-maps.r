@@ -2726,8 +2726,8 @@ target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
         #i <- 1 # debug
-        sel1 <- which(names(as.numeric(extendCoal))      %in% target.ife[i])
-        sel2 <- which(names(as.numeric(extendCoalmanip)) %in% target.ife[i])
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
         #names(regs.2006$pan)[sel1]      # debug
         #names(regs.2006manip$pan)[sel2] # debug
         extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
