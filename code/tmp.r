@@ -22,6 +22,32 @@
 
 
 
+summary(extendCoal)
+summary(extendCoal.bis)
+
+
+
+summary(extendCoal.bis)
+
+tmp1 <- list(A = data.frame(n=1:3, x=c("a","b","c"), y = c(1,0,0)),
+             B = data.frame(n=1:3, x=c("d","e","f"), y = c(0,1,0)))
+tmp1[1]
+tmp1[[1]]
+summary(tmp1)
+tmp2 <- list(A = data.frame(n=1:4, x=c("g","h","i","j"), y = c(0,0,1,0)),
+             B = data.frame(n=1:4, x=c("k","l","m","n"), y = c(1,1,0,0)))
+tmp1[[1]] <- tmp2[[2]]
+
+x
+
+
+
+tmp1 <- extendCoal    ["32047"]
+tmp.names <- names(tmp1[[1]][[1]])
+tmp1 <- as.data.frame(tmp1)
+names(tmp1) <- tmp.names
+
+
 
 
 
