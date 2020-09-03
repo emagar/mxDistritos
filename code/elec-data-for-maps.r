@@ -1052,6 +1052,8 @@ v91manip <- d
 ## # write.csv(d, file = "tmp91.csv", row.names=FALSE)
 # load manipulated version
 d <- read.csv(paste(dd, "../municipios/dipfed1991.csv", sep = ""), header=TRUE, stringsAsFactors=FALSE)
+# NAs to zero in v91 -- still non-existing municipios
+d[is.na(d)] <- 0
 d$mun <- NULL
 v91m <- d
 
@@ -2661,9 +2663,6 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load("data/too-big-4-github/tmp4.RData")
 
-# split municipio manipulation (next block) returns nested lists, 
-extendCoal.bis <- extendCoal                   # duplicate to fix
-
 
 ##############################################
 ## REPLACE WRONG REGRESSION ESTIMATES       ##
@@ -2935,7 +2934,6 @@ if (length(sel)>0){
     }
 }
 
-#
 ################################
 ## FIX TWICE SPLIT MUNICIPIOS ##
 ################################
@@ -2948,8 +2946,8 @@ load(file = paste(wd, "data/regs-to-fix-twice-split-muns.RData", sep = "/"))
 ## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003manip ##
 ###############################################################
 target.ife <- 12013 # azoyu
-for (i in 1:length(sel)){
-    #i <- 1 # debug
+#for (i in 1:length(sel)){
+    i <- 1 # debug
     sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
     sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
     #names(regs.2006$pan)[sel1]      # debug
@@ -2959,7 +2957,7 @@ for (i in 1:length(sel)){
     regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
     regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
     #need to figure if mean.regsmanip should also be used---manips input skipped
-}
+#}
 #
 ####################################################################
 ## chg 2009                                                       ##
@@ -2969,30 +2967,24 @@ for (i in 1:length(sel)){
 ## 2015 <- 2000manip2 2003manip2 2006manip2 2009 2012             ##
 ## 2018 <- 2003manip2 2006manip2 2009 2012 2015                   ##
 ####################################################################
-# 2sep2020 THIS SEEMS WRONG SHOULD DROP #sel <- which(treat.yrs$yr.chg==2009)
-# 2sep2020 THIS SEEMS WRONG SHOULD DROP #target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
-if (length(sel)>0){
-    for (i in 1:length(sel)){
-        #i <- 1 # debug
-        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
-        #names(regs.2006$pan)[sel1]      # debug
-        #names(regs.2006manip$pan)[sel2] # debug
-        extendCoal[[sel1]] <- extendCoalmanip2
-        regs.2009$pan [[sel1]] <- regs.2009manip2$pan 
-        regs.2009$left[[sel1]] <- regs.2009manip2$left
-        regs.2009$oth [[sel1]] <- regs.2009manip2$oth 
-        regs.2012$pan [[sel1]] <- regs.2012manip2$pan 
-        regs.2012$left[[sel1]] <- regs.2012manip2$left
-        regs.2012$oth [[sel1]] <- regs.2012manip2$oth 
-        regs.2015$pan [[sel1]] <- regs.2015manip2$pan 
-        regs.2015$left[[sel1]] <- regs.2015manip2$left
-        regs.2015$oth [[sel1]] <- regs.2015manip2$oth 
-        regs.2018$pan [[sel1]] <- regs.2018manip2$pan 
-        regs.2018$left[[sel1]] <- regs.2018manip2$left
-        regs.2018$oth [[sel1]] <- regs.2018manip2$oth 
-        #need to figure if mean.regsmanip should also be used---manips input skipped
-    }
-}
+i <- 1 # debug
+sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+#names(regs.2006$pan)[sel1]      # debug
+#names(regs.2006manip$pan)[sel2] # debug
+extendCoal[[sel1]] <- extendCoalmanip2
+regs.2009$pan [[sel1]] <- regs.2009manip2$pan 
+regs.2009$left[[sel1]] <- regs.2009manip2$left
+regs.2009$oth [[sel1]] <- regs.2009manip2$oth 
+regs.2012$pan [[sel1]] <- regs.2012manip2$pan 
+regs.2012$left[[sel1]] <- regs.2012manip2$left
+regs.2012$oth [[sel1]] <- regs.2012manip2$oth 
+regs.2015$pan [[sel1]] <- regs.2015manip2$pan 
+regs.2015$left[[sel1]] <- regs.2015manip2$left
+regs.2015$oth [[sel1]] <- regs.2015manip2$oth 
+regs.2018$pan [[sel1]] <- regs.2018manip2$pan 
+regs.2018$left[[sel1]] <- regs.2018manip2$left
+regs.2018$oth [[sel1]] <- regs.2018manip2$oth 
+#need to figure if mean.regsmanip should also be used---manips input skipped
 #
 # clean
 rm(v91manip, v94manip, v97manip, v00manip, v03manip, v06manip, v09manip, v12manip, v15manip, v18manip,
@@ -3058,15 +3050,7 @@ if (agg=="s") {
     }
 }
 
-# split municipio manipulation return some nested lists, flatten
-extendCoal.bis <- extendCoal # duplicate
-summary(extendCoal)
-
-extendCoal["m32046"]
-extendCoal["m32047"]
-
-
-eric  x
+eric  xx OJO hay dataframes en extendcoal que no tienen vhats
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
 ##########################################################################
@@ -3093,6 +3077,7 @@ tmp.func <- function(year) {
     rm(sel.col)
     return(tmp)
 }
+
 extendCoal.2006 <- tmp.func(year=2006)
 extendCoal.2009 <- tmp.func(year=2009)
 extendCoal.2012 <- tmp.func(year=2012)

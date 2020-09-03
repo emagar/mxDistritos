@@ -22,9 +22,18 @@
 
 
 
-summary(extendCoal)
+summary(extendCoal[1:100])
+extendCoal[["1009"]]
 summary(extendCoal.bis)
 
+v97$efec[is.na(v97$efec)]
+
+v91[1:20,]
+tmp <- v91
+tmp[]
+non.nas[['1009']]
+non.nas[1]
+x
 
 
 tmp1 <- list(A = data.frame(n=1:3, x=c("a","b","c"), y = c(1,0,0)),

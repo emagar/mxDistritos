@@ -173,6 +173,8 @@ for (i in 1:nrow(v00)){
     }
     # re-compute shares
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
     # fill info to new list
     extendCoalmanip2[[i]] <- tmp
 }
