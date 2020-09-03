@@ -21,8 +21,14 @@
 10. save m regs
 
 
+tmp <- extendCoal
+for (i in 1:length(tmp)){
+    tmp[[i]] <- tmp[[i]][7,]
+}
+i
 
-summary(extendCoal[1:100])
+
+summary(extendCoal[101:150])
 extendCoal[["1009"]]
 summary(extendCoal.bis)
 

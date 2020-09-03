@@ -2017,7 +2017,7 @@ mean.regs <- list(pan    = tmp,
 non.nas <- lapply(extendCoal, sum)
 non.nas <- unlist(non.nas)
 non.nas <- which(is.na(non.nas)==FALSE)
-tail(non.nas)
+#tail(non.nas)
 #    
 for (i in non.nas){
     #i <- 81 # debug
@@ -2419,6 +2419,7 @@ mean.regsmanip <- list(pan    = tmp,
 #
 # drop list elements that still have NAs from loop
 # (happens with some secciones)
+non.nas.orig <- non.nas # duplicate to restore
 non.nas <- lapply(extendCoalmanip, sum)
 non.nas <- unlist(non.nas)
 non.nas <- which(is.na(non.nas)==FALSE)
@@ -2651,6 +2652,9 @@ for (i in non.nas){
 ## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
 ##############################################################################################
 
+# restore
+non.nas <- non.nas.orig; rm(non.nas.orig)
+#
 # clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
 extendCoalmanip[[1]]
 rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
@@ -3050,7 +3054,8 @@ if (agg=="s") {
     }
 }
 
-eric  xx OJO hay dataframes en extendcoal que no tienen vhats
+
+eric  xx what is non.nas?
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
 ##########################################################################
@@ -3058,23 +3063,25 @@ tmp.func <- function(year) {
     #year <- 2009         # debug
     #X <- extendCoal[[1]] # debug
     sel <- which(extendCoal[[1]]$yr==year) # which row reports year (symmetric in all other objects in list)
+    # generate list with selected row only in every municipio
     tmp <- lapply(extendCoal, FUN = function(X) {
-        prune <- X[sel,] # keep selected row only
+        prune <- X[sel,]
         return(prune)
-    }) # keep sel yr only in every municipio
+    })
     # spot NAs in list
     tmp.sel <- setdiff(1:length(extendCoal), non.nas)
     # fill with same-dim NA data.frame
     tmp.manip <- tmp[[non.nas[1]]]
     tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
-    tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
+    if (length(tmp.sel)>0) tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
     # turn into one dataframe
     tmp <- do.call("rbind", tmp)
     rownames(tmp) <- NULL
-    if (agg=="m") sel.col <- c("edon","ife","inegi")       # cols to merge when using municipios
-    if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi") # when using secciones
-    tmp <- cbind(tmp, v00[,sel.col])
-    rm(sel.col)
+    ## # next block seems redundant 2sep2020
+    ## if (agg=="m") sel.col <- c("edon","ife","inegi")       # cols to merge when using municipios
+    ## if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi") # when using secciones
+    ## tmp <- cbind(tmp, v00[,sel.col])
+    ## rm(sel.col)
     return(tmp)
 }
 
