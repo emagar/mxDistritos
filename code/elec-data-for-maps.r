@@ -3204,10 +3204,7 @@ rm(v91manip, v94manip, v97manip, v00manip, v03manip, v06manip, v09manip, v12mani
    extendCoalmanip, extendCoalmanip2)
 rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
 rm(pan,pri,left,oth,efec)
-rm(sel,sel1,sel2,sel.to,target.ife,i)
-
-
-
+rm(sel,sel1,sel2,sel.to,sel.c,target.ife,i,tmp)
 
 # adds manipulation indicator to all data frames in list
 if (agg=="s") {
@@ -3262,7 +3259,6 @@ if (agg=="s") {
 }
 
 
-eric  xx
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
 ##########################################################################
@@ -3292,7 +3288,6 @@ tmp.func <- function(year) {
     ## rm(sel.col)
     return(tmp)
 }
-
 extendCoal.2006 <- tmp.func(year=2006)
 extendCoal.2009 <- tmp.func(year=2009)
 extendCoal.2012 <- tmp.func(year=2012)
