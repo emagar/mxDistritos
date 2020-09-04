@@ -62,6 +62,37 @@ names(tmp1) <- tmp.names
 
 
 
+-----------------------
+
+
+# children
+sel <- which(treat.yrs$yr.chg==2018 & treat.yrs$childparent=="child")
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+        sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+        tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+        tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+        tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+        tmp[tmp$yr==2000,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2000)        
+        tmp[tmp$yr==2003,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2003)        
+        tmp[tmp$yr==2006,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2006)        
+        tmp[tmp$yr==2009,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2009)        
+        tmp[tmp$yr==2012,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2012)        
+        tmp[tmp$yr==2015,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2015)        
+        extendCoal[[sel1]] <- tmp     # return manipulated data
+        # no need to change regs fwd in new muns
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+
+
+-----------------------
+
 
 
 

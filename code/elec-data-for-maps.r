@@ -2696,7 +2696,8 @@ load("data/too-big-4-github/tmp4.RData")
 ## 2015 <- 2000 2003 2006 2009 2012           ##
 ## 2018 <- 2003 2006 2009 2012 2015           ##
 ################################################
-sel <- which(treat.yrs$yr.chg==1997)
+# parents
+sel <- which(treat.yrs$yr.chg==1997 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
@@ -2715,6 +2716,23 @@ if (length(sel)>0){
         #need to figure if mean.regsmanip should also be used---manips input skipped
     }
 }
+# children
+sel <- which(treat.yrs$yr.chg==1997 & treat.yrs$childparent=="child")
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+        sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+        tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+        tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+        extendCoal[[sel1]] <- tmp     # return manipulated data
+        # no need to change regs forward in new muns
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
 #        
 ##############
 ## chg 2000 ##
@@ -2724,7 +2742,8 @@ if (length(sel)>0){
 ## 2012 <- 1997manip 2000 2003 2006 2009
 ## 2015 <- 2000 2003 2006 2009 2012
 ## 2018 <- 2003 2006 2009 2012 2015
-sel <- which(treat.yrs$yr.chg==2000)
+# parents
+sel <- which(treat.yrs$yr.chg==2000 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
@@ -2743,6 +2762,24 @@ if (length(sel)>0){
         regs.2012$pan [[sel1]] <- regs.2012manip$pan [[sel2]]
         regs.2012$left[[sel1]] <- regs.2012manip$left[[sel2]]
         regs.2012$oth [[sel1]] <- regs.2012manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+# children
+sel <- which(treat.yrs$yr.chg==2000 & treat.yrs$childparent=="child")
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+        sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+        tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+        tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+        tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+        extendCoal[[sel1]] <- tmp     # return manipulated data
+        # no need to fwd change regs in new muns
         #need to figure if mean.regsmanip should also be used---manips input skipped
     }
 }
@@ -2755,7 +2792,8 @@ if (length(sel)>0){
 ## 2012 <- 1997manip 2000manip 2003 2006 2009
 ## 2015 <- 2000manip 2003 2006 2009 2012
 ## 2018 <- 2003 2006 2009 2012 2015
-sel <- which(treat.yrs$yr.chg==2003)
+# parents
+sel <- which(treat.yrs$yr.chg==2003 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
@@ -2777,6 +2815,25 @@ if (length(sel)>0){
         regs.2015$pan [[sel1]] <- regs.2015manip$pan [[sel2]]
         regs.2015$left[[sel1]] <- regs.2015manip$left[[sel2]]
         regs.2015$oth [[sel1]] <- regs.2015manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+# children
+sel <- which(treat.yrs$yr.chg==2003 & treat.yrs$childparent=="child")
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+        sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+        tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+        tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+        tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+        tmp[tmp$yr==2000,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2000)        
+        extendCoal[[sel1]] <- tmp     # return manipulated data
+        # no need to change regs fwd in new muns
         #need to figure if mean.regsmanip should also be used---manips input skipped
     }
 }
@@ -2789,7 +2846,8 @@ if (length(sel)>0){
 ## 2012 <- 1997manip 2000manip 2003manip 2006 2009
 ## 2015 <- 2000manip 2003manip 2006 2009 2012
 ## 2018 <- 2003manip 2006 2009 2012 2015
-sel <- which(treat.yrs$yr.chg==2006)
+# parents
+sel <- which(treat.yrs$yr.chg==2006 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
@@ -2817,6 +2875,26 @@ if (length(sel)>0){
         #need to figure if mean.regsmanip should also be used---manips input skipped
     }
 }
+# children
+sel <- which(treat.yrs$yr.chg==2006 & treat.yrs$childparent=="child")
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+        sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+        tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+        tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+        tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+        tmp[tmp$yr==2000,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2000)        
+        tmp[tmp$yr==2003,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2003)        
+        extendCoal[[sel1]] <- tmp     # return manipulated data
+        # no need to change regs fwd in new muns
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
 #
 ##############
 ## chg 2009 ##
@@ -2826,7 +2904,8 @@ if (length(sel)>0){
 ## 2012 <- 1997manip 2000manip 2003manip 2006manip 2009
 ## 2015 <- 2000manip 2003manip 2006manip 2009 2012
 ## 2018 <- 2003manip 2006manip 2009 2012 2015
-sel <- which(treat.yrs$yr.chg==2009)
+# parents
+sel <- which(treat.yrs$yr.chg==2009 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
@@ -2851,6 +2930,27 @@ if (length(sel)>0){
         #need to figure if mean.regsmanip should also be used---manips input skipped
     }
 }
+# children
+sel <- which(treat.yrs$yr.chg==2009 & treat.yrs$childparent=="child")
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+        sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+        tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+        tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+        tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+        tmp[tmp$yr==2000,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2000)        
+        tmp[tmp$yr==2003,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2003)        
+        tmp[tmp$yr==2006,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2006)        
+        extendCoal[[sel1]] <- tmp     # return manipulated data
+        # no need to change regs fwd in new muns
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
 #
 ##############
 ## chg 2012 ##
@@ -2860,7 +2960,8 @@ if (length(sel)>0){
 ## 2012 <- 1997manip 2000manip 2003manip 2006manip 2009manip
 ## 2015 <- 2000manip 2003manip 2006manip 2009manip 2012
 ## 2018 <- 2003manip 2006manip 2009manip 2012 2015
-sel <- which(treat.yrs$yr.chg==2012)
+# parents
+sel <- which(treat.yrs$yr.chg==2012 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
@@ -2879,6 +2980,28 @@ if (length(sel)>0){
         regs.2018$pan [[sel1]] <- regs.2018manip$pan [[sel2]]
         regs.2018$left[[sel1]] <- regs.2018manip$left[[sel2]]
         regs.2018$oth [[sel1]] <- regs.2018manip$oth [[sel2]]
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
+# children
+sel <- which(treat.yrs$yr.chg==2012 & treat.yrs$childparent=="child")
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+        sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+        tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+        tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+        tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+        tmp[tmp$yr==2000,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2000)        
+        tmp[tmp$yr==2003,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2003)        
+        tmp[tmp$yr==2006,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2006)        
+        tmp[tmp$yr==2009,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2009)        
+        extendCoal[[sel1]] <- tmp     # return manipulated data
+        # no need to change regs fwd in new muns
         #need to figure if mean.regsmanip should also be used---manips input skipped
     }
 }
@@ -2892,7 +3015,8 @@ if (length(sel)>0){
 ## 2015 <- 2000manip 2003manip 2006manip 2009manip 2012manip ##
 ## 2018 <- 2003manip 2006manip 2009manip 2012manip 2015      ##
 ###############################################################
-sel <- which(treat.yrs$yr.chg==2015)
+# parents
+sel <- which(treat.yrs$yr.chg==2015 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
@@ -2911,6 +3035,29 @@ if (length(sel)>0){
         #need to figure if mean.regsmanip should also be used---manips input skipped
     }
 }
+# children
+sel <- which(treat.yrs$yr.chg==2015 & treat.yrs$childparent=="child")
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+        sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+        tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+        tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+        tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+        tmp[tmp$yr==2000,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2000)        
+        tmp[tmp$yr==2003,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2003)        
+        tmp[tmp$yr==2006,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2006)        
+        tmp[tmp$yr==2009,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2009)        
+        tmp[tmp$yr==2012,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2012)        
+        extendCoal[[sel1]] <- tmp     # return manipulated data
+        # no need to change regs fwd in new muns
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
 #
 ###############################################################
 ## chg 2018                                                  ##
@@ -2921,7 +3068,8 @@ if (length(sel)>0){
 ## 2015 <- 2000 2003 2006 2009 2012                          ##
 ## 2018 <- 2003manip 2006manip 2009manip 2012manip 2015manip ##
 ###############################################################
-sel <- which(treat.yrs$yr.chg==2018)
+# parents
+sel <- which(treat.yrs$yr.chg==2018 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
 if (length(sel)>0){
     for (i in 1:length(sel)){
@@ -2937,6 +3085,30 @@ if (length(sel)>0){
         #need to figure if mean.regsmanip should also be used---manips input skipped
     }
 }
+# children
+sel <- which(treat.yrs$yr.chg==2018 & treat.yrs$childparent=="child")
+target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
+if (length(sel)>0){
+    for (i in 1:length(sel)){
+        #i <- 1 # debug
+        sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+        sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+        tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+        sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+        tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+        tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+        tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+        tmp[tmp$yr==2000,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2000)        
+        tmp[tmp$yr==2003,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2003)        
+        tmp[tmp$yr==2006,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2006)        
+        tmp[tmp$yr==2009,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2009)        
+        tmp[tmp$yr==2012,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2012)        
+        tmp[tmp$yr==2015,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2015)        
+        extendCoal[[sel1]] <- tmp     # return manipulated data
+        # no need to change regs fwd in new muns
+        #need to figure if mean.regsmanip should also be used---manips input skipped
+    }
+}
 
 ################################
 ## FIX TWICE SPLIT MUNICIPIOS ##
@@ -2944,24 +3116,41 @@ if (length(sel)>0){
 #
 # read estimates (produced externally with script code/script-to-fix-twice-split-muns.r)
 load(file = paste(wd, "data/regs-to-fix-twice-split-muns.RData", sep = "/"))
-###############################################################
-## chg 2006                                                  ##
-## ########                                                  ##
-## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003manip ##
-###############################################################
-target.ife <- 12013 # azoyu
-#for (i in 1:length(sel)){
-    i <- 1 # debug
-    sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
-    sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
-    #names(regs.2006$pan)[sel1]      # debug
-    #names(regs.2006manip$pan)[sel2] # debug
-    extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
-    regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
-    regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
-    regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
-    #need to figure if mean.regsmanip should also be used---manips input skipped
-#}
+## # BLOCK MANIPULATED ABOVE
+## ###############################################################
+## ## chg 2006                                                  ##
+## ## ########                                                  ##
+## ## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003manip ##
+## ###############################################################
+## target.ife <- 12013 # azoyu parent
+## #for (i in 1:length(sel)){
+##     i <- 1 # debug
+##     sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+##     sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+##     #names(regs.2006$pan)[sel1]      # debug
+##     #names(regs.2006manip$pan)[sel2] # debug
+##     extendCoal[[sel1]] <- extendCoalmanip[[sel2]]
+##     regs.2006$pan [[sel1]] <- regs.2006manip$pan [[sel2]]
+##     regs.2006$left[[sel1]] <- regs.2006manip$left[[sel2]]
+##     regs.2006$oth [[sel1]] <- regs.2006manip$oth [[sel2]]
+##     #need to figure if mean.regsmanip should also be used---manips input skipped
+## #}
+## target.ife <- 12080 # child
+## #for (i in 1:length(sel)){
+##     i <- 1 # debug
+##     sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+##     sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+##     tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+##     sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+##     tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+##     tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+##     tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+##     tmp[tmp$yr==2000,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2000)        
+##     tmp[tmp$yr==2003,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2003)        
+##     extendCoal[[sel1]] <- tmp     # return manipulated data
+##     # no need to change regs fwd in new muns
+##     #need to figure if mean.regsmanip should also be used---manips input skipped
+## #}
 #
 ####################################################################
 ## chg 2009                                                       ##
@@ -2971,11 +3160,12 @@ target.ife <- 12013 # azoyu
 ## 2015 <- 2000manip2 2003manip2 2006manip2 2009 2012             ##
 ## 2018 <- 2003manip2 2006manip2 2009 2012 2015                   ##
 ####################################################################
+target.ife <- 12013 # azoyu parent
 i <- 1 # debug
 sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
 #names(regs.2006$pan)[sel1]      # debug
 #names(regs.2006manip$pan)[sel2] # debug
-extendCoal[[sel1]] <- extendCoalmanip2
+extendCoal[[sel1]] <- extendCoalmanip2[[1]]
 regs.2009$pan [[sel1]] <- regs.2009manip2$pan 
 regs.2009$left[[sel1]] <- regs.2009manip2$left
 regs.2009$oth [[sel1]] <- regs.2009manip2$oth 
@@ -2989,6 +3179,23 @@ regs.2018$pan [[sel1]] <- regs.2018manip2$pan
 regs.2018$left[[sel1]] <- regs.2018manip2$left
 regs.2018$oth [[sel1]] <- regs.2018manip2$oth 
 #need to figure if mean.regsmanip should also be used---manips input skipped
+target.ife <- 12081 # child
+#for (i in 1:length(sel)){
+    i <- 1 # debug
+    sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
+    sel2 <- which(as.numeric(names(extendCoalmanip)) %in% target.ife[i])
+    tmp <- extendCoal[[sel1]]     # duplicate for manipulation
+    sel.c <- c("pan","pri","left","efec","d.pan","d.pri","d.left","vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left","alphahat.pan","alphahat.pri","alphahat.left","betahat.pan","betahat.left")
+    tmp[tmp$yr==1991,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1991)        
+    tmp[tmp$yr==1994,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1994)        
+    tmp[tmp$yr==1997,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 1997)        
+    tmp[tmp$yr==2000,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2000)        
+    tmp[tmp$yr==2003,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2003)        
+    tmp[tmp$yr==2006,sel.c] <- NA # empty incorrect regression coefs and predicts with NAs (mun did not exist in 2006)        
+    extendCoal[[sel1]] <- tmp     # return manipulated data
+    # no need to change regs fwd in new muns
+    #need to figure if mean.regsmanip should also be used---manips input skipped
+#}
 #
 # clean
 rm(v91manip, v94manip, v97manip, v00manip, v03manip, v06manip, v09manip, v12manip, v15manip, v18manip,
@@ -3055,7 +3262,7 @@ if (agg=="s") {
 }
 
 
-eric  xx what is non.nas?
+eric  xx
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
 ##########################################################################
@@ -3075,6 +3282,7 @@ tmp.func <- function(year) {
     tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
     if (length(tmp.sel)>0) tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
     # turn into one dataframe
+    # table(summary(tmp)) # debug
     tmp <- do.call("rbind", tmp)
     rownames(tmp) <- NULL
     ## # next block seems redundant 2sep2020
