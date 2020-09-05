@@ -10,70 +10,70 @@ sel <- which(v91m$ife %in% c(12013,12081))
 tmp <- v91m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v91 <- tmp
 #
 sel <- which(v94m$ife %in% c(12013,12081))
 tmp <- v94m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v94 <- tmp
 #
 sel <- which(v97m$ife %in% c(12013,12081))
 tmp <- v97m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v97 <- tmp
 #
 sel <- which(v00m$ife %in% c(12013,12081))
 tmp <- v00m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v00 <- tmp
 #
 sel <- which(v03m$ife %in% c(12013,12081))
 tmp <- v03m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v03 <- tmp
 #
 sel <- which(v06m$ife %in% c(12013,12081))
 tmp <- v06m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v06 <- tmp
 #
 sel <- which(v09m$ife %in% c(12013,12081))
 tmp <- v09m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v09 <- tmp
 #
 sel <- which(v12m$ife %in% c(12013,12081))
 tmp <- v12m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v12 <- tmp
 #
 sel <- which(v15m$ife %in% c(12013,12081))
 tmp <- v15m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v15 <- tmp
 #
 sel <- which(v18m$ife %in% c(12013,12081))
 tmp <- v18m[sel,]
 sel.c <- which(colnames(tmp) %in% c("edon","ife","inegi"))
 tmp[is.na(tmp)] <- 0
-tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 120130 
+tmp[1,-sel.c] <- colSums(tmp[,-sel.c]); tmp <- tmp[1,]; tmp$ife <- 12013
 v18 <- tmp
 
 ###########################################
@@ -186,7 +186,7 @@ for (i in 1:nrow(v00)){
     #i <- 2 # debug
     extendCoalmanip2[[i]] <- cbind(extendCoalmanip2[[i]], yr.means[,6:8])
 }
-#
+
 ###############################
 ## código de las regresiones ##
 ###############################

@@ -2667,7 +2667,6 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load("data/too-big-4-github/tmp4.RData")
 
-
 ##############################################
 ## REPLACE WRONG REGRESSION ESTIMATES       ##
 ## KEEPING THE TRUE VOTE RETURNS INSTEAD    ##
@@ -3163,8 +3162,6 @@ load(file = paste(wd, "data/regs-to-fix-twice-split-muns.RData", sep = "/"))
 target.ife <- 12013 # azoyu parent
 i <- 1 # debug
 sel1 <- which(as.numeric(names(extendCoal))      %in% target.ife[i])
-#names(regs.2006$pan)[sel1]      # debug
-#names(regs.2006manip$pan)[sel2] # debug
 extendCoal[[sel1]] <- extendCoalmanip2[[1]]
 regs.2009$pan [[sel1]] <- regs.2009manip2$pan 
 regs.2009$left[[sel1]] <- regs.2009manip2$left
@@ -3258,7 +3255,6 @@ if (agg=="s") {
     }
 }
 
-
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
 ##########################################################################
@@ -3288,12 +3284,22 @@ tmp.func <- function(year) {
     ## rm(sel.col)
     return(tmp)
 }
+
 extendCoal.2006 <- tmp.func(year=2006)
 extendCoal.2009 <- tmp.func(year=2009)
 extendCoal.2012 <- tmp.func(year=2012)
 extendCoal.2015 <- tmp.func(year=2015)
 extendCoal.2018 <- tmp.func(year=2018)
 #rm(extendCoal.2015) # clean memory
+
+# plug inegi into data for export
+tmp <- v00m[,c("ife","inegi")]
+#dim(tmp); dim(extendCoal.2006) # debug
+extendCoal.2006 <- merge(x = extendCoal.2006, y = tmp, by = "ife", all = TRUE)
+extendCoal.2009 <- merge(x = extendCoal.2009, y = tmp, by = "ife", all = TRUE)
+extendCoal.2012 <- merge(x = extendCoal.2012, y = tmp, by = "ife", all = TRUE)
+extendCoal.2015 <- merge(x = extendCoal.2015, y = tmp, by = "ife", all = TRUE)
+extendCoal.2018 <- merge(x = extendCoal.2018, y = tmp, by = "ife", all = TRUE)
 
 # drop some columns
 extendCoal.2006 <- within(extendCoal.2006, yr <- edosecn <- NULL)
