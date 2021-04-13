@@ -41,6 +41,7 @@ se.map <- readOGR(dsn = tmp, layer = 'SECCION')
 summary(se.map)
 # projects to a different datum with long and lat
 se.map <- spTransform(se.map, osm()) # project to osm native Mercator
+plot(se.map)
 
 # read all state borders from rojano
 ed.map <- list()
@@ -739,7 +740,7 @@ addscalebar(style = "ticks", pos = "bottomleft")
 ########################
 ## historia electoral ##
 ########################
-pdf(file = paste(md2, edo, "-core.pdf", sep = ""))
+#pdf(file = paste(md2, edo, "-core.pdf", sep = ""))
 #png(file = paste(md2, edo, "-core.png", sep = ""), width=10, height=10, units="cm", res=144) 
 par(fig = c(0,1,0,1)) # sets primary plot size (to include smaller plot inside below)
 par(mar = c(0,0,2,0)) ## SETS B L U R MARGIN SIZES
@@ -812,7 +813,7 @@ text(x = 4.75, y = 2.5, label = "5de6", pos = NULL, cex = sz)
 text(x = 4.75, y = 1.5, label = "4de6", pos = NULL, cex = sz)
 text(x = 4.75, y = 0.5, label = "menos", pos = NULL, cex = sz)
 ###################################################################################################################
-dev.off()
+#dev.off()
 
 
 # distritos c indígenas
