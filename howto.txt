@@ -15,5 +15,5 @@ git checkout github
 git rm -rf file-to-drop
 git commit
 
-Push to 'public_repo' remote repository:
-git push public_repo github:master  # ie. push github to public_repo/master
+Push to 'mxDistritos' remote repository:
+git push mxDistritos github:master

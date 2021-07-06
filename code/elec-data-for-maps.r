@@ -11,8 +11,8 @@ options(width = 140)
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 
-# DROP #wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/atlasDis/data/")
 # cambiar por cartografía 2017 en /home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/shp/disfed2018
+# también preparé cartografía 2020   <---  OJO
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
 
 setwd(dd)
@@ -385,13 +385,71 @@ d <- ag.sec(d, sel.c)
 d <- within(d, edo <- cabecera <- casn <- TIPO_CASILLA <- NULL)
 v18 <- d
 
+##########
+## 2021 ##
+##########
+d <- read.csv( "dip2021.csv", header=TRUE, , stringsAsFactors=FALSE)
+d <- d[order(d$edon, d$seccion),]
+d <- within(d, nr <- nul <- tot <- NULL)
+#
+# will assign major pty coalition to pri/pan according which won the state govt more recently
+d$panc <- NA
+d$pric <- NA
+sel <- which(d$edon %in% c(1:3,8:10,12,21:22,24,28,30:31)); d$panc[sel] <- d$pan.pri.prd[sel]
+sel <- which(d$edon %in% c(4:7,11,13:20,23,25:27,29,32)); d$pric[sel] <- d$pan.pri.prd[sel]
+d$pan.pri.prd <- NULL
+# morena coal
+colnames(d)[which(colnames(d)=="pvem.pt.morena")]  <- "morenac"
+#
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","lisnom")
+d <- to.num(d,sel.c) # clean data
+#
+# efec
+d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + morena + pes + rsp + fxm + indep + panc + pric + morenac)
+#
+# district coalition dummies
+d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dpric <- as.numeric(d$dpric>0)
+d$dmorenac <- ave(d$morenac, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
+d$dmorenac <- as.numeric(d$dmorenac>0)
+table(d$dpanc, useNA = "always")
+table(d$dpric, useNA = "always")
+table(d$dmorenac, useNA = "always")
+# aggregate coalitions where present for correct winner assesment
+sel <- which(d$dpanc==1)
+d[sel,] <- within(d[sel,], {
+    panc <- pan + panc + pri + prd;
+    pan <- pri <- prd <- 0
+})
+sel <- which(d$dpric==1)
+d[sel,] <- within(d[sel,], {
+    pric <- pan + pri + pric + prd;
+    pan <- pri <- prd <- 0
+})
+sel <- which(d$dmorenac==1)
+d[sel,] <- within(d[sel,], {
+    morenac <- pvem + pt + morena + morenac;
+    pvem <- pt <- morena <- 0
+})
+#
+# sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
+#d[sel.r,sel.c] <- 0 # anuladas to 0
+## aggregate seccion-level votes ##
+d <- ag.sec(d, sel.c)
+# clean
+d <- within(d, ord <- edo <- cabecera <- casn <- TIPO_CASILLA <- NULL)
+v21 <- d
+# head(v21) # debug
+
 # clean
 rm(d,sel.c,sel.r)
 
 ################################
 ## district winners 2006-2015 ##
 ################################
-v06d <- v06; v09d <- v09; v12d <- v12; v15d <- v15; v18d <- v18
+v06d <- v06; v09d <- v09; v12d <- v12; v15d <- v15; v18d <- v18; v21d <- v21
 v06d <- within(v06d, {
     pan   <- ave(pan,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
     pric  <- ave(pric, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
@@ -469,14 +527,30 @@ v18d <- within(v18d, {
 v18d <- v18d[duplicated(v18d$edon*100 + v18d$disn)==FALSE,]
 v18d <- v18d[order(v18d$edon*100, v18d$disn),]
 #
+v21d <- within(v21d, {
+    pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    prd <-    ave(prd,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pvem <-   ave(pvem,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pt <-     ave(pt,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    mc <-     ave(mc,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    morena <- ave(morena, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pes <-    ave(pes,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    rsp <-    ave(rsp,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    fxm <-    ave(fxm,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    panc <-   ave(panc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    morenac<- ave(morenac,as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    indep <- ave(indep, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+})
+v21d <- v21d[duplicated(v21d$edon*100 + v21d$disn)==FALSE,]
+v21d <- v21d[order(v21d$edon*100, v21d$disn),]
+#
 windis <- v15d[,c("edon","disn")] # will receive data
 #
 # handy function to sort one data frame by order of another, matching data frame
-sortBy <- function(target, By){
-    t <- target; b <- By;
-    do.call(rbind, lapply(seq_len(nrow(b)), 
-            function(i) as.character(unlist(t[i,])[order(unlist(-b[i,]))]))) # change to -b if decreasing wished
-}
+source("/home/eric/Dropbox/data/useful-functions/sortBy.r")
 ## # example
 ## v <- data.frame(c1=c(30,15,3), c2=c(10,25,2), c3=c(20,35,4))
 ## w <- data.frame(c1=c("thirty","fifteen","three"), c2=c("ten","twenty-five","two"), c3=c("twenty","thirty-five","four"))
@@ -559,12 +633,27 @@ windis$e18 <- etiq[,1]
 ## mg$e15 <- (vot[,1] - vot[,2]) / rowSums(vot)
 ## enp$e15 <- 1/rowSums((vot/rowSums(vot))^2)
 #
+# 2021
+vot <- v21d[,c("pan","pri","prd","pvem","pt","mc","morena","pes","fxm","rsp","indep","panc","pric","morenac")]
+vot[is.na(vot)==TRUE] <- 0 # drop NAs
+# crea objeto de etiquetas
+etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+#
+etiq <- sortBy(target = etiq, By = vot)
+vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+#
+windis$e21 <- etiq[,1]
+## runnerup$e21 <- etiq[,2]
+## mg$e21 <- (vot[,1] - vot[,2]) / rowSums(vot)
+## enp$e21 <- 1/rowSums((vot/rowSums(vot))^2)
+#
 rm(vot,etiq)
 
 #
 ## write.csv(windis, file = paste(dd, "dfdf2006-2015winners.csv", sep = ""))
 
-# get equivalencias seccionales
+# get equivalencias seccionales # OJO check new secciones 2021, get new file
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 # get municipio info to merge into votes
