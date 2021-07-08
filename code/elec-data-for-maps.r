@@ -440,6 +440,9 @@ d[sel,] <- within(d[sel,], {
 d <- ag.sec(d, sel.c)
 # clean
 d <- within(d, ord <- edo <- cabecera <- casn <- TIPO_CASILLA <- NULL)
+# drop seccion=0
+sel <- which(d$seccion==0)
+d <- d[-sel,]
 v21 <- d
 # head(v21) # debug
 
@@ -653,9 +656,17 @@ rm(vot,etiq)
 #
 ## write.csv(windis, file = paste(dd, "dfdf2006-2015winners.csv", sep = ""))
 
+# not in function
+source("/home/eric/Dropbox/data/useful-functions/notin.r")
+
 # get equivalencias seccionales # OJO check new secciones 2021, get new file
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
+eq[1,]
+sel <- which(as.factor(v21$edon+v21$seccion/10000) %notin% as.factor(eq$edon+eq$seccion/10000))
+#sel <- which(as.factor(eq$edon+eq$seccion/10000) %notin% as.factor(v21$edon+v21$seccion/10000))
+v21$edon[sel]+v21$seccion[sel]/10000
+v21$disn[sel]
 # get municipio info to merge into votes
 muns <- eq[,c("edon","seccion","ife","inegi")]
 
