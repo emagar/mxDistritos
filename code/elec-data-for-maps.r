@@ -663,10 +663,21 @@ source("/home/eric/Dropbox/data/useful-functions/notin.r")
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 eq[1,]
-sel <- which(as.factor(v21$edon+v21$seccion/10000) %notin% as.factor(eq$edon+eq$seccion/10000))
-#sel <- which(as.factor(eq$edon+eq$seccion/10000) %notin% as.factor(v21$edon+v21$seccion/10000))
-v21$edon[sel]+v21$seccion[sel]/10000
-v21$disn[sel]
+# any secciones missing?
+tmp <- v21 # which year to evaluate
+sel <- which(as.factor(tmp$edon+tmp$seccion/10000) %notin% as.factor(eq$edon+eq$seccion/10000))
+if (length(sel)>0){
+    tmp$edon[sel]+tmp$seccion[sel]/10000
+} else {
+    print("All v-secciones in eq object")
+}
+## sel <- which(as.factor(eq$edon+eq$seccion/10000) %notin% as.factor(tmp$edon+tmp$seccion/10000))
+## if (length(sel)>0){
+##     eq$edon[sel]+eq$seccion[sel]/10000
+## } else {
+##     print("All eq-secciones in v object")
+## }
+
 # get municipio info to merge into votes
 muns <- eq[,c("edon","seccion","ife","inegi")]
 
@@ -712,6 +723,10 @@ v18 <- within(v18, {
     edosecn <- edon*10000 + seccion;
     d18    <- 1;
 })
+v21 <- within(v21, {
+    edosecn <- edon*10000 + seccion;
+    d21    <- 1;
+})
 # dummies d91 to d18 indicate if seccion exists each year
 ## tmp <- merge(x=v91[,c("edosecn","d91")], y=v94[,c("edosecn","d94")], by = "edosecn", all = TRUE)
 ## tmp <- merge(x=tmp,                      y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
@@ -723,8 +738,9 @@ tmp <- merge(x=tmp,                      y=v09[,c("edosecn","d09")], by = "edose
 tmp <- merge(x=tmp,                      y=v12[,c("edosecn","d12")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v15[,c("edosecn","d15")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v18[,c("edosecn","d18")], by = "edosecn", all = TRUE)
+tmp <- merge(x=tmp,                      y=v21[,c("edosecn","d21")], by = "edosecn", all = TRUE)
 ## v91$d91 <-
-v94$d94 <- v97$d97 <- v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- NULL # clean
+v94$d94 <- v97$d97 <- v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- v21$d21 <- NULL # clean
 #
 # adds any missing secciones to each object
 ## v91 <- merge(x=tmp, y=v91, by = "edosecn", all = TRUE)
@@ -737,9 +753,10 @@ v09 <- merge(x=tmp, y=v09, by = "edosecn", all = TRUE)
 v12 <- merge(x=tmp, y=v12, by = "edosecn", all = TRUE)
 v15 <- merge(x=tmp, y=v15, by = "edosecn", all = TRUE)
 v18 <- merge(x=tmp, y=v18, by = "edosecn", all = TRUE)
+v21 <- merge(x=tmp, y=v21, by = "edosecn", all = TRUE)
 # verify dimensionality
 ## dim(v91);
-dim(v94); dim(v97); dim(v00); dim(v03); dim(v06); dim(v06); dim(v12); dim(v15);
+dim(v94); dim(v97); dim(v00); dim(v03); dim(v06); dim(v06); dim(v12); dim(v15); dim(v18); dim(v21)
 # fill in missing edon and seccion numbers
 tmp.func <- function(x) {
     within(x, {
@@ -757,6 +774,7 @@ v09 <- tmp.func(v09)
 v12 <- tmp.func(v12)
 v15 <- tmp.func(v15)
 v18 <- tmp.func(v18)
+v21 <- tmp.func(v21)
 rm(tmp,tmp.func) # clean
 
 
@@ -777,6 +795,7 @@ v09 <- merge(x = v09, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y 
 v12 <- merge(x = v12, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v12$munn <- NULL
 v15 <- merge(x = v15, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
 v18 <- merge(x = v18, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
+v21 <- merge(x = v21, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
 rm(muns)
 
 ###########################################################################################################
