@@ -393,6 +393,7 @@ d <- d[order(d$edon, d$seccion),]
 d <- within(d, nr <- nul <- tot <- NULL)
 #
 # will assign major pty coalition to pri/pan according which won the state govt more recently
+# OJO 11jul21: better method is splitting halfway pan/pri across the board
 d$panc <- NA
 d$pric <- NA
 sel <- which(d$edon %in% c(1:3,8:10,12,21:22,24,28,30:31)); d$panc[sel] <- d$pan.pri.prd[sel]
@@ -827,7 +828,7 @@ v21$ife <- v21$ife2021
 v21$inegi <- mapvalues(v21$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
 rm(ife.inegi)
 
-getwd()
+# temporary for debugging
 save.image("../../datosBrutos/not-in-git/tmp.RData")
 
 rm(list = ls())
@@ -836,7 +837,7 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(dd)
 load("../../datosBrutos/not-in-git/tmp.RData")
 
-# save all to restore after saving raw vote manipulations (11jul2021: maybe redundant)
+# save all to restore after exporting raw vote manipulations (11jul2021: maybe redundant)
 save.image(paste0(wd, "data/too-big-4-github/tmp.RData"))
 
 #################################################
@@ -1035,21 +1036,55 @@ v12m <- within(v12m, disn <- dpanc <- dpric <- dprdc <- NULL)
 v15m <- within(v15m, disn <- dpanc <- dpric <- dprdc <- dmorenac <- NULL)
 v18m <- within(v18m, disn <- dpanc <- dpric <- dmorenac <- NULL)
 v21m <- within(v21m, disn <- dpanc <- dpric <- dmorenac <- NULL)
-#
+
+# add missing municipios to v..m objects to get same dimensionality
+tmp <- c(v91m$ife, v94m$ife, v97m$ife, v00m$ife, v03m$ife, v06m$ife, v09m$ife, v12m$ife, v15m$ife, v18m$ife, v21m$ife)
+tmp <- unique(tmp)
+tmp <- tmp[order(tmp)]
+tmp <- data.frame(ife=tmp)
+#head(tmp)
+homog <- function(x){
+    x <- merge(x, tmp, by = "ife", all = TRUE, sort = TRUE)
+    return(x)
+}
+v91m <- homog(v91m)
+v94m <- homog(v94m)
+v97m <- homog(v97m)
+v00m <- homog(v00m)
+v03m <- homog(v03m)
+v06m <- homog(v06m)
+v09m <- homog(v09m)
+v12m <- homog(v12m)
+v15m <- homog(v15m)
+v18m <- homog(v18m)
+v21m <- homog(v21m)
+rm(homog)
+# verify
+dim(v91m); dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); dim(v21m); 
 
 
 # drop columns before saving raw vote seccion files
-#v91s <- within(v91s, munn <- NULL)
-v94s <- within(v94s, edosecn <- dpanc <- dpric <- dprdc <- NULL)
-v97s <- within(v97s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- dpanc <- dpric <- dprdc <- NULL)
-v00s <- within(v00s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v03s <- within(v03s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v06s <- within(v06s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v09s <- within(v09s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v12s <- within(v12s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v15s <- within(v15s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v18s <- within(v18s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v21s <- within(v18s, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+#v91s <- within(v91, munn <- NULL)
+v94s <- within(v94, edosecn <- dpanc <- dpric <- dprdc <- NULL)
+v97s <- within(v97, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- dpanc <- dpric <- dprdc <- NULL)
+v00s <- within(v00, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v03s <- within(v03, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v06s <- within(v06, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v09s <- within(v09, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v12s <- within(v12, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v15s <- within(v15, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v18s <- within(v18, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v21s <- within(v18, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v94s <- within(v94s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v97s <- within(v97s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v00s <- within(v00s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v03s <- within(v03s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v06s <- within(v06s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v09s <- within(v09s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v12s <- within(v12s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v15s <- within(v15s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v18s <- within(v18s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v21s <- within(v21s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
 #
 #write.csv(v91s, file = paste(wd, "data/dipfed-seccion-vraw-1991.csv", sep = ""), row.names = FALSE)
 write.csv(v94s, file = paste(wd, "data/dipfed-seccion-vraw-1994.csv", sep = ""), row.names = FALSE)
@@ -1061,6 +1096,7 @@ write.csv(v09s, file = paste(wd, "data/dipfed-seccion-vraw-2009.csv", sep = ""),
 write.csv(v12s, file = paste(wd, "data/dipfed-seccion-vraw-2012.csv", sep = ""), row.names = FALSE)
 write.csv(v15s, file = paste(wd, "data/dipfed-seccion-vraw-2015.csv", sep = ""), row.names = FALSE)
 write.csv(v18s, file = paste(wd, "data/dipfed-seccion-vraw-2018.csv", sep = ""), row.names = FALSE)
+write.csv(v21s, file = paste(wd, "data/dipfed-seccion-vraw-2021.csv", sep = ""), row.names = FALSE)
 
 
 # save municipal winners with correct manipulated data for new municipalities

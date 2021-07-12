@@ -138,6 +138,18 @@ v <- sortBy(target = v, By = v)
 winner$w18  <- l[,1]
 winner$mg18 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2018 done")
+##########
+## 2021 ##
+##########
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac")
+v <- v21[,sel.c]
+v <- v / rowSums(v)
+l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
+l <- sortBy(target = l, By = v)
+v <- sortBy(target = v, By = v)
+winner$w21  <- l[,1]
+winner$mg21 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
+message("2021 done")
 #
 # clean
 rm(v,l)
