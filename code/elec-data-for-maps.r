@@ -392,13 +392,19 @@ d <- read.csv( "dip2021.csv", header=TRUE, , stringsAsFactors=FALSE)
 d <- d[order(d$edon, d$seccion),]
 d <- within(d, nr <- nul <- tot <- NULL)
 #
-# will assign major pty coalition to pri/pan according which won the state govt more recently
-# OJO 11jul21: better method is splitting halfway pan/pri across the board
-d$panc <- NA
-d$pric <- NA
-sel <- which(d$edon %in% c(1:3,8:10,12,21:22,24,28,30:31)); d$panc[sel] <- d$pan.pri.prd[sel]
-sel <- which(d$edon %in% c(4:7,11,13:20,23,25:27,29,32)); d$pric[sel] <- d$pan.pri.prd[sel]
+# assign 2021 pan-pri-prd coalition to pan and pri in proportion to votes each won by itself
+tmp <- d[,c("pan","pri")]
+tmp[which(rowSums(tmp)==0),] <- tmp[which(rowSums(tmp)==0),] + 1 # avoid zero denominators (0,0 wil turn into half and half)
+tmp <- tmp/rowSums(tmp) # two-party shares
+#
+d$pan.pri.prd[is.na(d$pan.pri.prd)] <- 0 # replace NAs w 0 votes
+d$panc <- d$pan.pri.prd * tmp[,1] # pan's proportional votes
+d$pric <- d$pan.pri.prd * tmp[,2] # pri's proportional votes
 d$pan.pri.prd <- NULL
+#
+## # alt method: give all coal votes to pty last controlling state govt
+## sel <- which(d$edon %in% c(1:3,8:10,12,21:22,24,28,30:31)); d$panc[sel] <- d$pan.pri.prd[sel]
+## sel <- which(d$edon %in% c(4:7,11,13:20,23,25:27,29,32)); d$pric[sel] <- d$pan.pri.prd[sel]
 # morena coal
 colnames(d)[which(colnames(d)=="pvem.pt.morena")]  <- "morenac"
 #
@@ -451,7 +457,7 @@ v21 <- d
 rm(d,sel.c,sel.r)
 
 ################################
-## district winners 2006-2015 ##
+## district winners 2006-2021 ##
 ################################
 v06d <- v06; v09d <- v09; v12d <- v12; v15d <- v15; v18d <- v18; v21d <- v21
 v06d <- within(v06d, {
@@ -663,6 +669,7 @@ source("/home/eric/Dropbox/data/useful-functions/notin.r")
 # get equivalencias seccionales # OJO check new secciones 2021, get new file
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
+eq$check <- NULL # drop column meant to clean within excel file
 eq[1,]
 # any secciones missing?
 tmp <- v21 # which year to evaluate
@@ -828,14 +835,6 @@ v21$ife <- v21$ife2021
 v21$inegi <- mapvalues(v21$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
 rm(ife.inegi)
 
-# temporary for debugging
-save.image("../../datosBrutos/not-in-git/tmp.RData")
-
-rm(list = ls())
-dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
-setwd(dd)
-load("../../datosBrutos/not-in-git/tmp.RData")
 
 # save all to restore after exporting raw vote manipulations (11jul2021: maybe redundant)
 save.image(paste0(wd, "data/too-big-4-github/tmp.RData"))
@@ -1563,9 +1562,23 @@ v18m.cf21 <- d
 ## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 ## v21m.cf36 <- d
 
-pasted tmp.r here, drop all munic manipulations below
+# temporary for debugging
+save.image("../../datosBrutos/not-in-git/tmp.RData")
 
-cut old block manipulating new municipios
+rm(list = ls())
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(dd)
+load("../../datosBrutos/not-in-git/tmp.RData")
+
+
+pasted tmp.r here
+cut old block manipulating new municipios (saved as tmp.r)
+1) push reload and seccion data manip for later
+2) v5 for factual and counterfactual v..ms
+3) alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
+4) beta regs need to rely on appropriate counterfactuals instead of factual v..ms
+
 
 ######################################################
 ## reload data to restore unmanipulated vote files  ##
@@ -1596,17 +1609,17 @@ agg <- c("m","s","d")[1]
 if (agg=="m") {
     v91 <- v91m;
     v94 <- v94m; v97 <- v97m; 
-    v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m;
+    v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m; v21 <- v21m;
 }
 if (agg=="s") {
     ## v91 <- v91m;
     v94 <- v94s; v97 <- v97s; 
-    v00 <- v00s; v03 <- v03s; v06 <- v06s; v09 <- v09s; v12 <- v12s; v15 <- v15s; v18 <- v18s;
+    v00 <- v00s; v03 <- v03s; v06 <- v06s; v09 <- v09s; v12 <- v12s; v15 <- v15s; v18 <- v18s; v21 <- v21s;
 }
 if (agg=="d") {
     ## v91 <- v91m;
     v94 <- v94d; v97 <- v97d; 
-    v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v18 <- v18d;
+    v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v18 <- v18d; v21 <- v21d;
 }
 #
 # get unit winners and margins: will output object winner for chosen agg
@@ -1636,7 +1649,8 @@ pan <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pan  / v91$efec),
                   v09 = ifelse(v09$efec==0, NA,  v09$pan  / v09$efec),
                   v12 = ifelse(v12$efec==0, NA,  v12$pan  / v12$efec),
                   v15 = ifelse(v15$efec==0, NA,  v15$pan  / v15$efec),
-                  v18 = ifelse(v18$efec==0, NA, (v18$pan + v18$panc + v18$prd + v18$mc) / v18$efec))
+                  v18 = ifelse(v18$efec==0, NA, (v18$pan + v18$panc + v18$prd + v18$mc) / v18$efec),
+                  v21 = ifelse(v21$efec==0, NA, (v21$pan + v21$panc + v21$prd) / v21$efec))
 pan <- round(pan, 3)
 #
 pri <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pri  / v91$efec),
@@ -1648,7 +1662,8 @@ pri <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pri  / v91$efec),
                   v09 = ifelse(v09$efec==0, NA, (v09$pri + v09$pric + v09$pvem) / v09$efec),
                   v12 = ifelse(v12$efec==0, NA, (v12$pri + v12$pric + v12$pvem) / v12$efec),
                   v15 = ifelse(v15$efec==0, NA, (v15$pri + v15$pric + v15$pvem) / v15$efec),
-                  v18 = ifelse(v18$efec==0, NA, (v18$pri + v18$pric + v18$pvem + v18$pna) / v18$efec))
+                  v18 = ifelse(v18$efec==0, NA, (v18$pri + v18$pric + v18$pvem + v18$pna) / v18$efec),
+                  v21 = ifelse(v21$efec==0, NA, (v21$pri + v21$pric) / v21$efec))
 pri <- round(pri, 3)
 #
 left <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
@@ -1660,7 +1675,8 @@ left <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
                      v09 = ifelse(v09$efec==0, NA, (v09$prd + v09$pt + v09$ptc + v09$conve) / v09$efec),
                      v12 = ifelse(v12$efec==0, NA, (v12$prd + v12$prdc + v12$pt + v12$mc)  / v12$efec),
                      v15 = ifelse(v15$efec==0, NA, (v15$prd + v15$prdc + v15$pt + v15$morena + v15$pes) / v15$efec),
-                     v18 = ifelse(v18$efec==0, NA, (v18$morena + v18$morenac + v18$pt + v18$pes) / v18$efec))
+                     v18 = ifelse(v18$efec==0, NA, (v18$morena + v18$morenac + v18$pt + v18$pes) / v18$efec),
+                     v21 = ifelse(v21$efec==0, NA, (v21$morena + v21$morenac) / v21$efec)) # 12jul21: should add pt*dmorenac + pvem
 left <- round(left, 3)
 #
 oth <- data.frame(v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfcrn + v91$pps + v91$pem + v91$prt) / v91$efec),
@@ -1672,7 +1688,8 @@ oth <- data.frame(v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfcrn 
                   v09 = ifelse(v09$efec==0, NA, (v09$pna + v09$psd) / v09$efec),
                   v12 = ifelse(v12$efec==0, NA,  v12$pna / v12$efec),
                   v15 = ifelse(v15$efec==0, NA, (v15$mc + v15$pna + v15$ph + v15$indep1 + v15$indep2) / v15$efec),
-                  v18 = ifelse(v18$efec==0, NA, (v18$indep1 + v18$indep2) / v18$efec))
+                  v18 = ifelse(v18$efec==0, NA, (v18$indep1 + v18$indep2) / v18$efec),
+                  v21 = ifelse(v21$efec==0, NA, (v21$pvem + v21$pt + v21$mc + v21$pes + v21$rsp + v21$fxm + v21$indep) / v21$efec))
 oth <- round(oth, 3)
 #
 efec <- data.frame(v91 = v91$efec,
@@ -1684,7 +1701,8 @@ efec <- data.frame(v91 = v91$efec,
                    v09 = v09$efec,
                    v12 = v12$efec,
                    v15 = v15$efec,
-                   v18 = v18$efec)
+                   v18 = v18$efec,
+                   v21 = v21$efec)
 #
 # transpose to plug columns into new data.frames
 pan <- t(pan)
@@ -1699,7 +1717,7 @@ if (agg=="s") names(extendCoal) <- v00$edon*10000 + v00$seccion # untested
 # loop over municipios/secciones
 for (i in 1:nrow(v00)){
     #i <- 81 # debug
-    tmp <- data.frame(yr = seq(from=1991, to=2018, by=3),
+    tmp <- data.frame(yr = seq(from=1991, to=2021, by=3),
                       pan = pan[,i],
                       pri = pri[,i],
                       left = left[,i],
