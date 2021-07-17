@@ -384,7 +384,7 @@ d <- ag.sec(d, sel.c)
 # clean
 d <- within(d, edo <- cabecera <- casn <- TIPO_CASILLA <- NULL)
 v18 <- d
-
+#
 ##########
 ## 2021 ##
 ##########
@@ -661,7 +661,7 @@ windis$e21 <- etiq[,1]
 rm(vot,etiq)
 
 #
-## write.csv(windis, file = paste(dd, "dfdf2006-2015winners.csv", sep = ""))
+write.csv(windis, file = paste(dd, "dfdf2006-2021winners.csv", sep = ""))
 
 # not in function
 source("/home/eric/Dropbox/data/useful-functions/notin.r")
@@ -838,6 +838,7 @@ rm(ife.inegi)
 
 # save all to restore after exporting raw vote manipulations (11jul2021: maybe redundant)
 save.image(paste0(wd, "data/too-big-4-github/tmp.RData"))
+
 
 #################################################
 ## function to aggregate municipio-level votes ##
@@ -1023,6 +1024,920 @@ d[is.na(d)] <- 0
 d$mun <- NULL
 v91m <- d
 
+
+##################################################################################################
+## Generate counterfactual municipal aggregates to use as regressors for each year's regressand ##
+## Note: full period counterfactuals needed to compute means for missing values                 ##
+## After 2024 election, uncheck appropriate lines                                               ##
+##################################################################################################
+#
+#################################
+## 1991 counterfactuals needed ##
+#################################
+## d <- v91; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+## d <- ag.mun(d,sel.c, grouping=d$ife2006)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2006 # use appropriate ife code
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v91m.cf06 <- d
+## #
+## d <- v91; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+## d <- ag.mun(d,sel.c, grouping=d$ife2009)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2009 # use appropriate ife code
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v91m.cf09 <- d
+## #
+## d <- v91; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+## d <- ag.mun(d,sel.c, grouping=d$ife2012)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2012 # use appropriate ife code
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v91m.cf12 <- d
+## #
+## d <- v91; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+## d <- ag.mun(d,sel.c, grouping=d$ife2015)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2015 # use appropriate ife code
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v91m.cf15 <- d
+## #
+## d <- v91; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+## d <- ag.mun(d,sel.c, grouping=d$ife2018)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2018 # use appropriate ife code
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v91m.cf18 <- d
+## #
+## d <- v91; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+## d <- ag.mun(d,sel.c, grouping=d$ife2021)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2021 # use appropriate ife code
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v91m.cf21 <- d
+## #
+## ## d <- v91; d[is.na(d)] <- 0
+## ## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+## ## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## ## d$edosecn <- d$seccion <- d$disn <- NULL
+## ## d$ife <- d$ife2024 # use appropriate ife code
+## ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## ## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## ## v91m.cf24 <- d
+#################################
+## 1994 counterfactuals needed ##
+#################################
+d <- v94; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v94m.cf06 <- d
+#
+d <- v94; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v94m.cf09 <- d
+#
+d <- v94; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2012
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v94m.cf12 <- d
+#
+d <- v94; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2015
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v94m.cf15 <- d
+#
+d <- v94; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2018
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v94m.cf18 <- d
+#
+d <- v94; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2021
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v94m.cf21 <- d
+#
+## d <- v94; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
+## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2024
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v94m.cf24 <- d
+#################################
+## 1997 counterfactuals needed ##
+#################################
+d <- v97; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v97m.cf06 <- d
+#
+d <- v97; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v97m.cf09 <- d
+#
+d <- v97; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2012
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v97m.cf12 <- d
+#
+d <- v97; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2015
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v97m.cf15 <- d
+#
+d <- v97; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2018
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v97m.cf18 <- d
+#
+d <- v97; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2021
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v97m.cf21 <- d
+#
+## d <- v97; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
+## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2024
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v97m.cf24 <- d
+#################################
+## 2000 counterfactuals needed ##
+#################################
+d <- v00; d[is.na(d)] <- 0
+sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v00m.cf06 <- d
+#
+d <- v00; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v00m.cf09 <- d
+#
+d <- v00; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2012
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v00m.cf12 <- d
+#
+d <- v00; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2015
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v00m.cf15 <- d
+#
+d <- v00; d[is.na(d)] <- 0
+sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2018
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v00m.cf18 <- d
+#
+d <- v00; d[is.na(d)] <- 0
+sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$dpanc <- as.numeric(d$dpanc>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v00m.cf21 <- d
+#
+## d <- v00; d[is.na(d)] <- 0
+## sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
+## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d$dpanc <- as.numeric(d$dpanc>0)
+## d$dprdc <- as.numeric(d$dprdc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2024
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v00m.cf24 <- d
+#################################
+## 2003 counterfactuals needed ##
+#################################
+d <- v03; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$dpric <- as.numeric(d$dpric>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v03m.cf06 <- d
+#
+d <- v03; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$dpric <- as.numeric(d$dpric>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v03m.cf09 <- d
+#
+d <- v03; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d$dpric <- as.numeric(d$dpric>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2012
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v03m.cf12 <- d
+#
+d <- v03; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d$dpric <- as.numeric(d$dpric>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2015
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v03m.cf15 <- d
+#
+d <- v03; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d$dpric <- as.numeric(d$dpric>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2018
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v03m.cf18 <- d
+#
+d <- v03; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
+d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d$dpric <- as.numeric(d$dpric>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2021
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v03m.cf21 <- d
+#
+## d <- v03; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
+## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2024
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v03m.cf24 <- d
+#################################
+## 2006 counterfactuals needed ##
+#################################
+## # UNNEEDED
+## d <- v06; d[is.na(d)] <- 0
+## sel.c <- c("pan","pric","prdc","pna","asdc","efec")
+## d <- ag.mun(d,sel.c, grouping=d$ife2009)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2009
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v06m.cf06 <- d
+#
+d <- v06; d[is.na(d)] <- 0
+sel.c <- c("pan","pric","prdc","pna","asdc","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v06m.cf09 <- d
+#
+d <- v06; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2012
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v06m.cf12 <- d
+#
+d <- v06; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2015
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v06m.cf15 <- d
+#
+d <- v06; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2018
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v06m.cf18 <- d
+#
+d <- v06; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2021
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v06m.cf21 <- d
+#
+d <- v06; d[is.na(d)] <- 0
+sel.c <- c("pan","pric","prdc","pna","asdc","efec")
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v06m.cf24 <- d
+#################################
+## 2009 counterfactuals needed ##
+#################################
+d <- v09; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$dpric <- as.numeric(d$dpric>0)
+d$dptc <- as.numeric(d$dptc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v09m.cf06 <- d
+#
+## UNNEEDED
+## d <- v09; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
+## d <- ag.mun(d,sel.c, grouping=d$ife2009)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$dptc <- as.numeric(d$dptc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2009
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v09m.cf09 <- d
+#
+d <- v09; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
+d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d$dpric <- as.numeric(d$dpric>0)
+d$dptc <- as.numeric(d$dptc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2012
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v09m.cf12 <- d
+#
+d <- v09; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d$dpric <- as.numeric(d$dpric>0)
+d$dptc <- as.numeric(d$dptc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2015
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v09m.cf15 <- d
+#
+d <- v09; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d$dpric <- as.numeric(d$dpric>0)
+d$dptc <- as.numeric(d$dptc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2018
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v09m.cf18 <- d
+#
+d <- v09; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d$dpric <- as.numeric(d$dpric>0)
+d$dptc <- as.numeric(d$dptc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2021
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v09m.cf21 <- d
+#
+## d <- v09; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$dptc <- as.numeric(d$dptc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2024
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v09m.cf24 <- d
+#################################
+## 2012 counterfactuals needed ##
+#################################
+d <- v12; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v12m.cf06 <- d
+#
+d <- v12; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v12m.cf09 <- d
+#
+## # UNNEEDED
+## d <- v12; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
+## d <- ag.mun(d,sel.c, grouping=d$ife2012)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$dprdc <- as.numeric(d$dprdc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2012
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v12m.cf12 <- d
+#
+d <- v12; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2015
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v12m.cf15 <- d
+#
+d <- v12; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2018
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v12m.cf18 <- d
+#
+d <- v12; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2021
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v12m.cf21 <- d
+#
+## d <- v12; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$dprdc <- as.numeric(d$dprdc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2024
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v12m.cf24 <- d
+## #
+## d <- v12; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2027)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$dprdc <- as.numeric(d$dprdc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2027
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v12m.cf27 <- d
+#################################
+## 2015 counterfactuals needed ##
+#################################
+d <- v15; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v15m.cf06 <- d
+#
+d <- v15; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v15m.cf09 <- d
+#
+d <- v15; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2012
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v15m.cf12 <- d
+#
+## # UNNEEDED
+## d <- v15; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
+## d <- ag.mun(d,sel.c, grouping=d$ife2015)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$dprdc <- as.numeric(d$dprdc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2015
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v15m.cf15 <- d
+#
+d <- v15; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
+d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2018
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v15m.cf18 <- d
+#
+d <- v15; d[is.na(d)] <- 0
+d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d$dpric <- as.numeric(d$dpric>0)
+d$dprdc <- as.numeric(d$dprdc>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2021
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v15m.cf21 <- d
+#
+## d <- v15; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$dprdc <- as.numeric(d$dprdc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2024
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v15m.cf24 <- d
+## #
+## d <- v15; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2027)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$dprdc <- as.numeric(d$dprdc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2027
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v15m.cf27 <- d
+## #
+## d <- v15; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2030)
+## d$dpric <- as.numeric(d$dpric>0)
+## d$dprdc <- as.numeric(d$dprdc>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2030
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v15m.cf30 <- d
+#################################
+## 2018 counterfactuals needed ##
+#################################
+d <- v18; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v18m.cf06 <- d
+#
+d <- v18; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v18m.cf09 <- d
+#
+d <- v18; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2012
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v18m.cf12 <- d
+#
+d <- v18; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2015
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v18m.cf15 <- d
+#
+## # UNNEEDED
+## d <- v18; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
+## d <- ag.mun(d,sel.c, grouping=d$ife2018)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2018
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v18m.cf18 <- d
+#
+d <- v18; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2021
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v18m.cf21 <- d
+#
+## d <- v18; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2024
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v18m.cf24 <- d
+## #
+## d <- v18; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2027)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2027
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v18m.cf27 <- d
+## #
+## d <- v18; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2030)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2030
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v18m.cf30 <- d
+## #
+## d <- v18; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2033)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2033
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v18m.cf33 <- d
+#################################
+## 2021 counterfactuals needed ##
+#################################
+d <- v21; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2006
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v21m.cf06 <- d
+#
+d <- v21; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2009
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v21m.cf09 <- d
+#
+d <- v21; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2012
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v21m.cf12 <- d
+#
+d <- v21; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2015
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v21m.cf15 <- d
+#
+d <- v21; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2018
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v21m.cf18 <- d
+#
+# UNNEEDED
+d <- v21; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- d$disn <- NULL
+d$ife <- d$ife2021
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v21m.cf21 <- d
+#
+## d <- v21; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
+## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2024
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v21m.cf24 <- d
+## d <- v21; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2027)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2027
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v21m.cf27 <- d
+## d <- v21; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2030)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2030
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v21m.cf30 <- d
+## d <- v21; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2033)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2033
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v21m.cf33 <- d
+## d <- v21; d[is.na(d)] <- 0
+## d <- ag.mun(d,sel.c, grouping=d$ife2036)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2036
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v21m.cf36 <- d
+
+
 # drop columns before saving raw vote municipio files
 v91m <- within(v91m, ord <- munn <- NULL)
 v94m <- within(v94m, disn <- dpanc <- dpric <- dprdc <- NULL)
@@ -1038,6 +1953,7 @@ v21m <- within(v21m, disn <- dpanc <- dpric <- dmorenac <- NULL)
 
 # add missing municipios to v..m objects to get same dimensionality
 tmp <- c(v91m$ife, v94m$ife, v97m$ife, v00m$ife, v03m$ife, v06m$ife, v09m$ife, v12m$ife, v15m$ife, v18m$ife, v21m$ife)
+tmp <- c(tmp, v94m.cf06$ife, v94m.cf09$ife, v94m.cf12$ife, v94m.cf15$ife, v94m.cf18$ife, v94m.cf21$ife)
 tmp <- unique(tmp)
 tmp <- tmp[order(tmp)]
 tmp <- data.frame(ife=tmp)
@@ -1057,10 +1973,105 @@ v12m <- homog(v12m)
 v15m <- homog(v15m)
 v18m <- homog(v18m)
 v21m <- homog(v21m)
-rm(homog)
-# verify
-dim(v91m); dim(v94m); dim(v97m); dim(v00m); dim(v03m); dim(v06m); dim(v09m); dim(v12m); dim(v15m); dim(v18m); dim(v21m); 
+#
+#v91m.cf06 <- homog(v91m.cf06)
+#v91m.cf09 <- homog(v91m.cf09)
+#v91m.cf12 <- homog(v91m.cf12)
+#v91m.cf15 <- homog(v91m.cf15)
+#v91m.cf18 <- homog(v91m.cf18)
+#v91m.cf21 <- homog(v91m.cf21)
+#
+v94m.cf06 <- homog(v94m.cf06)
+v94m.cf09 <- homog(v94m.cf09)
+v94m.cf12 <- homog(v94m.cf12)
+v94m.cf15 <- homog(v94m.cf15)
+v94m.cf18 <- homog(v94m.cf18)
+v94m.cf21 <- homog(v94m.cf21)
+#
+v97m.cf06 <- homog(v97m.cf06)
+v97m.cf09 <- homog(v97m.cf09)
+v97m.cf12 <- homog(v97m.cf12)
+v97m.cf15 <- homog(v97m.cf15)
+v97m.cf18 <- homog(v97m.cf18)
+v97m.cf21 <- homog(v97m.cf21)
+#
+v00m.cf06 <- homog(v00m.cf06)
+v00m.cf09 <- homog(v00m.cf09)
+v00m.cf12 <- homog(v00m.cf12)
+v00m.cf15 <- homog(v00m.cf15)
+v00m.cf18 <- homog(v00m.cf18)
+v00m.cf21 <- homog(v00m.cf21)
+#
+v03m.cf06 <- homog(v03m.cf06)
+v03m.cf09 <- homog(v03m.cf09)
+v03m.cf12 <- homog(v03m.cf12)
+v03m.cf15 <- homog(v03m.cf15)
+v03m.cf18 <- homog(v03m.cf18)
+v03m.cf21 <- homog(v03m.cf21)
+#
+# v06m.cf06 <- homog(v06m.cf06) # UNNEEDED
+v06m.cf09 <- homog(v06m.cf09)
+v06m.cf12 <- homog(v06m.cf12)
+v06m.cf15 <- homog(v06m.cf15)
+v06m.cf18 <- homog(v06m.cf18)
+v06m.cf21 <- homog(v06m.cf21)
+#
+v09m.cf06 <- homog(v09m.cf06)
+# v09m.cf09 <- homog(v09m.cf09) # UNNEEDED
+v09m.cf12 <- homog(v09m.cf12)
+v09m.cf15 <- homog(v09m.cf15)
+v09m.cf18 <- homog(v09m.cf18)
+v09m.cf21 <- homog(v09m.cf21)
+#
+v12m.cf06 <- homog(v12m.cf06)
+v12m.cf09 <- homog(v12m.cf09)
+# v12m.cf12 <- homog(v12m.cf12) # UNNEEDED
+v12m.cf15 <- homog(v12m.cf15)
+v12m.cf18 <- homog(v12m.cf18)
+v12m.cf21 <- homog(v12m.cf21)
+#
+v15m.cf06 <- homog(v15m.cf06)
+v15m.cf09 <- homog(v15m.cf09)
+v15m.cf12 <- homog(v15m.cf12)
+# v15m.cf15 <- homog(v15m.cf15) # UNNEEDED
+v15m.cf18 <- homog(v15m.cf18)
+v15m.cf21 <- homog(v15m.cf21)
+#
+v18m.cf06 <- homog(v18m.cf06)
+v18m.cf09 <- homog(v18m.cf09)
+v18m.cf12 <- homog(v18m.cf12)
+v18m.cf15 <- homog(v18m.cf15)
+# v18m.cf18 <- homog(v18m.cf18) # UNNEEDED
+v18m.cf21 <- homog(v18m.cf21)
+#
+v21m.cf06 <- homog(v21m.cf06)
+v21m.cf09 <- homog(v21m.cf09)
+v21m.cf12 <- homog(v21m.cf12)
+v21m.cf15 <- homog(v21m.cf15)
+v21m.cf18 <- homog(v21m.cf18)
+# v21m.cf21 <- homog(v21m.cf21) # UNNEEDED
 
+# verify
+tmp <- c(
+nrow(v91m), nrow(v94m), nrow(v97m), nrow(v00m), nrow(v03m), nrow(v06m), nrow(v09m), nrow(v12m), nrow(v15m), nrow(v18m), nrow(v21m), 
+#nrow(v91m.cf06),
+nrow(v94m.cf06), nrow(v94m.cf09), nrow(v94m.cf12), nrow(v94m.cf15), nrow(v94m.cf18), nrow(v94m.cf21), 
+nrow(v97m.cf06), nrow(v97m.cf09), nrow(v97m.cf12), nrow(v97m.cf15), nrow(v97m.cf18), nrow(v97m.cf21), 
+nrow(v00m.cf06), nrow(v00m.cf09), nrow(v00m.cf12), nrow(v00m.cf15), nrow(v00m.cf18), nrow(v00m.cf21), 
+nrow(v03m.cf06), nrow(v03m.cf09), nrow(v03m.cf12), nrow(v03m.cf15), nrow(v03m.cf18), nrow(v03m.cf21), 
+                 nrow(v06m.cf09), nrow(v06m.cf12), nrow(v06m.cf15), nrow(v06m.cf18), nrow(v06m.cf21),
+nrow(v09m.cf06),                  nrow(v09m.cf12), nrow(v09m.cf15), nrow(v09m.cf18), nrow(v09m.cf21), 
+nrow(v12m.cf06), nrow(v12m.cf09),                  nrow(v12m.cf15), nrow(v12m.cf18), nrow(v12m.cf21), 
+nrow(v15m.cf06), nrow(v15m.cf09), nrow(v15m.cf12),                  nrow(v15m.cf18), nrow(v15m.cf21), 
+nrow(v18m.cf06), nrow(v18m.cf09), nrow(v18m.cf12), nrow(v18m.cf15),                  nrow(v18m.cf21), 
+nrow(v21m.cf06), nrow(v21m.cf09), nrow(v21m.cf12), nrow(v21m.cf15), nrow(v21m.cf18))
+#
+if (min(tmp)==max(tmp)){
+    print("OK, v..ms ALL HAVE SAME DIMENSIONALITY")
+} else {
+    print("ERROR: SOME v..m HAS DIFFERENT DIMENSIONALITY")
+}
+rm(homog)
 
 # drop columns before saving raw vote seccion files
 #v91s <- within(v91, munn <- NULL)
@@ -1125,445 +2136,8 @@ write.csv(v18m, file = paste(wd, "data/dipfed-municipio-vraw-2018.csv", sep = ""
 write.csv(v21m, file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), row.names = FALSE)
 
 
-#################################################################################################
-## generate counterfactual municipal aggregates to use as regressors for each years regressand ##
-#################################################################################################
-#
-#################################
-## 1991 counterfactuals needed ##
-#################################
-## d <- v91; d[is.na(d)] <- 0
-## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2006)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v91m.cf06 <- d
-#################################
-## 1994 counterfactuals needed ##
-#################################
-d <- v94; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v94m.cf06 <- d
-d <- v94; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v94m.cf09 <- d
-#################################
-## 1997 counterfactuals needed ##
-#################################
-d <- v97; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v97m.cf06 <- d
-d <- v97; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v97m.cf09 <- d
-d <- v97; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v97m.cf12 <- d
-#################################
-## 2000 counterfactuals needed ##
-#################################
-d <- v00; d[is.na(d)] <- 0
-sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
-d$dpanc <- as.numeric(d$dpanc>0)
-d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v00m.cf06 <- d
-d <- v00; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
-d$dpanc <- as.numeric(d$dpanc>0)
-d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v00m.cf09 <- d
-d <- v00; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
-d$dpanc <- as.numeric(d$dpanc>0)
-d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v00m.cf12 <- d
-d <- v00; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
-d$dpanc <- as.numeric(d$dpanc>0)
-d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v00m.cf15 <- d
-#################################
-## 2003 counterfactuals needed ##
-#################################
-d <- v03; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
-d$dpric <- as.numeric(d$dpric>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v03m.cf06 <- d
-d <- v03; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
-d$dpric <- as.numeric(d$dpric>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v03m.cf09 <- d
-d <- v03; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
-d$dpric <- as.numeric(d$dpric>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v03m.cf12 <- d
-d <- v03; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
-d$dpric <- as.numeric(d$dpric>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v03m.cf15 <- d
-d <- v03; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
-d$dpric <- as.numeric(d$dpric>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v03m.cf18 <- d
-#################################
-## 2006 counterfactuals needed ##
-#################################
-d <- v06; d[is.na(d)] <- 0
-sel.c <- c("pan","pric","prdc","pna","asdc","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v06m.cf09 <- d
-d <- v06; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v06m.cf12 <- d
-d <- v06; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v06m.cf15 <- d
-d <- v06; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v06m.cf18 <- d
-d <- v06; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v06m.cf21 <- d
-#################################
-## 2009 counterfactuals needed ##
-#################################
-d <- v09; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
-d$dpric <- as.numeric(d$dpric>0)
-d$dptc <- as.numeric(d$dptc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v09m.cf12 <- d
-d <- v09; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
-d$dpric <- as.numeric(d$dpric>0)
-d$dptc <- as.numeric(d$dptc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v09m.cf15 <- d
-d <- v09; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
-d$dpric <- as.numeric(d$dpric>0)
-d$dptc <- as.numeric(d$dptc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v09m.cf18 <- d
-d <- v09; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
-d$dpric <- as.numeric(d$dpric>0)
-d$dptc <- as.numeric(d$dptc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v09m.cf21 <- d
-## d <- v09; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
-## d$dpric <- as.numeric(d$dpric>0)
-## d$dptc <- as.numeric(d$dptc>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v09m.cf24 <- d
-#################################
-## 2012 counterfactuals needed ##
-#################################
-d <- v12; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
-d$dpric <- as.numeric(d$dpric>0)
-d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v12m.cf15 <- d
-d <- v12; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
-d$dpric <- as.numeric(d$dpric>0)
-d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v12m.cf18 <- d
-d <- v12; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
-d$dpric <- as.numeric(d$dpric>0)
-d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v12m.cf21 <- d
-## d <- v12; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
-## d$dpric <- as.numeric(d$dpric>0)
-## d$dprdc <- as.numeric(d$dprdc>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v12m.cf24 <- d
-## d <- v12; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2027)
-## d$dpric <- as.numeric(d$dpric>0)
-## d$dprdc <- as.numeric(d$dprdc>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v12m.cf27 <- d
-#################################
-## 2015 counterfactuals needed ##
-#################################
-d <- v15; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
-d$dpric <- as.numeric(d$dpric>0)
-d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v15m.cf18 <- d
-d <- v15; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
-d$dpric <- as.numeric(d$dpric>0)
-d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v15m.cf21 <- d
-## d <- v15; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
-## d$dpric <- as.numeric(d$dpric>0)
-## d$dprdc <- as.numeric(d$dprdc>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v15m.cf24 <- d
-## d <- v15; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2027)
-## d$dpric <- as.numeric(d$dpric>0)
-## d$dprdc <- as.numeric(d$dprdc>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v15m.cf27 <- d
-## d <- v15; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2030)
-## d$dpric <- as.numeric(d$dpric>0)
-## d$dprdc <- as.numeric(d$dprdc>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v15m.cf30 <- d
-#################################
-## 2018 counterfactuals needed ##
-#################################
-d <- v18; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
-d$dpanc    <- as.numeric(d$dpanc>0)
-d$dpric    <- as.numeric(d$dpric>0)
-d$dmorenac <- as.numeric(d$dmorenac>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v18m.cf21 <- d
-## d <- v18; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
-## d$dpanc    <- as.numeric(d$dpanc>0)
-## d$dpric    <- as.numeric(d$dpric>0)
-## d$dmorenac <- as.numeric(d$dmorenac>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v18m.cf24 <- d
-## d <- v18; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2027)
-## d$dpanc    <- as.numeric(d$dpanc>0)
-## d$dpric    <- as.numeric(d$dpric>0)
-## d$dmorenac <- as.numeric(d$dmorenac>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v18m.cf27 <- d
-## d <- v18; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2030)
-## d$dpanc    <- as.numeric(d$dpanc>0)
-## d$dpric    <- as.numeric(d$dpric>0)
-## d$dmorenac <- as.numeric(d$dmorenac>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v18m.cf30 <- d
-## d <- v18; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2033)
-## d$dpanc    <- as.numeric(d$dpanc>0)
-## d$dpric    <- as.numeric(d$dpric>0)
-## d$dmorenac <- as.numeric(d$dmorenac>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v18m.cf33 <- d
-#################################
-## 2021 counterfactuals needed ##
-#################################
-## d <- v21; d[is.na(d)] <- 0
-## sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
-## d$dpanc    <- as.numeric(d$dpanc>0)
-## d$dpric    <- as.numeric(d$dpric>0)
-## d$dmorenac <- as.numeric(d$dmorenac>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v21m.cf24 <- d
-## d <- v21; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2027)
-## d$dpanc    <- as.numeric(d$dpanc>0)
-## d$dpric    <- as.numeric(d$dpric>0)
-## d$dmorenac <- as.numeric(d$dmorenac>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v21m.cf27 <- d
-## d <- v21; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2030)
-## d$dpanc    <- as.numeric(d$dpanc>0)
-## d$dpric    <- as.numeric(d$dpric>0)
-## d$dmorenac <- as.numeric(d$dmorenac>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v21m.cf30 <- d
-## d <- v21; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2033)
-## d$dpanc    <- as.numeric(d$dpanc>0)
-## d$dpric    <- as.numeric(d$dpric>0)
-## d$dmorenac <- as.numeric(d$dmorenac>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v21m.cf33 <- d
-## d <- v21; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2036)
-## d$dpanc    <- as.numeric(d$dpanc>0)
-## d$dpric    <- as.numeric(d$dpric>0)
-## d$dmorenac <- as.numeric(d$dmorenac>0)
-## d$edosecn <- d$seccion <- NULL
-## d$disn <- NULL
-## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-## v21m.cf36 <- d
-
 # temporary for debugging
-save.image("../../datosBrutos/not-in-git/tmp.RData")
+#save.image("../../datosBrutos/not-in-git/tmp.RData")
 
 rm(list = ls())
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
@@ -1572,31 +2146,38 @@ setwd(dd)
 load("../../datosBrutos/not-in-git/tmp.RData")
 
 
-pasted tmp.r here
-cut old block manipulating new municipios (saved as tmp.r)
-1) push reload and seccion data manip for later
-2) v5 for factual and counterfactual v..ms
-3) alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
-4) beta regs need to rely on appropriate counterfactuals instead of factual v..ms
+1) [x] push reload and seccion data manip for later
+2) [x] v5 for factual and counterfactual v..ms
+3) [ ] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
+4) [ ] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
 
+# clean
+rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,tmp,to.num)
 
-######################################################
-## reload data to restore unmanipulated vote files  ##
-######################################################
+#########################################################################################
+## reload data to restore unmanipulated vote files (but keeping manipulated mun votes) ##
+#########################################################################################
+# save munic manipulations for use below
+tmp <- ls(); tmp <- tmp[grep("^v..m", tmp)]
+save(list=tmp, file = paste0(wd, "data/too-big-4-github/tmp-mun.RData"))
+# clean all
 rm(list = ls())
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load(paste0(wd, "data/too-big-4-github/tmp.RData"))
+# rename seccion vote objects
+v94s <- v94; v97s <- v97; v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18; v21s <- v21;
+rm(v94, v97, v00, v03, v06, v09, v12, v15, v18, v21)
+# reload manipulated munic votes
+load(paste0(wd, "data/too-big-4-github/tmp-mun.RData"))
 
-# clean
-rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,tmp,to.num)
-
-
-####################################################################
-## manipulate reseccionamiento cases to preserve them in analysis ##
-## note: will not affect municipal aggregates, done above         ##
-####################################################################
+#####################################################################
+## Manipulate reseccionamiento cases to preserve them in analysis. ##
+## Note: will not affect municipal aggregates, done above.         ##
+## Note 16jul2021: why not do this before manipulating municipios, ##
+## which now have been manipulated in ife.1991, ife.1994 etc.?     ##
+#####################################################################
 source(paste(wd, "code/resecc-deal-with-splits.r", sep = ""))
 
 ############################################################
@@ -1633,76 +2214,536 @@ if (agg=="s") {
               file = paste(wd, "data/dipfed-seccion-win.csv", sep = ""), row.names = FALSE)
 }
 
-###########################################
-## prepare manipulated party objects     ##
-## for time-series and alpha regressions ##
-###########################################
+############################################
+## prepare manipulated party objects      ##
+## for time-series and alpha regressions  ##
+## After 2024 election, uncheck/add lines ##
+############################################
 #
 # version 1: extend partial coalitions across the board
 # shares
-pan <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pan  / v91$efec),
-                  v94 = ifelse(v94$efec==0, NA,  v94$pan  / v94$efec),
-                  v97 = ifelse(v97$efec==0, NA,  v97$pan  / v97$efec),
-                  v00 = ifelse(v00$efec==0, NA,  v00$panc / v00$efec),
-                  v03 = ifelse(v03$efec==0, NA,  v03$pan  / v03$efec),
-                  v06 = ifelse(v06$efec==0, NA,  v06$pan  / v06$efec),
-                  v09 = ifelse(v09$efec==0, NA,  v09$pan  / v09$efec),
-                  v12 = ifelse(v12$efec==0, NA,  v12$pan  / v12$efec),
-                  v15 = ifelse(v15$efec==0, NA,  v15$pan  / v15$efec),
-                  v18 = ifelse(v18$efec==0, NA, (v18$pan + v18$panc + v18$prd + v18$mc) / v18$efec),
-                  v21 = ifelse(v21$efec==0, NA, (v21$pan + v21$panc + v21$prd) / v21$efec))
+pan <- data.frame(v91 =      with(v91,       ifelse(efec==0, NA,  pan  / efec)),
+                  v94 =      with(v94,       ifelse(efec==0, NA,  pan  / efec)),
+                  v97 =      with(v97,       ifelse(efec==0, NA,  pan  / efec)),
+                  v00 =      with(v00,       ifelse(efec==0, NA,  panc / efec)),
+                  v03 =      with(v03,       ifelse(efec==0, NA,  pan  / efec)),
+                  v06 =      with(v06,       ifelse(efec==0, NA,  pan  / efec)),
+                  v09 =      with(v09,       ifelse(efec==0, NA,  pan  / efec)),
+                  v12 =      with(v12,       ifelse(efec==0, NA,  pan  / efec)),
+                  v15 =      with(v15,       ifelse(efec==0, NA,  pan  / efec)),
+                  v18 =      with(v18,       ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
+                  v21 =      with(v21,       ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
 pan <- round(pan, 3)
 #
-pri <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$pri  / v91$efec),
-                  v94 = ifelse(v94$efec==0, NA,  v94$pri  / v94$efec),
-                  v97 = ifelse(v97$efec==0, NA,  v97$pri  / v97$efec),
-                  v00 = ifelse(v00$efec==0, NA,  v00$pri / v00$efec),
-                  v03 = ifelse(v03$efec==0, NA, (v03$pri + v03$pric + v03$pvem) / v03$efec),
-                  v06 = ifelse(v06$efec==0, NA,  v06$pric / v06$efec),
-                  v09 = ifelse(v09$efec==0, NA, (v09$pri + v09$pric + v09$pvem) / v09$efec),
-                  v12 = ifelse(v12$efec==0, NA, (v12$pri + v12$pric + v12$pvem) / v12$efec),
-                  v15 = ifelse(v15$efec==0, NA, (v15$pri + v15$pric + v15$pvem) / v15$efec),
-                  v18 = ifelse(v18$efec==0, NA, (v18$pri + v18$pric + v18$pvem + v18$pna) / v18$efec),
-                  v21 = ifelse(v21$efec==0, NA, (v21$pri + v21$pric) / v21$efec))
+if (agg=="m"){ # counterfactual aggregates to account for new municipalities
+pan.cf06 <- data.frame(#v91 = with(v91m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
+                       v94 = with(v94m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
+                       v97 = with(v97m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
+                       v00 = with(v00m.cf06,  ifelse(efec==0, NA,  panc / efec)),
+                       v03 = with(v03m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
+                       v06 = with(v06,       ifelse(efec==0, NA,  pan  / efec)),
+                       v09 = with(v09m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
+                       v12 = with(v12m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
+                       v15 = with(v15m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
+                       v18 = with(v18m.cf06,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
+                       v21 = with(v21m.cf06,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
+pan.cf06 <- round(pan.cf06, 3)
+#
+pan.cf09 <- data.frame(#v91 = with(v91m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
+                       v94 = with(v94m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
+                       v97 = with(v97m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
+                       v00 = with(v00m.cf09,  ifelse(efec==0, NA,  panc / efec)),
+                       v03 = with(v03m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
+                       v06 = with(v06m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
+                       v09 = with(v09,       ifelse(efec==0, NA,  pan  / efec)),
+                       v12 = with(v12m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
+                       v15 = with(v15m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
+                       v18 = with(v18m.cf09,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
+                       v21 = with(v21m.cf09,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
+pan.cf09 <- round(pan.cf09, 3)
+#
+pan.cf12 <- data.frame(#v91 = with(v91m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
+                       v94 = with(v94m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
+                       v97 = with(v97m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
+                       v00 = with(v00m.cf12,  ifelse(efec==0, NA,  panc / efec)),
+                       v03 = with(v03m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
+                       v06 = with(v06m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
+                       v09 = with(v09m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
+                       v12 = with(v12,       ifelse(efec==0, NA,  pan  / efec)),
+                       v15 = with(v15m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
+                       v18 = with(v18m.cf12,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
+                       v21 = with(v21m.cf12,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
+pan.cf12 <- round(pan.cf12, 3)
+#
+pan.cf15 <- data.frame(#v91 = with(v91m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
+                       v94 = with(v94m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
+                       v97 = with(v97m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
+                       v00 = with(v00m.cf15,  ifelse(efec==0, NA,  panc / efec)),
+                       v03 = with(v03m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
+                       v06 = with(v06m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
+                       v09 = with(v09m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
+                       v12 = with(v12m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
+                       v15 = with(v15,       ifelse(efec==0, NA,  pan  / efec)),
+                       v18 = with(v18m.cf15,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
+                       v21 = with(v21m.cf15,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
+pan.cf15 <- round(pan.cf15, 3)
+#
+pan.cf18 <- data.frame(#v91 = with(v91m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
+                       v94 = with(v94m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
+                       v97 = with(v97m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
+                       v00 = with(v00m.cf18,  ifelse(efec==0, NA,  panc / efec)),
+                       v03 = with(v03m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
+                       v06 = with(v06m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
+                       v09 = with(v09m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
+                       v12 = with(v12m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
+                       v15 = with(v15m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
+                       v18 = with(v18,       ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
+                       v21 = with(v21m.cf18,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
+pan.cf18 <- round(pan.cf18, 3)
+#
+pan.cf21 <- data.frame(#v91 = with(v91m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
+                       v94 = with(v94m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
+                       v97 = with(v97m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
+                       v00 = with(v00m.cf21,  ifelse(efec==0, NA,  panc / efec)),
+                       v03 = with(v03m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
+                       v06 = with(v06m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
+                       v09 = with(v09m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
+                       v12 = with(v12m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
+                       v15 = with(v15m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
+                       v18 = with(v18m.cf21,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
+                       v21 = with(v21,       ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
+pan.cf21 <- round(pan.cf21, 3)
+#
+## pan.cf24 <- data.frame(#v91 = with(v91m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
+##                        v94 = with(v94m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
+##                        v97 = with(v97m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
+##                        v00 = with(v00m.cf24,  ifelse(efec==0, NA,  panc / efec)),
+##                        v03 = with(v03m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
+##                        v06 = with(v06m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
+##                        v09 = with(v09m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
+##                        v12 = with(v12m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
+##                        v15 = with(v15m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
+##                        v18 = with(v18m.cf24,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
+##                        v21 = with(v21m.cf24,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
+## pan.cf24 <- round(pan.cf24, 3)
+}
+#
+pri <- data.frame(v91 =      with(v91,       ifelse(efec==0, NA,  pri  / efec)),
+                  v94 =      with(v94,       ifelse(efec==0, NA,  pri  / efec)),
+                  v97 =      with(v97,       ifelse(efec==0, NA,  pri  / efec)),
+                  v00 =      with(v00,       ifelse(efec==0, NA,  pri / efec)),
+                  v03 =      with(v03,       ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                  v06 =      with(v06,       ifelse(efec==0, NA,  pric / efec)),
+                  v09 =      with(v09,       ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                  v12 =      with(v12,       ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                  v15 =      with(v15,       ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                  v18 =      with(v18,       ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
+                  v21 =      with(v21,       ifelse(efec==0, NA, (pri + pric) / efec)))
 pri <- round(pri, 3)
 #
-left <- data.frame(v91 = ifelse(v91$efec==0, NA,  v91$prd  / v91$efec),
-                     v94 = ifelse(v94$efec==0, NA,  v94$prd  / v94$efec),
-                     v97 = ifelse(v97$efec==0, NA,  v97$prd  / v97$efec),
-                     v00 = ifelse(v00$efec==0, NA,  v00$prdc / v00$efec),
-                     v03 = ifelse(v03$efec==0, NA, (v03$prd + v03$pt + v03$conve) / v03$efec),
-                     v06 = ifelse(v06$efec==0, NA,  v06$prdc / v06$efec),
-                     v09 = ifelse(v09$efec==0, NA, (v09$prd + v09$pt + v09$ptc + v09$conve) / v09$efec),
-                     v12 = ifelse(v12$efec==0, NA, (v12$prd + v12$prdc + v12$pt + v12$mc)  / v12$efec),
-                     v15 = ifelse(v15$efec==0, NA, (v15$prd + v15$prdc + v15$pt + v15$morena + v15$pes) / v15$efec),
-                     v18 = ifelse(v18$efec==0, NA, (v18$morena + v18$morenac + v18$pt + v18$pes) / v18$efec),
-                     v21 = ifelse(v21$efec==0, NA, (v21$morena + v21$morenac) / v21$efec)) # 12jul21: should add pt*dmorenac + pvem
+if (agg=="m"){
+pri.cf06 <- data.frame(#v91 = with(v91m.cf06, ifelse(efec==0, NA,  pri  / efec)),
+                       v94 = with(v94m.cf06, ifelse(efec==0, NA,  pri  / efec)),
+                       v97 = with(v97m.cf06, ifelse(efec==0, NA,  pri  / efec)),
+                       v00 = with(v00m.cf06, ifelse(efec==0, NA,  pri / efec)),
+                       v03 = with(v03m.cf06, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v06 = with(v06,      ifelse(efec==0, NA,  pric / efec)),
+                       v09 = with(v09m.cf06, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v12 = with(v12m.cf06, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v15 = with(v15m.cf06, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v18 = with(v18m.cf06, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
+                       v21 = with(v21m.cf06, ifelse(efec==0, NA, (pri + pric) / efec)))
+pri.cf06 <- round(pri.cf06, 3)
+#
+pri.cf09 <- data.frame(#v91 = with(v91m.cf09, ifelse(efec==0, NA,  pri  / efec)),
+                       v94 = with(v94m.cf09, ifelse(efec==0, NA,  pri  / efec)),
+                       v97 = with(v97m.cf09, ifelse(efec==0, NA,  pri  / efec)),
+                       v00 = with(v00m.cf09, ifelse(efec==0, NA,  pri / efec)),
+                       v03 = with(v03m.cf09, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v06 = with(v06m.cf09, ifelse(efec==0, NA,  pric / efec)),
+                       v09 = with(v09,      ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v12 = with(v12m.cf09, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v15 = with(v15m.cf09, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v18 = with(v18m.cf09, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
+                       v21 = with(v21m.cf09, ifelse(efec==0, NA, (pri + pric) / efec)))
+pri.cf09 <- round(pri.cf09, 3)
+#
+pri.cf12 <- data.frame(#v91 = with(v91m.cf12, ifelse(efec==0, NA,  pri  / efec)),
+                       v94 = with(v94m.cf12, ifelse(efec==0, NA,  pri  / efec)),
+                       v97 = with(v97m.cf12, ifelse(efec==0, NA,  pri  / efec)),
+                       v00 = with(v00m.cf12, ifelse(efec==0, NA,  pri / efec)),
+                       v03 = with(v03m.cf12, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v06 = with(v06m.cf12, ifelse(efec==0, NA,  pric / efec)),
+                       v09 = with(v09m.cf12, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v12 = with(v12,      ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v15 = with(v15m.cf12, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v18 = with(v18m.cf12, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
+                       v21 = with(v21m.cf12, ifelse(efec==0, NA, (pri + pric) / efec)))
+pri.cf12 <- round(pri.cf12, 3)
+#
+pri.cf15 <- data.frame(#v91 = with(v91m.cf15, ifelse(efec==0, NA,  pri  / efec)),
+                       v94 = with(v94m.cf15, ifelse(efec==0, NA,  pri  / efec)),
+                       v97 = with(v97m.cf15, ifelse(efec==0, NA,  pri  / efec)),
+                       v00 = with(v00m.cf15, ifelse(efec==0, NA,  pri / efec)),
+                       v03 = with(v03m.cf15, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v06 = with(v06m.cf15, ifelse(efec==0, NA,  pric / efec)),
+                       v09 = with(v09m.cf15, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v12 = with(v12m.cf15, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v15 = with(v15,      ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v18 = with(v18m.cf15, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
+                       v21 = with(v21m.cf15, ifelse(efec==0, NA, (pri + pric) / efec)))
+pri.cf15 <- round(pri.cf15, 3)
+#
+pri.cf18 <- data.frame(#v91 = with(v91m.cf18, ifelse(efec==0, NA,  pri  / efec)),
+                       v94 = with(v94m.cf18, ifelse(efec==0, NA,  pri  / efec)),
+                       v97 = with(v97m.cf18, ifelse(efec==0, NA,  pri  / efec)),
+                       v00 = with(v00m.cf18, ifelse(efec==0, NA,  pri / efec)),
+                       v03 = with(v03m.cf18, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v06 = with(v06m.cf18, ifelse(efec==0, NA,  pric / efec)),
+                       v09 = with(v09m.cf18, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v12 = with(v12m.cf18, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v15 = with(v15m.cf18, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v18 = with(v18,      ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
+                       v21 = with(v21m.cf18, ifelse(efec==0, NA, (pri + pric) / efec)))
+pri.cf18 <- round(pri.cf18, 3)
+#
+pri.cf21 <- data.frame(#v91 = with(v91m.cf21, ifelse(efec==0, NA,  pri  / efec)),
+                       v94 = with(v94m.cf21, ifelse(efec==0, NA,  pri  / efec)),
+                       v97 = with(v97m.cf21, ifelse(efec==0, NA,  pri  / efec)),
+                       v00 = with(v00m.cf21, ifelse(efec==0, NA,  pri / efec)),
+                       v03 = with(v03m.cf21, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v06 = with(v06m.cf21, ifelse(efec==0, NA,  pric / efec)),
+                       v09 = with(v09m.cf21, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v12 = with(v12m.cf21, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v15 = with(v15m.cf21, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v18 = with(v18m.cf21, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
+                       v21 = with(v21,      ifelse(efec==0, NA, (pri + pric) / efec)))
+pri.cf21 <- round(pri.cf21, 3)
+#
+## pri.cf24 <- data.frame(#v91 = with(v91m.cf24, ifelse(efec==0, NA,  pri  / efec)),
+##                        v94 = with(v94m.cf24, ifelse(efec==0, NA,  pri  / efec)),
+##                        v97 = with(v97m.cf24, ifelse(efec==0, NA,  pri  / efec)),
+##                        v00 = with(v00m.cf24, ifelse(efec==0, NA,  pri / efec)),
+##                        v03 = with(v03m.cf24, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+##                        v06 = with(v06m.cf24, ifelse(efec==0, NA,  pric / efec)),
+##                        v09 = with(v09m.cf24, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+##                        v12 = with(v12m.cf24, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+##                        v15 = with(v15m.cf24, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+##                        v18 = with(v18m.cf24, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
+##                        v21 = with(v21m.cf24, ifelse(efec==0, NA, (pri + pric) / efec)))
+## pri.cf24 <- round(pri.cf24, 3)
+}
+#
+left <- data.frame(v91 =      with(v91,       ifelse(efec==0, NA,  prd  / efec)),
+                   v94 =      with(v94,       ifelse(efec==0, NA,  prd  / efec)),
+                   v97 =      with(v97,       ifelse(efec==0, NA,  prd  / efec)),
+                   v00 =      with(v00,       ifelse(efec==0, NA,  prdc / efec)),
+                   v03 =      with(v03,       ifelse(efec==0, NA, (prd + pt + conve) / efec)),
+                   v06 =      with(v06,       ifelse(efec==0, NA,  prdc / efec)),
+                   v09 =      with(v09,       ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
+                   v12 =      with(v12,       ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
+                   v15 =      with(v15,       ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+                   v18 =      with(v18,       ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
+                   v21 =      with(v21,       ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
 left <- round(left, 3)
 #
-oth <- data.frame(v91 = ifelse(v91$efec==0, NA, (v91$parm + v91$pdm + v91$pfcrn + v91$pps + v91$pem + v91$prt) / v91$efec),
-                  v94 = ifelse(v94$efec==0, NA, (v94$pps + v94$pfcrn + v94$parm + v94$uno.pdm + v94$pt + v94$pvem) / v94$efec),
-                  v97 = ifelse(v97$efec==0, NA, (v97$pc + v97$pt + v97$pvem + v97$pps + v97$pdm) / v97$efec),
-                  v00 = ifelse(v00$efec==0, NA, (v00$pcd + v00$parm + v00$dsppn) / v00$efec),
-                  v03 = ifelse(v03$efec==0, NA, (v03$psn + v03$pas + v03$mp + v03$plm + v03$fc) / v03$efec),
-                  v06 = ifelse(v06$efec==0, NA, (v06$pna + v06$asdc) / v06$efec),
-                  v09 = ifelse(v09$efec==0, NA, (v09$pna + v09$psd) / v09$efec),
-                  v12 = ifelse(v12$efec==0, NA,  v12$pna / v12$efec),
-                  v15 = ifelse(v15$efec==0, NA, (v15$mc + v15$pna + v15$ph + v15$indep1 + v15$indep2) / v15$efec),
-                  v18 = ifelse(v18$efec==0, NA, (v18$indep1 + v18$indep2) / v18$efec),
-                  v21 = ifelse(v21$efec==0, NA, (v21$pvem + v21$pt + v21$mc + v21$pes + v21$rsp + v21$fxm + v21$indep) / v21$efec))
+if (agg=="m"){
+left.cf06 <- data.frame(#v91 = with(v91m.cf06,  ifelse(efec==0, NA,  prd  / efec)),
+                        v94 = with(v94m.cf06,  ifelse(efec==0, NA,  prd  / efec)),
+                        v97 = with(v97m.cf06,  ifelse(efec==0, NA,  prd  / efec)),
+                        v00 = with(v00m.cf06,  ifelse(efec==0, NA,  prdc / efec)),
+                        v03 = with(v03m.cf06,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
+                        v06 = with(v06,       ifelse(efec==0, NA,  prdc / efec)),
+                        v09 = with(v09m.cf06,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
+                        v12 = with(v12m.cf06,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
+                        v15 = with(v15m.cf06,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+                        v18 = with(v18m.cf06,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
+                        v21 = with(v21m.cf06,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
+left.cf06 <- round(left.cf06, 3)
+#
+left.cf09 <- data.frame(#v91 = with(v91m.cf09,  ifelse(efec==0, NA,  prd  / efec)),
+                        v94 = with(v94m.cf09,  ifelse(efec==0, NA,  prd  / efec)),
+                        v97 = with(v97m.cf09,  ifelse(efec==0, NA,  prd  / efec)),
+                        v00 = with(v00m.cf09,  ifelse(efec==0, NA,  prdc / efec)),
+                        v03 = with(v03m.cf09,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
+                        v06 = with(v06m.cf09,  ifelse(efec==0, NA,  prdc / efec)),
+                        v09 = with(v09,       ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
+                        v12 = with(v12m.cf09,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
+                        v15 = with(v15m.cf09,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+                        v18 = with(v18m.cf09,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
+                        v21 = with(v21m.cf09,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
+left.cf09 <- round(left.cf09, 3)
+#
+left.cf12 <- data.frame(#v91 = with(v91m.cf12,  ifelse(efec==0, NA,  prd  / efec)),
+                        v94 = with(v94m.cf12,  ifelse(efec==0, NA,  prd  / efec)),
+                        v97 = with(v97m.cf12,  ifelse(efec==0, NA,  prd  / efec)),
+                        v00 = with(v00m.cf12,  ifelse(efec==0, NA,  prdc / efec)),
+                        v03 = with(v03m.cf12,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
+                        v06 = with(v06m.cf12,  ifelse(efec==0, NA,  prdc / efec)),
+                        v09 = with(v09m.cf12,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
+                        v12 = with(v12,       ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
+                        v15 = with(v15m.cf12,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+                        v18 = with(v18m.cf12,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
+                        v21 = with(v21m.cf12,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
+left.cf12 <- round(left.cf12, 3)
+#
+left.cf15 <- data.frame(#v91 = with(v91m.cf15,  ifelse(efec==0, NA,  prd  / efec)),
+                        v94 = with(v94m.cf15,  ifelse(efec==0, NA,  prd  / efec)),
+                        v97 = with(v97m.cf15,  ifelse(efec==0, NA,  prd  / efec)),
+                        v00 = with(v00m.cf15,  ifelse(efec==0, NA,  prdc / efec)),
+                        v03 = with(v03m.cf15,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
+                        v06 = with(v06m.cf15,  ifelse(efec==0, NA,  prdc / efec)),
+                        v09 = with(v09m.cf15,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
+                        v12 = with(v12m.cf15,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
+                        v15 = with(v15,       ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+                        v18 = with(v18m.cf15,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
+                        v21 = with(v21m.cf15,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
+left.cf15 <- round(left.cf15, 3)
+#
+left.cf18 <- data.frame(#v91 = with(v91m.cf18,  ifelse(efec==0, NA,  prd  / efec)),
+                        v94 = with(v94m.cf18,  ifelse(efec==0, NA,  prd  / efec)),
+                        v97 = with(v97m.cf18,  ifelse(efec==0, NA,  prd  / efec)),
+                        v00 = with(v00m.cf18,  ifelse(efec==0, NA,  prdc / efec)),
+                        v03 = with(v03m.cf18,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
+                        v06 = with(v06m.cf18,  ifelse(efec==0, NA,  prdc / efec)),
+                        v09 = with(v09m.cf18,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
+                        v12 = with(v12m.cf18,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
+                        v15 = with(v15m.cf18,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+                        v18 = with(v18,       ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
+                        v21 = with(v21m.cf18,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
+left.cf18 <- round(left.cf18, 3)
+#
+left.cf21 <- data.frame(#v91 = with(v91m.cf21,  ifelse(efec==0, NA,  prd  / efec)),
+                        v94 = with(v94m.cf21,  ifelse(efec==0, NA,  prd  / efec)),
+                        v97 = with(v97m.cf21,  ifelse(efec==0, NA,  prd  / efec)),
+                        v00 = with(v00m.cf21,  ifelse(efec==0, NA,  prdc / efec)),
+                        v03 = with(v03m.cf21,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
+                        v06 = with(v06m.cf21,  ifelse(efec==0, NA,  prdc / efec)),
+                        v09 = with(v09m.cf21,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
+                        v12 = with(v12m.cf21,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
+                        v15 = with(v15m.cf21,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+                        v18 = with(v18m.cf21,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
+                        v21 = with(v21,       ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
+left.cf21 <- round(left.cf21, 3)
+#
+## left.cf24 <- data.frame(#v91 = with(v91m.cf24,  ifelse(efec==0, NA,  prd  / efec)),
+##                         v94 = with(v94m.cf24,  ifelse(efec==0, NA,  prd  / efec)),
+##                         v97 = with(v97m.cf24,  ifelse(efec==0, NA,  prd  / efec)),
+##                         v00 = with(v00m.cf24,  ifelse(efec==0, NA,  prdc / efec)),
+##                         v03 = with(v03m.cf24,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
+##                         v06 = with(v06m.cf24,  ifelse(efec==0, NA,  prdc / efec)),
+##                         v09 = with(v09m.cf24,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
+##                         v12 = with(v12m.cf24,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
+##                         v15 = with(v15m.cf24,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+##                         v18 = with(v18m.cf24,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
+##                         v21 = with(v21m.cf24,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
+## left.cf24 <- round(left.cf24, 3)
+}
+#
+oth <- data.frame(v91 =      with(v91,       ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+                  v94 =      with(v94,       ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+                  v97 =      with(v97,       ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
+                  v00 =      with(v00,       ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
+                  v03 =      with(v03,       ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
+                  v06 =      with(v06,       ifelse(efec==0, NA, (pna + asdc) / efec)),
+                  v09 =      with(v09,       ifelse(efec==0, NA, (pna + psd) / efec)),
+                  v12 =      with(v12,       ifelse(efec==0, NA,  pna / efec)),
+                  v15 =      with(v15,       ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
+                  v18 =      with(v18,       ifelse(efec==0, NA, (indep1 + indep2) / efec)),
+                  v21 =      with(v21,       ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
 oth <- round(oth, 3)
 #
-efec <- data.frame(v91 = v91$efec,
-                   v94 = v94$efec,
-                   v97 = v97$efec,
-                   v00 = v00$efec,
-                   v03 = v03$efec,
-                   v06 = v06$efec,
-                   v09 = v09$efec,
-                   v12 = v12$efec,
-                   v15 = v15$efec,
-                   v18 = v18$efec,
-                   v21 = v21$efec)
+if (agg=="m"){
+oth.cf06 <- data.frame(#v91 = with(v91m.cf06,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+                       v94 = with(v94m.cf06,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+                       v97 = with(v97m.cf06,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
+                       v00 = with(v00m.cf06,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
+                       v03 = with(v03m.cf06,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
+                       v06 = with(v06,       ifelse(efec==0, NA, (pna + asdc) / efec)),
+                       v09 = with(v09m.cf06,  ifelse(efec==0, NA, (pna + psd) / efec)),
+                       v12 = with(v12m.cf06,  ifelse(efec==0, NA,  pna / efec)),
+                       v15 = with(v15m.cf06,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
+                       v18 = with(v18m.cf06,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
+                       v21 = with(v21m.cf06,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
+oth.cf06 <- round(oth.cf06, 3)
+#
+oth.cf09 <- data.frame(#v91 = with(v91m.cf09,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+                       v94 = with(v94m.cf09,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+                       v97 = with(v97m.cf09,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
+                       v00 = with(v00m.cf09,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
+                       v03 = with(v03m.cf09,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
+                       v06 = with(v06m.cf09,  ifelse(efec==0, NA, (pna + asdc) / efec)),
+                       v09 = with(v09,       ifelse(efec==0, NA, (pna + psd) / efec)),
+                       v12 = with(v12m.cf09,  ifelse(efec==0, NA,  pna / efec)),
+                       v15 = with(v15m.cf09,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
+                       v18 = with(v18m.cf09,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
+                       v21 = with(v21m.cf09,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
+oth.cf09 <- round(oth.cf09, 3)
+#
+oth.cf12 <- data.frame(#v91 = with(v91m.cf12,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+                       v94 = with(v94m.cf12,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+                       v97 = with(v97m.cf12,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
+                       v00 = with(v00m.cf12,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
+                       v03 = with(v03m.cf12,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
+                       v06 = with(v06m.cf12,  ifelse(efec==0, NA, (pna + asdc) / efec)),
+                       v09 = with(v09m.cf12,  ifelse(efec==0, NA, (pna + psd) / efec)),
+                       v12 = with(v12,       ifelse(efec==0, NA,  pna / efec)),
+                       v15 = with(v15m.cf12,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
+                       v18 = with(v18m.cf12,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
+                       v21 = with(v21m.cf12,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
+oth.cf12 <- round(oth.cf12, 3)
+#
+oth.cf15 <- data.frame(#v91 = with(v91m.cf15,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+                       v94 = with(v94m.cf15,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+                       v97 = with(v97m.cf15,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
+                       v00 = with(v00m.cf15,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
+                       v03 = with(v03m.cf15,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
+                       v06 = with(v06m.cf15,  ifelse(efec==0, NA, (pna + asdc) / efec)),
+                       v09 = with(v09m.cf15,  ifelse(efec==0, NA, (pna + psd) / efec)),
+                       v12 = with(v12m.cf15,  ifelse(efec==0, NA,  pna / efec)),
+                       v15 = with(v15,       ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
+                       v18 = with(v18m.cf15,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
+                       v21 = with(v21m.cf15,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
+oth.cf15 <- round(oth.cf15, 3)
+#
+oth.cf18 <- data.frame(#v91 = with(v91m.cf18,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+                       v94 = with(v94m.cf18,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+                       v97 = with(v97m.cf18,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
+                       v00 = with(v00m.cf18,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
+                       v03 = with(v03m.cf18,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
+                       v06 = with(v06m.cf18,  ifelse(efec==0, NA, (pna + asdc) / efec)),
+                       v09 = with(v09m.cf18,  ifelse(efec==0, NA, (pna + psd) / efec)),
+                       v12 = with(v12m.cf18,  ifelse(efec==0, NA,  pna / efec)),
+                       v15 = with(v15m.cf18,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
+                       v18 = with(v18,       ifelse(efec==0, NA, (indep1 + indep2) / efec)),
+                       v21 = with(v21m.cf18,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
+oth.cf18 <- round(oth.cf18, 3)
+#
+oth.cf21 <- data.frame(#v91 = with(v91m.cf21,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+                       v94 = with(v94m.cf21,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+                       v97 = with(v97m.cf21,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
+                       v00 = with(v00m.cf21,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
+                       v03 = with(v03m.cf21,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
+                       v06 = with(v06m.cf21,  ifelse(efec==0, NA, (pna + asdc) / efec)),
+                       v09 = with(v09m.cf21,  ifelse(efec==0, NA, (pna + psd) / efec)),
+                       v12 = with(v12m.cf21,  ifelse(efec==0, NA,  pna / efec)),
+                       v15 = with(v15m.cf21,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
+                       v18 = with(v18m.cf21,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
+                       v21 = with(v21,       ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
+oth.cf21 <- round(oth.cf21, 3)
+#
+## oth.cf24 <- data.frame(v91 = with(#v91m.cf24,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+##                        v94 = with(v94m.cf24,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+##                        v97 = with(v97m.cf24,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
+##                        v00 = with(v00m.cf24,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
+##                        v03 = with(v03m.cf24,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
+##                        v06 = with(v06m.cf24,  ifelse(efec==0, NA, (pna + asdc) / efec)),
+##                        v09 = with(v09m.cf24,  ifelse(efec==0, NA, (pna + psd) / efec)),
+##                        v12 = with(v12m.cf24,  ifelse(efec==0, NA,  pna / efec)),
+##                        v15 = with(v15m.cf24,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
+##                        v18 = with(v18m.cf24,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
+##                        v21 = with(v21m.cf24,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
+## oth.cf24 <- round(oth.cf24, 3)
+}
+#
+efec <- data.frame(v91 =      v91$efec,
+                   v94 =      v94$efec,
+                   v97 =      v97$efec,
+                   v00 =      v00$efec,
+                   v03 =      v03$efec,
+                   v06 =      v06$efec,
+                   v09 =      v09$efec,
+                   v12 =      v12$efec,
+                   v15 =      v15$efec,
+                   v18 =      v18$efec,
+                   v21 =      v21$efec)
+#
+if (agg=="m"){
+efec.cf06 <- data.frame(#v91 = v91m.cf06$efec,
+                        v94 = v94m.cf06$efec,
+                        v97 = v97m.cf06$efec,
+                        v00 = v00m.cf06$efec,
+                        v03 = v03m.cf06$efec,
+                        v06 = v06$efec,
+                        v09 = v09m.cf06$efec,
+                        v12 = v12m.cf06$efec,
+                        v15 = v15m.cf06$efec,
+                        v18 = v18m.cf06$efec,
+                        v21 = v21m.cf06$efec)
+#
+efec.cf09 <- data.frame(#v91 = v91m.cf09$efec,
+                        v94 = v94m.cf09$efec,
+                        v97 = v97m.cf09$efec,
+                        v00 = v00m.cf09$efec,
+                        v03 = v03m.cf09$efec,
+                        v06 = v06m.cf09$efec,
+                        v09 = v09$efec,
+                        v12 = v12m.cf09$efec,
+                        v15 = v15m.cf09$efec,
+                        v18 = v18m.cf09$efec,
+                        v21 = v21m.cf09$efec)
+#
+efec.cf12 <- data.frame(#v91 = v91m.cf12$efec,
+                        v94 = v94m.cf12$efec,
+                        v97 = v97m.cf12$efec,
+                        v00 = v00m.cf12$efec,
+                        v03 = v03m.cf12$efec,
+                        v06 = v06m.cf12$efec,
+                        v09 = v09m.cf12$efec,
+                        v12 = v12$efec,
+                        v15 = v15m.cf12$efec,
+                        v18 = v18m.cf12$efec,
+                        v21 = v21m.cf12$efec)
+#
+efec.cf15 <- data.frame(#v91 = v91m.cf15$efec,
+                        v94 = v94m.cf15$efec,
+                        v97 = v97m.cf15$efec,
+                        v00 = v00m.cf15$efec,
+                        v03 = v03m.cf15$efec,
+                        v06 = v06m.cf15$efec,
+                        v09 = v09m.cf15$efec,
+                        v12 = v12m.cf15$efec,
+                        v15 = v15$efec,
+                        v18 = v18m.cf15$efec,
+                        v21 = v21m.cf15$efec)
+#
+efec.cf18 <- data.frame(#v91 = v91m.cf18$efec,
+                        v94 = v94m.cf18$efec,
+                        v97 = v97m.cf18$efec,
+                        v00 = v00m.cf18$efec,
+                        v03 = v03m.cf18$efec,
+                        v06 = v06m.cf18$efec,
+                        v09 = v09m.cf18$efec,
+                        v12 = v12m.cf18$efec,
+                        v15 = v15m.cf18$efec,
+                        v18 = v18$efec,
+                        v21 = v21m.cf18$efec)
+#
+efec.cf21 <- data.frame(#v91 = v91m.cf21$efec,
+                        v94 = v94m.cf21$efec,
+                        v97 = v97m.cf21$efec,
+                        v00 = v00m.cf21$efec,
+                        v03 = v03m.cf21$efec,
+                        v06 = v06m.cf21$efec,
+                        v09 = v09m.cf21$efec,
+                        v12 = v12m.cf21$efec,
+                        v15 = v15m.cf21$efec,
+                        v18 = v18m.cf21$efec,
+                        v21 = v21$efec)
+#
+## efec.cf24 <- data.frame(#v91 = v91m.cf24$efec,
+##                         v94 = v94m.cf24$efec,
+##                         v97 = v97m.cf24$efec,
+##                         v00 = v00m.cf24$efec,
+##                         v03 = v03m.cf24$efec,
+##                         v06 = v06m.cf24$efec,
+##                         v09 = v09m.cf24$efec,
+##                         v12 = v12m.cf24$efec,
+##                         v15 = v15m.cf24$efec,
+##                         v18 = v18m.cf24$efec,
+##                         v21 = v21m.cf24$efec)
+}
+
 #
 # transpose to plug columns into new data.frames
 pan <- t(pan)
@@ -1711,17 +2752,68 @@ left <- t(left)
 oth <- t(oth)
 efec <- t(efec)
 #
+if (agg=="m"){
+    pan.cf06  <- t(pan.cf06)
+    pri.cf06  <- t(pri.cf06)
+    left.cf06 <- t(left.cf06)
+    oth.cf06  <- t(oth.cf06)
+    efec.cf06 <- t(efec.cf06)
+    #
+    pan.cf09  <- t(pan.cf09)
+    pri.cf09  <- t(pri.cf09)
+    left.cf09 <- t(left.cf09)
+    oth.cf09  <- t(oth.cf09)
+    efec.cf09 <- t(efec.cf09)
+    #
+    pan.cf12  <- t(pan.cf12)
+    pri.cf12  <- t(pri.cf12)
+    left.cf12 <- t(left.cf12)
+    oth.cf12  <- t(oth.cf12)
+    efec.cf12 <- t(efec.cf12)
+    #
+    pan.cf15  <- t(pan.cf15)
+    pri.cf15  <- t(pri.cf15)
+    left.cf15 <- t(left.cf15)
+    oth.cf15  <- t(oth.cf15)
+    efec.cf15 <- t(efec.cf15)
+    #
+    pan.cf18  <- t(pan.cf18)
+    pri.cf18  <- t(pri.cf18)
+    left.cf18 <- t(left.cf18)
+    oth.cf18  <- t(oth.cf18)
+    efec.cf18 <- t(efec.cf18)
+    #
+    pan.cf21  <- t(pan.cf21)
+    pri.cf21  <- t(pri.cf21)
+    left.cf21 <- t(left.cf21)
+    oth.cf21  <- t(oth.cf21)
+    efec.cf21 <- t(efec.cf21)
+    #
+    ## pan.cf24  <- t(pan.cf24)
+    ## pri.cf24  <- t(pri.cf24)
+    ## left.cf24 <- t(left.cf24)
+    ## oth.cf24  <- t(oth.cf24)
+    ## efec.cf24 <- t(efec.cf24)
+}
+
+
 extendCoal <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
-if (agg=="m") names(extendCoal) <- v00$ife
+if (agg=="m"){
+    names(extendCoal) <- v00$ife
+    # replicate for counterfactual munic data for regressions
+    extendCoal.cf06 <- extendCoal.cf09 <- extendCoal.cf12 <- extendCoal.cf15 <- extendCoal.cf18 <- extendCoal.cf21 <- extendCoal
+}
 if (agg=="s") names(extendCoal) <- v00$edon*10000 + v00$seccion # untested
 # loop over municipios/secciones
 for (i in 1:nrow(v00)){
     #i <- 81 # debug
-    tmp <- data.frame(yr = seq(from=1991, to=2021, by=3),
-                      pan = pan[,i],
-                      pri = pri[,i],
+    message(sprintf("loop %s of %s", i, nrow(v00)))
+    # votes with actual municipios to plug into distributed data
+    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3),
+                      pan  = pan[,i],
+                      pri  = pri[,i],
                       left = left[,i],
-                      oth = oth[,i],
+                      oth  = oth[,i],
                       efec = efec[,i])
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
@@ -1731,25 +2823,215 @@ for (i in 1:nrow(v00)){
         tmp$left[is.na(tmp$left)] <- per.means["left"];
         tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
     }
-    # add epsilon = 2*max(rounding error) to zeroes 
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
         tmp[tmp==0] <- 0.001;
     }
-    # re-compute shares
+    # re-compute shares to add to 1
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
     # add id
     if (agg=="m") tmp$ife     <- v00$ife[i]
     if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
     # fill info to new list
     extendCoal[[i]] <- tmp
+    #
+    # votes with counterfactual municicios for regressions
+    ##########
+    ## cf06 ##
+    ##########
+    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+                      pan  = pan.cf06[,i],
+                      pri  = pri.cf06[,i],
+                      left = left.cf06[,i],
+                      oth  = oth.cf06[,i],
+                      efec = efec.cf06[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
+    # fill info to new list
+    extendCoal.cf06[[i]] <- tmp
+    #
+    # votes with counterfactual municicios for regressions
+    ##########
+    ## cf09 ##
+    ##########
+    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+                      pan  = pan.cf09[,i],
+                      pri  = pri.cf09[,i],
+                      left = left.cf09[,i],
+                      oth  = oth.cf09[,i],
+                      efec = efec.cf09[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
+    # fill info to new list
+    extendCoal.cf09[[i]] <- tmp
+    #
+    # votes with counterfactual municicios for regressions
+    ##########
+    ## cf12 ##
+    ##########
+    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+                      pan  = pan.cf12[,i],
+                      pri  = pri.cf12[,i],
+                      left = left.cf12[,i],
+                      oth  = oth.cf12[,i],
+                      efec = efec.cf12[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
+    # fill info to new list
+    extendCoal.cf12[[i]] <- tmp
+    #
+    # votes with counterfactual municicios for regressions
+    ##########
+    ## cf15 ##
+    ##########
+    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+                      pan  = pan.cf15[,i],
+                      pri  = pri.cf15[,i],
+                      left = left.cf15[,i],
+                      oth  = oth.cf15[,i],
+                      efec = efec.cf15[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
+    # fill info to new list
+    extendCoal.cf15[[i]] <- tmp
+    #
+    # votes with counterfactual municicios for regressions
+    ##########
+    ## cf18 ##
+    ##########
+    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+                      pan  = pan.cf18[,i],
+                      pri  = pri.cf18[,i],
+                      left = left.cf18[,i],
+                      oth  = oth.cf18[,i],
+                      efec = efec.cf18[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
+    # fill info to new list
+    extendCoal.cf18[[i]] <- tmp
+    #
+    # votes with counterfactual municicios for regressions
+    ##########
+    ## cf21 ##
+    ##########
+    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+                      pan  = pan.cf21[,i],
+                      pri  = pri.cf21[,i],
+                      left = left.cf21[,i],
+                      oth  = oth.cf21[,i],
+                      efec = efec.cf21[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
+    # fill info to new list
+    extendCoal.cf21[[i]] <- tmp
 }
 #
-# datos para regresión de alfa
-yr.means <- data.frame(yr = seq(1991,2018,3),
-                       pan    = rep(NA,10),
-                       pri    = rep(NA,10),
-                       left   = rep(NA,10),
-                       oth    = rep(NA,10))
+
+##################################
+## datos para regresión de alfa ##
+##################################
+#
+##################################################################################################################################
+## Nota 16jul2021: al añadir datos 2021 cambiarán todas las alfas y betas! Una solución fácil (que usaré) y otra que requiere   ##
+## más coco. La fácil es reestimar con 2021 e identificar el commit que reportaba la versión hasta 2018. La otra: definir una   ##
+## ventana temporal (como cinco elecciones) para producir alfas y betas cada elección: alfa.2006, alfa.2009, etc. Debería poder ##
+## investigar cómo usan esto en el Capital Asset Pricing Model...                                                               ##
+##################################################################################################################################
+yr.means <- data.frame(yr = seq(1991,2021,3),
+                       pan    = rep(NA,11),
+                       pri    = rep(NA,11),
+                       left   = rep(NA,11),
+                       oth    = rep(NA,11))
 #cs <- function(x) colSums(x, na.rm=TRUE)
 if (agg=="s"){
     cs <- function(x) colSums(x[x$dunbaja==0,], na.rm=TRUE) # drops secciones that received aggregates upon splitting
@@ -1757,6 +3039,8 @@ if (agg=="s"){
     cs <- function(x) colSums(x, na.rm=TRUE)
 }
 #
+# change with v91s when available
+AQUI ME QUEDE
 yr.means$pan   [1] <-  cs(v91)["pan"]                                                      / cs(v91)["efec"]
 yr.means$pri   [1] <-  cs(v91)["pri"]                                                      / cs(v91)["efec"]
 yr.means$left  [1] <-  cs(v91)["prd"]                                                      / cs(v91)["efec"]
@@ -1777,35 +3061,40 @@ yr.means$pri   [4] <-  cs(v00s)["pri"]                     / cs(v00s)["efec"]
 yr.means$left  [4] <-  cs(v00s)["prdc"]                    / cs(v00s)["efec"]
 yr.means$oth   [4] <- (cs(v00s)["pcd"] + cs(v00s)["parm"]) / cs(v00s)["efec"]
 #                
-yr.means$pan   [5] <-   cs(v03s)["pan"]                                                                         / cs(v03s)["efec"]
-yr.means$pri   [5] <-  (cs(v03s)["pri"] + cs(v03s)["pric"] + cs(v03s)["pvem"])                                  / cs(v03s)["efec"]
-yr.means$left  [5] <-  (cs(v03s)["prd"] + cs(v03s)["pt"]   + cs(v03s)["conve"])                                 / cs(v03s)["efec"]
-yr.means$oth   [5] <-  (cs(v03s)["psn"] + cs(v03s)["pas"]  + cs(v03s)["mp"] + cs(v03s)["plm"] + cs(v03s)["fc"]) / cs(v03s)["efec"]
+yr.means$pan   [5] <-  cs(v03s)["pan"]                                                                         / cs(v03s)["efec"]
+yr.means$pri   [5] <- (cs(v03s)["pri"] + cs(v03s)["pric"] + cs(v03s)["pvem"])                                  / cs(v03s)["efec"]
+yr.means$left  [5] <- (cs(v03s)["prd"] + cs(v03s)["pt"]   + cs(v03s)["conve"])                                 / cs(v03s)["efec"]
+yr.means$oth   [5] <- (cs(v03s)["psn"] + cs(v03s)["pas"]  + cs(v03s)["mp"] + cs(v03s)["plm"] + cs(v03s)["fc"]) / cs(v03s)["efec"]
 #                
-yr.means$pan   [6] <-   cs(v06s)["pan"]                     / cs(v06s)["efec"]
-yr.means$pri   [6] <-   cs(v06s)["pric"]                    / cs(v06s)["efec"]
-yr.means$left  [6] <-   cs(v06s)["prdc"]                    / cs(v06s)["efec"]
-yr.means$oth   [6] <-  (cs(v06s)["pna"] + cs(v06s)["asdc"]) / cs(v06s)["efec"]
+yr.means$pan   [6] <-  cs(v06s)["pan"]                     / cs(v06s)["efec"]
+yr.means$pri   [6] <-  cs(v06s)["pric"]                    / cs(v06s)["efec"]
+yr.means$left  [6] <-  cs(v06s)["prdc"]                    / cs(v06s)["efec"]
+yr.means$oth   [6] <- (cs(v06s)["pna"] + cs(v06s)["asdc"]) / cs(v06s)["efec"]
 #                
-yr.means$pan   [7] <-   cs(v09s)["pan"]                                                           / cs(v09s)["efec"]
-yr.means$pri   [7] <-  (cs(v09s)["pri"] + cs(v09s)["pric"] + cs(v09s)["pvem"])                    / cs(v09s)["efec"]
-yr.means$left  [7] <-  (cs(v09s)["prd"] + cs(v09s)["pt"]   + cs(v09s)["ptc"] + cs(v09s)["conve"]) / cs(v09s)["efec"]
-yr.means$oth   [7] <-  (cs(v09s)["pna"] + cs(v09s)["psd"])                                        / cs(v09s)["efec"]
+yr.means$pan   [7] <-  cs(v09s)["pan"]                                                           / cs(v09s)["efec"]
+yr.means$pri   [7] <- (cs(v09s)["pri"] + cs(v09s)["pric"] + cs(v09s)["pvem"])                    / cs(v09s)["efec"]
+yr.means$left  [7] <- (cs(v09s)["prd"] + cs(v09s)["pt"]   + cs(v09s)["ptc"] + cs(v09s)["conve"]) / cs(v09s)["efec"]
+yr.means$oth   [7] <- (cs(v09s)["pna"] + cs(v09s)["psd"])                                        / cs(v09s)["efec"]
 #                
-yr.means$pan   [8] <-    cs(v12s)["pan"]                                                       / cs(v12s)["efec"]
-yr.means$pri   [8] <-   (cs(v12s)["pri"] + cs(v12s)["pric"] + cs(v12s)["pvem"])                / cs(v12s)["efec"]
-yr.means$left  [8] <-   (cs(v12s)["prd"] + cs(v12s)["prdc"] + cs(v12s)["pt"] + cs(v12s)["mc"]) / cs(v12s)["efec"]
-yr.means$oth   [8] <-    cs(v12s)["pna"]                                                       / cs(v12s)["efec"]
+yr.means$pan   [8] <-  cs(v12s)["pan"]                                                       / cs(v12s)["efec"]
+yr.means$pri   [8] <- (cs(v12s)["pri"] + cs(v12s)["pric"] + cs(v12s)["pvem"])                / cs(v12s)["efec"]
+yr.means$left  [8] <- (cs(v12s)["prd"] + cs(v12s)["prdc"] + cs(v12s)["pt"] + cs(v12s)["mc"]) / cs(v12s)["efec"]
+yr.means$oth   [8] <-  cs(v12s)["pna"]                                                       / cs(v12s)["efec"]
 #                
-yr.means$pan   [9] <-    cs(v15s)["pan"]                                                                                / cs(v15s)["efec"]
-yr.means$pri   [9] <-   (cs(v15s)["pri"] + cs(v15s)["pric"] + cs(v15s)["pvem"])                                         / cs(v15s)["efec"]
-yr.means$left  [9] <-   (cs(v15s)["prd"] + cs(v15s)["prdc"] + cs(v15s)["pt"] + cs(v15s)["morena"] + cs(v15s)["pes"])    / cs(v15s)["efec"]
-yr.means$oth   [9] <-   (cs(v15s)["mc"]  + cs(v15s)["pna"]  + cs(v15s)["ph"] + cs(v15s)["indep1"] + cs(v15s)["indep2"]) / cs(v15s)["efec"]
+yr.means$pan   [9] <-  cs(v15s)["pan"]                                                                                / cs(v15s)["efec"]
+yr.means$pri   [9] <- (cs(v15s)["pri"] + cs(v15s)["pric"] + cs(v15s)["pvem"])                                         / cs(v15s)["efec"]
+yr.means$left  [9] <- (cs(v15s)["prd"] + cs(v15s)["prdc"] + cs(v15s)["pt"] + cs(v15s)["morena"] + cs(v15s)["pes"])    / cs(v15s)["efec"]
+yr.means$oth   [9] <- (cs(v15s)["mc"]  + cs(v15s)["pna"]  + cs(v15s)["ph"] + cs(v15s)["indep1"] + cs(v15s)["indep2"]) / cs(v15s)["efec"]
 #
-yr.means$pan   [10] <-   (cs(v18s)["pan"]    + cs(v18s)["panc"]    + cs(v18s)["prd"]  + cs(v18s)["mc"])  / cs(v18s)["efec"]
-yr.means$pri   [10] <-   (cs(v18s)["pri"]    + cs(v18s)["pric"]    + cs(v18s)["pvem"] + cs(v18s)["pna"]) / cs(v18s)["efec"]
-yr.means$left  [10] <-   (cs(v18s)["morena"] + cs(v18s)["morenac"] + cs(v18s)["pt"]   + cs(v18s)["pes"]) / cs(v18s)["efec"]
-yr.means$oth   [10] <-   (cs(v18s)["indep1"] + cs(v18s)["indep2"])                                       / cs(v18s)["efec"]
+yr.means$pan   [10] <- (cs(v18s)["pan"]    + cs(v18s)["panc"]    + cs(v18s)["prd"]  + cs(v18s)["mc"])  / cs(v18s)["efec"]
+yr.means$pri   [10] <- (cs(v18s)["pri"]    + cs(v18s)["pric"]    + cs(v18s)["pvem"] + cs(v18s)["pna"]) / cs(v18s)["efec"]
+yr.means$left  [10] <- (cs(v18s)["morena"] + cs(v18s)["morenac"] + cs(v18s)["pt"]   + cs(v18s)["pes"]) / cs(v18s)["efec"]
+yr.means$oth   [10] <- (cs(v18s)["indep1"] + cs(v18s)["indep2"])                                       / cs(v18s)["efec"]
+#
+yr.means$pan   [11] <- (cs(v21s)["pan"]    + cs(v21s)["panc"]    + cs(v21s)["prd"])                                       / cs(v21s)["efec"]
+yr.means$pri   [11] <- (cs(v21s)["pri"]    + cs(v21s)["pric"])                                                            / cs(v21s)["efec"]
+yr.means$left  [11] <- (cs(v21s)["morena"] + cs(v21s)["morenac"] + cs(v21s)["pt"]  + cs(v21s)["pvem"])                    / cs(v21s)["efec"]
+yr.means$oth   [11] <- (cs(v21s)["mc"]     + cs(v21s)["pes"]     + cs(v21s)["rsp"] + cs(v21s)["fxm"] + cs(v21s)["indep"]) / cs(v21s)["efec"]
 #
 yr.means <- within(yr.means, mean.rpan    <- pan/pri)
 yr.means <- within(yr.means, mean.rleft   <- left/pri)
@@ -1876,7 +3165,7 @@ for (i in non.nas){
     #i <- 81 # debug
     #i <- 44508 # debug
     message(sprintf("loop %s of %s", i, max(non.nas)))
-    # subset data
+    # subset data to single unit
     data.tmp <- extendCoal[[i]]
     #
     # add first-differences

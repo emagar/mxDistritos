@@ -21,17 +21,21 @@ add.split <- function(year.var = NA) {
     if (year.var==2012) d <- v12s
     if (year.var==2015) d <- v15s
     if (year.var==2018) d <- v18s
+    if (year.var==2021) d <- v21s
     #
-    #d <- v15 # debug
+    #d <- v15s # debug
     #
     sel.agg <- which(d$edon==info$edon & d$seccion %in% sel.to)
-    sel.col <- setdiff(colnames(d), c("edon","disn","seccion","munn","dunbaja","edosecn",
-                                      "d94","d97","d00","d03","d06","d09","d12","d15","d18")) # exclude ids (order-dependent)
+    sel.col <- setdiff(colnames(d),
+                       c("edon", "disn", "seccion", "munn", "dunbaja", "edosecn",
+                         "d94", "d97", "d00", "d03", "d06", "d09", "d12", "d15", "d18", "d21",
+                         "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021",
+                         "ife", "inegi")) # exclude ids (order-dependent)
     #
     # sum votes
     totals <- colSums(d[sel.agg, sel.col])
     # dummies
-    if (!is.na(totals["dpanc"])    & totals["dpanc"]>0)    totals["panc"]     <- 1
+    if (!is.na(totals["dpanc"])    & totals["dpanc"]>0)    totals["dpanc"]     <- 1
     if (!is.na(totals["dpric"])    & totals["dpric"]>0)    totals["dpric"]    <- 1
     if (!is.na(totals["dprdc"])    & totals["dprdc"]>0)    totals["dprdc"]    <- 1
     if (!is.na(totals["dmorenac"]) & totals["dmorenac"]>0) totals["dmorenac"] <- 1
@@ -54,10 +58,11 @@ v09s$dunbaja <- 0
 v12s$dunbaja <- 0
 v15s$dunbaja <- 0
 v18s$dunbaja <- 0
+v21s$dunbaja <- 0
 
-#########################################
-## manipulate seccines that were split ##
-#########################################
+##########################################
+## manipulate secciones that were split ##
+##########################################
 sel.split <- which(eq$action=="split")
 #table(eq$when[sel.split])
 #
@@ -81,6 +86,7 @@ for (i in sel.split){
         v12s <- add.split(2012);
         v15s <- add.split(2015);
         v18s <- add.split(2018);
+        v21s <- add.split(2021);
     }
     if (year >= 1994 & year < 1997) {
         v97s <- add.split(1997);
@@ -91,6 +97,7 @@ for (i in sel.split){
         v12s <- add.split(2012);
         v15s <- add.split(2015);
         v18s <- add.split(2018);
+        v21s <- add.split(2021);
     }
     if (year >= 1997 & year < 2000) {
         v00s <- add.split(2000);
@@ -100,6 +107,7 @@ for (i in sel.split){
         v12s <- add.split(2012);
         v15s <- add.split(2015);
         v18s <- add.split(2018);
+        v21s <- add.split(2021);
     }
     if (year >= 2000 & year < 2003) {
         v03s <- add.split(2003);
@@ -108,6 +116,7 @@ for (i in sel.split){
         v12s <- add.split(2012);
         v15s <- add.split(2015);
         v18s <- add.split(2018);
+        v21s <- add.split(2021);
     }
     if (year >= 2003 & year < 2006) {
         v06s <- add.split(2006);
@@ -115,24 +124,32 @@ for (i in sel.split){
         v12s <- add.split(2012);
         v15s <- add.split(2015);
         v18s <- add.split(2018);
+        v21s <- add.split(2021);
     }
     if (year >= 2006 & year < 2009) {
         v09s <- add.split(2009);
         v12s <- add.split(2012);
         v15s <- add.split(2015);
         v18s <- add.split(2018);
+        v21s <- add.split(2021);
     }
     if (year >= 2009 & year < 2012) {
         v12s <- add.split(2012);
         v15s <- add.split(2015);
         v18s <- add.split(2018);
+        v21s <- add.split(2021);
     }
     if (year >= 2012 & year < 2015) {
         v15s <- add.split(2015);
         v18s <- add.split(2018);
+        v21s <- add.split(2021);
     }
     if (year >= 2015 & year < 2018) {
         v18s <- add.split(2018);
+        v21s <- add.split(2021);
+    }
+    if (year >= 2018 & year < 2021) {
+        v21s <- add.split(2021);
     }
 }
 
