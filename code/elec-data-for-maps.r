@@ -24,9 +24,9 @@ ag.sec <- function(d=d, sel.c=sel.c){
     sel.c <- which(colnames(d) %in% sel.c); # extract indices
     for (i in sel.c){
         #i <- sel.c[1] #debug
-        d[,i] <- ave(d[,i], d$edon*10000+d$seccion, FUN=sum, na.rm=TRUE)
+        d[,i] <- ave(d[,i], as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE)
     }
-    sel.r <- which(duplicated(d$edon*10000+d$seccion)==TRUE)
+    sel.r <- which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE)
     d <- d[-sel.r,]
     return(d)
 }
@@ -339,7 +339,7 @@ v15 <- d
 d <- read.csv( "dip2018.csv", header=TRUE, , stringsAsFactors=FALSE)
 d <- d[order(d$edon, d$seccion),]
 #
-colnames(d)[which(colnames(d)=="panal")]     <- "pna"
+colnames(d)[which(colnames(d)=="panal")]          <- "pna"
 colnames(d)[which(colnames(d)=="pan.prd.mc")]     <- "panc"
 colnames(d)[which(colnames(d)=="pri.pvem.panal")] <- "pric"
 colnames(d)[which(colnames(d)=="pt.morena.pes")]  <- "morenac"
@@ -392,9 +392,15 @@ d <- read.csv( "dip2021.csv", header=TRUE, , stringsAsFactors=FALSE)
 d <- d[order(d$edon, d$seccion),]
 d <- within(d, nr <- nul <- tot <- NULL)
 #
+# efec
+tmp <- d[,c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","pan.pri.prd","pvem.pt.morena")]
+tmp[is.na(tmp)] <- 0
+d[,c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","pan.pri.prd","pvem.pt.morena")] <- tmp
+d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + morena + pes + rsp + fxm + indep + pan.pri.prd + pvem.pt.morena)
+#
 # assign 2021 pan-pri-prd coalition to pan and pri in proportion to votes each won by itself
 tmp <- d[,c("pan","pri")]
-tmp[which(rowSums(tmp)==0),] <- tmp[which(rowSums(tmp)==0),] + 1 # avoid zero denominators (0,0 wil turn into half and half)
+tmp[which(rowSums(tmp)==0),] <- tmp[which(rowSums(tmp)==0),] + 1 # avoid zero denominators (0,0 will turn into half and half)
 tmp <- tmp/rowSums(tmp) # two-party shares
 #
 d$pan.pri.prd[is.na(d$pan.pri.prd)] <- 0 # replace NAs w 0 votes
@@ -408,11 +414,8 @@ d$pan.pri.prd <- NULL
 # morena coal
 colnames(d)[which(colnames(d)=="pvem.pt.morena")]  <- "morenac"
 #
-sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","lisnom")
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","lisnom","efec")
 d <- to.num(d,sel.c) # clean data
-#
-# efec
-d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + morena + pes + rsp + fxm + indep + panc + pric + morenac)
 #
 # district coalition dummies
 d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
@@ -424,15 +427,15 @@ d$dmorenac <- as.numeric(d$dmorenac>0)
 table(d$dpanc, useNA = "always")
 table(d$dpric, useNA = "always")
 table(d$dmorenac, useNA = "always")
-# aggregate coalitions where present for correct winner assesment
+# aggregate coalitions where present. OJO: splits PRI from rest, so might miss correct winner assessment
 sel <- which(d$dpanc==1)
 d[sel,] <- within(d[sel,], {
-    panc <- pan + panc + pri + prd;
+    panc <- pan + panc + prd;
     pan <- pri <- prd <- 0
 })
 sel <- which(d$dpric==1)
 d[sel,] <- within(d[sel,], {
-    pric <- pan + pri + pric + prd;
+    pric <- pri + pric;
     pan <- pri <- prd <- 0
 })
 sel <- which(d$dmorenac==1)
@@ -2135,6 +2138,8 @@ write.csv(v15m, file = paste(wd, "data/dipfed-municipio-vraw-2015.csv", sep = ""
 write.csv(v18m, file = paste(wd, "data/dipfed-municipio-vraw-2018.csv", sep = ""), row.names = FALSE)
 write.csv(v21m, file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), row.names = FALSE)
 
+# clean
+rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,tmp,to.num)
 
 # temporary for debugging
 #save.image("../../datosBrutos/not-in-git/tmp.RData")
@@ -2151,8 +2156,6 @@ load("../../datosBrutos/not-in-git/tmp.RData")
 3) [ ] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
 4) [ ] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
 
-# clean
-rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,tmp,to.num)
 
 #########################################################################################
 ## reload data to restore unmanipulated vote files (but keeping manipulated mun votes) ##
@@ -2169,6 +2172,17 @@ load(paste0(wd, "data/too-big-4-github/tmp.RData"))
 # rename seccion vote objects
 v94s <- v94; v97s <- v97; v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18; v21s <- v21;
 rm(v94, v97, v00, v03, v06, v09, v12, v15, v18, v21)
+# make inegi numeric instead of character
+v94s$inegi <- with(v94s, as.numeric(inegi))
+v97s$inegi <- with(v97s, as.numeric(inegi))
+v00s$inegi <- with(v00s, as.numeric(inegi))
+v03s$inegi <- with(v03s, as.numeric(inegi))
+v06s$inegi <- with(v06s, as.numeric(inegi))
+v09s$inegi <- with(v09s, as.numeric(inegi))
+v12s$inegi <- with(v12s, as.numeric(inegi))
+v15s$inegi <- with(v15s, as.numeric(inegi))
+v18s$inegi <- with(v18s, as.numeric(inegi))
+v21s$inegi <- with(v21s, as.numeric(inegi)) # ignore NAs warning, inegi codes for new campeche munic still missing
 # reload manipulated munic votes
 load(paste0(wd, "data/too-big-4-github/tmp-mun.RData"))
 
@@ -2236,12 +2250,12 @@ pan <- data.frame(v91 =      with(v91,       ifelse(efec==0, NA,  pan  / efec)),
 pan <- round(pan, 3)
 #
 if (agg=="m"){ # counterfactual aggregates to account for new municipalities
-pan.cf06 <- data.frame(#v91 = with(v91m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
+pan.cf06 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  pan  / efec)), # change with v91m.cf06 when available
                        v94 = with(v94m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
                        v97 = with(v97m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
                        v00 = with(v00m.cf06,  ifelse(efec==0, NA,  panc / efec)),
                        v03 = with(v03m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
-                       v06 = with(v06,       ifelse(efec==0, NA,  pan  / efec)),
+                       v06 = with(v06,        ifelse(efec==0, NA,  pan  / efec)),
                        v09 = with(v09m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
                        v12 = with(v12m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
                        v15 = with(v15m.cf06,  ifelse(efec==0, NA,  pan  / efec)),
@@ -2249,33 +2263,33 @@ pan.cf06 <- data.frame(#v91 = with(v91m.cf06,  ifelse(efec==0, NA,  pan  / efec)
                        v21 = with(v21m.cf06,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
 pan.cf06 <- round(pan.cf06, 3)
 #
-pan.cf09 <- data.frame(#v91 = with(v91m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
+pan.cf09 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  pan  / efec)), # change with v91m.cf09 when available
                        v94 = with(v94m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
                        v97 = with(v97m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
                        v00 = with(v00m.cf09,  ifelse(efec==0, NA,  panc / efec)),
                        v03 = with(v03m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
                        v06 = with(v06m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
-                       v09 = with(v09,       ifelse(efec==0, NA,  pan  / efec)),
+                       v09 = with(v09,        ifelse(efec==0, NA,  pan  / efec)),
                        v12 = with(v12m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
                        v15 = with(v15m.cf09,  ifelse(efec==0, NA,  pan  / efec)),
                        v18 = with(v18m.cf09,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
                        v21 = with(v21m.cf09,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
 pan.cf09 <- round(pan.cf09, 3)
 #
-pan.cf12 <- data.frame(#v91 = with(v91m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
+pan.cf12 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  pan  / efec)), # change with v91m.cf12 when available
                        v94 = with(v94m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
                        v97 = with(v97m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
                        v00 = with(v00m.cf12,  ifelse(efec==0, NA,  panc / efec)),
                        v03 = with(v03m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
                        v06 = with(v06m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
                        v09 = with(v09m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
-                       v12 = with(v12,       ifelse(efec==0, NA,  pan  / efec)),
+                       v12 = with(v12,        ifelse(efec==0, NA,  pan  / efec)),
                        v15 = with(v15m.cf12,  ifelse(efec==0, NA,  pan  / efec)),
                        v18 = with(v18m.cf12,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
                        v21 = with(v21m.cf12,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
 pan.cf12 <- round(pan.cf12, 3)
 #
-pan.cf15 <- data.frame(#v91 = with(v91m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
+pan.cf15 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  pan  / efec)), # change with v91m.cf15 when available
                        v94 = with(v94m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
                        v97 = with(v97m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
                        v00 = with(v00m.cf15,  ifelse(efec==0, NA,  panc / efec)),
@@ -2283,12 +2297,12 @@ pan.cf15 <- data.frame(#v91 = with(v91m.cf15,  ifelse(efec==0, NA,  pan  / efec)
                        v06 = with(v06m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
                        v09 = with(v09m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
                        v12 = with(v12m.cf15,  ifelse(efec==0, NA,  pan  / efec)),
-                       v15 = with(v15,       ifelse(efec==0, NA,  pan  / efec)),
+                       v15 = with(v15,        ifelse(efec==0, NA,  pan  / efec)),
                        v18 = with(v18m.cf15,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
                        v21 = with(v21m.cf15,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
 pan.cf15 <- round(pan.cf15, 3)
 #
-pan.cf18 <- data.frame(#v91 = with(v91m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
+pan.cf18 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  pan  / efec)), # change with v91m.cf18 when available
                        v94 = with(v94m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
                        v97 = with(v97m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
                        v00 = with(v00m.cf18,  ifelse(efec==0, NA,  panc / efec)),
@@ -2297,11 +2311,11 @@ pan.cf18 <- data.frame(#v91 = with(v91m.cf18,  ifelse(efec==0, NA,  pan  / efec)
                        v09 = with(v09m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
                        v12 = with(v12m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
                        v15 = with(v15m.cf18,  ifelse(efec==0, NA,  pan  / efec)),
-                       v18 = with(v18,       ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
+                       v18 = with(v18,        ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
                        v21 = with(v21m.cf18,  ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
 pan.cf18 <- round(pan.cf18, 3)
 #
-pan.cf21 <- data.frame(#v91 = with(v91m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
+pan.cf21 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  pan  / efec)), # change with v91m.cf21 when available
                        v94 = with(v94m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
                        v97 = with(v97m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
                        v00 = with(v00m.cf21,  ifelse(efec==0, NA,  panc / efec)),
@@ -2311,10 +2325,10 @@ pan.cf21 <- data.frame(#v91 = with(v91m.cf21,  ifelse(efec==0, NA,  pan  / efec)
                        v12 = with(v12m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
                        v15 = with(v15m.cf21,  ifelse(efec==0, NA,  pan  / efec)),
                        v18 = with(v18m.cf21,  ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)), # drop mc?
-                       v21 = with(v21,       ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
+                       v21 = with(v21,        ifelse(efec==0, NA, (pan + panc + prd) / efec)))      # drop prd?
 pan.cf21 <- round(pan.cf21, 3)
 #
-## pan.cf24 <- data.frame(#v91 = with(v91m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
+## pan.cf24 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  pan  / efec)), # change with v91m.cf24 when available
 ##                        v94 = with(v94m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
 ##                        v97 = with(v97m.cf24,  ifelse(efec==0, NA,  pan  / efec)),
 ##                        v00 = with(v00m.cf24,  ifelse(efec==0, NA,  panc / efec)),
@@ -2342,12 +2356,12 @@ pri <- data.frame(v91 =      with(v91,       ifelse(efec==0, NA,  pri  / efec)),
 pri <- round(pri, 3)
 #
 if (agg=="m"){
-pri.cf06 <- data.frame(#v91 = with(v91m.cf06, ifelse(efec==0, NA,  pri  / efec)),
+pri.cf06 <- data.frame(v91 = with(v91,       ifelse(efec==0, NA,  pri  / efec)), # change with v91m.cf06 when available
                        v94 = with(v94m.cf06, ifelse(efec==0, NA,  pri  / efec)),
                        v97 = with(v97m.cf06, ifelse(efec==0, NA,  pri  / efec)),
                        v00 = with(v00m.cf06, ifelse(efec==0, NA,  pri / efec)),
                        v03 = with(v03m.cf06, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
-                       v06 = with(v06,      ifelse(efec==0, NA,  pric / efec)),
+                       v06 = with(v06,       ifelse(efec==0, NA,  pric / efec)),
                        v09 = with(v09m.cf06, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v12 = with(v12m.cf06, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v15 = with(v15m.cf06, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
@@ -2355,33 +2369,33 @@ pri.cf06 <- data.frame(#v91 = with(v91m.cf06, ifelse(efec==0, NA,  pri  / efec))
                        v21 = with(v21m.cf06, ifelse(efec==0, NA, (pri + pric) / efec)))
 pri.cf06 <- round(pri.cf06, 3)
 #
-pri.cf09 <- data.frame(#v91 = with(v91m.cf09, ifelse(efec==0, NA,  pri  / efec)),
+pri.cf09 <- data.frame(v91 = with(v91,       ifelse(efec==0, NA,  pri  / efec)), # change with v91m.cf09 when available
                        v94 = with(v94m.cf09, ifelse(efec==0, NA,  pri  / efec)),
                        v97 = with(v97m.cf09, ifelse(efec==0, NA,  pri  / efec)),
                        v00 = with(v00m.cf09, ifelse(efec==0, NA,  pri / efec)),
                        v03 = with(v03m.cf09, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v06 = with(v06m.cf09, ifelse(efec==0, NA,  pric / efec)),
-                       v09 = with(v09,      ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v09 = with(v09,       ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v12 = with(v12m.cf09, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v15 = with(v15m.cf09, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v18 = with(v18m.cf09, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
                        v21 = with(v21m.cf09, ifelse(efec==0, NA, (pri + pric) / efec)))
 pri.cf09 <- round(pri.cf09, 3)
 #
-pri.cf12 <- data.frame(#v91 = with(v91m.cf12, ifelse(efec==0, NA,  pri  / efec)),
+pri.cf12 <- data.frame(v91 = with(v91,       ifelse(efec==0, NA,  pri  / efec)), # change with v91m.cf12 when available
                        v94 = with(v94m.cf12, ifelse(efec==0, NA,  pri  / efec)),
                        v97 = with(v97m.cf12, ifelse(efec==0, NA,  pri  / efec)),
                        v00 = with(v00m.cf12, ifelse(efec==0, NA,  pri / efec)),
                        v03 = with(v03m.cf12, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v06 = with(v06m.cf12, ifelse(efec==0, NA,  pric / efec)),
                        v09 = with(v09m.cf12, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
-                       v12 = with(v12,      ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v12 = with(v12,       ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v15 = with(v15m.cf12, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v18 = with(v18m.cf12, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
                        v21 = with(v21m.cf12, ifelse(efec==0, NA, (pri + pric) / efec)))
 pri.cf12 <- round(pri.cf12, 3)
 #
-pri.cf15 <- data.frame(#v91 = with(v91m.cf15, ifelse(efec==0, NA,  pri  / efec)),
+pri.cf15 <- data.frame(v91 = with(v91,       ifelse(efec==0, NA,  pri  / efec)), # change with v91m.cf15 when available
                        v94 = with(v94m.cf15, ifelse(efec==0, NA,  pri  / efec)),
                        v97 = with(v97m.cf15, ifelse(efec==0, NA,  pri  / efec)),
                        v00 = with(v00m.cf15, ifelse(efec==0, NA,  pri / efec)),
@@ -2389,12 +2403,12 @@ pri.cf15 <- data.frame(#v91 = with(v91m.cf15, ifelse(efec==0, NA,  pri  / efec))
                        v06 = with(v06m.cf15, ifelse(efec==0, NA,  pric / efec)),
                        v09 = with(v09m.cf15, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v12 = with(v12m.cf15, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
-                       v15 = with(v15,      ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
+                       v15 = with(v15,       ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v18 = with(v18m.cf15, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
                        v21 = with(v21m.cf15, ifelse(efec==0, NA, (pri + pric) / efec)))
 pri.cf15 <- round(pri.cf15, 3)
 #
-pri.cf18 <- data.frame(#v91 = with(v91m.cf18, ifelse(efec==0, NA,  pri  / efec)),
+pri.cf18 <- data.frame(v91 = with(v91,       ifelse(efec==0, NA,  pri  / efec)), # change with v91m.cf18 when available
                        v94 = with(v94m.cf18, ifelse(efec==0, NA,  pri  / efec)),
                        v97 = with(v97m.cf18, ifelse(efec==0, NA,  pri  / efec)),
                        v00 = with(v00m.cf18, ifelse(efec==0, NA,  pri / efec)),
@@ -2403,11 +2417,11 @@ pri.cf18 <- data.frame(#v91 = with(v91m.cf18, ifelse(efec==0, NA,  pri  / efec))
                        v09 = with(v09m.cf18, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v12 = with(v12m.cf18, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v15 = with(v15m.cf18, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
-                       v18 = with(v18,      ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
+                       v18 = with(v18,       ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
                        v21 = with(v21m.cf18, ifelse(efec==0, NA, (pri + pric) / efec)))
 pri.cf18 <- round(pri.cf18, 3)
 #
-pri.cf21 <- data.frame(#v91 = with(v91m.cf21, ifelse(efec==0, NA,  pri  / efec)),
+pri.cf21 <- data.frame(v91 = with(v91,       ifelse(efec==0, NA,  pri  / efec)), # change with v91m.cf21 when available
                        v94 = with(v94m.cf21, ifelse(efec==0, NA,  pri  / efec)),
                        v97 = with(v97m.cf21, ifelse(efec==0, NA,  pri  / efec)),
                        v00 = with(v00m.cf21, ifelse(efec==0, NA,  pri / efec)),
@@ -2417,10 +2431,10 @@ pri.cf21 <- data.frame(#v91 = with(v91m.cf21, ifelse(efec==0, NA,  pri  / efec))
                        v12 = with(v12m.cf21, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v15 = with(v15m.cf21, ifelse(efec==0, NA, (pri + pric + pvem) / efec)),        # drop pvem?
                        v18 = with(v18m.cf21, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)),  # drop pvem + pna?
-                       v21 = with(v21,      ifelse(efec==0, NA, (pri + pric) / efec)))
+                       v21 = with(v21,       ifelse(efec==0, NA, (pri + pric) / efec)))
 pri.cf21 <- round(pri.cf21, 3)
 #
-## pri.cf24 <- data.frame(#v91 = with(v91m.cf24, ifelse(efec==0, NA,  pri  / efec)),
+## pri.cf24 <- data.frame(v91 = with(v91,       ifelse(efec==0, NA,  pri  / efec)), # change with v91m.cf24 when available
 ##                        v94 = with(v94m.cf24, ifelse(efec==0, NA,  pri  / efec)),
 ##                        v97 = with(v97m.cf24, ifelse(efec==0, NA,  pri  / efec)),
 ##                        v00 = with(v00m.cf24, ifelse(efec==0, NA,  pri / efec)),
@@ -2448,12 +2462,12 @@ left <- data.frame(v91 =      with(v91,       ifelse(efec==0, NA,  prd  / efec))
 left <- round(left, 3)
 #
 if (agg=="m"){
-left.cf06 <- data.frame(#v91 = with(v91m.cf06,  ifelse(efec==0, NA,  prd  / efec)),
+left.cf06 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  prd  / efec)), # change with v91m.cf06 when available
                         v94 = with(v94m.cf06,  ifelse(efec==0, NA,  prd  / efec)),
                         v97 = with(v97m.cf06,  ifelse(efec==0, NA,  prd  / efec)),
                         v00 = with(v00m.cf06,  ifelse(efec==0, NA,  prdc / efec)),
                         v03 = with(v03m.cf06,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
-                        v06 = with(v06,       ifelse(efec==0, NA,  prdc / efec)),
+                        v06 = with(v06,        ifelse(efec==0, NA,  prdc / efec)),
                         v09 = with(v09m.cf06,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
                         v12 = with(v12m.cf06,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
                         v15 = with(v15m.cf06,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
@@ -2461,33 +2475,33 @@ left.cf06 <- data.frame(#v91 = with(v91m.cf06,  ifelse(efec==0, NA,  prd  / efec
                         v21 = with(v21m.cf06,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
 left.cf06 <- round(left.cf06, 3)
 #
-left.cf09 <- data.frame(#v91 = with(v91m.cf09,  ifelse(efec==0, NA,  prd  / efec)),
+left.cf09 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  prd  / efec)), # change with v91m.cf09 when available
                         v94 = with(v94m.cf09,  ifelse(efec==0, NA,  prd  / efec)),
                         v97 = with(v97m.cf09,  ifelse(efec==0, NA,  prd  / efec)),
                         v00 = with(v00m.cf09,  ifelse(efec==0, NA,  prdc / efec)),
                         v03 = with(v03m.cf09,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
                         v06 = with(v06m.cf09,  ifelse(efec==0, NA,  prdc / efec)),
-                        v09 = with(v09,       ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
+                        v09 = with(v09,        ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
                         v12 = with(v12m.cf09,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
                         v15 = with(v15m.cf09,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
                         v18 = with(v18m.cf09,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
                         v21 = with(v21m.cf09,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
 left.cf09 <- round(left.cf09, 3)
 #
-left.cf12 <- data.frame(#v91 = with(v91m.cf12,  ifelse(efec==0, NA,  prd  / efec)),
+left.cf12 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  prd  / efec)), # change with v91m.cf12 when available
                         v94 = with(v94m.cf12,  ifelse(efec==0, NA,  prd  / efec)),
                         v97 = with(v97m.cf12,  ifelse(efec==0, NA,  prd  / efec)),
                         v00 = with(v00m.cf12,  ifelse(efec==0, NA,  prdc / efec)),
                         v03 = with(v03m.cf12,  ifelse(efec==0, NA, (prd + pt + conve) / efec)),
                         v06 = with(v06m.cf12,  ifelse(efec==0, NA,  prdc / efec)),
                         v09 = with(v09m.cf12,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
-                        v12 = with(v12,       ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
+                        v12 = with(v12,        ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
                         v15 = with(v15m.cf12,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
                         v18 = with(v18m.cf12,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
                         v21 = with(v21m.cf12,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
 left.cf12 <- round(left.cf12, 3)
 #
-left.cf15 <- data.frame(#v91 = with(v91m.cf15,  ifelse(efec==0, NA,  prd  / efec)),
+left.cf15 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  prd  / efec)), # change with v91m.cf15 when available
                         v94 = with(v94m.cf15,  ifelse(efec==0, NA,  prd  / efec)),
                         v97 = with(v97m.cf15,  ifelse(efec==0, NA,  prd  / efec)),
                         v00 = with(v00m.cf15,  ifelse(efec==0, NA,  prdc / efec)),
@@ -2495,12 +2509,12 @@ left.cf15 <- data.frame(#v91 = with(v91m.cf15,  ifelse(efec==0, NA,  prd  / efec
                         v06 = with(v06m.cf15,  ifelse(efec==0, NA,  prdc / efec)),
                         v09 = with(v09m.cf15,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
                         v12 = with(v12m.cf15,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
-                        v15 = with(v15,       ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+                        v15 = with(v15,        ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
                         v18 = with(v18m.cf15,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
                         v21 = with(v21m.cf15,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
 left.cf15 <- round(left.cf15, 3)
 #
-left.cf18 <- data.frame(#v91 = with(v91m.cf18,  ifelse(efec==0, NA,  prd  / efec)),
+left.cf18 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  prd  / efec)), # change with v91m.cf18 when available
                         v94 = with(v94m.cf18,  ifelse(efec==0, NA,  prd  / efec)),
                         v97 = with(v97m.cf18,  ifelse(efec==0, NA,  prd  / efec)),
                         v00 = with(v00m.cf18,  ifelse(efec==0, NA,  prdc / efec)),
@@ -2509,11 +2523,11 @@ left.cf18 <- data.frame(#v91 = with(v91m.cf18,  ifelse(efec==0, NA,  prd  / efec
                         v09 = with(v09m.cf18,  ifelse(efec==0, NA, (prd + pt + ptc + conve) / efec)),
                         v12 = with(v12m.cf18,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
                         v15 = with(v15m.cf18,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
-                        v18 = with(v18,       ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
+                        v18 = with(v18,        ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
                         v21 = with(v21m.cf18,  ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
 left.cf18 <- round(left.cf18, 3)
 #
-left.cf21 <- data.frame(#v91 = with(v91m.cf21,  ifelse(efec==0, NA,  prd  / efec)),
+left.cf21 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  prd  / efec)), # change with v91m.cf21 when available
                         v94 = with(v94m.cf21,  ifelse(efec==0, NA,  prd  / efec)),
                         v97 = with(v97m.cf21,  ifelse(efec==0, NA,  prd  / efec)),
                         v00 = with(v00m.cf21,  ifelse(efec==0, NA,  prdc / efec)),
@@ -2523,10 +2537,10 @@ left.cf21 <- data.frame(#v91 = with(v91m.cf21,  ifelse(efec==0, NA,  prd  / efec
                         v12 = with(v12m.cf21,  ifelse(efec==0, NA, (prd + prdc + pt + mc)  / efec)),
                         v15 = with(v15m.cf21,  ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
                         v18 = with(v18m.cf21,  ifelse(efec==0, NA, (morena + morenac + pt + pes) / efec)),
-                        v21 = with(v21,       ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
+                        v21 = with(v21,        ifelse(efec==0, NA, (morena + morenac + pt + pvem) / efec)))    # drop pt + pvem?
 left.cf21 <- round(left.cf21, 3)
 #
-## left.cf24 <- data.frame(#v91 = with(v91m.cf24,  ifelse(efec==0, NA,  prd  / efec)),
+## left.cf24 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA,  prd  / efec)), # change with v91m.cf24 when available
 ##                         v94 = with(v94m.cf24,  ifelse(efec==0, NA,  prd  / efec)),
 ##                         v97 = with(v97m.cf24,  ifelse(efec==0, NA,  prd  / efec)),
 ##                         v00 = with(v00m.cf24,  ifelse(efec==0, NA,  prdc / efec)),
@@ -2554,12 +2568,12 @@ oth <- data.frame(v91 =      with(v91,       ifelse(efec==0, NA, (parm + pdm + p
 oth <- round(oth, 3)
 #
 if (agg=="m"){
-oth.cf06 <- data.frame(#v91 = with(v91m.cf06,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+oth.cf06 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),# chg w v91m.cf06 when available
                        v94 = with(v94m.cf06,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
                        v97 = with(v97m.cf06,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
                        v00 = with(v00m.cf06,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
                        v03 = with(v03m.cf06,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
-                       v06 = with(v06,       ifelse(efec==0, NA, (pna + asdc) / efec)),
+                       v06 = with(v06,        ifelse(efec==0, NA, (pna + asdc) / efec)),
                        v09 = with(v09m.cf06,  ifelse(efec==0, NA, (pna + psd) / efec)),
                        v12 = with(v12m.cf06,  ifelse(efec==0, NA,  pna / efec)),
                        v15 = with(v15m.cf06,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
@@ -2567,33 +2581,33 @@ oth.cf06 <- data.frame(#v91 = with(v91m.cf06,  ifelse(efec==0, NA, (parm + pdm +
                        v21 = with(v21m.cf06,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
 oth.cf06 <- round(oth.cf06, 3)
 #
-oth.cf09 <- data.frame(#v91 = with(v91m.cf09,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+oth.cf09 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)), # chg w v91m.cf09 when available
                        v94 = with(v94m.cf09,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
                        v97 = with(v97m.cf09,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
                        v00 = with(v00m.cf09,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
                        v03 = with(v03m.cf09,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
                        v06 = with(v06m.cf09,  ifelse(efec==0, NA, (pna + asdc) / efec)),
-                       v09 = with(v09,       ifelse(efec==0, NA, (pna + psd) / efec)),
+                       v09 = with(v09,        ifelse(efec==0, NA, (pna + psd) / efec)),
                        v12 = with(v12m.cf09,  ifelse(efec==0, NA,  pna / efec)),
                        v15 = with(v15m.cf09,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
                        v18 = with(v18m.cf09,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
                        v21 = with(v21m.cf09,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
 oth.cf09 <- round(oth.cf09, 3)
 #
-oth.cf12 <- data.frame(#v91 = with(v91m.cf12,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+oth.cf12 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)), # change with v91m.cf12 when available
                        v94 = with(v94m.cf12,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
                        v97 = with(v97m.cf12,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
                        v00 = with(v00m.cf12,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
                        v03 = with(v03m.cf12,  ifelse(efec==0, NA, (psn + pas + mp + plm + fc) / efec)),
                        v06 = with(v06m.cf12,  ifelse(efec==0, NA, (pna + asdc) / efec)),
                        v09 = with(v09m.cf12,  ifelse(efec==0, NA, (pna + psd) / efec)),
-                       v12 = with(v12,       ifelse(efec==0, NA,  pna / efec)),
+                       v12 = with(v12,        ifelse(efec==0, NA,  pna / efec)),
                        v15 = with(v15m.cf12,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
                        v18 = with(v18m.cf12,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
                        v21 = with(v21m.cf12,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
 oth.cf12 <- round(oth.cf12, 3)
 #
-oth.cf15 <- data.frame(#v91 = with(v91m.cf15,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+oth.cf15 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)), # change with v91m.cf15 when available
                        v94 = with(v94m.cf15,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
                        v97 = with(v97m.cf15,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
                        v00 = with(v00m.cf15,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
@@ -2601,12 +2615,12 @@ oth.cf15 <- data.frame(#v91 = with(v91m.cf15,  ifelse(efec==0, NA, (parm + pdm +
                        v06 = with(v06m.cf15,  ifelse(efec==0, NA, (pna + asdc) / efec)),
                        v09 = with(v09m.cf15,  ifelse(efec==0, NA, (pna + psd) / efec)),
                        v12 = with(v12m.cf15,  ifelse(efec==0, NA,  pna / efec)),
-                       v15 = with(v15,       ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
+                       v15 = with(v15,        ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
                        v18 = with(v18m.cf15,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
                        v21 = with(v21m.cf15,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
 oth.cf15 <- round(oth.cf15, 3)
 #
-oth.cf18 <- data.frame(#v91 = with(v91m.cf18,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+oth.cf18 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)), # change with v91m.cf18 when available
                        v94 = with(v94m.cf18,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
                        v97 = with(v97m.cf18,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
                        v00 = with(v00m.cf18,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
@@ -2615,11 +2629,11 @@ oth.cf18 <- data.frame(#v91 = with(v91m.cf18,  ifelse(efec==0, NA, (parm + pdm +
                        v09 = with(v09m.cf18,  ifelse(efec==0, NA, (pna + psd) / efec)),
                        v12 = with(v12m.cf18,  ifelse(efec==0, NA,  pna / efec)),
                        v15 = with(v15m.cf18,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
-                       v18 = with(v18,       ifelse(efec==0, NA, (indep1 + indep2) / efec)),
+                       v18 = with(v18,        ifelse(efec==0, NA, (indep1 + indep2) / efec)),
                        v21 = with(v21m.cf18,  ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
 oth.cf18 <- round(oth.cf18, 3)
 #
-oth.cf21 <- data.frame(#v91 = with(v91m.cf21,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+oth.cf21 <- data.frame(v91 = with(v91,        ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)), # change with v91m.cf21 when available
                        v94 = with(v94m.cf21,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
                        v97 = with(v97m.cf21,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
                        v00 = with(v00m.cf21,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
@@ -2629,10 +2643,10 @@ oth.cf21 <- data.frame(#v91 = with(v91m.cf21,  ifelse(efec==0, NA, (parm + pdm +
                        v12 = with(v12m.cf21,  ifelse(efec==0, NA,  pna / efec)),
                        v15 = with(v15m.cf21,  ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2) / efec)),
                        v18 = with(v18m.cf21,  ifelse(efec==0, NA, (indep1 + indep2) / efec)),
-                       v21 = with(v21,       ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
+                       v21 = with(v21,        ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep) / efec)))
 oth.cf21 <- round(oth.cf21, 3)
 #
-## oth.cf24 <- data.frame(v91 = with(#v91m.cf24,  ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)),
+## oth.cf24 <- data.frame(91 = with(v91,        ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt) / efec)), # change with #v91m.cf24 when available
 ##                        v94 = with(v94m.cf24,  ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
 ##                        v97 = with(v97m.cf24,  ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm) / efec)),
 ##                        v00 = with(v00m.cf24,  ifelse(efec==0, NA, (pcd + parm + dsppn) / efec)),
@@ -2659,7 +2673,7 @@ efec <- data.frame(v91 =      v91$efec,
                    v21 =      v21$efec)
 #
 if (agg=="m"){
-efec.cf06 <- data.frame(#v91 = v91m.cf06$efec,
+efec.cf06 <- data.frame(v91 = v91$efec, # change with v91m.cf06 when available
                         v94 = v94m.cf06$efec,
                         v97 = v97m.cf06$efec,
                         v00 = v00m.cf06$efec,
@@ -2671,7 +2685,7 @@ efec.cf06 <- data.frame(#v91 = v91m.cf06$efec,
                         v18 = v18m.cf06$efec,
                         v21 = v21m.cf06$efec)
 #
-efec.cf09 <- data.frame(#v91 = v91m.cf09$efec,
+efec.cf09 <- data.frame(v91 = v91$efec, # change with v91m.cf09 when available
                         v94 = v94m.cf09$efec,
                         v97 = v97m.cf09$efec,
                         v00 = v00m.cf09$efec,
@@ -2683,7 +2697,7 @@ efec.cf09 <- data.frame(#v91 = v91m.cf09$efec,
                         v18 = v18m.cf09$efec,
                         v21 = v21m.cf09$efec)
 #
-efec.cf12 <- data.frame(#v91 = v91m.cf12$efec,
+efec.cf12 <- data.frame(v91 = v91$efec, # change with v91m.cf12 when available
                         v94 = v94m.cf12$efec,
                         v97 = v97m.cf12$efec,
                         v00 = v00m.cf12$efec,
@@ -2695,7 +2709,7 @@ efec.cf12 <- data.frame(#v91 = v91m.cf12$efec,
                         v18 = v18m.cf12$efec,
                         v21 = v21m.cf12$efec)
 #
-efec.cf15 <- data.frame(#v91 = v91m.cf15$efec,
+efec.cf15 <- data.frame(v91 = v91$efec, # change with v91m.cf15 when available
                         v94 = v94m.cf15$efec,
                         v97 = v97m.cf15$efec,
                         v00 = v00m.cf15$efec,
@@ -2707,7 +2721,7 @@ efec.cf15 <- data.frame(#v91 = v91m.cf15$efec,
                         v18 = v18m.cf15$efec,
                         v21 = v21m.cf15$efec)
 #
-efec.cf18 <- data.frame(#v91 = v91m.cf18$efec,
+efec.cf18 <- data.frame(v91 = v91$efec, # change with v91m.cf18 when available
                         v94 = v94m.cf18$efec,
                         v97 = v97m.cf18$efec,
                         v00 = v00m.cf18$efec,
@@ -2719,7 +2733,7 @@ efec.cf18 <- data.frame(#v91 = v91m.cf18$efec,
                         v18 = v18$efec,
                         v21 = v21m.cf18$efec)
 #
-efec.cf21 <- data.frame(#v91 = v91m.cf21$efec,
+efec.cf21 <- data.frame(v91 = v91$efec, # change with v91m.cf21 when available
                         v94 = v94m.cf21$efec,
                         v97 = v97m.cf21$efec,
                         v00 = v00m.cf21$efec,
@@ -2731,7 +2745,7 @@ efec.cf21 <- data.frame(#v91 = v91m.cf21$efec,
                         v18 = v18m.cf21$efec,
                         v21 = v21$efec)
 #
-## efec.cf24 <- data.frame(#v91 = v91m.cf24$efec,
+## efec.cf24 <- data.frame(v91 = v91$efec, # change with v91m.cf24 when available
 ##                         v94 = v94m.cf24$efec,
 ##                         v97 = v97m.cf24$efec,
 ##                         v00 = v00m.cf24$efec,
@@ -2796,7 +2810,6 @@ if (agg=="m"){
     ## efec.cf24 <- t(efec.cf24)
 }
 
-
 extendCoal <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per municipio
 if (agg=="m"){
     names(extendCoal) <- v00$ife
@@ -2805,6 +2818,7 @@ if (agg=="m"){
 }
 if (agg=="s") names(extendCoal) <- v00$edon*10000 + v00$seccion # untested
 # loop over municipios/secciones
+
 for (i in 1:nrow(v00)){
     #i <- 81 # debug
     message(sprintf("loop %s of %s", i, nrow(v00)))
@@ -2839,7 +2853,7 @@ for (i in 1:nrow(v00)){
     ##########
     ## cf06 ##
     ##########
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3), # add 1991 when available
                       pan  = pan.cf06[,i],
                       pri  = pri.cf06[,i],
                       left = left.cf06[,i],
@@ -2869,7 +2883,7 @@ for (i in 1:nrow(v00)){
     ##########
     ## cf09 ##
     ##########
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3), # add 1991 when available
                       pan  = pan.cf09[,i],
                       pri  = pri.cf09[,i],
                       left = left.cf09[,i],
@@ -2899,7 +2913,7 @@ for (i in 1:nrow(v00)){
     ##########
     ## cf12 ##
     ##########
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3), # add 1991 when available
                       pan  = pan.cf12[,i],
                       pri  = pri.cf12[,i],
                       left = left.cf12[,i],
@@ -2929,7 +2943,7 @@ for (i in 1:nrow(v00)){
     ##########
     ## cf15 ##
     ##########
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3), # add 1991 when available
                       pan  = pan.cf15[,i],
                       pri  = pri.cf15[,i],
                       left = left.cf15[,i],
@@ -2959,7 +2973,7 @@ for (i in 1:nrow(v00)){
     ##########
     ## cf18 ##
     ##########
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3), # add 1991 when available
                       pan  = pan.cf18[,i],
                       pri  = pri.cf18[,i],
                       left = left.cf18[,i],
@@ -2989,7 +3003,7 @@ for (i in 1:nrow(v00)){
     ##########
     ## cf21 ##
     ##########
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3), # add 1991 when available
+    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3), # add 1991 when available
                       pan  = pan.cf21[,i],
                       pri  = pri.cf21[,i],
                       left = left.cf21[,i],
@@ -3036,11 +3050,10 @@ yr.means <- data.frame(yr = seq(1991,2021,3),
 if (agg=="s"){
     cs <- function(x) colSums(x[x$dunbaja==0,], na.rm=TRUE) # drops secciones that received aggregates upon splitting
 } else {
-    cs <- function(x) colSums(x, na.rm=TRUE)
+    cs <- function(x) colSums(x, na.rm=TRUE) # 21jul2021: stopped working, asked for numeric, replaced with sum
 }
 #
 # change with v91s when available
-AQUI ME QUEDE
 yr.means$pan   [1] <-  cs(v91)["pan"]                                                      / cs(v91)["efec"]
 yr.means$pri   [1] <-  cs(v91)["pri"]                                                      / cs(v91)["efec"]
 yr.means$left  [1] <-  cs(v91)["prd"]                                                      / cs(v91)["efec"]
@@ -3105,7 +3118,13 @@ yr.means[,2:8] <- round(yr.means[,2:8], 3)
 # plug into data
 for (i in 1:nrow(v00)){
     #i <- 2 # debug
-    extendCoal[[i]] <- cbind(extendCoal[[i]], yr.means[,6:8])
+    extendCoal     [[i]] <- cbind(extendCoal     [[i]], yr.means[,6:8])
+    extendCoal.cf06[[i]] <- cbind(extendCoal.cf06[[i]], yr.means[,6:8])
+    extendCoal.cf09[[i]] <- cbind(extendCoal.cf09[[i]], yr.means[,6:8])
+    extendCoal.cf12[[i]] <- cbind(extendCoal.cf12[[i]], yr.means[,6:8])
+    extendCoal.cf15[[i]] <- cbind(extendCoal.cf15[[i]], yr.means[,6:8])
+    extendCoal.cf18[[i]] <- cbind(extendCoal.cf18[[i]], yr.means[,6:8])
+    extendCoal.cf21[[i]] <- cbind(extendCoal.cf21[[i]], yr.means[,6:8])
 }
 
 save.image("data/too-big-4-github/tmp3.RData")
@@ -3125,7 +3144,7 @@ load("data/too-big-4-github/tmp3.RData")
 ###############################
 ## código de las regresiones ##
 ###############################
-vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <- vhat.2006 <- 
+vhat.2021 <- vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <- vhat.2006 <- 
         data.frame(pan    = rep(NA, nrow(v00)),
                    pri  = rep(NA, nrow(v00)),
                    left = rep(NA, nrow(v00))) # will receive vote estimates
@@ -3139,12 +3158,12 @@ betahat <- data.frame(pan    = rep(NA, nrow(v00)),
 #
 tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
                                    # regression per municipio, each used to
-                                   # predict votes in 2006:2018 
+                                   # predict votes in 2006:2021
 # add names
 if (agg=="m") names(tmp) <- v00$ife
 if (agg=="s") names(tmp) <- v00$edon*10000 + v00$seccion # untested
 #
-regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <-
+regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <- regs.2021 <- 
     list(pan    = tmp,
          left   = tmp,
          oth    = tmp,
@@ -3345,10 +3364,41 @@ for (i in non.nas){
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
     data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
     #
+    ##################################
+    ## predict 2021 with last 5 els ##
+    ##################################
+    year <- 2021
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2021[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2021$pan   [[i]] <- reg.pan
+    regs.2021$left  [[i]] <- reg.left  
+    regs.2021$oth   [[i]] <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
+    #
     # ALTERNATIVE: exp(predict.lm(reg.pan,    newdata = new.d, interval = "confidence"))
     # #########################################################################
     ## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
     #########################################################################
+data.tmp
     reg.pan    <- lm(formula = log(pan/pri)    ~ mean.rpan, data = data.tmp)
     reg.left   <- lm(formula = log(left  /pri) ~ mean.rleft  , data = data.tmp)
     reg.oth    <- lm(formula = log(oth/pri)    ~ mean.roth, data = data.tmp)
