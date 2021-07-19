@@ -3222,7 +3222,7 @@ for (i in non.nas){
     #                                                                    # FIRST YEAR ONLY:           #
     data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
     data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
-    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
+#   data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
     data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
     data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
@@ -3398,7 +3398,6 @@ for (i in non.nas){
     # #########################################################################
     ## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
     #########################################################################
-data.tmp
     reg.pan    <- lm(formula = log(pan/pri)    ~ mean.rpan, data = data.tmp)
     reg.left   <- lm(formula = log(left  /pri) ~ mean.rleft  , data = data.tmp)
     reg.oth    <- lm(formula = log(oth/pri)    ~ mean.roth, data = data.tmp)
@@ -3452,6 +3451,7 @@ data.tmp
 # clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
 rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
 
+AQUI VAMOS! 19jul2021
 ##############################################################
 ## ESTIMATE MANIPULATED MUNICIPAL REGRESSIONS (NEW MUN FIX) ##
 ##############################################################
