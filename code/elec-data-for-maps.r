@@ -390,7 +390,8 @@ v18 <- d
 ##########
 d <- read.csv( "dip2021.csv", header=TRUE, , stringsAsFactors=FALSE)
 d <- d[order(d$edon, d$seccion),]
-d <- within(d, nr <- nul <- tot <- NULL)
+d <- within(d, cabecera <- ID_CASILLA <- TIPO_CASILLA <- EXT_CONTIGUA <- CASILLA <- FECHA_HORA <- NULL)
+d <- within(d, nr <- nul <- total <- NULL)
 #
 # efec
 tmp <- d[,c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","pan.pri.prd","pvem.pt.morena")]
@@ -448,8 +449,6 @@ d[sel,] <- within(d[sel,], {
 #d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
-# clean
-d <- within(d, ord <- edo <- cabecera <- casn <- TIPO_CASILLA <- NULL)
 # drop seccion=0
 sel <- which(d$seccion==0)
 d <- d[-sel,]
@@ -691,6 +690,7 @@ if (length(sel)>0){
 
 # get municipio info to merge into votes
 #muns <- eq[, c("edon", "seccion", "ife", "inegi")]
+
 muns <- eq[, c("edon", "seccion", "ife", "inegi", "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021")]
 
 # match yearly observations (secciones)
@@ -2497,10 +2497,11 @@ mean.regs <- list(pan    = tmp,
 # (happens with some secciones)
 non.nas <- lapply(extendCoal, sum)
 non.nas <- unlist(non.nas)
-non.nas
-extendCoal[[2465]]
+non.nas                     # debug
+extendCoal[[206]]           # debug: 20jul2021 NA due to unreported sole sección in cps municipio
+which(is.na(non.nas)==TRUE) # debug
 non.nas <- which(is.na(non.nas)==FALSE)
-#tail(non.nas)
+#length(non.nas)
 #    
 for (i in non.nas){
     #i <- 81 # debug
