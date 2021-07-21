@@ -2335,7 +2335,7 @@ for (i in 1:nrow(v00)){
         tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
         tmp$left[is.na(tmp$left)] <- per.means["left"];
         tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
-        tmp$efec[is.na(tmp$efec)] <- 1
+        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -2349,7 +2349,6 @@ for (i in 1:nrow(v00)){
     # fill info to new list
     extendCoal[[i]] <- tmp
 }
-
 
 ##################################
 ## datos para regresión de alfa ##
@@ -2545,8 +2544,7 @@ for (i in non.nas){
     #                                                                    # FIRST YEAR ONLY:           #
     data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
     data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
-#   data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
-    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
     data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
     data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
@@ -2772,83 +2770,29 @@ for (i in non.nas){
 ##############################################################################################
 #
 # clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
-rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
+rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.2021, vhat.left, vhat.pan, vhat.pri)
 
 
-ls()
-AQUI VAMOS! 20jul2021
-
-
-###################################################
-## determine which muncipalities changed borders ##
-###################################################
-# re-read eq (changed and don't need to re-do full code since last read)
-tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
-eq <- read.csv(tmp, stringsAsFactors = FALSE)
-eq$check <- NULL # drop column meant to clean within excel file
-# check that dummy hits all mun changes
-tmp1 <- eq[,c("ife1991","ife1994","ife1997","ife2000","ife2003","ife2006","ife2009","ife2012","ife2015","ife2018","ife2021")]
-tmp1 <- apply(tmp1, 1, max)
-tmp2 <- eq[,c("ife1991","ife1994","ife1997","ife2000","ife2003","ife2006","ife2009","ife2012","ife2015","ife2018","ife2021")]
-tmp2 <- apply(tmp2, 1, min)
-tmp <- tmp1-tmp2
-if (length(which(eq$dmunchg==0 & tmp!=0))==0 & length(which(eq$dmunchg!=0 & tmp==0))==0){
-    print("CHECKED: all dmunchg coded correctly")
-} else {
-    print("WARNING: some dmunchg coded wrong!")
-    table(tmp==0, eq$dmunchg)
+##################################################################
+## ESTIMATE MANIPULATED MUNICIPAL REGRESSIONS (NEW MUN FIX)     ##
+## AND MANIPULATE regs AND extendCoal OBJECTS WHERE APPROPRIATE ##
+##################################################################
+if (agg=="m"){
+    source("code/code-to-run-counterfactual-mun-regs.r")
 }
-## # debug
-## sel <- which(eq$dmunchg==0 & tmp!=0)
-## eq$ord[sel]
-## sel <- which(eq$dmunchg==1 & tmp==0)
-## eq$ord[sel]
-#
-# select secciones that switched municipios
-tmp <- tmp1 <- eq[eq$dmunchg==1, c("ife1991", "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021")]
-#
-chg1994 <- unique(c(tmp$ife1991[which(tmp$ife1991 != tmp$ife1994)],
-                    tmp$ife1994[which(tmp$ife1991 != tmp$ife1994)]))
-chg1994 <- chg1994[order(chg1994)]
-#
-chg1997 <- unique(c(tmp$ife1994[which(tmp$ife1994 != tmp$ife1997)],
-                    tmp$ife1997[which(tmp$ife1994 != tmp$ife1997)]))
-chg1997 <- chg1997[order(chg1997)]
-#
-chg2000 <- unique(c(tmp$ife1997[which(tmp$ife1997 != tmp$ife2000)],
-                    tmp$ife2000[which(tmp$ife1997 != tmp$ife2000)]))
-chg2000 <- chg2000[order(chg2000)]
-#
-chg2003 <- unique(c(tmp$ife2000[which(tmp$ife2000 != tmp$ife2003)],
-                    tmp$ife2003[which(tmp$ife2000 != tmp$ife2003)]))
-chg2003 <- chg2003[order(chg2003)]
-#
-chg2006 <- unique(c(tmp$ife2003[which(tmp$ife2003 != tmp$ife2006)],
-                    tmp$ife2006[which(tmp$ife2003 != tmp$ife2006)]))
-chg2006 <- chg2006[order(chg2006)]
-#
-chg2009 <- unique(c(tmp$ife2006[which(tmp$ife2006 != tmp$ife2009)],
-                    tmp$ife2009[which(tmp$ife2006 != tmp$ife2009)]))
-chg2009 <- chg2009[order(chg2009)]
-#
-chg2012 <- unique(c(tmp$ife2009[which(tmp$ife2009 != tmp$ife2012)],
-                    tmp$ife2012[which(tmp$ife2009 != tmp$ife2012)]))
-chg2012 <- chg2012[order(chg2012)]
-#
-chg2015 <- unique(c(tmp$ife2012[which(tmp$ife2012 != tmp$ife2015)],
-                    tmp$ife2015[which(tmp$ife2012 != tmp$ife2015)]))
-chg2015 <- chg2015[order(chg2015)]
-#
-chg2018 <- unique(c(tmp$ife2015[which(tmp$ife2015 != tmp$ife2018)],
-                    tmp$ife2018[which(tmp$ife2015 != tmp$ife2018)]))
-chg2018 <- chg2018[order(chg2018)]
-#
-chg2021 <- unique(c(tmp$ife2018[which(tmp$ife2018 != tmp$ife2021)],
-                    tmp$ife2021[which(tmp$ife2018 != tmp$ife2021)]))
-chg2021 <- chg2021[order(chg2021)]
-#
+
+# tmp for debugging
+#save.image("data/too-big-4-github/tmp4.RData")
+
+rm(list = ls())
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(wd)
+load("data/too-big-4-github/tmp4.RData")
 
 
+
+OLD MUN FIX BELOW
 
 #agg <- "m"
 if (agg=="m") {
@@ -3285,6 +3229,8 @@ rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left
 ## 2012 <- 1997 2000 2003 2006 2009           ##
 ## 2015 <- 2000 2003 2006 2009 2012           ##
 ## 2018 <- 2003 2006 2009 2012 2015           ##
+## 2021 <- 2006 2009 2012 2015 2018           ##
+## 2024 <- 2009 2012 2015 2018 2021           ##
 ################################################
 # parents
 sel <- which(treat.yrs$yr.chg==1997 & treat.yrs$childparent=="parent")
@@ -3324,14 +3270,17 @@ if (length(sel)>0){
     }
 }
 #        
-##############
-## chg 2000 ##
-##############
-## 2006 <- 1991manip 1994manip 1997manip 2000 2003
-## 2009 <- 1994manip 1997manip 2000 2003 2006
-## 2012 <- 1997manip 2000 2003 2006 2009
-## 2015 <- 2000 2003 2006 2009 2012
-## 2018 <- 2003 2006 2009 2012 2015
+#####################################################
+## chg 2000                                        ##
+## ########                                        ##
+## 2006 <- 1991manip 1994manip 1997manip 2000 2003 ##
+## 2009 <- 1994manip 1997manip 2000 2003 2006      ##
+## 2012 <- 1997manip 2000 2003 2006 2009           ##
+## 2015 <- 2000 2003 2006 2009 2012                ##
+## 2018 <- 2003 2006 2009 2012 2015                ##
+## 2021 <- 2006 2009 2012 2015 2018                ##
+## 2024 <- 2009 2012 2015 2018 2021                ##
+#####################################################
 # parents
 sel <- which(treat.yrs$yr.chg==2000 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
@@ -3374,14 +3323,17 @@ if (length(sel)>0){
     }
 }
 #
-##############
-## chg 2003 ##
-##############
-## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003
-## 2009 <- 1994manip 1997manip 2000manip 2003 2006
-## 2012 <- 1997manip 2000manip 2003 2006 2009
-## 2015 <- 2000manip 2003 2006 2009 2012
-## 2018 <- 2003 2006 2009 2012 2015
+##########################################################
+## chg 2003                                             ##
+## ########                                             ##
+## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003 ##
+## 2009 <- 1994manip 1997manip 2000manip 2003 2006      ##
+## 2012 <- 1997manip 2000manip 2003 2006 2009           ##
+## 2015 <- 2000manip 2003 2006 2009 2012                ##
+## 2018 <- 2003 2006 2009 2012 2015                     ##
+## 2021 <- 2006 2009 2012 2015 2018                     ##
+## 2024 <- 2009 2012 2015 2018 2021                     ##
+##########################################################
 # parents
 sel <- which(treat.yrs$yr.chg==2003 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
@@ -3428,14 +3380,17 @@ if (length(sel)>0){
     }
 }
 #
-##############
-## chg 2006 ##
-##############
-## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003manip
-## 2009 <- 1994manip 1997manip 2000manip 2003manip 2006
-## 2012 <- 1997manip 2000manip 2003manip 2006 2009
-## 2015 <- 2000manip 2003manip 2006 2009 2012
-## 2018 <- 2003manip 2006 2009 2012 2015
+###############################################################
+## chg 2006                                                  ##
+## ########                                                  ##
+## 2006 <- 1991manip 1994manip 1997manip 2000manip 2003manip ##
+## 2009 <- 1994manip 1997manip 2000manip 2003manip 2006      ##
+## 2012 <- 1997manip 2000manip 2003manip 2006 2009           ##
+## 2015 <- 2000manip 2003manip 2006 2009 2012                ##
+## 2018 <- 2003manip 2006 2009 2012 2015                     ##
+## 2021 <- 2006 2009 2012 2015 2018                          ##
+## 2024 <- 2009 2012 2015 2018 2021                          ##
+###############################################################
 # parents
 sel <- which(treat.yrs$yr.chg==2006 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
@@ -3486,14 +3441,17 @@ if (length(sel)>0){
     }
 }
 #
-##############
-## chg 2009 ##
-##############
-## 2006 <- 1991 1994 1997 2000 2003
-## 2009 <- 1994manip 1997manip 2000manip 2003manip 2006manip
-## 2012 <- 1997manip 2000manip 2003manip 2006manip 2009
-## 2015 <- 2000manip 2003manip 2006manip 2009 2012
-## 2018 <- 2003manip 2006manip 2009 2012 2015
+###############################################################
+## chg 2009                                                  ##
+## ########                                                  ##
+## 2006 <- 1991 1994 1997 2000 2003                          ##
+## 2009 <- 1994manip 1997manip 2000manip 2003manip 2006manip ##
+## 2012 <- 1997manip 2000manip 2003manip 2006manip 2009      ##
+## 2015 <- 2000manip 2003manip 2006manip 2009 2012           ##
+## 2018 <- 2003manip 2006manip 2009 2012 2015                ##
+## 2021 <- 2006manip 2009 2012 2015 2018                     ##
+## 2024 <- 2009 2012 2015 2018 2021                          ##
+###############################################################
 # parents
 sel <- which(treat.yrs$yr.chg==2009 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
@@ -3542,14 +3500,17 @@ if (length(sel)>0){
     }
 }
 #
-##############
-## chg 2012 ##
-##############
-## 2006 <- 1991 1994 1997 2000 2003
-## 2009 <- 1994 1997 2000 2003 2006
-## 2012 <- 1997manip 2000manip 2003manip 2006manip 2009manip
-## 2015 <- 2000manip 2003manip 2006manip 2009manip 2012
-## 2018 <- 2003manip 2006manip 2009manip 2012 2015
+###############################################################
+## chg 2012                                                  ##
+## ########                                                  ##
+## 2006 <- 1991 1994 1997 2000 2003                          ##
+## 2009 <- 1994 1997 2000 2003 2006                          ##
+## 2012 <- 1997manip 2000manip 2003manip 2006manip 2009manip ##
+## 2015 <- 2000manip 2003manip 2006manip 2009manip 2012      ##
+## 2018 <- 2003manip 2006manip 2009manip 2012 2015           ##
+## 2021 <- 2006manip 2009manip 2012 2015 2018                ##
+## 2024 <- 2009manip 2012 2015 2018 2021                     ##
+###############################################################
 # parents
 sel <- which(treat.yrs$yr.chg==2012 & treat.yrs$childparent=="parent")
 target.ife <- treat.yrs$ife[sel];  target.ife <- target.ife[order(target.ife)]
@@ -3604,6 +3565,8 @@ if (length(sel)>0){
 ## 2012 <- 1997 2000 2003 2006 2009                          ##
 ## 2015 <- 2000manip 2003manip 2006manip 2009manip 2012manip ##
 ## 2018 <- 2003manip 2006manip 2009manip 2012manip 2015      ##
+## 2021 <- 2006manip 2009manip 2012manip 2015 2018           ##
+## 2024 <- 2009manip 2012manip 2015 2018 2021                ##
 ###############################################################
 # parents
 sel <- which(treat.yrs$yr.chg==2015 & treat.yrs$childparent=="parent")
@@ -3657,6 +3620,8 @@ if (length(sel)>0){
 ## 2012 <- 1997 2000 2003 2006 2009                          ##
 ## 2015 <- 2000 2003 2006 2009 2012                          ##
 ## 2018 <- 2003manip 2006manip 2009manip 2012manip 2015manip ##
+## 2021 <- 2006manip 2009manip 2012manip 2015manip 2018      ##
+## 2024 <- 2009manip 2012manip 2015manip 2018 2021           ##
 ###############################################################
 # parents
 sel <- which(treat.yrs$yr.chg==2018 & treat.yrs$childparent=="parent")
