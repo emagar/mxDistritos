@@ -2789,11 +2789,12 @@ dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load("data/too-big-4-github/tmp4.RData")
-
+ls()
+x
 
 # restore
 non.nas <- non.nas.orig; rm(non.nas.orig)
-#
+
 # clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
 extendCoalmanip[[1]]
 rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
@@ -2817,7 +2818,79 @@ rm(pan,pri,left,oth,efec)
 rm(sel,sel1,sel2,sel.to,sel.c,target.ife,i,tmp)
 
 # adds manipulation indicator to all data frames in list
-if (agg=="s") {
+if (agg=="m") {
+    extendCoal <- sapply(extendCoal, simplify = FALSE, function(x) {
+        x$munchg <- 0;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg1994)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006);
+        x$munchg[sel] <- 1994;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg1997)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2009);
+        x$munchg[sel] <- 1997;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2000)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2012);
+        x$munchg[sel] <- 2000;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2003)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2015);
+        x$munchg[sel] <- 2003;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2006)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2018);
+        x$munchg[sel] <- 2006;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2009)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2009:2021);
+        x$munchg[sel] <- 2009;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2012)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2012:2024);
+        x$munchg[sel] <- 2012;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2015)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2015:2027);
+        x$munchg[sel] <- 2015;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2018)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2018:2030);
+        x$munchg[sel] <- 2018;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2021)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2021:2033);
+        x$munchg[sel] <- 2021;
+        return(x)
+    })
+    ## sel2 <- which(names(extendCoal) %in% chg2024)
+    ## extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+    ##     sel <- which(x$yr %in% 2024:2036);
+    ##     x$munchg[sel] <- 2024;
+    ##     return(x)
+    ## })
+}
+if (agg=="s") { # will be manipulated below
     extendCoal <- sapply(extendCoal, simplify = FALSE, function(x) {
         x$new <- x$split <- 0;
         return(x)
@@ -2903,16 +2976,18 @@ extendCoal.2009 <- tmp.func(year=2009)
 extendCoal.2012 <- tmp.func(year=2012)
 extendCoal.2015 <- tmp.func(year=2015)
 extendCoal.2018 <- tmp.func(year=2018)
+extendCoal.2021 <- tmp.func(year=2021)
 #rm(extendCoal.2015) # clean memory
 
 # plug inegi into data for export
-tmp <- v00m[,c("ife","inegi")]
+tmp <- v21m[,c("ife","inegi")]
 #dim(tmp); dim(extendCoal.2006) # debug
 extendCoal.2006 <- merge(x = extendCoal.2006, y = tmp, by = "ife", all = TRUE)
 extendCoal.2009 <- merge(x = extendCoal.2009, y = tmp, by = "ife", all = TRUE)
 extendCoal.2012 <- merge(x = extendCoal.2012, y = tmp, by = "ife", all = TRUE)
 extendCoal.2015 <- merge(x = extendCoal.2015, y = tmp, by = "ife", all = TRUE)
 extendCoal.2018 <- merge(x = extendCoal.2018, y = tmp, by = "ife", all = TRUE)
+extendCoal.2021 <- merge(x = extendCoal.2021, y = tmp, by = "ife", all = TRUE)
 
 # drop some columns
 extendCoal.2006 <- within(extendCoal.2006, yr <- edosecn <- NULL)
@@ -2920,6 +2995,7 @@ extendCoal.2009 <- within(extendCoal.2009, yr <- edosecn <- NULL)
 extendCoal.2012 <- within(extendCoal.2012, yr <- edosecn <- NULL)
 extendCoal.2015 <- within(extendCoal.2015, yr <- edosecn <- NULL)
 extendCoal.2018 <- within(extendCoal.2018, yr <- edosecn <- NULL)
+extendCoal.2021 <- within(extendCoal.2021, yr <- edosecn <- NULL)
 
 # more cleaning
 rm(add.split,cs,sel.split)
@@ -2946,6 +3022,9 @@ if (agg=="m") {
     #
     write.csv(extendCoal.2018,
               file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2021,
+              file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), row.names = FALSE)
 }
 if (agg=="s") {
     write.csv(extendCoal.2009,
@@ -2968,6 +3047,7 @@ save(regs.2009, file = paste(wd, "data/dipfed-municipio-regs-2009.RData", sep = 
 save(regs.2012, file = paste(wd, "data/dipfed-municipio-regs-2012.RData", sep = ""), compress = "gzip")
 save(regs.2015, file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""), compress = "gzip")
 save(regs.2018, file = paste(wd, "data/dipfed-municipio-regs-2018.RData", sep = ""), compress = "gzip")
+save(regs.2021, file = paste(wd, "data/dipfed-municipio-regs-2021.RData", sep = ""), compress = "gzip")
 
 # save sección regression objects
 save(mean.regs, file = paste(wd, "data/too-big-4-github/dipfed-seccion-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])

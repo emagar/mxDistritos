@@ -2622,48 +2622,52 @@ if (length(which(eq$dmunchg==0 & tmp!=0))==0 & length(which(eq$dmunchg!=0 & tmp=
 ## eq$ord[sel]
 #
 # select secciones that switched municipios
-tmp <- tmp1 <- eq[eq$dmunchg==1, c("ife1991", "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021")]
+tmp <- eq[eq$dmunchg==1, c("ife1991", "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021")]
 #
 # chg1994:2021 list ife codes of munics that changed that year
-chg1994 <- unique(c(tmp$ife1991[which(tmp$ife1991 != tmp$ife1994)],
-                    tmp$ife1994[which(tmp$ife1991 != tmp$ife1994)]))
+sel <- which(tmp$ife1991 != tmp$ife1994)
+chg1994 <- unique(c(tmp$ife1991[sel], tmp$ife1994[sel]))
 chg1994 <- chg1994[order(chg1994)]
 #
-chg1997 <- unique(c(tmp$ife1994[which(tmp$ife1994 != tmp$ife1997)],
-                    tmp$ife1997[which(tmp$ife1994 != tmp$ife1997)]))
+sel <- which(tmp$ife1994 != tmp$ife1997)
+chg1997 <- unique(c(tmp$ife1994[sel], tmp$ife1997[sel]))
 chg1997 <- chg1997[order(chg1997)]
 #
-chg2000 <- unique(c(tmp$ife1997[which(tmp$ife1997 != tmp$ife2000)],
-                    tmp$ife2000[which(tmp$ife1997 != tmp$ife2000)]))
+sel <- which(tmp$ife1997 != tmp$ife2000)
+chg2000 <- unique(c(tmp$ife1997[sel], tmp$ife2000[sel]))
 chg2000 <- chg2000[order(chg2000)]
 #
-chg2003 <- unique(c(tmp$ife2000[which(tmp$ife2000 != tmp$ife2003)],
-                    tmp$ife2003[which(tmp$ife2000 != tmp$ife2003)]))
+sel <- which(tmp$ife2000 != tmp$ife2003)
+chg2003 <- unique(c(tmp$ife2000[sel], tmp$ife2003[sel]))
 chg2003 <- chg2003[order(chg2003)]
 #
-chg2006 <- unique(c(tmp$ife2003[which(tmp$ife2003 != tmp$ife2006)],
-                    tmp$ife2006[which(tmp$ife2003 != tmp$ife2006)]))
+sel <- which(tmp$ife2003 != tmp$ife2006)
+chg2006 <- unique(c(tmp$ife2003[sel], tmp$ife2006[sel]))
 chg2006 <- chg2006[order(chg2006)]
 #
-chg2009 <- unique(c(tmp$ife2006[which(tmp$ife2006 != tmp$ife2009)],
-                    tmp$ife2009[which(tmp$ife2006 != tmp$ife2009)]))
+sel <- which(tmp$ife2006 != tmp$ife2009)
+chg2009 <- unique(c(tmp$ife2006[sel], tmp$ife2009[sel]))
 chg2009 <- chg2009[order(chg2009)]
 #
-chg2012 <- unique(c(tmp$ife2009[which(tmp$ife2009 != tmp$ife2012)],
-                    tmp$ife2012[which(tmp$ife2009 != tmp$ife2012)]))
+sel <- which(tmp$ife2009 != tmp$ife2012)
+chg2012 <- unique(c(tmp$ife2009[sel], tmp$ife2012[sel]))
 chg2012 <- chg2012[order(chg2012)]
 #
-chg2015 <- unique(c(tmp$ife2012[which(tmp$ife2012 != tmp$ife2015)],
-                    tmp$ife2015[which(tmp$ife2012 != tmp$ife2015)]))
+sel <- which(tmp$ife2012 != tmp$ife2015)
+chg2015 <- unique(c(tmp$ife2012[sel], tmp$ife2015[sel]))
 chg2015 <- chg2015[order(chg2015)]
 #
-chg2018 <- unique(c(tmp$ife2015[which(tmp$ife2015 != tmp$ife2018)],
-                    tmp$ife2018[which(tmp$ife2015 != tmp$ife2018)]))
+sel <- which(tmp$ife2015 != tmp$ife2018)
+chg2018 <- unique(c(tmp$ife2015[sel], tmp$ife2018[sel]))
 chg2018 <- chg2018[order(chg2018)]
 #
-chg2021 <- unique(c(tmp$ife2018[which(tmp$ife2018 != tmp$ife2021)],
-                    tmp$ife2021[which(tmp$ife2018 != tmp$ife2021)]))
+sel <- which(tmp$ife2018 != tmp$ife2021)
+chg2021 <- unique(c(tmp$ife2018[sel], tmp$ife2021[sel]))
 chg2021 <- chg2021[order(chg2021)]
+#
+## sel <- which(tmp$ife2021 != tmp$ife2024)
+## chg2024 <- unique(c(tmp$ife2021[sel], tmp$ife2024[sel]))
+## chg2024 <- chg2024[order(chg2024)]
 #
 
 ##############################################
