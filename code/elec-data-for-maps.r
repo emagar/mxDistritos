@@ -2265,7 +2265,8 @@ ToDo jul2021:
 3) [x] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
 4) [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
 5) [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners 
-6) [ ] Debug seccion winner
+Cuando haya codificado historia de AMGE:
+6) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
 7) [ ] Fix seccion action and to.from
 
 #########################################################################################
