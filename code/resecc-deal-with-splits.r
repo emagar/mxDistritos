@@ -48,6 +48,15 @@ add.split <- function(year.var = NA) {
     return(d)
 }
 
+## # fix orig.dest with non-adjacent seccion nums
+## sel <- grep("[|]", eq$orig.dest)
+## #eq$orig.dest[sel]
+## if (length(sel)>0){
+##     tmp <- gsub("[|]", ",", eq$orig.dest[sel], perl = TRUE)
+##     tmp <- paste0("c(", tmp, ")")
+##     eq$orig.dest[sel] <- tmp
+## }
+
 # add dummies indicating a manipulation
 v94s$dunbaja <- 0
 v97s$dunbaja <- 0

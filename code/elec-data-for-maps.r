@@ -403,6 +403,7 @@ d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + morena + pes + rsp + f
 tmp <- d[,c("pan","pri")]
 tmp[which(rowSums(tmp)==0),] <- tmp[which(rowSums(tmp)==0),] + 1 # avoid zero denominators (0,0 will turn into half and half)
 tmp <- tmp/rowSums(tmp) # two-party shares
+pan21pri <- tmp # retain rel shares to give coal winners to bigger of both
 #
 d$pan.pri.prd[is.na(d$pan.pri.prd)] <- 0 # replace NAs w 0 votes
 d$panc <- d$pan.pri.prd * tmp[,1] # pan's proportional votes
@@ -428,7 +429,20 @@ d$dmorenac <- as.numeric(d$dmorenac>0)
 table(d$dpanc, useNA = "always")
 table(d$dpric, useNA = "always")
 table(d$dmorenac, useNA = "always")
-# aggregate coalitions where present. OJO: splits PRI from rest, so might miss correct winner assessment
+# aggregate coalitions where present for correct winner assessment
+d2 <- d
+sel <- which(d2$dpanc==1) # assigns all va por mex to pan here --- will rely on pan21pri later to assign properly
+d2[sel,] <- within(d2[sel,], {
+    panc <- pan + panc + pri + pric + prd;
+    pan <- pri <- pric <- prd <- 0
+})
+sel <- which(d2$dmorenac==1)
+d2[sel,] <- within(d2[sel,], {
+    morenac <- pvem + pt + morena + morenac;
+    pvem <- pt <- morena <- 0
+})
+#
+# aggregate coalitions for analysis -- OJO: splits PRI from rest, so might miss correct winner
 sel <- which(d$dpanc==1)
 d[sel,] <- within(d[sel,], {
     panc <- pan + panc + prd;
@@ -448,20 +462,29 @@ d[sel,] <- within(d[sel,], {
 # sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
 #d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+pan21pri$pan <- ave(pan21pri$pan, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
+pan21pri$pri <- ave(pan21pri$pri, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
+pan21pri <- pan21pri[-which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE),]
+pan21pri <- round((pan21pri / rowSums(pan21pri)), 3) # shares add to 1
+#
+d <-  ag.sec(d, sel.c)
+d2 <- ag.sec(d2, sel.c)
 # drop seccion=0
 sel <- which(d$seccion==0)
-d <- d[-sel,]
+d        <-        d[-sel,]
+d2       <-       d2[-sel,]
+pan21pri <- pan21pri[-sel,]
 v21 <- d
+v21w <- d2
 # head(v21) # debug
 
 # clean
-rm(d,sel.c,sel.r)
+rm(d,sel.c,tmp)
 
 ################################
 ## district winners 2006-2021 ##
 ################################
-v06d <- v06; v09d <- v09; v12d <- v12; v15d <- v15; v18d <- v18; v21d <- v21
+v06d <- v06; v09d <- v09; v12d <- v12; v15d <- v15; v18d <- v18; v21d <- v21; v21dw <- v21w # dw for winners
 v06d <- within(v06d, {
     pan   <- ave(pan,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
     pric  <- ave(pric, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
@@ -559,6 +582,33 @@ v21d <- within(v21d, {
 v21d <- v21d[duplicated(v21d$edon*100 + v21d$disn)==FALSE,]
 v21d <- v21d[order(v21d$edon*100, v21d$disn),]
 #
+tmp.w <- pan21pri # agg dis 2-pty shares
+tmp.w$pan <- ave(tmp.w$pan,    as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
+tmp.w$pri <- ave(tmp.w$pri,    as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
+v21dw <- within(v21dw, {
+    pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    prd <-    ave(prd,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pvem <-   ave(pvem,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pt <-     ave(pt,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    mc <-     ave(mc,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    morena <- ave(morena, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pes <-    ave(pes,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    rsp <-    ave(rsp,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    fxm <-    ave(fxm,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    panc <-   ave(panc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE); # should all be zero
+    morenac<- ave(morenac,as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    indep <- ave(indep, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+})
+tmp.w <- tmp.w[duplicated(v21dw$edon*100 + v21dw$disn)==FALSE,]
+v21dw <- v21dw[duplicated(v21dw$edon*100 + v21dw$disn)==FALSE,]
+tmp.w <- tmp.w[order(v21dw$edon*100, v21dw$disn),]
+v21dw <- v21dw[order(v21dw$edon*100, v21dw$disn),]
+tmp.w <- round((tmp.w / rowSums(tmp.w)), 3) # shares add to 1
+tmp.w[1:5,]
+#
 windis <- v15d[,c("edon","disn")] # will receive data
 #
 # handy function to sort one data frame by order of another, matching data frame
@@ -645,8 +695,8 @@ windis$e18 <- etiq[,1]
 ## mg$e15 <- (vot[,1] - vot[,2]) / rowSums(vot)
 ## enp$e15 <- 1/rowSums((vot/rowSums(vot))^2)
 #
-# 2021
-vot <- v21d[,c("pan","pri","prd","pvem","pt","mc","morena","pes","fxm","rsp","indep","panc","pric","morenac")]
+# 2021 -- uses v21dw instead of v21d
+vot <- v21dw[,c("pan","pri","prd","pvem","pt","mc","morena","pes","fxm","rsp","indep","panc","pric","morenac")]
 vot[is.na(vot)==TRUE] <- 0 # drop NAs
 # crea objeto de etiquetas
 etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
@@ -656,11 +706,17 @@ etiq <- sortBy(target = etiq, By = vot)
 vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
 #
 windis$e21 <- etiq[,1]
+
+# assign coal win to bigger of pan or pri in district
+lab <- apply(tmp.w, 1, max)
+lab <- ifelse(tmp.w$pan==lab, "panc", "pric")
+windis$e21[which(windis$e21=="panc")] <- lab[which(windis$e21=="panc")]
 ## runnerup$e21 <- etiq[,2]
 ## mg$e21 <- (vot[,1] - vot[,2]) / rowSums(vot)
 ## enp$e21 <- 1/rowSums((vot/rowSums(vot))^2)
 #
 rm(vot,etiq)
+rm(v21dw,tmp.w) # drop to avoid confusion
 
 #
 write.csv(windis, file = paste(dd, "dfdf2006-2021winners.csv", sep = ""))
@@ -739,9 +795,19 @@ v21 <- within(v21, {
     edosecn <- edon*10000 + seccion;
     d21    <- 1;
 })
+v21w <- within(v21w, {
+    edosecn <- edon*10000 + seccion;
+    d21    <- 1;
+})
+# add edosecn to pan21pri
+tmp.w <- pan21pri
+tmp.w <- cbind(tmp.w, edosecn=v21w$edosecn)
+
+
 # dummies d91 to d18 indicate if seccion exists each year
 ## tmp <- merge(x=v91[,c("edosecn","d91")], y=v94[,c("edosecn","d94")], by = "edosecn", all = TRUE)
 ## tmp <- merge(x=tmp,                      y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
+
 tmp <- merge(x=v94[,c("edosecn","d94")], y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v00[,c("edosecn","d00")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
@@ -751,24 +817,27 @@ tmp <- merge(x=tmp,                      y=v12[,c("edosecn","d12")], by = "edose
 tmp <- merge(x=tmp,                      y=v15[,c("edosecn","d15")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v18[,c("edosecn","d18")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v21[,c("edosecn","d21")], by = "edosecn", all = TRUE)
+
 ## v91$d91 <-
-v94$d94 <- v97$d97 <- v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- v21$d21 <- NULL # clean
+v94$d94 <- v97$d97 <- v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- v21$d21 <- v21w$d21 <- NULL # clean
 #
 # adds any missing secciones to each object
-## v91 <- merge(x=tmp, y=v91, by = "edosecn", all = TRUE)
-v94 <- merge(x=tmp, y=v94, by = "edosecn", all = TRUE)
-v97 <- merge(x=tmp, y=v97, by = "edosecn", all = TRUE)
-v00 <- merge(x=tmp, y=v00, by = "edosecn", all = TRUE)
-v03 <- merge(x=tmp, y=v03, by = "edosecn", all = TRUE)
-v06 <- merge(x=tmp, y=v06, by = "edosecn", all = TRUE)
-v09 <- merge(x=tmp, y=v09, by = "edosecn", all = TRUE)
-v12 <- merge(x=tmp, y=v12, by = "edosecn", all = TRUE)
-v15 <- merge(x=tmp, y=v15, by = "edosecn", all = TRUE)
-v18 <- merge(x=tmp, y=v18, by = "edosecn", all = TRUE)
-v21 <- merge(x=tmp, y=v21, by = "edosecn", all = TRUE)
+#v91  <- merge(x=tmp, y=v91,  by = "edosecn", all = TRUE)
+v94  <- merge(x=tmp, y=v94,  by = "edosecn", all = TRUE)
+v97  <- merge(x=tmp, y=v97,  by = "edosecn", all = TRUE)
+v00  <- merge(x=tmp, y=v00,  by = "edosecn", all = TRUE)
+v03  <- merge(x=tmp, y=v03,  by = "edosecn", all = TRUE)
+v06  <- merge(x=tmp, y=v06,  by = "edosecn", all = TRUE)
+v09  <- merge(x=tmp, y=v09,  by = "edosecn", all = TRUE)
+v12  <- merge(x=tmp, y=v12,  by = "edosecn", all = TRUE)
+v15  <- merge(x=tmp, y=v15,  by = "edosecn", all = TRUE)
+v18  <- merge(x=tmp, y=v18,  by = "edosecn", all = TRUE)
+v21  <- merge(x=tmp, y=v21,  by = "edosecn", all = TRUE)
+v21w <- merge(x=tmp, y=v21w, by = "edosecn", all = TRUE)
+tmp.w<- merge(x=tmp, y=tmp.w, by = "edosecn", all = TRUE)
 # verify dimensionality
 ## dim(v91);
-dim(v94); dim(v97); dim(v00); dim(v03); dim(v06); dim(v06); dim(v12); dim(v15); dim(v18); dim(v21)
+dim(v94); dim(v97); dim(v00); dim(v03); dim(v06); dim(v06); dim(v12); dim(v15); dim(v18); dim(v21); dim(v21w); dim(tmp.w)
 # fill in missing edon and seccion numbers
 tmp.func <- function(x) {
     within(x, {
@@ -787,6 +856,8 @@ v12 <- tmp.func(v12)
 v15 <- tmp.func(v15)
 v18 <- tmp.func(v18)
 v21 <- tmp.func(v21)
+v21w<- tmp.func(v21w)
+tmp.w <- tmp.func(tmp.w)
 rm(tmp,tmp.func) # clean
 
 
@@ -798,16 +869,18 @@ muns$edosecn <- muns$edon*10000 + muns$seccion
 # add municipio names to votes
 sel.drop <- which(colnames(muns) %in% c("edon","seccion")) # do not merge these columns
 # v91 <- merge(x = v91, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v91$munn <- NULL
-v94 <- merge(x = v94, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v94$munn <- NULL
-v97 <- merge(x = v97, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v97$munn <- NULL
-v00 <- merge(x = v00, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v00$munn <- NULL
-v03 <- merge(x = v03, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v03$munn <- NULL
-v06 <- merge(x = v06, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v06$munn <- NULL
-v09 <- merge(x = v09, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v09$munn <- NULL
-v12 <- merge(x = v12, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v12$munn <- NULL
-v15 <- merge(x = v15, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
-v18 <- merge(x = v18, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
-v21 <- merge(x = v21, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
+v94 <- merge(x = v94,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v94$munn <- NULL
+v97 <- merge(x = v97,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v97$munn <- NULL
+v00 <- merge(x = v00,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v00$munn <- NULL
+v03 <- merge(x = v03,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v03$munn <- NULL
+v06 <- merge(x = v06,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v06$munn <- NULL
+v09 <- merge(x = v09,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v09$munn <- NULL
+v12 <- merge(x = v12,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v12$munn <- NULL
+v15 <- merge(x = v15,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
+v18 <- merge(x = v18,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
+v21 <- merge(x = v21,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
+v21w<- merge(x = v21w, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
+#
 rm(muns)
 
 #######################################################
@@ -836,6 +909,8 @@ v18$ife <- v18$ife2018
 v18$inegi <- mapvalues(v18$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
 v21$ife <- v21$ife2021
 v21$inegi <- mapvalues(v21$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v21w$ife <- v21w$ife2021
+v21w$inegi <- mapvalues(v21w$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
 rm(ife.inegi)
 
 
@@ -994,6 +1069,29 @@ d$disn <- NULL
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v21m <- d
+######################
+## 2021 for winners ##
+######################
+d <- v21w; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
+d <- ag.mun(d,sel.c)
+d$dpanc    <- as.numeric(d$dpanc>0)
+d$dpric    <- as.numeric(d$dpric>0)
+d$dmorenac <- as.numeric(d$dmorenac>0)
+d$edosecn <- d$seccion <- NULL
+d$disn <- NULL
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+v21mw <- d
+# agg mun winner
+#tmp <- tmp.w # duplicate to debug
+#tmp.w <- tmp # restore to debug
+tmp.w <- cbind(tmp.w, ife=v21w$ife) # add ife code
+tmp.w$pan[is.na(tmp.w$pan)] <- 0; tmp.w$pri[is.na(tmp.w$pri)] <- 0
+tmp.w$pan <- ave(tmp.w$pan, tmp.w$ife, FUN=sum, na.rm=TRUE) # use ife codes
+tmp.w$pri <- ave(tmp.w$pri, tmp.w$ife, FUN=sum, na.rm=TRUE) # use ife codes
+tmp.w <- tmp.w[duplicated(tmp.w$ife)==FALSE, c("pan","pri","ife")]
+tmp.w[,c("pan","pri")] <- round(tmp.w[,c("pan","pri")] / rowSums(tmp.w[,c("pan","pri")]), 3) # shares add to 1
 
 ####################################################################################
 ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly     ##
@@ -1875,18 +1973,18 @@ d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v21m.cf18 <- d
 #
-# UNNEEDED
-d <- v21; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
-d$dpanc    <- as.numeric(d$dpanc>0)
-d$dpric    <- as.numeric(d$dpric>0)
-d$dmorenac <- as.numeric(d$dmorenac>0)
-d$edosecn <- d$seccion <- d$disn <- NULL
-d$ife <- d$ife2021
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v21m.cf21 <- d
+## # UNNEEDED
+## d <- v21; d[is.na(d)] <- 0
+## sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
+## d <- ag.mun(d,sel.c, grouping=d$ife2021)
+## d$dpanc    <- as.numeric(d$dpanc>0)
+## d$dpric    <- as.numeric(d$dpric>0)
+## d$dmorenac <- as.numeric(d$dmorenac>0)
+## d$edosecn <- d$seccion <- d$disn <- NULL
+## d$ife <- d$ife2021
+## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
+## v21m.cf21 <- d
 #
 ## d <- v21; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
@@ -1940,6 +2038,11 @@ v21m.cf21 <- d
 ## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 ## v21m.cf36 <- d
 
+# for future cleaning
+tmp.ls <- ls()
+#tmp <- ls()
+#setdiff(tmp, tmp.ls)
+
 
 # drop columns before saving raw vote municipio files
 v91m <- within(v91m, ord <- munn <- NULL)
@@ -1953,6 +2056,7 @@ v12m <- within(v12m, disn <- dpanc <- dpric <- dprdc <- NULL)
 v15m <- within(v15m, disn <- dpanc <- dpric <- dprdc <- dmorenac <- NULL)
 v18m <- within(v18m, disn <- dpanc <- dpric <- dmorenac <- NULL)
 v21m <- within(v21m, disn <- dpanc <- dpric <- dmorenac <- NULL)
+v21mw <- within(v21mw, disn <- dpanc <- dpric <- dmorenac <- NULL)
 
 # add missing municipios to v..m objects to get same dimensionality
 tmp <- c(v91m$ife, v94m$ife, v97m$ife, v00m$ife, v03m$ife, v06m$ife, v09m$ife, v12m$ife, v15m$ife, v18m$ife, v21m$ife)
@@ -1976,6 +2080,8 @@ v12m <- homog(v12m)
 v15m <- homog(v15m)
 v18m <- homog(v18m)
 v21m <- homog(v21m)
+v21mw <- homog(v21mw)
+tmp.w <- homog(tmp.w)
 #
 #v91m.cf06 <- homog(v91m.cf06)
 #v91m.cf09 <- homog(v91m.cf09)
@@ -2056,7 +2162,8 @@ v21m.cf18 <- homog(v21m.cf18)
 
 # verify
 tmp <- c(
-nrow(v91m), nrow(v94m), nrow(v97m), nrow(v00m), nrow(v03m), nrow(v06m), nrow(v09m), nrow(v12m), nrow(v15m), nrow(v18m), nrow(v21m), 
+nrow(v91m), nrow(v94m), nrow(v97m), nrow(v00m), nrow(v03m), nrow(v06m), nrow(v09m), nrow(v12m), nrow(v15m), nrow(v18m), nrow(v21m),
+nrow(v21mw), nrow(tmp.w),
 #nrow(v91m.cf06),
 nrow(v94m.cf06), nrow(v94m.cf09), nrow(v94m.cf12), nrow(v94m.cf15), nrow(v94m.cf18), nrow(v94m.cf21), 
 nrow(v97m.cf06), nrow(v97m.cf09), nrow(v97m.cf12), nrow(v97m.cf15), nrow(v97m.cf18), nrow(v97m.cf21), 
@@ -2115,14 +2222,16 @@ write.csv(v21s, file = paste(wd, "data/dipfed-seccion-vraw-2021.csv", sep = ""),
 # save municipal winners with correct manipulated data for new municipalities
 # v.. needed to work with winner script
 v91 <- v91m;
-v94 <- v94m; v97 <- v97m; v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m; v21 <- v21m
+v94 <- v94m; v97 <- v97m; v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m; v21 <- v21m; v21w <- v21mw
 # get unit winners and margins: will output object winner for chosen agg
 agg <- "m"
 source(paste(wd, "code/get-winners.r", sep = ""))
-head(winner)
+tail(winner) # ojo: mg not ok for new zac muns
 # save first part of output
 write.csv(winner,
           file = paste(wd, "data/dipfed-municipio-win.csv", sep = ""), row.names = FALSE)
+#
+rm(tmp,tmp.w) # drop to avoid confusion
 
 
 # saves fixed mun raw aggregates
@@ -2139,7 +2248,7 @@ write.csv(v18m, file = paste(wd, "data/dipfed-municipio-vraw-2018.csv", sep = ""
 write.csv(v21m, file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), row.names = FALSE)
 
 # clean
-rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,tmp,to.num)
+rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,to.num)
 
 # temporary for debugging
 #save.image("../../datosBrutos/not-in-git/tmp.RData")
@@ -2150,12 +2259,14 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(dd)
 load("../../datosBrutos/not-in-git/tmp.RData")
 
-
+ToDo jul2021:
 1) [x] push reload and seccion data manip for later
 2) [x] v5 for factual and counterfactual v..ms
 3) [x] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
-4) [ ] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
-5) [ ] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners 
+4) [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
+5) [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners 
+6) [ ] Debug seccion winner
+7) [ ] Fix seccion action and to.from
 
 #########################################################################################
 ## reload data to restore unmanipulated vote files (but keeping manipulated mun votes) ##

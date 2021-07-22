@@ -8,11 +8,11 @@
 ## unit winners and margin ##
 #############################
 if (agg=="m") {
-    winner <- v94[,c("edon","inegi","ife")] # will receive data
+    winner <- v21[,c("edon","inegi","ife")] # will receive data, change to latest v.. after new election to get full list of muns 
     rownames(winner) <- NULL
 }
 if (agg=="s") {
-    winner <- v94[,c("edon","seccion")] # will receive data
+    winner <- v21[,c("edon","seccion")] # will receive data
     rownames(winner) <- NULL
 }
 ##########
@@ -25,6 +25,7 @@ if (agg=="m") { # secc data not ready yet
     l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
     l <- sortBy(target = l, By = v)
     v <- sortBy(target = v, By = v)
+    l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
     winner$w91  <- l[,1]
     winner$mg91 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
     winner$w91[is.na(winner$mg91)] <- NA
@@ -39,6 +40,7 @@ v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w94  <- l[,1]
 winner$mg94 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("1994 done")
@@ -51,6 +53,7 @@ v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w97  <- l[,1]
 winner$mg97 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("1997 done")
@@ -63,6 +66,7 @@ v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w00  <- l[,1]
 winner$mg00 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2000 done")
@@ -75,6 +79,7 @@ v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w03  <- l[,1]
 winner$mg03 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2003 done")
@@ -87,6 +92,7 @@ v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w06  <- l[,1]
 winner$mg06 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2006 done")
@@ -99,6 +105,7 @@ v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w09  <- l[,1]
 winner$mg09 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2009 done")
@@ -111,6 +118,7 @@ v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w12  <- l[,1]
 winner$mg12 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2012 done")
@@ -123,6 +131,7 @@ v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w15  <- l[,1]
 winner$mg15 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2015 done")
@@ -135,19 +144,29 @@ v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w18  <- l[,1]
 winner$mg18 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2018 done")
-##########
-## 2021 ##
-##########
+######################
+## 2021 (uses v21w) ##
+######################
+# OJO 22jul2021: need to check that this works when agg=="s", esp. line 146
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac")
-v <- v21[,sel.c]
+v <- v21w[,sel.c]
 v <- v / rowSums(v)
 l <- as.data.frame(matrix(rep(colnames(v), nrow(v)), nrow = nrow(v), byrow = TRUE), stringsAsFactors = FALSE)
 l <- sortBy(target = l, By = v)
 v <- sortBy(target = v, By = v)
+l[is.na(v[,1]),1] <- NA # when no vote, falsely gives to pan (1st pty listed)
 winner$w21  <- l[,1]
+#
+# assign coal win to bigger of pan or pri in district
+if (agg=="s") print("DEBUG 22jul2021: need to check that line edosecn is in tmp.w's col 1 for next line") # drop this when done
+lab <- apply(tmp.w[,-1], 1, max) # -1 to drop ife/edosecn when determining max
+lab <- ifelse(tmp.w$pan==lab, "panc", "pric")
+winner$w21[which(winner$w21=="panc")] <- lab[which(winner$w21=="panc")]
+#
 winner$mg21 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2021 done")
 #
@@ -166,7 +185,9 @@ winner$nwin.pri <- rowSums(tmp, na.rm=TRUE)
 #left
 tmp <- winner[,grep("^w[0-9]", colnames(winner))]
 sel.r <- which(tmp[,"w18"]=="prd")
-tmp[sel.r,"w18"] <- "panc" # rename prd in 2018 to not count it as left's here
+tmp[sel.r,"w18"] <- "panc" # rename prd in 2018 to not count victory as left's here
+sel.r <- which(tmp[,"w21"]=="prd")
+tmp[sel.r,"w21"] <- "panc" # rename prd in 2021 to not count victory as left's here
 tmp <- ifelse(tmp=="prd" | tmp=="prdc" | tmp=="morena" | tmp=="morenac", 1, 0)
 winner$nwin.left <- rowSums(tmp, na.rm=TRUE)
 #oth
