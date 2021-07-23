@@ -2902,6 +2902,9 @@ if (agg=="m"){
     source("code/code-to-run-counterfactual-mun-regs.r")
 }
 
+# restore
+non.nas <- non.nas.orig; rm(non.nas.orig)
+
 # tmp for debugging
 #save.image("data/too-big-4-github/tmp4.RData")
 
@@ -2915,6 +2918,7 @@ x
 
 # restore
 non.nas <- non.nas.orig; rm(non.nas.orig)
+
 
 # clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
 extendCoalmanip[[1]]
