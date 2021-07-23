@@ -405,7 +405,6 @@ tmp[which(rowSums(tmp)==0),] <- tmp[which(rowSums(tmp)==0),] + 1 # avoid zero de
 tmp <- tmp/rowSums(tmp) # two-party shares
 pan21pri <- tmp # retain rel shares to give coal winners to bigger of both
 #
-d$pan.pri.prd[is.na(d$pan.pri.prd)] <- 0 # replace NAs w 0 votes
 d$panc <- d$pan.pri.prd * tmp[,1] # pan's proportional votes
 d$pric <- d$pan.pri.prd * tmp[,2] # pri's proportional votes
 d$pan.pri.prd <- NULL
@@ -446,12 +445,12 @@ d2[sel,] <- within(d2[sel,], {
 sel <- which(d$dpanc==1)
 d[sel,] <- within(d[sel,], {
     panc <- pan + panc + prd;
-    pan <- pri <- prd <- 0
+    pan <- prd <- 0
 })
 sel <- which(d$dpric==1)
 d[sel,] <- within(d[sel,], {
     pric <- pri + pric;
-    pan <- pri <- prd <- 0
+    pri <- 0
 })
 sel <- which(d$dmorenac==1)
 d[sel,] <- within(d[sel,], {
@@ -721,14 +720,13 @@ rm(v21dw,tmp.w) # drop to avoid confusion
 #
 write.csv(windis, file = paste(dd, "dfdf2006-2021winners.csv", sep = ""))
 
-# not in function
+# 'not in' function
 source("/home/eric/Dropbox/data/useful-functions/notin.r")
 
 # get equivalencias seccionales # OJO check new secciones 2021, get new file
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 eq$check <- NULL # drop column meant to clean within excel file
-eq[1,]
 # any secciones missing?
 tmp <- v21 # which year to evaluate
 sel <- which(as.factor(tmp$edon+tmp$seccion/10000) %notin% as.factor(eq$edon+eq$seccion/10000))
@@ -837,32 +835,42 @@ v21w <- merge(x=tmp, y=v21w, by = "edosecn", all = TRUE)
 tmp.w<- merge(x=tmp, y=tmp.w, by = "edosecn", all = TRUE)
 # verify dimensionality
 ## dim(v91);
-dim(v94); dim(v97); dim(v00); dim(v03); dim(v06); dim(v06); dim(v12); dim(v15); dim(v18); dim(v21); dim(v21w); dim(tmp.w)
+nrow(v94)==nrow(v97)
+nrow(v97)==nrow(v00)
+nrow(v00)==nrow(v03)
+nrow(v03)==nrow(v06)
+nrow(v06)==nrow(v06)
+nrow(v06)==nrow(v12)
+nrow(v12)==nrow(v15)
+nrow(v15)==nrow(v18)
+nrow(v18)==nrow(v21)
+nrow(v21)==nrow(v21w)
+nrow(v21w)==nrow(tmp.w)
 # fill in missing edon and seccion numbers
-tmp.func <- function(x) {
+add.edon.secn <- function(x) {
     within(x, {
         edon    <- as.integer(edosecn/10000);
         seccion <- edosecn - edon*10000;
     })
 }
-## v91 <- tmp.func(v91)
-v94 <- tmp.func(v94)
-v97 <- tmp.func(v97)
-v00 <- tmp.func(v00)
-v03 <- tmp.func(v03)
-v06 <- tmp.func(v06)
-v09 <- tmp.func(v09)
-v12 <- tmp.func(v12)
-v15 <- tmp.func(v15)
-v18 <- tmp.func(v18)
-v21 <- tmp.func(v21)
-v21w<- tmp.func(v21w)
-tmp.w <- tmp.func(tmp.w)
-rm(tmp,tmp.func) # clean
+## v91 <- add.edon.secn(v91)
+v94 <- add.edon.secn(v94)
+v97 <- add.edon.secn(v97)
+v00 <- add.edon.secn(v00)
+v03 <- add.edon.secn(v03)
+v06 <- add.edon.secn(v06)
+v09 <- add.edon.secn(v09)
+v12 <- add.edon.secn(v12)
+v15 <- add.edon.secn(v15)
+v18 <- add.edon.secn(v18)
+v21 <- add.edon.secn(v21)
+v21w<- add.edon.secn(v21w)
+tmp.w <- add.edon.secn(tmp.w)
+rm(tmp,add.edon.secn) # clean
 
 
 ###################################################
-## consolidate municipios before secciones       ##
+## consolidate municipios before doing secciones ##
 ## are manipulated to deal with reseccionamiento ##
 ###################################################
 muns$edosecn <- muns$edon*10000 + muns$seccion
@@ -890,31 +898,31 @@ ife.inegi <- eq[,c("inegi","ife")] # correct inegi where ife changed
 ife.inegi <- ife.inegi[duplicated(ife.inegi$ife)==FALSE,]
 library(plyr)
 v94$ife <- v94$ife1994
-v94$inegi <- mapvalues(v94$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v94$inegi <- mapvalues(v94$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v97$ife <- v97$ife1997
-v97$inegi <- mapvalues(v97$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v97$inegi <- mapvalues(v97$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v00$ife <- v00$ife2000
-v00$inegi <- mapvalues(v00$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v00$inegi <- mapvalues(v00$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v03$ife <- v03$ife2003
-v03$inegi <- mapvalues(v03$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v03$inegi <- mapvalues(v03$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v06$ife <- v06$ife2006
-v06$inegi <- mapvalues(v06$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v06$inegi <- mapvalues(v06$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v09$ife <- v09$ife2009
-v09$inegi <- mapvalues(v09$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v09$inegi <- mapvalues(v09$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v12$ife <- v12$ife2012
-v12$inegi <- mapvalues(v12$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v12$inegi <- mapvalues(v12$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v15$ife <- v15$ife2015
-v15$inegi <- mapvalues(v15$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v15$inegi <- mapvalues(v15$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v18$ife <- v18$ife2018
-v18$inegi <- mapvalues(v18$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v18$inegi <- mapvalues(v18$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v21$ife <- v21$ife2021
-v21$inegi <- mapvalues(v21$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v21$inegi <- mapvalues(v21$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 v21w$ife <- v21w$ife2021
-v21w$inegi <- mapvalues(v21w$ife, from = ife.inegi$ife, to = ife.inegi$inegi)
+v21w$inegi <- mapvalues(v21w$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 rm(ife.inegi)
 
 
-# save all to restore after exporting raw vote manipulations (11jul2021: maybe redundant)
+# save all to restore after exporting raw vote manipulations (11jul2021: maybe redundant, check when working with seccion aggs)
 save.image(paste0(wd, "data/too-big-4-github/tmp.RData"))
 
 
@@ -2226,7 +2234,7 @@ v94 <- v94m; v97 <- v97m; v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v1
 # get unit winners and margins: will output object winner for chosen agg
 agg <- "m"
 source(paste(wd, "code/get-winners.r", sep = ""))
-tail(winner) # ojo: mg not ok for new zac muns
+tail(winner) # NAs before new mun creation
 # save first part of output
 write.csv(winner,
           file = paste(wd, "data/dipfed-municipio-win.csv", sep = ""), row.names = FALSE)
@@ -2264,7 +2272,10 @@ ToDo jul2021:
 2) [x] v5 for factual and counterfactual v..ms
 3) [x] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
 4) [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
-5) [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners 
+5) [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners
+6) [ ] Why do vhats have NA 2467 line? Also ife 7124 (first could be capilla de guadalupe or san quintin)
+7) [ ] Al agregar votos 2021, parezco no sumar bien el voto PRI (ver foto en ife.ine/data)
+8) [ ] Ya puedo generar vhat.2024
 Cuando haya codificado historia de AMGE:
 6) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
 7) [ ] Fix seccion action and to.from

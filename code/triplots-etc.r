@@ -34,7 +34,7 @@ add.lab <- function(labels){
 la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .15, main = NA){
     # Prepare data: re-arrange so pan is lower right, pri lower left, morena is above 
     #                  left    right    up
-    datos <- datos[,c("pri",   "pan",  "morena")] # subset
+    datos <- datos[,c("pri",   "pan",  "left")] # subset
     #Then transformed into cartesian coordinates:
     datos <- t(apply(datos,1,tern2cart))
     # Draw the empty ternary diagram:
@@ -118,9 +118,9 @@ col.morena <- rgb(.55,.27,.07, alpha = .2)
 #####################
 ## municipio-level ##
 #####################
-extendCoal.2015 <- read.csv(file = paste(wd, "data/dipfed2015municipio-vhat.csv", sep = ""), stringsAsFactors = FALSE)
-extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed2018municipio-vhat.csv", sep = ""), stringsAsFactors = FALSE)
-
+extendCoal.2015 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2015.csv", sep = ""), stringsAsFactors = FALSE)
+extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), stringsAsFactors = FALSE)
+extendCoal.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), stringsAsFactors = FALSE)
 
 ####################
 ## ############## ##
@@ -129,10 +129,36 @@ extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed2018municipio-vhat.csv"
 ####################
 #
 ##########
+## 2021 ##
+##########
+# triplot observed
+tmp <- extendCoal.2021[,c("pan", "pri", "left")] # subset
+tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
+tri.color[tri.color==1] <- col.pan
+tri.color[tri.color==2] <- col.pri
+tri.color[tri.color==3] <- col.morena
+#pdf(file = paste(wd, "graph/triplot2018-v-mu.pdf", sep = ""))
+#png(file = paste(wd, "graph/triplot2018-v-mu.png", sep = ""))
+la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main ="Observación 2021")
+#dev.off()
+
+# triplot predicted
+tmp <- extendCoal.2021[,c("vhat.pan", "vhat.pri", "vhat.left")] # subset
+colnames(tmp) <- c("pan", "pri", "left")
+tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
+tri.color[tri.color==1] <- col.pan
+tri.color[tri.color==2] <- col.pri
+tri.color[tri.color==3] <- col.morena
+#pdf(file = paste(wd, "graph/triplot2018-vhat-mu.pdf", sep = ""))
+#png(file = paste(wd, "graph/triplot2018-vhat-mu.png", sep = ""))
+la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main ="Pronóstico 2021")# expression(hat(v)[2018]))
+#dev.off()
+
+##########
 ## 2018 ##
 ##########
 # triplot observed
-tmp <- extendCoal.2018[,c("pan", "pri", "morena")] # subset
+tmp <- extendCoal.2018[,c("pan", "pri", "left")] # subset
 tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
 tri.color[tri.color==1] <- col.pan
 tri.color[tri.color==2] <- col.pri
@@ -143,8 +169,8 @@ la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main ="Observación 2018
 #dev.off()
 
 # triplot predicted
-tmp <- extendCoal.2018[,c("vhat.pan", "vhat.pri", "vhat.morena")] # subset
-colnames(tmp) <- c("pan", "pri", "morena")
+tmp <- extendCoal.2018[,c("vhat.pan", "vhat.pri", "vhat.left")] # subset
+colnames(tmp) <- c("pan", "pri", "left")
 tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
 tri.color[tri.color==1] <- col.pan
 tri.color[tri.color==2] <- col.pri
@@ -158,7 +184,7 @@ la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main ="Pronóstico 2018"
 ## 2015 ##
 ##########
 # triplot observed
-tmp <- extendCoal.2015[,c("pan", "pri", "morena")] # subset
+tmp <- extendCoal.2015[,c("pan", "pri", "left")] # subset
 tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
 tri.color[tri.color==1] <- col.pan
 tri.color[tri.color==2] <- col.pri
@@ -169,8 +195,8 @@ la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main = "Observación 201
 #dev.off()
 
 # triplot predicted
-tmp <- extendCoal.2015[,c("vhat.pan", "vhat.pri", "vhat.morena")] # subset
-colnames(tmp) <- c("pan", "pri", "morena")
+tmp <- extendCoal.2015[,c("vhat.pan", "vhat.pri", "vhat.left")] # subset
+colnames(tmp) <- c("pan", "pri", "left")
 tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
 tri.color[tri.color==1] <- col.pan
 tri.color[tri.color==2] <- col.pri
@@ -190,7 +216,7 @@ extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed2018seccion-vhat.csv", 
 ## 2018 ##
 ##########
 # triplot observed
-tmp <- extendCoal.2018[,c("pan", "pri", "morena")] # subset
+tmp <- extendCoal.2018[,c("pan", "pri", "left")] # subset
 tmp <- tmp[-which(is.na(rowSums(tmp))==TRUE),] # drop NAs
 tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
 tri.color[tri.color==1] <- col.pan
@@ -202,9 +228,9 @@ la.ternera(datos = tmp, cex.pts = .2, color = tri.color, main = "Voto 2018 obser
 #dev.off()
 
 # triplot predicted
-tmp <- extendCoal.2018[,c("vhat.pan", "vhat.pri", "vhat.morena")] # subset
+tmp <- extendCoal.2018[,c("vhat.pan", "vhat.pri", "vhat.left")] # subset
 tmp <- tmp[-which(is.na(rowSums(tmp))==TRUE),] # drop NAs
-colnames(tmp) <- c("pan", "pri", "morena")
+colnames(tmp) <- c("pan", "pri", "left")
 tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
 tri.color[tri.color==1] <- col.pan
 tri.color[tri.color==2] <- col.pri

@@ -758,7 +758,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 for (i in non.nas){
     #i <- 81 # debug
     #i <- 44508 # debug
-    message(sprintf("Estimating couterfactual regs for cf06 loop %s of %s", i, max(non.nas)))
+    message(sprintf("Estimating regs for couterfactual 2006 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
     data.tmp <- extendCoal.cf06[[i]]
     #
@@ -1071,7 +1071,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 for (i in non.nas){
     #i <- 81 # debug
     #i <- 44508 # debug
-    message(sprintf("Estimating couterfactual regs for cf09 loop %s of %s", i, max(non.nas)))
+    message(sprintf("Estimating regs for couterfactual 2009 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
     data.tmp <- extendCoal.cf09[[i]]
     #
@@ -1384,7 +1384,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 for (i in non.nas){
     #i <- 81 # debug
     #i <- 44508 # debug
-    message(sprintf("Estimating couterfactual regs for cf12 loop %s of %s", i, max(non.nas)))
+    message(sprintf("Estimating regs for couterfactual 2012 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
     data.tmp <- extendCoal.cf12[[i]]
     #
@@ -1697,7 +1697,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 for (i in non.nas){
     #i <- 81 # debug
     #i <- 44508 # debug
-    message(sprintf("Estimating couterfactual regs for cf15 loop %s of %s", i, max(non.nas)))
+    message(sprintf("Estimating regs for couterfactual 2015 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
     data.tmp <- extendCoal.cf15[[i]]
     #
@@ -2010,7 +2010,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 for (i in non.nas){
     #i <- 81 # debug
     #i <- 44508 # debug
-    message(sprintf("Estimating couterfactual regs for cf18 loop %s of %s", i, max(non.nas)))
+    message(sprintf("Estimating regs for couterfactual 2018 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
     data.tmp <- extendCoal.cf18[[i]]
     #
@@ -2323,7 +2323,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 for (i in non.nas){
     #i <- 81 # debug
     #i <- 44508 # debug
-    message(sprintf("Estimating couterfactual regs for cf21 loop %s of %s", i, max(non.nas)))
+    message(sprintf("Estimating regs for couterfactual 2021 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
     data.tmp <- extendCoal.cf21[[i]]
     #
