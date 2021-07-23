@@ -805,7 +805,6 @@ tmp.w <- cbind(tmp.w, edosecn=v21w$edosecn)
 # dummies d91 to d18 indicate if seccion exists each year
 ## tmp <- merge(x=v91[,c("edosecn","d91")], y=v94[,c("edosecn","d94")], by = "edosecn", all = TRUE)
 ## tmp <- merge(x=tmp,                      y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
-
 tmp <- merge(x=v94[,c("edosecn","d94")], y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v00[,c("edosecn","d00")], by = "edosecn", all = TRUE)
 tmp <- merge(x=tmp,                      y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
@@ -2202,7 +2201,7 @@ v09s <- within(v09, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- 
 v12s <- within(v12, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
 v15s <- within(v15, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
 v18s <- within(v18, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v21s <- within(v18, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v21s <- within(v21, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
 v94s <- within(v94s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
 v97s <- within(v97s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
 v00s <- within(v00s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
@@ -2213,6 +2212,7 @@ v12s <- within(v12s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2
 v15s <- within(v15s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
 v18s <- within(v18s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
 v21s <- within(v21s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+
 #
 #write.csv(v91s, file = paste(wd, "data/dipfed-seccion-vraw-1991.csv", sep = ""), row.names = FALSE)
 write.csv(v94s, file = paste(wd, "data/dipfed-seccion-vraw-1994.csv", sep = ""), row.names = FALSE)
@@ -2274,7 +2274,7 @@ ToDo jul2021:
 4) [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
 5) [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners
 6) [ ] Why do vhats have NA 2467 line? Also ife 7124 (first could be capilla de guadalupe or san quintin)
-7) [ ] Al agregar votos 2021, parezco no sumar bien el voto PRI (ver foto en ife.ine/data)
+7) [ ] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
 8) [ ] Ya puedo generar vhat.2024
 Cuando haya codificado historia de AMGE:
 6) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
@@ -2439,8 +2439,6 @@ if (agg=="m"){
 }
 if (agg=="s") names(extendCoal) <- v00$edon*10000 + v00$seccion # untested
 # loop over municipios/secciones
-
-
 for (i in 1:nrow(v00)){
     #i <- 81 # debug
     message(sprintf("loop %s of %s", i, nrow(v00)))
