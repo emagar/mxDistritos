@@ -743,8 +743,6 @@ if (length(sel)>0){
 ## }
 
 # get municipio info to merge into votes
-#muns <- eq[, c("edon", "seccion", "ife", "inegi")]
-
 muns <- eq[, c("edon", "seccion", "ife", "inegi", "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021")]
 
 # match yearly observations (secciones)
@@ -2274,8 +2272,8 @@ ToDo jul2021:
 4) [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
 5) [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners
 6) [ ] Why do vhats have NA 2467 line? Also ife 7124 (first could be capilla de guadalupe or san quintin)
-7) [ ] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
-8) [ ] Ya puedo generar vhat.2024
+7) [x] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
+8) [ ] Ya puedo generar vhat.2024 (con municipios 21)
 Cuando haya codificado historia de AMGE:
 6) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
 7) [ ] Fix seccion action and to.from

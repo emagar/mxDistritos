@@ -122,6 +122,7 @@ extendCoal.2015 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2015.cs
 extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), stringsAsFactors = FALSE)
 extendCoal.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), stringsAsFactors = FALSE)
 
+
 ####################
 ## ############## ##
 ## ## triplots ## ##
