@@ -8,3 +8,5 @@ sum(tmp$pri, na.rm=TRUE)
 sum(tmp$panc, na.rm=TRUE)
 sum(tmp$pric, na.rm=TRUE)
 
+
+tail(extendCoal.2021)

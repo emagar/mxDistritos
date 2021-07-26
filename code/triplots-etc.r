@@ -31,7 +31,7 @@ add.lab <- function(labels){
 ###############################
 ## function wrapping triplot ##
 ###############################
-la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .15, main = NA){
+la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .15, main = NA, labs=c("PAN","PRI","Morena")){
     # Prepare data: re-arrange so pan is lower right, pri lower left, morena is above 
     #                  left    right    up
     datos <- datos[,c("pri",   "pan",  "left")] # subset
@@ -44,7 +44,7 @@ la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .1
     segments(0.5,sqrt(3)/2,1,0)
     segments(1,0,0,0)
     # add vértice labels
-    add.lab(c("PAN","PRI","Morena"))
+    add.lab(labs)
     ## # add a grid:
     ## a <- seq(0.9,0.1,by=-0.1)
     ## b <- rep(0,9)
@@ -106,8 +106,9 @@ la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .1
 col.pan <-    rgb(.18,.24,.73, alpha = .2) # moderate blue
 col.pri <-    rgb(.89,.17,.17, alpha = .2) # bright red
 col.morena <- rgb(.55,.27,.07, alpha = .2)
-
-
+col.pvem   <- rgb(  0,.80,  0, alpha = .2) # green 3
+col.mc     <- rgb(.93,.46,  0, alpha = .2) # darkorange2
+col.oth    <- rgb(.55,.55,.55, alpha = .2) # gray 59
 
 ############################################################
 ## ###################################################### ##
@@ -122,6 +123,14 @@ extendCoal.2015 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2015.cs
 extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), stringsAsFactors = FALSE)
 extendCoal.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), stringsAsFactors = FALSE)
 
+raw.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), stringsAsFactors = FALSE)
+raw.2021 <- within(raw.2021, {
+    dpanc <- as.numeric(panc>0);
+    dpric <- as.numeric(pric>0);
+    dmorenac <- as.numeric(morenac>0);
+})
+raw.2021[10:15,]
+x
 
 ####################
 ## ############## ##

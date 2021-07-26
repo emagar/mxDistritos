@@ -166,6 +166,10 @@ if (agg=="s") print("DEBUG 22jul2021: need to check that line edosecn is in tmp.
 lab <- apply(tmp.w[,-1], 1, max) # -1 to drop ife/edosecn when determining max
 lab <- ifelse(tmp.w$pan==lab, "panc", "pric")
 winner$w21[which(winner$w21=="panc")] <- lab[which(winner$w21=="panc")]
+# assign coal win to bigger of morena or pvem in district
+lab <- apply(tmp.w2[,-1], 1, max) # -1 to drop ife/edosecn when determining max
+lab <- ifelse(tmp.w2$morena==lab, "morenac", "pvemc")
+winner$w21[which(winner$w21=="morenac")] <- lab[which(winner$w21=="morenac")]
 #
 winner$mg21 <- round(as.numeric(v[,1]) - as.numeric(v[,2]), 3)
 message("2021 done")

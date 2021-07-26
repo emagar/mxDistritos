@@ -385,9 +385,12 @@ d <- ag.sec(d, sel.c)
 d <- within(d, edo <- cabecera <- casn <- TIPO_CASILLA <- NULL)
 v18 <- d
 #
-##########
-## 2021 ##
-##########
+##############################################################################################
+## 2021                                                                                     ##
+## Note: generates v21w version for winner assessment,                                      ##
+## then v21 (for analysis) with pri separate from pan+prd and pvem separate from morena+pt  ##
+## Might want to also separate prd and pt, respectively, and extend this to previous years? ##
+##############################################################################################
 d <- read.csv( "dip2021.csv", header=TRUE, , stringsAsFactors=FALSE)
 d <- d[order(d$edon, d$seccion),]
 d <- within(d, cabecera <- ID_CASILLA <- TIPO_CASILLA <- EXT_CONTIGUA <- CASILLA <- FECHA_HORA <- NULL)
@@ -405,15 +408,19 @@ tmp[which(rowSums(tmp)==0),] <- tmp[which(rowSums(tmp)==0),] + 1 # avoid zero de
 tmp <- tmp/rowSums(tmp) # two-party shares
 pan21pri <- tmp # retain rel shares to give coal winners to bigger of both
 #
-d$panc <- d$pan.pri.prd * tmp[,1] # pan's proportional votes
-d$pric <- d$pan.pri.prd * tmp[,2] # pri's proportional votes
+d$panc <- round(d$pan.pri.prd * pan21pri[,1], 2) # pan's proportional votes
+d$pric <- round(d$pan.pri.prd * pan21pri[,2], 2) # pri's proportional votes
 d$pan.pri.prd <- NULL
 #
-## # alt method: give all coal votes to pty last controlling state govt
-## sel <- which(d$edon %in% c(1:3,8:10,12,21:22,24,28,30:31)); d$panc[sel] <- d$pan.pri.prd[sel]
-## sel <- which(d$edon %in% c(4:7,11,13:20,23,25:27,29,32)); d$pric[sel] <- d$pan.pri.prd[sel]
-# morena coal
-colnames(d)[which(colnames(d)=="pvem.pt.morena")]  <- "morenac"
+# assign 2021 pvem-pt-morena coalition to morena and pvem in proportion to votes each won by itself
+tmp <- d[,c("morena","pvem")]
+tmp[which(rowSums(tmp)==0),] <- tmp[which(rowSums(tmp)==0),] + 1 # avoid zero denominators (0,0 will turn into half and half)
+tmp <- tmp/rowSums(tmp) # two-party shares
+morena21pvem <- tmp # retain rel shares to give coal winners to bigger of both
+#
+d$morenac <- round(d$pvem.pt.morena * morena21pvem[,1], 2) # pan's proportional votes
+d$pvemc   <- round(d$pvem.pt.morena * morena21pvem[,2], 2) # pri's proportional votes
+d$pvem.pt.morena <- NULL
 #
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","lisnom","efec")
 d <- to.num(d,sel.c) # clean data
@@ -428,7 +435,7 @@ d$dmorenac <- as.numeric(d$dmorenac>0)
 table(d$dpanc, useNA = "always")
 table(d$dpric, useNA = "always")
 table(d$dmorenac, useNA = "always")
-# aggregate coalitions where present for correct winner assessment
+# aggregate full coalitions where present for correct winner assessment
 d2 <- d
 sel <- which(d2$dpanc==1) # assigns all va por mex to pan here --- will rely on pan21pri later to assign properly
 d2[sel,] <- within(d2[sel,], {
@@ -441,38 +448,51 @@ d2[sel,] <- within(d2[sel,], {
     pvem <- pt <- morena <- 0
 })
 #
-# aggregate coalitions for analysis -- OJO: splits PRI from rest, so might miss correct winner
-sel <- which(d$dpanc==1)
-d[sel,] <- within(d[sel,], {
-    panc <- pan + panc + prd;
-    pan <- prd <- 0
-})
-sel <- which(d$dpric==1)
-d[sel,] <- within(d[sel,], {
-    pric <- pri + pric;
-    pri <- 0
-})
-sel <- which(d$dmorenac==1)
-d[sel,] <- within(d[sel,], {
-    morenac <- pvem + pt + morena + morenac;
-    pvem <- pt <- morena <- 0
-})
+# coalition manipulation for analysis -- OJO: splits coalitions, so often misses correct winner
+## # COMMENTED THIS BLOC TO RETAIN COALITION PARTY BREAKDOWN
+## sel <- which(d$dpanc==1)
+## d[sel,] <- within(d[sel,], {
+##     panc <- pan + panc + prd; # remove prd?
+##     pan <- prd <- 0
+## })
+## sel <- which(d$dpric==1)
+## d[sel,] <- within(d[sel,], {
+##     pric <- pri + pric;
+##     pri <- 0
+## })
+## sel <- which(d$dmorenac==1)
+## d[sel,] <- within(d[sel,], {
+##     morenac <- pt + morena + morenac;
+##     pt <- morena <- 0
+# })
+## sel <- which(d$dmorenac==1)
+## d[sel,] <- within(d[sel,], {
+##     morenac <- pvem + pvemc;
+##     pvem <- 0
+## })
 #
 # sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
 #d[sel.r,sel.c] <- 0 # anuladas to 0
+#
 ## aggregate seccion-level votes ##
 pan21pri$pan <- ave(pan21pri$pan, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
 pan21pri$pri <- ave(pan21pri$pri, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
 pan21pri <- pan21pri[-which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE),]
 pan21pri <- round((pan21pri / rowSums(pan21pri)), 3) # shares add to 1
 #
+morena21pvem$morena <- ave(morena21pvem$morena, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
+morena21pvem$pvem <- ave(morena21pvem$pvem, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
+morena21pvem <- morena21pvem[-which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE),]
+morena21pvem <- round((morena21pvem / rowSums(morena21pvem)), 3) # shares add to 1
+#
 d <-  ag.sec(d, sel.c)
 d2 <- ag.sec(d2, sel.c)
 # drop seccion=0
 sel <- which(d$seccion==0)
-d        <-        d[-sel,]
-d2       <-       d2[-sel,]
-pan21pri <- pan21pri[-sel,]
+d            <-            d[-sel,]
+d2           <-           d2[-sel,]
+pan21pri     <-     pan21pri[-sel,]
+morena21pvem <- morena21pvem[-sel,]
 v21 <- d
 v21w <- d2
 # head(v21) # debug
@@ -581,9 +601,12 @@ v21d <- within(v21d, {
 v21d <- v21d[duplicated(v21d$edon*100 + v21d$disn)==FALSE,]
 v21d <- v21d[order(v21d$edon*100, v21d$disn),]
 #
-tmp.w <- pan21pri # agg dis 2-pty shares
-tmp.w$pan <- ave(tmp.w$pan,    as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
-tmp.w$pri <- ave(tmp.w$pri,    as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
+tmp.w  <- pan21pri     # agg dis 2-pty shares
+tmp.w2 <- morena21pvem # agg dis 2-pty shares
+tmp.w$pan     <- ave(tmp.w$pan,     as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
+tmp.w$pri     <- ave(tmp.w$pri,     as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
+tmp.w2$morena <- ave(tmp.w2$morena, as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
+tmp.w2$pvem   <- ave(tmp.w2$pvem,   as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
 v21dw <- within(v21dw, {
     pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
     pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
@@ -598,15 +621,19 @@ v21dw <- within(v21dw, {
     panc <-   ave(panc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
     pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE); # should all be zero
     morenac<- ave(morenac,as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    indep <- ave(indep, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    indep <-  ave(indep, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+    efec  <-  ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
 })
-tmp.w <- tmp.w[duplicated(v21dw$edon*100 + v21dw$disn)==FALSE,]
+tmp.w  <- tmp.w [duplicated(v21dw$edon*100 + v21dw$disn)==FALSE,]
+tmp.w2 <- tmp.w2[duplicated(v21dw$edon*100 + v21dw$disn)==FALSE,]
 v21dw <- v21dw[duplicated(v21dw$edon*100 + v21dw$disn)==FALSE,]
-tmp.w <- tmp.w[order(v21dw$edon*100, v21dw$disn),]
+tmp.w  <- tmp.w [order(v21dw$edon*100, v21dw$disn),]
+tmp.w2 <- tmp.w2[order(v21dw$edon*100, v21dw$disn),]
 v21dw <- v21dw[order(v21dw$edon*100, v21dw$disn),]
-tmp.w <- round((tmp.w / rowSums(tmp.w)), 3) # shares add to 1
+tmp.w  <- round((tmp.w / rowSums(tmp.w)), 3) # shares add to 1
+tmp.w2 <- round((tmp.w2/ rowSums(tmp.w2)), 3) # shares add to 1
 tmp.w[1:5,]
+tmp.w2[1:5,]
 #
 windis <- v15d[,c("edon","disn")] # will receive data
 #
@@ -710,13 +737,16 @@ windis$e21 <- etiq[,1]
 lab <- apply(tmp.w, 1, max)
 lab <- ifelse(tmp.w$pan==lab, "panc", "pric")
 windis$e21[which(windis$e21=="panc")] <- lab[which(windis$e21=="panc")]
+# assign coal win to bigger of morena or pvem in district
+lab <- apply(tmp.w2, 1, max)
+lab <- ifelse(tmp.w2$morena==lab, "morenac", "pvemc")
+windis$e21[which(windis$e21=="morenac")] <- lab[which(windis$e21=="morenac")]
 ## runnerup$e21 <- etiq[,2]
 ## mg$e21 <- (vot[,1] - vot[,2]) / rowSums(vot)
 ## enp$e21 <- 1/rowSums((vot/rowSums(vot))^2)
 #
 rm(vot,etiq)
-rm(v21dw,tmp.w) # drop to avoid confusion
-
+rm(v21dw,tmp.w,tmp.w2) # drop to avoid confusion
 #
 write.csv(windis, file = paste(dd, "dfdf2006-2021winners.csv", sep = ""))
 
@@ -795,9 +825,11 @@ v21w <- within(v21w, {
     edosecn <- edon*10000 + seccion;
     d21    <- 1;
 })
-# add edosecn to pan21pri
-tmp.w <- pan21pri
-tmp.w <- cbind(tmp.w, edosecn=v21w$edosecn)
+# add edosecn to pan21pri and morena21pvem
+tmp.w  <- pan21pri
+tmp.w  <- cbind(tmp.w,  edosecn=v21w$edosecn)
+tmp.w2 <- morena21pvem
+tmp.w2 <- cbind(tmp.w2, edosecn=v21w$edosecn)
 
 
 # dummies d91 to d18 indicate if seccion exists each year
@@ -829,7 +861,8 @@ v15  <- merge(x=tmp, y=v15,  by = "edosecn", all = TRUE)
 v18  <- merge(x=tmp, y=v18,  by = "edosecn", all = TRUE)
 v21  <- merge(x=tmp, y=v21,  by = "edosecn", all = TRUE)
 v21w <- merge(x=tmp, y=v21w, by = "edosecn", all = TRUE)
-tmp.w<- merge(x=tmp, y=tmp.w, by = "edosecn", all = TRUE)
+tmp.w  <- merge(x=tmp, y=tmp.w,  by = "edosecn", all = TRUE)
+tmp.w2 <- merge(x=tmp, y=tmp.w2, by = "edosecn", all = TRUE)
 # verify dimensionality
 ## dim(v91);
 nrow(v94)==nrow(v97)
@@ -843,6 +876,7 @@ nrow(v15)==nrow(v18)
 nrow(v18)==nrow(v21)
 nrow(v21)==nrow(v21w)
 nrow(v21w)==nrow(tmp.w)
+nrow(tmp.w)==nrow(tmp.w2)
 # fill in missing edon and seccion numbers
 add.edon.secn <- function(x) {
     within(x, {
@@ -862,7 +896,8 @@ v15 <- add.edon.secn(v15)
 v18 <- add.edon.secn(v18)
 v21 <- add.edon.secn(v21)
 v21w<- add.edon.secn(v21w)
-tmp.w <- add.edon.secn(tmp.w)
+tmp.w  <- add.edon.secn(tmp.w)
+tmp.w2 <- add.edon.secn(tmp.w2)
 rm(tmp,add.edon.secn) # clean
 
 
@@ -1089,14 +1124,21 @@ d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v21mw <- d
 # agg mun winner
-#tmp <- tmp.w # duplicate to debug
-#tmp.w <- tmp # restore to debug
+#tmp <- tmp.w2 # duplicate to debug
+#tmp.w2 <- tmp # restore to debug
 tmp.w <- cbind(tmp.w, ife=v21w$ife) # add ife code
 tmp.w$pan[is.na(tmp.w$pan)] <- 0; tmp.w$pri[is.na(tmp.w$pri)] <- 0
 tmp.w$pan <- ave(tmp.w$pan, tmp.w$ife, FUN=sum, na.rm=TRUE) # use ife codes
 tmp.w$pri <- ave(tmp.w$pri, tmp.w$ife, FUN=sum, na.rm=TRUE) # use ife codes
 tmp.w <- tmp.w[duplicated(tmp.w$ife)==FALSE, c("pan","pri","ife")]
 tmp.w[,c("pan","pri")] <- round(tmp.w[,c("pan","pri")] / rowSums(tmp.w[,c("pan","pri")]), 3) # shares add to 1
+#
+tmp.w2 <- cbind(tmp.w2, ife=v21w$ife) # add ife code
+tmp.w2$morena[is.na(tmp.w2$morena)] <- 0; tmp.w2$pvem[is.na(tmp.w2$pvem)] <- 0
+tmp.w2$morena <- ave(tmp.w2$morena, tmp.w2$ife, FUN=sum, na.rm=TRUE) # use ife codes
+tmp.w2$pvem <- ave(tmp.w2$pvem, tmp.w2$ife, FUN=sum, na.rm=TRUE) # use ife codes
+tmp.w2 <- tmp.w2[duplicated(tmp.w2$ife)==FALSE, c("morena","pvem","ife")]
+tmp.w2[,c("morena","pvem")] <- round(tmp.w2[,c("morena","pvem")] / rowSums(tmp.w2[,c("morena","pvem")]), 3) # shares add to 1
 
 ####################################################################################
 ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly     ##
@@ -2050,18 +2092,18 @@ tmp.ls <- ls()
 
 
 # drop columns before saving raw vote municipio files
-v91m <- within(v91m, ord <- munn <- NULL)
-v94m <- within(v94m, disn <- dpanc <- dpric <- dprdc <- NULL)
-v97m <- within(v97m, disn <- dpanc <- dpric <- dprdc <- NULL)
-v00m <- within(v00m, disn <- dpanc <- dpric <- dprdc <- NULL)
-v03m <- within(v03m, disn <- dpanc <- dpric <- dprdc <- NULL)
-v06m <- within(v06m, disn <- dpanc <- dpric <- dprdc <- NULL)
-v09m <- within(v09m, disn <- dpanc <- dpric <- dprdc <- dptc <- NULL)
-v12m <- within(v12m, disn <- dpanc <- dpric <- dprdc <- NULL)
-v15m <- within(v15m, disn <- dpanc <- dpric <- dprdc <- dmorenac <- NULL)
-v18m <- within(v18m, disn <- dpanc <- dpric <- dmorenac <- NULL)
-v21m <- within(v21m, disn <- dpanc <- dpric <- dmorenac <- NULL)
-v21mw <- within(v21mw, disn <- dpanc <- dpric <- dmorenac <- NULL)
+v91m <-  within(v91m,  ord <- munn <- NULL)
+v94m <-  within(v94m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
+v97m <-  within(v97m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
+v00m <-  within(v00m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
+v03m <-  within(v03m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
+v06m <-  within(v06m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
+v09m <-  within(v09m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- dptc <- NULL)
+v12m <-  within(v12m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
+v15m <-  within(v15m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- dmorenac <- NULL)
+v18m <-  within(v18m,  disn <- NULL) #  <- dpanc <- dpric <- dmorenac <- NULL)
+v21m <-  within(v21m,  disn <- NULL) #  <- dpanc <- dpric <- dmorenac <- NULL)
+v21mw <- within(v21mw, disn <- NULL) #  <- dpanc <- dpric <- dmorenac <- NULL)
 
 # add missing municipios to v..m objects to get same dimensionality
 tmp <- c(v91m$ife, v94m$ife, v97m$ife, v00m$ife, v03m$ife, v06m$ife, v09m$ife, v12m$ife, v15m$ife, v18m$ife, v21m$ife)
@@ -2086,7 +2128,8 @@ v15m <- homog(v15m)
 v18m <- homog(v18m)
 v21m <- homog(v21m)
 v21mw <- homog(v21mw)
-tmp.w <- homog(tmp.w)
+tmp.w  <- homog(tmp.w)
+tmp.w2 <- homog(tmp.w2)
 #
 #v91m.cf06 <- homog(v91m.cf06)
 #v91m.cf09 <- homog(v91m.cf09)
@@ -2237,21 +2280,21 @@ tail(winner) # NAs before new mun creation
 write.csv(winner,
           file = paste(wd, "data/dipfed-municipio-win.csv", sep = ""), row.names = FALSE)
 #
-rm(tmp,tmp.w) # drop to avoid confusion
+rm(tmp,tmp.w,tmp.w2) # drop to avoid confusion
 
 
 # saves fixed mun raw aggregates
 #write.csv(v91m, file = paste(wd, "data/dipfed-municipio-vraw-1991.csv", sep = ""), row.names = FALSE)
-write.csv(v94m, file = paste(wd, "data/dipfed-municipio-vraw-1994.csv", sep = ""), row.names = FALSE)
-write.csv(v97m, file = paste(wd, "data/dipfed-municipio-vraw-1997.csv", sep = ""), row.names = FALSE)
-write.csv(v00m, file = paste(wd, "data/dipfed-municipio-vraw-2000.csv", sep = ""), row.names = FALSE)
-write.csv(v03m, file = paste(wd, "data/dipfed-municipio-vraw-2003.csv", sep = ""), row.names = FALSE)
-write.csv(v06m, file = paste(wd, "data/dipfed-municipio-vraw-2006.csv", sep = ""), row.names = FALSE)
-write.csv(v09m, file = paste(wd, "data/dipfed-municipio-vraw-2009.csv", sep = ""), row.names = FALSE)
-write.csv(v12m, file = paste(wd, "data/dipfed-municipio-vraw-2012.csv", sep = ""), row.names = FALSE)
-write.csv(v15m, file = paste(wd, "data/dipfed-municipio-vraw-2015.csv", sep = ""), row.names = FALSE)
-write.csv(v18m, file = paste(wd, "data/dipfed-municipio-vraw-2018.csv", sep = ""), row.names = FALSE)
-write.csv(v21m, file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), row.names = FALSE)
+write.csv(v94m,  file = paste(wd, "data/dipfed-municipio-vraw-1994.csv", sep = ""), row.names = FALSE)
+write.csv(v97m,  file = paste(wd, "data/dipfed-municipio-vraw-1997.csv", sep = ""), row.names = FALSE)
+write.csv(v00m,  file = paste(wd, "data/dipfed-municipio-vraw-2000.csv", sep = ""), row.names = FALSE)
+write.csv(v03m,  file = paste(wd, "data/dipfed-municipio-vraw-2003.csv", sep = ""), row.names = FALSE)
+write.csv(v06m,  file = paste(wd, "data/dipfed-municipio-vraw-2006.csv", sep = ""), row.names = FALSE)
+write.csv(v09m,  file = paste(wd, "data/dipfed-municipio-vraw-2009.csv", sep = ""), row.names = FALSE)
+write.csv(v12m,  file = paste(wd, "data/dipfed-municipio-vraw-2012.csv", sep = ""), row.names = FALSE)
+write.csv(v15m,  file = paste(wd, "data/dipfed-municipio-vraw-2015.csv", sep = ""), row.names = FALSE)
+write.csv(v18m,  file = paste(wd, "data/dipfed-municipio-vraw-2018.csv", sep = ""), row.names = FALSE)
+write.csv(v21m,  file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), row.names = FALSE)
 
 # clean
 rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,to.num)
@@ -2265,18 +2308,34 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(dd)
 load("../../datosBrutos/not-in-git/tmp.RData")
 
+# this may be needed in case coal dummies cause troubles below
+v94m <-  within(v94m,  dpanc <- dpric <- dprdc <- NULL)
+v97m <-  within(v97m,  dpanc <- dpric <- dprdc <- NULL)
+v00m <-  within(v00m,  dpanc <- dpric <- dprdc <- NULL)
+v03m <-  within(v03m,  dpanc <- dpric <- dprdc <- NULL)
+v06m <-  within(v06m,  dpanc <- dpric <- dprdc <- NULL)
+v09m <-  within(v09m,  dpanc <- dpric <- dprdc <- dptc <- NULL)
+v12m <-  within(v12m,  dpanc <- dpric <- dprdc <- NULL)
+v15m <-  within(v15m,  dpanc <- dpric <- dprdc <- dmorenac <- NULL)
+v18m <-  within(v18m,  dpanc <- dpric <- dmorenac <- NULL)
+v21m <-  within(v21m,  dpanc <- dpric <- dmorenac <- NULL)
+v21mw <- within(v21mw, dpanc <- dpric <- dmorenac <- NULL)
+
+
 ToDo jul2021:
-1) [x] push reload and seccion data manip for later
-2) [x] v5 for factual and counterfactual v..ms
-3) [x] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
-4) [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
-5) [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners
-6) [ ] Why do vhats have NA 2467 line? Also ife 7124 (first could be capilla de guadalupe or san quintin)
-7) [x] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
-8) [ ] Ya puedo generar vhat.2024 (con municipios 21)
+1)  [x] push reload and seccion data manip for later
+2)  [x] v5 for factual and counterfactual v..ms
+3)  [x] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
+4)  [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
+5)  [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners
+6)  [ ] Why do vhats have NA 2467 line? Also ife 7124 (first could be capilla de guadalupe or san quintin)
+7)  [ ] Seybaplaya+Dzitbalche have 0s d.pan, bhats, and betahats... usa means en vez de cf? Quizás reseccionamiento post 2018 juega papel
+8)  [x] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
+9)  [ ] Separar 2021 pvem y pt de morenac, otros años también?
+10) [ ] Ya puedo generar vhat.2024 (con municipios 21)
 Cuando haya codificado historia de AMGE:
-6) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
-7) [ ] Fix seccion action and to.from
+11) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
+12) [ ] Fix seccion action and to.from
 
 #########################################################################################
 ## reload data to restore unmanipulated vote files (but keeping manipulated mun votes) ##
