@@ -509,7 +509,7 @@ efec.cf21 <- data.frame(v91 = v91$efec, # change with v91m.cf21 when available
 ## counterfactual municipio extendCoal objects ##
 #################################################
 for (i in 1:nrow(v00)){
-    #i <- 81 # debug
+    #i <- 34 # debug
     message(sprintf("loop %s of %s", i, nrow(v00)))
     # votes with counterfactual municicios for regressions with new municipios
     ##########
@@ -561,6 +561,7 @@ for (i in 1:nrow(v00)){
         tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
         tmp$left[is.na(tmp$left)] <- per.means["left"];
         tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -593,6 +594,7 @@ for (i in 1:nrow(v00)){
         tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
         tmp$left[is.na(tmp$left)] <- per.means["left"];
         tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -625,6 +627,7 @@ for (i in 1:nrow(v00)){
         tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
         tmp$left[is.na(tmp$left)] <- per.means["left"];
         tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -657,6 +660,7 @@ for (i in 1:nrow(v00)){
         tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
         tmp$left[is.na(tmp$left)] <- per.means["left"];
         tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -691,6 +695,7 @@ for (i in 1:nrow(v00)){
         tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
         tmp$left[is.na(tmp$left)] <- per.means["left"];
         tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -756,7 +761,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 #length(non.nas)
 #    
 for (i in non.nas){
-    #i <- 81 # debug
+    #i <- 34 # debug
     #i <- 44508 # debug
     message(sprintf("Estimating regs for couterfactual 2006 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
@@ -1069,7 +1074,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 #length(non.nas)
 #    
 for (i in non.nas){
-    #i <- 81 # debug
+    #i <- 34 # debug
     #i <- 44508 # debug
     message(sprintf("Estimating regs for couterfactual 2009 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
@@ -1382,7 +1387,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 #length(non.nas)
 #    
 for (i in non.nas){
-    #i <- 81 # debug
+    #i <- 34 # debug
     #i <- 44508 # debug
     message(sprintf("Estimating regs for couterfactual 2012 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
@@ -1695,7 +1700,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 #length(non.nas)
 #    
 for (i in non.nas){
-    #i <- 81 # debug
+    #i <- 34 # debug
     #i <- 44508 # debug
     message(sprintf("Estimating regs for couterfactual 2015 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
@@ -2008,7 +2013,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 #length(non.nas)
 #    
 for (i in non.nas){
-    #i <- 81 # debug
+    #i <- 34 # debug
     #i <- 44508 # debug
     message(sprintf("Estimating regs for couterfactual 2018 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
@@ -2321,7 +2326,7 @@ non.nas <- which(is.na(non.nas)==FALSE)
 #length(non.nas)
 #    
 for (i in non.nas){
-    #i <- 81 # debug
+    #i <- 34 # debug
     #i <- 44508 # debug
     message(sprintf("Estimating regs for couterfactual 2021 municipal map loop %s of %s", i, max(non.nas)))
     # subset data to single unit
@@ -2599,10 +2604,10 @@ rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left
 ###################################################
 ## determine which muncipalities changed borders ##
 ###################################################
-# re-read eq (changed and don't need to re-do full code since last read)
-tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
-eq <- read.csv(tmp, stringsAsFactors = FALSE)
-eq$check <- NULL # drop column meant to clean within excel file
+## # re-read eq (in case changed and don't want to re-do full code since last read)
+## tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
+## eq <- read.csv(tmp, stringsAsFactors = FALSE)
+## eq$check <- NULL # drop column meant to clean within excel file
 # check that dummy hits all mun changes
 tmp1 <- eq[,c("ife1991","ife1994","ife1997","ife2000","ife2003","ife2006","ife2009","ife2012","ife2015","ife2018","ife2021")]
 tmp1 <- apply(tmp1, 1, max)
@@ -2888,6 +2893,7 @@ extendCoal[sel]     <- extendCoal.cf18[sel] # alternative would change reg coefs
 ## 2024 <- 2009 2012 2015 2018 2021                          ##
 ## 2027 <- 2012 2015 2018 2021 2024                          ##
 ###############################################################
+sel <- which(names(extendCoal) %in% chg2009)
 regs.2009$pan [sel] <- regs.2009.cf09$pan [sel]
 regs.2009$left[sel] <- regs.2009.cf09$left[sel]
 regs.2009$oth [sel] <- regs.2009.cf09$oth [sel]
@@ -2940,6 +2946,7 @@ extendCoal[sel]     <- extendCoal.cf21[sel] # alternative would change reg coefs
 ## 2024 <- 2009manip 2012 2015 2018 2021                     ##
 ## 2027 <- 2012 2015 2018 2021 2024                          ##
 ###############################################################
+sel <- which(names(extendCoal) %in% chg2012)
 regs.2012$pan [sel] <- regs.2012.cf12$pan [sel]
 regs.2012$left[sel] <- regs.2012.cf12$left[sel]
 regs.2012$oth [sel] <- regs.2012.cf12$oth [sel]
@@ -2992,6 +2999,7 @@ extendCoal[sel]     <- extendCoal.cf21[sel] # alternative would change reg coefs
 ## 2024 <- 2009manip 2012manip 2015 2018 2021                ##
 ## 2027 <- 2012manip 2015 2018 2021 2024                     ##
 ###############################################################
+sel <- which(names(extendCoal) %in% chg2015)
 regs.2015$pan [sel] <- regs.2015.cf15$pan [sel]
 regs.2015$left[sel] <- regs.2015.cf15$left[sel]
 regs.2015$oth [sel] <- regs.2015.cf15$oth [sel]
@@ -3045,6 +3053,7 @@ extendCoal[sel]     <- extendCoal.cf21[sel] # alternative would change reg coefs
 ## 2027 <- 2012manip 2015manip 2018 2021 2024                ##
 ## 2030 <- 2015manip 2018 2021 2024 2027                     ##
 ###############################################################
+sel <- which(names(extendCoal) %in% chg2018)
 regs.2018$pan [sel] <- regs.2018.cf18$pan [sel]
 regs.2018$left[sel] <- regs.2018.cf18$left[sel]
 regs.2018$oth [sel] <- regs.2018.cf18$oth [sel]
@@ -3099,6 +3108,7 @@ extendCoal[sel]     <- extendCoal.cf21[sel] # alternative would change reg coefs
 ## 2030 <- 2015manip 2018manip 2021 2024 2027                ##
 ## 2033 <- 2018manip 2021 2024 2027 2030                     ##
 ###############################################################
+sel <- which(names(extendCoal) %in% chg2021)
 regs.2021$pan [sel] <- regs.2021.cf21$pan [sel]
 regs.2021$left[sel] <- regs.2021.cf21$left[sel]
 regs.2021$oth [sel] <- regs.2021.cf21$oth [sel]

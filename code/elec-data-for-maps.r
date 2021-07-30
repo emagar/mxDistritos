@@ -2364,7 +2364,8 @@ v09s$inegi <- with(v09s, as.numeric(inegi))
 v12s$inegi <- with(v12s, as.numeric(inegi))
 v15s$inegi <- with(v15s, as.numeric(inegi))
 v18s$inegi <- with(v18s, as.numeric(inegi))
-v21s$inegi <- with(v21s, as.numeric(inegi)) # ignore NAs warning, inegi codes for new campeche munic still missing
+v21s$inegi <- with(v21s, as.numeric(inegi))
+# ignore NAs warning, inegi codes for new 2021 campeche munic still missing
 # reload manipulated munic votes
 load(paste0(wd, "data/too-big-4-github/tmp-mun.RData"))
 
@@ -2626,13 +2627,6 @@ for (i in 1:nrow(v00)){
 #    extendCoal.cf21[[i]] <- cbind(extendCoal.cf21[[i]], yr.means[,6:8])
 }
 
-save.image("data/too-big-4-github/tmp3.RData")
-
-rm(list = ls())
-dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
-setwd(wd)
-load("data/too-big-4-github/tmp3.RData")
 
 
 #################################################################################################
@@ -3095,10 +3089,10 @@ if (agg=="s") {
             year <- info$when[i]               # year reseccionamiento
             sel.na <- which(reg.to$yr <= year) # elections before reseccionamiento 
             reg.to[sel.na,] <- within(reg.to[sel.na,], {
-                pan <- pri <- left   <- d.pan <- d.pri <- d.left   <- NA; # drop mean vote used, use NAs
+                pan <- pri <- left <- d.pan <- d.pri <- d.left <- NA; # drop mean vote used, use NAs
             })
             # columns to manipulate
-            sel.col <- c("vhat.pan","vhat.pri","vhat.left","bhat.pan","bhat.left", "alphahat.pan","alphahat.pri","alphahat.left  ","betahat.pan","betahat.left")
+            sel.col <- c("vhat.pan", "vhat.pri", "vhat.left", "bhat.pan", "bhat.left",  "alphahat.pan", "alphahat.pri", "alphahat.left", "betahat.pan", "betahat.left")
             reg.to[,sel.col] <- reg.from[,sel.col] # from -> to
             # indicate manipulation
             reg.to$new[-sel.na] <- year
