@@ -19,22 +19,22 @@ tern2cart <- function(coord){
     return(c(x1,y1))
     }
 # function to add vértice labels
-add.lab <- function(labels){
+add.lab <- function(labels, add.sign=TRUE){
     left  <- labels[2];
     right <- labels[1];
     up    <- labels[3];
     text(0,0,labels=left,pos=1)         # left
     text(1,0,labels=right,pos=1)        # right
     text(0.5,sqrt(3)/2,labels=up,pos=3) # up
+    if (add.sign==TRUE) text(0.5,0,labels="@emagar",pos=1,cex=.75,col="gray")
 }
 
 ###############################
 ## function wrapping triplot ##
 ###############################
-la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .15, main = NA, labs=c("PAN","PRI","Morena")){
+la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .15, main = NA, labs=c("PAN","PRI","Morena"), left.right.up=c("pri","pan","morena"), add.sign=TRUE){
     # Prepare data: re-arrange so pan is lower right, pri lower left, morena is above 
-    #                  left    right    up
-    datos <- datos[,c("pri",   "pan",  "left")] # subset
+    datos <- datos[,left.right.up] # subset
     #Then transformed into cartesian coordinates:
     datos <- t(apply(datos,1,tern2cart))
     # Draw the empty ternary diagram:
@@ -44,7 +44,7 @@ la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .1
     segments(0.5,sqrt(3)/2,1,0)
     segments(1,0,0,0)
     # add vértice labels
-    add.lab(labs)
+    add.lab(labs, add.sign=add.sign)
     ## # add a grid:
     ## a <- seq(0.9,0.1,by=-0.1)
     ## b <- rep(0,9)
@@ -104,11 +104,14 @@ la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .1
 ## party colors ##
 ##################
 col.pan <-    rgb(.18,.24,.73, alpha = .2) # moderate blue
-col.pri <-    rgb(.89,.17,.17, alpha = .2) # bright red
-col.morena <- rgb(.55,.27,.07, alpha = .2)
+col.vxm <-    rgb(  0,.75,  1, alpha = .2) # deepskyblue
+col.pri <-    rgb(.89,.17,.17, alpha = .2) # brightred
+col.morena <- rgb(.55,.27,.07, alpha = .2) # saddlebrown
 col.pvem   <- rgb(  0,.80,  0, alpha = .2) # green 3
 col.mc     <- rgb(.93,.46,  0, alpha = .2) # darkorange2
 col.oth    <- rgb(.55,.55,.55, alpha = .2) # gray 59
+#col.oth    <- rgb(.94, .5, .5, alpha = .2) # lightcoral
+#19/255
 
 ############################################################
 ## ###################################################### ##
@@ -123,14 +126,32 @@ extendCoal.2015 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2015.cs
 extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), stringsAsFactors = FALSE)
 extendCoal.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), stringsAsFactors = FALSE)
 
+# for pan/pri/morena
 raw.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), stringsAsFactors = FALSE)
 raw.2021 <- within(raw.2021, {
-    dpanc <- as.numeric(panc>0);
-    dpric <- as.numeric(pric>0);
-    dmorenac <- as.numeric(morenac>0);
+    pan <- pan + panc + prd;
+    pri <- pri + pric;
+    left <- morena + morenac + pt;
+    pvem <- pvem + pvemc;
+    oth <- pes + rsp + fxm + indep;
+    panc <- pric <- morena <- morenac <- pvemc <- prd <- pt <- pes <- rsp <- fxm <- indep <- NULL;
 })
-raw.2021[10:15,]
-x
+
+# alianzas/oth
+raw.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), stringsAsFactors = FALSE)
+raw.2021[1,]
+raw.2021 <- within(raw.2021, {
+    vxm <- pan + panc + pri + pric + prd;
+    left <- morena + morenac + pt + pvem + pvemc;
+    oth <- efec - vxm - left;
+})
+
+# oth breakdown
+raw.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), stringsAsFactors = FALSE)
+raw.2021 <- raw.2021[,c("ife","pvem","pt","mc","lisnom")]
+raw.2021 <- within(raw.2021, {
+    efec <- pvem + pt + mc;
+})
 
 ####################
 ## ############## ##
@@ -142,15 +163,20 @@ x
 ## 2021 ##
 ##########
 # triplot observed
-tmp <- extendCoal.2021[,c("pan", "pri", "left")] # subset
+#tmp <- extendCoal.2021[,c("pan", "pri", "left")] # subset
+tmp <- raw.2021[,c("mc", "pt", "pvem")] # subset
 tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
-tri.color[tri.color==1] <- col.pan
+tri.color[tri.color==1] <- col.mc
 tri.color[tri.color==2] <- col.pri
-tri.color[tri.color==3] <- col.morena
-#pdf(file = paste(wd, "graph/triplot2018-v-mu.pdf", sep = ""))
-#png(file = paste(wd, "graph/triplot2018-v-mu.png", sep = ""))
-la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main ="Observación 2021")
-#dev.off()
+tri.color[tri.color==3] <- col.pvem
+pdf(file = paste(wd, "graph/triplot2021-v-mu-pob.pdf", sep = ""))
+png(file = paste(wd, "graph/triplot2021-v-mu-pob.png", sep = ""))
+la.ternera(datos = tmp, cex.pts = sqrt(raw.2021$lisnom)/100, color = tri.color, main ="Tres oportunistas en 2021 (excluyendo demás partidos)", labs=c("mc","pt","pvem"), left.right.up=c("pt","mc","pvem"), add.sign=TRUE)
+dev.off()
+
+summary(sqrt(raw.2021$lisnom)/100)
+x
+
 
 # triplot predicted
 tmp <- extendCoal.2021[,c("vhat.pan", "vhat.pri", "vhat.left")] # subset
@@ -159,9 +185,9 @@ tri.color <- apply(tmp, 1, which.max); names(tri.color) <- NULL
 tri.color[tri.color==1] <- col.pan
 tri.color[tri.color==2] <- col.pri
 tri.color[tri.color==3] <- col.morena
-#pdf(file = paste(wd, "graph/triplot2018-vhat-mu.pdf", sep = ""))
-#png(file = paste(wd, "graph/triplot2018-vhat-mu.png", sep = ""))
-la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main ="Pronóstico 2021")# expression(hat(v)[2018]))
+#pdf(file = paste(wd, "graph/triplot2021-vhat-mu.pdf", sep = ""))
+#png(file = paste(wd, "graph/triplot2021-vhat-mu.png", sep = ""))
+la.ternera(datos = tmp, cex.pts = 2, color = tri.color, main ="Pronóstico 2021", labs=c("pan","pri","morena"), left.right.up=c("pri","pan","left"), add.sign=TRUE)# expression(hat(v)[2018]))
 #dev.off()
 
 ##########

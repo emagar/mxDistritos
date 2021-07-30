@@ -2331,11 +2331,12 @@ ToDo jul2021:
 6)  [ ] Why do vhats have NA 2467 line? Also ife 7124 (first could be capilla de guadalupe or san quintin)
 7)  [ ] Seybaplaya+Dzitbalche have 0s d.pan, bhats, and betahats... usa means en vez de cf? Quizás reseccionamiento post 2018 juega papel
 8)  [x] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
-9)  [ ] Separar 2021 pvem y pt de morenac, otros años también?
-10) [ ] Ya puedo generar vhat.2024 (con municipios 21)
+9)  [x] Separar 2021 pvem de morenac
+10) [ ] Separar tambien prd y pt de sus coaliciones? otros años también?
+11) [ ] Ya puedo generar vhat.2024 (con municipios 21)
 Cuando haya codificado historia de AMGE:
-11) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
-12) [ ] Fix seccion action and to.from
+12) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
+13) [ ] Fix seccion action and to.from
 
 #########################################################################################
 ## reload data to restore unmanipulated vote files (but keeping manipulated mun votes) ##
