@@ -2328,15 +2328,16 @@ ToDo jul2021:
 3)  [x] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
 4)  [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
 5)  [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners
-6)  [ ] Why do vhats have NA 2467 line? Also ife 7124 (first could be capilla de guadalupe or san quintin)
-7)  [ ] Seybaplaya+Dzitbalche have 0s d.pan, bhats, and betahats... usa means en vez de cf? Quizás reseccionamiento post 2018 juega papel
-8)  [x] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
-9)  [x] Separar 2021 pvem de morenac
-10) [ ] Separar tambien prd y pt de sus coaliciones? otros años también?
-11) [ ] Ya puedo generar vhat.2024 (con municipios 21)
+6)  [x] Why do vhats have NA 2467 line? 
+7)  [ ] Why do vhats have NA in ife 7124?
+8)  [ ] Seybaplaya+Dzitbalche have 0s d.pan, bhats, and betahats... usa means en vez de cf? Quizás reseccionamiento post 2018 juega papel
+9)  [x] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
+10) [x] Separar 2021 pvem de morenac
+11) [ ] Separar tambien prd y pt de sus coaliciones? otros años también?
+12) [ ] Ya puedo generar vhat.2024 (con municipios 21)
 Cuando haya codificado historia de AMGE:
-12) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
-13) [ ] Fix seccion action and to.from
+13) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
+14) [ ] Fix seccion action and to.from
 
 #########################################################################################
 ## reload data to restore unmanipulated vote files (but keeping manipulated mun votes) ##
@@ -3158,6 +3159,17 @@ extendCoal.2012 <- merge(x = extendCoal.2012, y = tmp, by = "ife", all = TRUE)
 extendCoal.2015 <- merge(x = extendCoal.2015, y = tmp, by = "ife", all = TRUE)
 extendCoal.2018 <- merge(x = extendCoal.2018, y = tmp, by = "ife", all = TRUE)
 extendCoal.2021 <- merge(x = extendCoal.2021, y = tmp, by = "ife", all = TRUE)
+
+# if missing ife code, that wrongly adds a rown with NAs, drop 
+sel <- which(is.na(extendCoal.2006$ife))
+if (length(sel)>0){
+    extendCoal.2006 <- extendCoal.2006[-sel,];
+    extendCoal.2009 <- extendCoal.2009[-sel,];
+    extendCoal.2012 <- extendCoal.2012[-sel,];
+    extendCoal.2015 <- extendCoal.2015[-sel,];
+    extendCoal.2018 <- extendCoal.2018[-sel,];
+    extendCoal.2021 <- extendCoal.2021[-sel,];
+}
 
 # drop some columns
 extendCoal.2006 <- within(extendCoal.2006, yr <- edosecn <- NULL)
