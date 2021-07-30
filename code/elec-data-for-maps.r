@@ -2972,24 +2972,11 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load("data/too-big-4-github/tmp4.RData")
 ls()
-x
-
-# restore
-non.nas <- non.nas.orig; rm(non.nas.orig)
 
 
 # clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
 extendCoalmanip[[1]]
 rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
-
-## save.image("data/too-big-4-github/tmp4.RData")
-
-## rm(list = ls())
-## dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-## wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
-## setwd(wd)
-## load("data/too-big-4-github/tmp4.RData")
-
 
 # clean
 rm(v91manip, v94manip, v97manip, v00manip, v03manip, v06manip, v09manip, v12manip, v15manip, v18manip,
