@@ -19,3 +19,20 @@ which(tmp$munchg>0)
 tmp[sel]
 
 extendCoal[[sel]]
+
+            y12 y15
+   a bcd      a
+   b          a   b
+   c          a   c
+   d          a   d
+
+            y12 y15
+   abc d      a   d
+   b          b   d
+   c          c   d
+   d          d
+
+
+
+
+

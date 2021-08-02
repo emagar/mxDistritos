@@ -2329,8 +2329,8 @@ ToDo jul2021:
 4)  [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
 5)  [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners
 6)  [x] Why do vhats have NA 2467 line? 
-7)  [ ] Why do vhats have NA in ife 7124?
-8)  [ ] Seybaplaya+Dzitbalche have 0s d.pan, bhats, and betahats... usa means en vez de cf? Quizás reseccionamiento post 2018 juega papel
+7)  [x] Why do vhats have NA in ife 7124?
+8)  [x] Seybaplaya+Dzitbalche have 0s d.pan, bhats, and betahats... usa means en vez de cf? Quizás reseccionamiento post 2018 juega papel
 9)  [x] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
 10) [x] Separar 2021 pvem de morenac
 11) [ ] Separar tambien prd y pt de sus coaliciones? otros años también?

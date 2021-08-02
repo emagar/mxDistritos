@@ -35,7 +35,7 @@ add.split <- function(year.var = NA) {
     # sum votes
     totals <- colSums(d[sel.agg, sel.col])
     # dummies
-    if (!is.na(totals["dpanc"])    & totals["dpanc"]>0)    totals["dpanc"]     <- 1
+    if (!is.na(totals["dpanc"])    & totals["dpanc"]>0)    totals["dpanc"]    <- 1
     if (!is.na(totals["dpric"])    & totals["dpric"]>0)    totals["dpric"]    <- 1
     if (!is.na(totals["dprdc"])    & totals["dprdc"]>0)    totals["dprdc"]    <- 1
     if (!is.na(totals["dmorenac"]) & totals["dmorenac"]>0) totals["dmorenac"] <- 1
