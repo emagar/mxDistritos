@@ -2337,7 +2337,7 @@ ToDo jul2021:
 12) [ ] Ya puedo generar vhat.2024 (con municipios 21)
 Cuando haya codificado historia de AMGE:
 13) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
-14) [ ] Fix seccion action and to.from
+14) [X] Fix seccion action and to.from
 
 #########################################################################################
 ## reload data to restore unmanipulated vote files (but keeping manipulated mun votes) ##
