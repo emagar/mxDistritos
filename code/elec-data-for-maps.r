@@ -2375,6 +2375,9 @@ load(paste0(wd, "data/too-big-4-github/tmp-mun.RData"))
 ## Note 16jul2021: why not do this before manipulating municipios, ##
 ## which now have been manipulated in ife.1991, ife.1994 etc.?     ##
 #####################################################################
+
+# 13ago2021: figure why source below uses object info that is created until line ~3073!!!
+# 13ago2021: eq$action is not just "split" but "split to" or "split from" 
 source(paste(wd, "code/resecc-deal-with-splits.r", sep = ""))
 
 ############################################################
