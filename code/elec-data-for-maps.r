@@ -176,7 +176,7 @@ d <- d[order(d$edon, d$seccion),]
 colnames(d)[which(colnames(d)=="apm")] <- "pric" # "pri-pvem"
 colnames(d)[which(colnames(d)=="pbt")] <- "prdc" # "prd-pt-conve"
 colnames(d)[which(colnames(d)=="panal")] <- "pna" 
-sel.c <- c("pan","pric","prdc","pna","asdc","efec")
+sel.c <- c("pan","pric","prdc","pna","asdc","efec","lisnom")
 d <- to.num(d,sel.c) # clean data
 d <- within(d, efec <- pan + pric + prdc + pna + asdc)
 d <- within(d, tot <- nul <- nr <- NULL)
@@ -898,13 +898,85 @@ v21 <- add.edon.secn(v21)
 v21w<- add.edon.secn(v21w)
 tmp.w  <- add.edon.secn(tmp.w)
 tmp.w2 <- add.edon.secn(tmp.w2)
-rm(tmp,add.edon.secn) # clean
+
+#########################
+## READ/PREP pop>18yrs ##
+#########################
+# 2005
+edos <- c("ags", "bc", "bcs", "cam", "coa", "col", "cps", "cua", "df", "dgo", "gua", "gue", "hgo", "jal", "mex", "mic", "mor", "nay", "nl", "oax", "pue", "que", "qui", "san", "sin", "son", "tab", "tam", "tla", "ver", "yuc", "zac")
+tmp18 <- data.frame()
+for (i in 1:9){
+    tmp2005 <- read.csv( paste0("/home/eric/Downloads/Desktop/MXelsCalendGovt/censos/secciones/eceg_2005/", edos[i], "/0", i, "_", edos[i], "_pob.csv"), stringsAsFactors = FALSE)
+    tmp18 <- rbind(tmp18, tmp2005[, grep("ENTIDAD|SECCION|POB_TOT|EDQUI0[1-4]", colnames(tmp2005))])
+}
+for (i in 10:32){
+    tmp2005 <- read.csv( paste0("/home/eric/Downloads/Desktop/MXelsCalendGovt/censos/secciones/eceg_2005/", edos[i], "/", i, "_", edos[i], "_pob.csv"), stringsAsFactors = FALSE)
+    tmp18 <- rbind(tmp18, tmp2005[, grep("ENTIDAD|SECCION|POB_TOT|EDQUI0[1-4]", colnames(tmp2005))])
+}
+rm(tmp2005)
+# drop seccion=0
+tmp18 <- tmp18[-which(tmp18$SECCION==0),]
+# EDQUI04 covers ages 15:19, so drop one two-fifths
+tmp18$EDQUI04 <- as.integer(tmp18$EDQUI04 * .6)
+# p18
+tmp18$p18_2005 <- tmp18$POB_TOT - tmp18$EDQUI01 - tmp18$EDQUI02 - tmp18$EDQUI03 - tmp18$EDQUI04
+#
+tmp18$edosecn <- tmp18$ENTIDAD*10000 + tmp18$SECCION
+tmp18 <- tmp18[, c("edosecn","p18_2005")]
+# add missing secciones
+tmp18  <- merge(x=tmp, y=tmp18,  by = "edosecn", all = TRUE)
+tmp18 <- tmp18[, -grep("d[0-9]", colnames(tmp18))]
+# add to pop object
+pob18 <- tmp18
+#
+# 2010
+tmp18 <- data.frame()
+for (i in 1:9){
+    tmp2010 <- read.csv( paste0("/home/eric/Downloads/Desktop/MXelsCalendGovt/censos/secciones/eceg_2010/", edos[i], "/secciones_0", i, ".csv"), stringsAsFactors = FALSE)
+    tmp18 <- rbind(tmp18, tmp2010[, grep("ENTIDAD|CLAVEGEO|P_18YMAS$", colnames(tmp2010))])
+}
+for (i in 10:32){
+    tmp2010 <- read.csv( paste0("/home/eric/Downloads/Desktop/MXelsCalendGovt/censos/secciones/eceg_2010/", edos[i], "/secciones_", i, ".csv"), stringsAsFactors = FALSE)
+    tmp18 <- rbind(tmp18, tmp2010[, grep("ENTIDAD|CLAVEGEO|P_18YMAS$", colnames(tmp2010))])
+}
+rm(tmp2010)
+# get seccion
+lastn <- function(x, n) substr(x, nchar(x)-n+1, nchar(x))
+tmp18$seccion <- as.numeric(lastn(tmp18$CLAVEGEO, 4))
+#
+tmp18$edosecn <- tmp18$ENTIDAD*10000 + tmp18$seccion
+tmp18$p18_2010 <- tmp18$P_18YMAS
+tmp18 <- tmp18[, c("edosecn","p18_2010")]
+# add missing secciones
+tmp18  <- merge(x=tmp, y=tmp18,  by = "edosecn", all = TRUE)
+tmp18 <- tmp18[, -grep("d[0-9]", colnames(tmp18))]
+# add to pop object
+pob18 <- merge(pob18, tmp18, by = "edosecn", all = TRUE)
+head(pob18)
+#
+# 2020
+tmp18 <- read.csv("/home/eric/Downloads/Desktop/MXelsCalendGovt/censos/secciones/eceg_2020/conjunto_de_datos/INE_SECCION_2020.csv", stringsAsFactors = FALSE)[, c(2,5,7,13)]
+tmp18$p18_2020 <- tmp18$POBTOT - tmp18$P_0A17
+tmp18$edosecn <- tmp18$ENTIDAD*10000 + tmp18$SECCION
+tmp18 <- tmp18[, c("edosecn","p18_2020")]
+# add missing secciones
+tmp18  <- merge(x=tmp, y=tmp18,  by = "edosecn", all = TRUE)
+tmp18 <- tmp18[, -grep("d[0-9]", colnames(tmp18))]
+# add to pop object
+pob18 <- merge(pob18, tmp18, by = "edosecn", all = TRUE)
+head(pob18)
+#
+# will need cleaning with reseccionamiento functions
+table(is.na(pob18$p18_2005), is.na(pob18$p18_2010))
+table(is.na(pob18$p18_2005), is.na(pob18$p18_2020))
+table(is.na(pob18$p18_2010), is.na(pob18$p18_2020))
+rm(lastn,tmp18,tmp,add.edon.secn,sel,sel.r) # clean
 
 
-###################################################
-## consolidate municipios before doing secciones ##
-## are manipulated to deal with reseccionamiento ##
-###################################################
+#################################################
+## consolidate municipios before secciones are ##
+## manipulated to deal with reseccionamiento   ##
+#################################################
 muns$edosecn <- muns$edon*10000 + muns$seccion
 # add municipio names to votes
 sel.drop <- which(colnames(muns) %in% c("edon","seccion")) # do not merge these columns
@@ -2338,6 +2410,7 @@ ToDo jul2021:
 Cuando haya codificado historia de AMGE:
 13) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
 14) [X] Fix seccion action and to.from
+15) [ ] Fix pob18 missing secciones in order to project inter-census years for turnout
 
 #########################################################################################
 ## reload data to restore unmanipulated vote files (but keeping manipulated mun votes) ##
@@ -2375,6 +2448,44 @@ load(paste0(wd, "data/too-big-4-github/tmp-mun.RData"))
 ## Note 16jul2021: why not do this before manipulating municipios, ##
 ## which now have been manipulated in ife.1991, ife.1994 etc.?     ##
 #####################################################################
+
+# pob18
+#eq$edosecn <- eq$edon*10000 + eq$seccion
+sel <- grep("split.to", eq$action)
+manip <- eq[sel, c("edon","seccion","edosecn","orig.dest","when")]
+sel <- grep("split.to", eq$action)
+tmp <- eq[sel, c("edon","seccion","edosecn","orig.dest2","when2")]; colnames(tmp) <- sub("[0-9]","", colnames(tmp))
+manip <- rbind(manip, tmp)
+sel <- grep("split.to", eq$action)
+tmp <- eq[sel, c("edon","seccion","edosecn","orig.dest3","when3")]; colnames(tmp) <- sub("[0-9]","", colnames(tmp))
+manip <- rbind(manip, tmp)
+# sort chrono
+manip <- manip[order(manip$when),]
+# rewrite orig.dest as vectors
+sel <- grep("[|]", manip$orig.dest)
+manip$orig.dest[sel] <- sub("[|]",",",manip$orig.dest[sel])
+manip$orig.dest[sel] <- paste0("c(", manip$orig.dest[sel], ")")
+# paste pob18
+sel <- which(pob18$edosecn %in% manip$edosecn)
+manip <- merge(x = manip, y = pob18[sel,], by = "edosecn", all.x = TRUE, all.y = FALSE)
+table(manip$when)
+manip[12,]
+x
+
+
+sel <- which(manip$when==2008)
+manip[sel,]
+
+2005 2010 2020
+
+pob18[1,]
+table(eq$action)
+table(eq$action2)
+table(eq$action3)
+    sel.split <- which(eq$action=="split.to")
+    info <- eq[sel.split, c("edon","seccion","orig.dest","when")]
+    info$edosecn <- info$edon*10000+info$seccion
+
 
 # 13ago2021: figure why source below uses object info that is created until line ~3073!!!
 # 13ago2021: eq$action is not just "split" but "split to" or "split from" 
@@ -3236,9 +3347,10 @@ save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2015
 save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2018.RData", sep = ""), compress = "gzip")
 
 # load regression object
-load(file = paste(wd, "data/dipfed-seccion-regs-2015.RData", sep = ""))
-summary.lm(regs.2015$left[[1]])$coef[2,1]
-
+load(file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""))
+ls()
+summary(regs.2015)
+summary.lm(regs.2015$oth[[1]])$coef[2,1]
 
 
 # version 2: coalitions only in districts where they happened
