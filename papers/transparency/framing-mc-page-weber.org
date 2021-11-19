@@ -1,0 +1,72 @@
+epigraph
+Bureaucracy develops the more perfectly, the more it is "dehumanized"
+--- Max Weber, /Ecomomy and Society/ (p. 975)
+
+1. Do systems of politicized congressional district boundary delimitation, such as the United States, let representatives choose their constituents rather than the other way round? A concern widespread in such systems is quite natural: Might incumbents and their parties be tempted to distort representation by introducing undue advantages in the maps they draw? And, more generally: Can such democracies work?
+
+2. To render such possibility less likely, reformers have long prescribed redistricting by independent commissions instead (citations to our friends here)---i.e., removing boundary delimitation from the standard legislative process and placing this authority in the hands of a bipartisan expert board. Since 1983, when Washington state adopted an independent congressional redistricting commission, reformers in seven other states have followed the depoliticization route (check numbers, citation).
+
+3. Checking partisan influence, however, is no guarantee of obtaining neutral congressional districts. Scholarship, both theoretical and empirical shows that achieving fairness in congressional maps is all but impossible (Balinski and Young 2001; Cox and Katz 2002; Engstrom 2013). Removing one set of distortions in district lines will inevitably create others. Such trade-offs force map drawers to sacrifice some democratic /desiderata/ in pursuit of others.
+
+4. Because independent redistricting commissions cannot simply follow objective criteria in search for optimal maps, we ask three legitimate questions: What type of distortions do experts introduce to the congressional maps they draw? Do they attack the normative and positive trade-offs more satisfactorily than politicians and their parties? What conditions help them do so?
+
+5. We study the case of the independent Congressional boundary delimitation board in Mexico, lauded by many as exemplary (Woldenberg 2012, Mozaffar and Schedler 2002). Since the 1990s, redistricting in Mexico has been carried out by a formally independent bureaucracy with broad authority over federal elections, campaigns, and parties. Political parties, however, were included at multiple stages of electoral regulation since the board's inception and have played a central role for the credibility of elections, especially during the country's transition to democracy (Estévez et al. 2008). Boundary delimitation is one such stage: expert cartographers have relied on automated redistricting to generate congressional map blueprints, parties have then had a chance to make counter-proposals to the computer-generated district lines, which are adopted if they can beat the machine at its own optimization game.
+
+6. We investigate systematic distortions in representation that such structure and redistricting process has introduced in a different paper (cite). Our interest here is on /accountability gaps in redistricting by experts/---a notion of interest beyond Mexican politics and applicable beyond redistricting. We see the delegation chain in democratic representation as made of three links: from citizens and interest groups to legislative parties; from legislative parties to administrative agencies (responsible for, in the case at hand, managing elections); and from an administrative agency to specialized experts (cartographers). While parties are brought in not just as mere observers of redistricting, but actually engaging at some stages of the process, agency costs are not just possible, but likely.
+
+7. Referring to the classic principal-agent perspective on delegation, the problem in Mexico is less one of "shirking" by experts than one of what McCubbins and Page (1987) have called "slippage".
+
+8. Shirking is a form of agency cost that is relatively well established: it denotes any form of non-compliance by the agent and results from a conflict of goals with the principal (Alchian and Demsetz 1972). Shirking in Mexican redistricting is a secondary concern due to active partisan monitoring throughout the process. Although they take the back seat, parties (the principals) remain inside the vehicle operated by expert cartographers (their agents) and their map-drawing computers.
+
+9. Agency slippage refers to institutionally induced problems. Redistricting commissions will suffer from many of the same dilemmas other social choice institutions do: if there exists a map that the parties would have preferred, then slippage may occur as the result of any biases in the decision-making process that make the agent choose districts that diverge from the principals' choice. Thus, even if commissioners within a redistricting board each earnestly attempt to choose districts that comply with the preferences of the parties, institutions within the commission may induce them collectively to choose district lines that are not in compliance with the map that parties would have collectively preferred (McCubbins and Page 1987:411). Agency slippage, then, may be a problem irrespective of shirking problems.  
+
+10. We utilize a novel dataset comprising the entire set of map blueprints and party counter-proposals that has remained unavailable outside the bureaucracy. Analysis reveals a sharp discrepancy between a purportedly transparent automated process and closed-door bargaining between parties and experts raising a broad set of questions related to transparency (e.g., Are Mexico's redistricting rules complete, exhaustive, and unambiguous?) and consistency (e.g., Were recent redistricting processes compliant with the law? Have rules been applied consistently within and across processes? Are the observed outputs consistent with how the process was officially portrayed?).
+
+11. We argue that, for any distortions (whatever their origin) to enter the public deliberation they must first be discoverable before new districts are implemented. In order for local authorities, community organizations, interest groups, minorities, and so forth to effectively react to proposed district lines affecting their representation, all information and decision-making needs to be both transparent and consistent in order for redistricting to be truly accountable and to render a more democratic process. 
+
+12. Weber famously forewarned of the perils of excess bureaucratization of public life. If left unchecked, the legal-rational march of bureaucratic structures in human affairs would inevitably lead to a "polar night of icy darkness" (Weber 1946:47), leaving little room, if any, for politics and charismatic leadership. Making the scrutiny of redistricting by experts effective is indispensable to avoid such bleak outcome. 
+
+----
+
+De intro de trelles
+
+esto a la conc, para mostrar relevancia comparativa del trabajo?
+The electoral governance debate has focused on a threefold classification of election regulators as partisan, mixed, and independent, which is based solely on the composition of the executive board or the institutional mechanisms used to appoint its members (Molina and Hernandez 1999, Hartlyn et al. 2008, Rosas 2010, Lara Otaola 2018). This overlooks, however, the different ways in which political parties can be embedded at different hierarchical levels in electoral bureaucracies, their role as watchdogs contributing to electoral integrity, or the degree to which they act as distrustful principals constraining the role of the agent, in this case the bureaucracy, at the implementation stages.
+
+para la conc
+12. In sum, outsiders in the past have been unable to assess the degree of political manipulation during Mexico’s redistricting. We examine the extent to which technocrats supplanted politicians by analyzing how the electoral bureaucracy interacted with political parties within the independent board in the 2013 and 2017 redistricting processes (Lujambio and Vives 2008, Trelles 2017). We utilize a novel dataset comprising the entire set of map blueprints and party counter-proposals that has remained unavailable outside the bureaucracy. Our analysis offers a unique insight into the internal workings of an independent electoral redistricting commission and provides guidance for narrowing the transparency, consistency, and accountability gaps in redistricting. 
+
+para la conc
+Our analysis offers a unique insight into the internal workings of an independent electoral redistricting commission and provides guidance for narrowing the transparency, consistency, and accountability gaps in redistricting. 
+
+
+----
+
+
+epigraph
+v2 Bureaucracy develops the more perfectly, the more it is "dehumanized", the more completely it succeeds in eliminating from official business love, hatred, and all purely personal, irrational, and emotional elements which escape calculation (p. 975) --- Weber, Ecomomy and Society
+
+
++ Weber, who saw increased bureaucratization as inevitable, also saw it as a threat leading to a "polar night of icy darkness" (Weber 1946:47)---the increasing rationalization of human life leaving no room whatsoever for politics and charismatic leadership. An effective scrutiny of redistricting by experts is indispensable to retain 
+
+
+10. Effective scrutiny to avoid Weber's bureaucratization as leading to a "polar night of icy darkness"
+
+
+"Agency slippage refers to institutionally induced problems. Administrative entities will suffer from many of the same problems other social choice institutions do: if there exists a stable legislative outcome, then slippage may occur as the result of institutionally indeuced biases that induce the agent to choose policies that diverge from the stable legislative policy choice [...] Thus, even if commissioners within a regulatory commission each earnestly attempt to choose policies that comply with the preferences of Congress, the institutions within the commission may lead tehm collectively to choose policies that are not in compliance with the collective choice Congress would have preferred. Agency slippage, then, may be a problem irrespective of shirking problems" (McCubbins and Page 1987 p. 411). 
+
+---
+elements weber 
+
+Weber also saw bureaucracy, however, as a threat to individual freedoms, and the ongoing bureaucratization as leading to a "polar night of icy darkness", in which increasing rationalization of human life traps individuals in a soulless "iron cage" of bureaucratic, rule-based, rational control.[5][6] Weber's critical study of the bureaucratization of society became one of the most enduring parts of his work.[5][61] Many aspects of modern public administration are based on his work, and a classic, hierarchically organized civil service of the Continental type is called "Weberian civil service"
+
+"polar night of icy darkness"
+
+
+
+Bureaucracy develops the more perfectly, the more it is "dehumanized", the more completely it succeeds in eliminating from official business love, hatred, and all purely personal, irrational, and emotional elements which escape calculation (p. 975)
+
+The horror continues as Weber goes on to explain that the new mechanized way of thinking has created cultural “disenchantment,” and has robbed people of their ability to be creative and think for themselves
+
+vs passionate politics and charismatic leadership 
+

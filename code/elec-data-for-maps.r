@@ -753,7 +753,7 @@ write.csv(windis, file = paste(dd, "dfdf2006-2021winners.csv", sep = ""))
 # 'not in' function
 source("/home/eric/Dropbox/data/useful-functions/notin.r")
 
-# get equivalencias seccionales # OJO check new secciones 2021, get new file
+# get equivalencias seccionales
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 eq$check <- NULL # drop column meant to clean within excel file
@@ -2449,32 +2449,30 @@ load(paste0(wd, "data/too-big-4-github/tmp-mun.RData"))
 ## which now have been manipulated in ife.1991, ife.1994 etc.?     ##
 #####################################################################
 
+# get equivalencias seccionales again (avoids re-running all code above after excel-eq suffered maginal changes) 
+tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
+eq <- read.csv(tmp, stringsAsFactors = FALSE)
+eq$check <- NULL # drop column meant to clean within excel file
+
+
+
+# rewrite eq$orig.dest as vectors
+sel <- grep("[|]", eq$orig.dest)
+eq$orig.dest[sel] <- gsub("[|]",",", eq$orig.dest[sel])
+eq$orig.dest[sel] <- paste0("c(", eq$orig.dest[sel], ")")
+sel <- grep("[|]", eq$orig.dest2)
+eq$orig.dest2[sel] <- gsub("[|]",",", eq$orig.dest2[sel])
+eq$orig.dest2[sel] <- paste0("c(", eq$orig.dest2[sel], ")")
+sel <- grep("[|]", eq$orig.dest3)
+eq$orig.dest3[sel] <- gsub("[|]",",", eq$orig.dest3[sel])
+eq$orig.dest3[sel] <- paste0("c(", eq$orig.dest3[sel], ")")
+
 # pob18
-#eq$edosecn <- eq$edon*10000 + eq$seccion
-sel <- grep("split.to", eq$action)
-manip <- eq[sel, c("edon","seccion","edosecn","orig.dest","when")]
-sel <- grep("split.to", eq$action)
-tmp <- eq[sel, c("edon","seccion","edosecn","orig.dest2","when2")]; colnames(tmp) <- sub("[0-9]","", colnames(tmp))
-manip <- rbind(manip, tmp)
-sel <- grep("split.to", eq$action)
-tmp <- eq[sel, c("edon","seccion","edosecn","orig.dest3","when3")]; colnames(tmp) <- sub("[0-9]","", colnames(tmp))
-manip <- rbind(manip, tmp)
-# sort chrono
-manip <- manip[order(manip$when),]
-# rewrite orig.dest as vectors
-sel <- grep("[|]", manip$orig.dest)
-manip$orig.dest[sel] <- sub("[|]",",",manip$orig.dest[sel])
-manip$orig.dest[sel] <- paste0("c(", manip$orig.dest[sel], ")")
-# paste pob18
-sel <- which(pob18$edosecn %in% manip$edosecn)
-manip <- merge(x = manip, y = pob18[sel,], by = "edosecn", all.x = TRUE, all.y = FALSE)
-table(manip$when)
-manip[12,]
-x
 
 
-sel <- which(manip$when==2008)
-manip[sel,]
+
+
+manip
 
 2005 2010 2020
 

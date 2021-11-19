@@ -1,0 +1,21 @@
+Some comments to the Transparency paper
+9/21/21
+
+McCubbins and Page (1986) see bureaucratic discretion as pre-calculated: Discretion = Scope + Instruments - Procedures. With parties actually present in the room along with bureaucrats and their experts, discretion is not really an issue in Mexican redistricting. This seems applicable to Rule #8: parties are adding distortions of some sort when they unanimously agree to switch the machine off, presumably in universalistic exchanges.
+
+p. 2 "When parties ... engage in the process, all info and decision-making needs to be both transparent and consistent ... to be truly accountable". In a classic view of representation, an opaque/inconsistent process that is nonetheless accountable to the parties should suffice, since parties are themselves periodically accountable to voters. So adding some slack on the part of the parties seems in order to add tension: accountability to external actors could mitigate bias/distortions that play out against societal interests.
+
+Alternative framing: Ask what type of distortions are machines, experts, and parties creating behind closed-door, either willingly (shirking) or inadvertently (slippage)? Detecting and describing such distortions should justify the need for transparent and consistent processes.  
+
+Unpacking/analyzing Rule #8 should offer elements to improve parts of the argument. Did you find any elements suggesting which portions of the exchange favored some party against others? Indicators welcome.
+
+Fig. 1: put nums 1-5 so that they translate into the x-axis in Figs 2 and 2a.  
+
+Figs. 2 and 2a: should scores be normalized such that the first machine-made equals 1? Counter offers would then measure relative improvement.
+
+Fig. 4 needs more detail: a line connecting two parties indicates collaboration or rivalry? Text suggests collaboration, but remains confusing.
+
+Minor:
+
+- "distrustful principals" (not principles)
+- criteria is plural
