@@ -13,11 +13,72 @@ eq2 <- merge(x = eq2, y = pob18, by = "edosecn", all.x = TRUE, all.y = FALSE)
 # will receive counterfactual sums
 eq2$p18_2020b <- eq2$p18_2010b <- eq2$p18_2005b <- NA
 
+eq2 <- within(eq2, {
+    ddone <- 0
+    #a <- b <- NA;
+    y1997 <- y1998 <- y1999 <- y2000 <- y2001 <- y2002 <- y2003 <- y2004 <- y2005 <- y2006 <- y2007 <- y2008 <- y2009 <- y2010 <- y2011 <- y2012 <- y2013 <- y2014 <- y2015 <- y2016 <- y2017 <- y2018 <- y2019 <- y2020 <- y2021 <- y2022 <- NA;
+    })
+
 # secciones that cannot be fixed for census data projection
 #no.manip <- c(10487) # eg. 10487 created in 2004 with bits of three secciones (mun limits), then merged to 10378 in 2008
-sel <- which(eq2$edosecn==10487); eq2[sel,] <- within(eq2[sel,], {action <- "lost"; when <- NA; orig.dest <- ""})
+sel <- which(eq2$edosecn==10487); eq2[sel,] <- within(eq2[sel,], {action <- "lost"; when <- NA; orig.dest <- ""; ddone <- 1})
 #eq2[sel,]
 
+# function to project 
+tmp.proj <- function(tmp){
+    tmp <- tmp;
+    # 2005-2010
+    tmp <- within(tmp, b <- (y2010 - y2005) / (2010 - 2005));
+    tmp <- within(tmp, a <- y2005 - b*2005);
+    tmp <- within(tmp, {
+        y1997 <- round(a + b*1997, 1);
+        y1998 <- round(a + b*1998, 1);
+        y1999 <- round(a + b*1999, 1);
+        y2000 <- round(a + b*2000, 1);
+        y2001 <- round(a + b*2001, 1);
+        y2002 <- round(a + b*2002, 1);
+        y2003 <- round(a + b*2003, 1);
+        y2004 <- round(a + b*2004, 1);
+        y2006 <- round(a + b*2006, 1);
+        y2007 <- round(a + b*2007, 1);
+        y2008 <- round(a + b*2008, 1);
+        y2009 <- round(a + b*2009, 1);
+    })
+    # 2010-2020
+    tmp <- within(tmp, b <- (y2020 - y2010) / (2020 - 2010));
+    tmp <- within(tmp, a <- y2010 - b*2010);
+    tmp <- within(tmp, {
+        y2011 <- round(a + b*2011, 1);
+        y2012 <- round(a + b*2012, 1);
+        y2013 <- round(a + b*2013, 1);
+        y2014 <- round(a + b*2014, 1);
+        y2015 <- round(a + b*2015, 1);
+        y2016 <- round(a + b*2016, 1);
+        y2017 <- round(a + b*2017, 1);
+        y2018 <- round(a + b*2018, 1);
+        y2019 <- round(a + b*2019, 1);
+        y2021 <- round(a + b*2021, 1);
+        y2022 <- round(a + b*2022, 1);
+    })
+    tmp <- within(tmp, a <- b <- NULL)
+    tmp$ddone <- 1
+    return(tmp)
+}
+
+# secciones that never changed
+sel <- which(is.na(eq2$when) & eq2$ddone==0)
+tmp <- eq2[sel,] # subset for manipulation
+tmp <- within(tmp, {y2005 <- p18_2005; y2010 <- p18_2010; y2020 <- p18_2020;})     
+tmp <- tmp.proj(tmp)
+eq2[sel,] <- tmp
+table(eq2$ddone)
+head(eq2)
+# groups 
+g1 <- which(eq2$when < 2005 | eq2$when %in% 2006:2009) # project with 2005-2010 slope, define start point
+g2 <- which(eq2$when %in% 2011:2019 | eq2$when > 2020) # project with 2010-2020 slope, define start point
+g3 <- which(eq2==2005) # inspect
+g4 <- which(eq2==2010)
+g5 <- which(eq2==2020)
 
 #
 ################################
