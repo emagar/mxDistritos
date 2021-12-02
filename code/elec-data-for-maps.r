@@ -2471,11 +2471,6 @@ eq$orig.dest3[sel] <- paste0("c(", eq$orig.dest3[sel], ")")
 
 
 
-
-manip
-
-2005 2010 2020
-
 pob18[1,]
 table(eq$action)
 table(eq$action2)
