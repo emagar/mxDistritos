@@ -140,31 +140,11 @@ eq2[sel,] <- manip
 sel <- which(is.na(eq2$when) & (eq2$dpre05done==0 | eq2$d0510done==0 | eq2$d1020done==0 | eq2$dpost20done==0))
 eq2[sel,] <- within(eq2[sel,], dpre05done  <- d0510done   <- d1020done   <- dpost20done <- 1)
 
-1 [] manipulate when3 controlling when2 and when
-2 [] start with split.to (should take care of split.from), then merged. Any missing?
-For each:
-    3 [] compute pct chg -> pi
-    4 [] project backwards with appropriate baseline pop
-    5 [] chg pre..done to 1
-    6 [] return manipulation to dataset
-    7 [] next
-    8 [] check ddone status across the board
-    9 [] check cases ddone==1 but NA
-
-1 [x] select changes bef 2005
-2 [x] take 1, subset it and its targets
-3 [x] compute pct chg -> pi
-4 [x] project backwards with appropriate baseline pop
-5 [x] chg pre2005done to 1
-6 [x] return manipulation to dataset
-7 [x] loop
-8 [] check ddone status across the board
-9 [] check cases ddone==1 but NA
-
 ############################
 ## cases with when3 record #
 ############################
-#sel <- which(!is.na(eq2$when3)) # one case only
+## sel2 <- which(!is.na(eq2$when3)) # two cases only
+## eq2[sel2[1],]
 # hand manipulation
 sel <- which(eq2$edosecn==161976)
 manip <- eq2[sel,]
@@ -233,11 +213,236 @@ manip <- within(manip, {
     #times.manip <- times.manip + 1;
 })
 eq2[vec.minus,] <- manip
+# item 2
+# get pi
+sel <- which(eq2$edosecn==192136)
+manip <- eq2[sel,]
+vec <- c(2136,2437,2809:2822)
+vec <- manip$edon*10000 + vec   # turn into edosecn
+manip$case <- "baja"
+vec <- which(eq2$edosecn %in% vec) # turn to indices
+vec <- vec[-1]
+# aggregate split populations
+manip$p18_2020b <- sum(eq2$p18_2020[vec]) # needed for backwards projection
+manip <- within(manip, {y2020 <- p18_2020b;}) # use aggregates to compute pi
+manip <- within(manip, pi <-  (y2020 / y2010) ^ (1 / (2020 - 2010)) ); # rate of change
+## # re-project where needed (targets unneeded before 2005)
+## manip <- within(manip, y2011 <- tmp.proj(baseyr = 2020, yr = 2011))
+## manip <- within(manip, y2012 <- tmp.proj(baseyr = 2020, yr = 2012))
+## manip <- within(manip, y2013 <- tmp.proj(baseyr = 2020, yr = 2013))
+## manip <- within(manip, y2014 <- tmp.proj(baseyr = 2020, yr = 2014))
+## manip <- within(manip, y2015 <- tmp.proj(baseyr = 2020, yr = 2015))
+## manip <- within(manip, y2016 <- tmp.proj(baseyr = 2020, yr = 2016))
+## manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+## manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+tmp <- manip$pi # keep pi for orig.dest3
+#manip <- within(manip, {y2020 <- when3 <- NA; action3 <- orig.dest3 <- ""}) # clean
+# return manipulation to data
+## manip$times.manip <- manip$times.manip + 1
+eq2[sel,] <- manip
+# fix proj in non-existing secciones and return manipulation to data
+manip <- eq2[vec,]
+manip$pi <- tmp
+manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
+manip <- within(manip, y2020 <- tmp.proj(baseyr = 2020, yr = 2020))
+manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
+manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
+manip <- within(manip, {
+    action  <- "";      when <- NA;    orig.dest <- "";
+    times.manip <- times.manip + 1;
+})
+eq2[vec,] <- manip
+# fix sección 2437 created in 2011 and return to data
+manip <- eq2[vec[1],]
+manip <- within(manip, y2011 <- tmp.proj(baseyr = 2020, yr = 2011))
+manip <- within(manip, y2012 <- tmp.proj(baseyr = 2020, yr = 2012))
+manip <- within(manip, y2013 <- tmp.proj(baseyr = 2020, yr = 2013))
+manip <- within(manip, y2014 <- tmp.proj(baseyr = 2020, yr = 2014))
+manip <- within(manip, y2015 <- tmp.proj(baseyr = 2020, yr = 2015))
+manip <- within(manip, y2016 <- tmp.proj(baseyr = 2020, yr = 2016))
+manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+tmp <- manip$y2010 # retain 2010 pop
+manip <- within(manip, y2010 <- NA)
+eq2[vec,] <- manip
+# fix sección 2136 and return to data
+sel <- which(eq2$edosecn==192136)
+manip <- eq2[sel,]
+manip$y2010 <- manip$y2010 - tmp # subtract split sección 2437 pop in 2010 
+# re-project where needed
+manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
+manip <- within(manip, y2012 <- tmp.proj(baseyr = 2010, yr = 2012))
+manip <- within(manip, y2013 <- tmp.proj(baseyr = 2010, yr = 2013))
+manip <- within(manip, y2014 <- tmp.proj(baseyr = 2010, yr = 2014))
+manip <- within(manip, y2015 <- tmp.proj(baseyr = 2010, yr = 2015))
+manip <- within(manip, y2016 <- tmp.proj(baseyr = 2010, yr = 2016))
+manip <- within(manip, y2017 <- tmp.proj(baseyr = 2010, yr = 2017))
+manip <- within(manip, y2018 <- tmp.proj(baseyr = 2010, yr = 2018))
+manip <- within(manip, {y2020 <- when3 <- when2 <- NA; action3 <- orig.dest3 <- action2 <- orig.dest2 <- ""}) # clean
+manip$y2010 <- manip$p18_2010 # restore pre-split pop in 2010
+# return manipulation to data
+manip$times.manip <- manip$times.manip + 1
+eq2[sel,] <- manip
 
 ############################
 ## cases with when2 record #
 ############################
+# items where change1 occurred before 2010 census and change2 before/at 2020 = mode
+sel <- which(eq2$action2=="split.to" & eq2$when2>2010 & eq2$when2 - eq2$when >= 10)
+# monitor
+eq2[sel,c(1,6:11)]
+#
+for (i in sel){
+    #i <- sel[1]
+    manip <- eq2[i,] # duplicate obs for manipulation
+    vec <- eval(parse(text = manip$orig.dest2)) # https://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
+    vec <- manip$edon*10000 + vec   # turn into edosecn
+    manip$case <- ifelse(manip$edosecn %in% vec, "no.baja", "baja") # did seccion survive the split? (baja means no) 
+    vec <- which(eq2$edosecn %in% vec) # turn to indices
+    vec.plus  <- union(vec, i)   # seccion and its targets (in case vec excludes dropped seccion) 
+    vec.minus <- setdiff(vec, i) # targets w/o seccion (for use when seccion was dropped)
+    # aggregate split populations
+    #manip$p18_2010b <- sum(eq2$p18_2010[vec])
+    manip$p18_2020b <- sum(eq2$p18_2020[vec]) # needed for backwards projection
+    manip <- within(manip, {y2010 <- p18_2010; y2020 <- p18_2020b;}) # use aggregates to compute pi
+    manip <- within(manip, pi <-  (y2020 / y2010) ^ (1 / (2020 - 2010)) ); # rate of change
+    # re-project where needed
+    if (manip$when2>2011) manip <- within(manip, y2011 <- tmp.proj(baseyr = 2020, yr = 2011))
+    if (manip$when2>2012) manip <- within(manip, y2012 <- tmp.proj(baseyr = 2020, yr = 2012))
+    if (manip$when2>2013) manip <- within(manip, y2013 <- tmp.proj(baseyr = 2020, yr = 2013))
+    if (manip$when2>2014) manip <- within(manip, y2014 <- tmp.proj(baseyr = 2020, yr = 2014))
+    if (manip$when2>2015) manip <- within(manip, y2015 <- tmp.proj(baseyr = 2020, yr = 2015))
+    if (manip$when2>2016) manip <- within(manip, y2016 <- tmp.proj(baseyr = 2020, yr = 2016))
+    if (manip$when2>2017) manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+    if (manip$when2>2018) manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+    if (manip$when2>2019) manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
+    if (manip$when2>2020) manip <- within(manip, y2020 <- tmp.proj(baseyr = 2020, yr = 2020))
+    if (manip$when2>2021) manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
+    if (manip$when2>2022) manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
+    # restore un-manipulated 2020 in cases where when is below
+    if (manip$when2<=2020) manip <- within(manip, y2020 <- p18_2020)
+    # return manipulation to data
+    tmp <- manip$pi # save to plug into split.from
+    eq2[i,] <- manip
+    # fix proj in non-existing secciones and return manipulation to data
+    manip <- eq2[vec.minus,]
+    manip <- within(manip, {y2020 <- p18_2020; pi <- tmp}) # plug pi
+    if (manip$when[1]<2012) manip <- within(manip, y2011 <- tmp.proj(baseyr = 2020, yr = 2011))
+    if (manip$when[1]<2013) manip <- within(manip, y2012 <- tmp.proj(baseyr = 2020, yr = 2012))
+    if (manip$when[1]<2014) manip <- within(manip, y2013 <- tmp.proj(baseyr = 2020, yr = 2013))
+    if (manip$when[1]<2015) manip <- within(manip, y2014 <- tmp.proj(baseyr = 2020, yr = 2014))
+    if (manip$when[1]<2016) manip <- within(manip, y2015 <- tmp.proj(baseyr = 2020, yr = 2015))
+    if (manip$when[1]<2017) manip <- within(manip, y2016 <- tmp.proj(baseyr = 2020, yr = 2016))
+    if (manip$when[1]<2018) manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+    if (manip$when[1]<2019) manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+    if (manip$when[1]<2020) manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
+    if (manip$when[1]<2021) manip <- within(manip, y2020 <- tmp.proj(baseyr = 2020, yr = 2020))
+    if (manip$when[1]<2022) manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
+    if (manip$when[1]<2023) manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
+    # indicate manipulation and return to data
+    manip <- within(manip, {
+        times.manip <- times.manip + 1;
+        action <- "";      when <- NA;    orig.dest <- "";
+    })
+    eq2[vec.minus,] <- manip
+    # indicate sección split.from and return to data
+    manip <- eq2[i,] # duplicate obs for manipulation
+    manip <- within(manip, {
+        action2 <- "";      when2 <- NA;    orig.dest2 <- "";
+    })
+    eq2[i,] <- manip
+}
+
+# items where change1 occurred before 2005 census and change2 at 2010
+sel <- which(eq2$action2=="split.to" & eq2$when2==2010 & eq2$when2 - eq2$when >= 5)
+# monitor
+eq2[sel,c(1,6:11)]
+#
+manip <- eq2[sel,] # duplicate obs for manipulation
+vec <- eval(parse(text = manip$orig.dest2)) # https://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
+vec <- manip$edon*10000 + vec   # turn into edosecn
+manip$case <- ifelse(manip$edosecn %in% vec, "no.baja", "baja") # did seccion survive the split? (baja means no) 
+vec <- which(eq2$edosecn %in% vec) # turn to indices
+vec.plus  <- union(vec, sel)   # seccion and its targets (in case vec excludes dropped seccion) 
+vec.minus <- setdiff(vec, sel) # targets w/o seccion (for use when seccion was dropped)
+# aggregate split populations
+manip$p18_2010b <- sum(eq2$p18_2010[vec])
+#manip$p18_2020b <- sum(eq2$p18_2020[vec]) # needed for backwards projection
+manip <- within(manip, {y2005 <- p18_2005; y2010 <- p18_2010b;}) # use aggregates to compute pi
+manip <- within(manip, pi <-  (y2010 / y2005) ^ (1 / (2010 - 2005)) ); # rate of change
+# re-project where needed
+if (manip$when2>2002) manip <- within(manip, y2002 <- tmp.proj(baseyr = 2010, yr = 2002))
+if (manip$when2>2003) manip <- within(manip, y2003 <- tmp.proj(baseyr = 2010, yr = 2003))
+if (manip$when2>2004) manip <- within(manip, y2004 <- tmp.proj(baseyr = 2010, yr = 2004))
+if (manip$when2>2006) manip <- within(manip, y2006 <- tmp.proj(baseyr = 2010, yr = 2006))
+if (manip$when2>2007) manip <- within(manip, y2007 <- tmp.proj(baseyr = 2010, yr = 2007))
+if (manip$when2>2008) manip <- within(manip, y2008 <- tmp.proj(baseyr = 2010, yr = 2008))
+if (manip$when2>2009) manip <- within(manip, y2009 <- tmp.proj(baseyr = 2010, yr = 2009))
+# return manipulation to data
+tmp <- manip$pi # save to plug into split.from
+manip <- within(manip, {
+    times.manip <- times.manip + 1
+})
+eq2[sel,] <- manip
+# non-existing secciones need no further manipulation, indicate done and return to data
+manip <- eq2[vec.minus,]
+manip <- within(manip, {
+    action <- "";      when <- NA;    orig.dest <- "";
+})
+eq2[vec.minus,] <- manip
+#
+# get vec to manipulate action1 in seccion 1913
+manip <- eq2[sel,] # duplicate obs for manipulation
+vec <- eval(parse(text = manip$orig.dest)) # https://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
+vec <- manip$edon*10000 + vec   # turn into edosecn
+vec <- which(eq2$edosecn %in% vec) # turn to indices
+# indicate previous manip in 2828 and return to data
+manip <- within(manip, {
+    action  <- "";    when  <- NA;   orig.dest  <- "";
+    action2 <- "";    when2 <- NA;   orig.dest2 <- "";
+})
+eq2[sel,] <- manip # duplicate obs for manipulation --- sel can be reset
+# get seccion 1913 for manipulation
+sel <- vec # vec can be reset
+manip <- eq2[sel,] # duplicate obs for manipulation
+manip$pi <- tmp # plug last known pi
+vec <- eval(parse(text = manip$orig.dest)) # https://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
+vec <- manip$edon*10000 + vec   # turn into edosecn
+manip$case <- ifelse(manip$edosecn %in% vec, "no.baja", "baja") # did seccion survive the split? (baja means no) 
+vec <- which(eq2$edosecn %in% vec) # turn to indices
+vec.plus  <- union(vec, sel)   # seccion and its targets (in case vec excludes dropped seccion) 
+vec.minus <- setdiff(vec, sel) # targets w/o seccion (for use when seccion was dropped)
+# aggregate split populations
+manip$p18_2005b <- sum(eq2$p18_2005[vec])
+#manip$p18_2020b <- sum(eq2$p18_2020[vec]) # needed for backwards projection
+manip <- within(manip, {y2005 <- p18_2005b;}) # use aggregates to compute pi
+# re-project where needed
+manip <- within(manip, y1997 <- tmp.proj(baseyr = 2005, yr = 1997))
+manip <- within(manip, y1998 <- tmp.proj(baseyr = 2005, yr = 1998))
+manip <- within(manip, y1999 <- tmp.proj(baseyr = 2005, yr = 1999))
+manip <- within(manip, y2000 <- tmp.proj(baseyr = 2005, yr = 2000))
+manip <- within(manip, y2001 <- tmp.proj(baseyr = 2005, yr = 2001))
+manip <- within(manip, y2005 <- NA # 2005 no longer needed
+# indicate manipulation and return manipulation to data
+manip <- within(manip, {
+    action  <- "";    when  <- NA;   orig.dest  <- "";
+    times.manip <- times.manip + 1;
+})
+eq2[sel,] <- manip # sel can be reset
+# finally, make pre 2002 pop NA in new secciones and indicate manipulation
+sel <- vec
+manip <- eq2[sel,]
+manip <- within(manip, {
+    y1997 <- y1998 <- y1999 <- y2000 <- y2001 <- NA;
+    action  <- "";    when  <- NA;   orig.dest  <- "";
+})
+eq2[sel,] <- manip # return to data
+
 sel <- which(!is.na(eq2$when2)) # five items only
+# monitor
+eq2[sel,c(1,6:11)]
+x
+
 # item 1 by hand
 manip <- eq2[sel[1],]
 vec <- eval(parse(text = manip$orig.dest2)) # https://stackoverflow.com/questions/1743698/evaluate-expression-given-as-a-string
@@ -278,8 +483,8 @@ vec.minus <- setdiff(vec, sel[5]) # targets w/o seccion (for use
 # aggregate split populations
 #manip$p18_2005b <- sum(eq2$p18_2005[vec])
 manip$p18_2020b <- sum(eq2$p18_2020[vec]) # needed for backwards projection
-manip <- within(manip, y2010 <- p18_2010b) # use aggregates to compute pi
-manip <- within(manip, pi <-  (y2010 / y2005) ^ (1 / (2010 - 2005)) ); # rate of change
+manip <- within(manip, y2020 <- p18_2020b) # use aggregates to compute pi
+manip <- within(manip, pi <-  (y2020 / y2010) ^ (1 / (2020 - 2010)) ); # rate of change
 
 
 x
