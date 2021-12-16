@@ -2371,6 +2371,24 @@ write.csv(v21m,  file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = "
 # clean
 rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,to.num)
 
+ToDo jul2021:
+1)  [x] push reload and seccion data manip for later
+2)  [x] v5 for factual and counterfactual v..ms
+3)  [x] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
+4)  [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
+5)  [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners
+6)  [x] Why do vhats have NA 2467 line? 
+7)  [ ] Why do vhats have NA in ife 7124?
+8)  [ ] Seybaplaya+Dzitbalche have 0s d.pan, bhats, and betahats... usa means en vez de cf? Quizás reseccionamiento post 2018 juega papel
+9)  [x] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
+10) [x] Separar 2021 pvem de morenac
+11) [ ] Separar tambien prd y pt de sus coaliciones? otros años también?
+12) [ ] Ya puedo generar vhat.2024 (con municipios 21)
+Cuando haya codificado historia de AMGE:
+13) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
+14) [X] Fix seccion action and to.from
+15) [ ] Fix pob18 missing secciones in order to project inter-census years for turnout
+
 # temporary for debugging
 #save.image("../../datosBrutos/not-in-git/tmp.RData")
 
@@ -2392,25 +2410,6 @@ v15m <-  within(v15m,  dpanc <- dpric <- dprdc <- dmorenac <- NULL)
 v18m <-  within(v18m,  dpanc <- dpric <- dmorenac <- NULL)
 v21m <-  within(v21m,  dpanc <- dpric <- dmorenac <- NULL)
 v21mw <- within(v21mw, dpanc <- dpric <- dmorenac <- NULL)
-
-
-ToDo jul2021:
-1)  [x] push reload and seccion data manip for later
-2)  [x] v5 for factual and counterfactual v..ms
-3)  [x] alpha regs seem to need little manipulation: generate year swings with each v..m, then regress as before
-4)  [x] beta regs need to rely on appropriate counterfactuals instead of factual v..ms
-5)  [x] Fix winners 2021: prepare temp coal agg object to use with pri in it to determine correct unit winners
-6)  [x] Why do vhats have NA 2467 line? 
-7)  [ ] Why do vhats have NA in ife 7124?
-8)  [ ] Seybaplaya+Dzitbalche have 0s d.pan, bhats, and betahats... usa means en vez de cf? Quizás reseccionamiento post 2018 juega papel
-9)  [x] Al agregar votos 2021, no suman bien el voto PRI en vhat (ver foto en ife.ine/data)
-10) [x] Separar 2021 pvem de morenac
-11) [ ] Separar tambien prd y pt de sus coaliciones? otros años también?
-12) [ ] Ya puedo generar vhat.2024 (con municipios 21)
-Cuando haya codificado historia de AMGE:
-13) [ ] Debug seccion winners (crear un tmp.w con pan21pri y v21sw, como con municipios)
-14) [X] Fix seccion action and to.from
-15) [ ] Fix pob18 missing secciones in order to project inter-census years for turnout
 
 #########################################################################################
 ## reload data to restore unmanipulated vote files (but keeping manipulated mun votes) ##
