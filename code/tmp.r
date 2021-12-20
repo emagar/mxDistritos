@@ -15,3 +15,5 @@ therefore p_6 = p_5 + 2 or p_6 = p_10 - 2*4
 
 
 
+
+
