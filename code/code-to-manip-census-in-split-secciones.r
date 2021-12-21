@@ -341,32 +341,35 @@ manip <- within(manip, {
     action3 <- "";      when3 <- NA;    orig.dest3 <- "";
 })
 eq3[sel,] <- manip
-#
+
 # bits of 23 290&295 split to create 971&973
-sel <- which(eq2$edosecn %in% c(230290,230295,230971,230973));
+## 290 -> 290 295 973
+## 295 -> 295 969 971
+sel <- which(eq2$edosecn %in% c(230290,230295,230969,230971,230973));
 manip <- eq2[sel,]
 # aggregate split populations
-manip$p18_2010b <- sum(eq2$p18_2010[sel[-3:-4]])
-manip$p18_2020b <- sum(eq2$p18_2020[sel])
+manip$p18_2010b <- sum(eq2$p18_2010[sel], na.rm = TRUE)
+manip$p18_2020b <- sum(eq2$p18_2020[sel], na.rm = TRUE)
 #manip <- within(manip, {y2005 <- p18_2005b; y2010 <- p18_2010b;}) # use aggregates to compute pi
 manip <- within(manip, pi <-  (p18_2020b / p18_2010b) ^ (1 / (2020 - 2010)) ); # rate of change
-# re-project full pop up to 2001
+# re-project 2011:17
 manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
 manip <- within(manip, y2012 <- tmp.proj(baseyr = 2010, yr = 2012))
 manip <- within(manip, y2013 <- tmp.proj(baseyr = 2010, yr = 2013))
 manip <- within(manip, y2014 <- tmp.proj(baseyr = 2010, yr = 2014))
 manip <- within(manip, y2015 <- tmp.proj(baseyr = 2010, yr = 2015))
 manip <- within(manip, y2016 <- tmp.proj(baseyr = 2010, yr = 2016))
-#
+# re-project 2017-on
+manip$y2020[3] <- 1 # 969 not in censo 2020?
 manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
 manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
 manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
 manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
 manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
-# indicate pt1 and return to data
+manip[3,]
+# indicate and return to data
 manip <- within(manip, times.manip <- times.manip + 1)
 eq2[sel,] <- manip
-# indicate pt2
 manip <- eq3[sel,]
 manip <- within(manip, {
     action  <- "";      when  <- NA;    orig.dest  <- "";
@@ -534,9 +537,10 @@ eq2[sel,] <- manip
 manip <- eq3[sel,]
 manip <- within(manip, {y2020 <- when3 <- when2 <- NA; action3 <- orig.dest3 <- action2 <- orig.dest2 <- ""}) # clean
 eq3[sel,] <- manip
-#
+
 # item 3
-sel <- c(205,875,970,975:1003)
+#sel <- c(205,875,970,975:1003)
+sel <- c(205,874,875,876:922,965,967,970,975:1003)
 sel <- 230000 + sel
 sel <- which(eq2$edosecn %in% sel)
 manip <- eq2[sel,]
@@ -544,42 +548,104 @@ manip <- eq2[sel,]
 ## manip$edosecn  # 970 vanished in 2020?
 vec <- sel
 # aggregate split populations
-manip$p18_2010b <- sum(eq2$p18_2010[vec[1]]) # needed for backwards projection
-manip$p18_2020b <- sum(eq2$p18_2020[vec[-1:-3]]) # needed for backwards projection
+manip$p18_2010b <- sum(eq2$p18_2010[sel], na.rm = TRUE)
+manip$p18_2020b <- sum(eq2$p18_2020[sel], na.rm = TRUE)
 manip <- within(manip, pi <-  (p18_2020b / p18_2010b) ^ (1 / (2020 - 2010)) ); # rate of change
 # return to data for piecemeal manipulation
 eq2[sel,] <- manip
-# re-project where needed
+# fix 205 and return to data
 manip <- eq2[sel[1],]
 manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
 manip <- within(manip, times.manip <- times.manip + 1)
 eq2[sel[1],] <- manip
+# fix 874 2012:16
 manip <- eq2[sel[2],]
-manip$y2010 <- 28 # use lisnom 2012 to infer pop18
+manip$y2010 <- 10718 # use lisnom 2012 to infer pop18
+manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
 manip <- within(manip, y2012 <- tmp.proj(baseyr = 2010, yr = 2012))
 manip <- within(manip, y2013 <- tmp.proj(baseyr = 2010, yr = 2013))
 manip <- within(manip, y2014 <- tmp.proj(baseyr = 2010, yr = 2014))
-manip <- within(manip, y2015 <- tmp.proj(baseyr = 2010, yr = 2015))
-manip <- within(manip, y2016 <- tmp.proj(baseyr = 2010, yr = 2016))
-manip <- within(manip, y2017 <- tmp.proj(baseyr = 2010, yr = 2017))
-manip <- within(manip, y2018 <- tmp.proj(baseyr = 2010, yr = 2018))
-manip <- within(manip, y2019 <- tmp.proj(baseyr = 2010, yr = 2019))
-manip <- within(manip, times.manip <- times.manip + 1)
-eq2[sel[2],] <- manip
-manip <- eq2[sel[3],]
-manip$y2020 <- 0 # use ine reportaba sin gente en lisnom 2020
+manip <- within(manip, {
+    y2016 <- y2014; 
+    y2015 <- y2013; 
+    y2014 <- y2012; 
+    y2013 <- y2011; 
+    y2012 <- y2010;
+    y2010 <- y2011 <- NA;
+}) # move two years up
+# fix 874 2017:21 and return to data
 manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
 manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
 manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
 manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
 manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
 manip <- within(manip, times.manip <- times.manip + 1)
-eq2[sel[3],] <- manip
-manip <- eq2[sel[-1:-3],]
+eq2[sel[2],] <- manip
+#
+# fix 875 2012:16
+manip <- eq2[sel[3],]
+manip$y2010 <- 19223 # use lisnom 2012 to infer pop18
+manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
+manip <- within(manip, y2012 <- tmp.proj(baseyr = 2010, yr = 2012))
+manip <- within(manip, y2013 <- tmp.proj(baseyr = 2010, yr = 2013))
+manip <- within(manip, y2014 <- tmp.proj(baseyr = 2010, yr = 2014))
+manip <- within(manip, {
+    y2016 <- y2014; 
+    y2015 <- y2013; 
+    y2014 <- y2012; 
+    y2013 <- y2011; 
+    y2012 <- y2010;
+    y2010 <- y2011 <- NA;
+}) # move two years up
+# fix 875 2017:19 and return to data
+vec <- c(230975:231003)
+vec <- which(eq2$edosecn %in% vec)
+manip$y2020 <- sum(eq2$p18_2020[vec], na.rm = TRUE) # agg 2020 pop
+manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
+manip$y2020 <- NA
+manip <- within(manip, times.manip <- times.manip + 1)
+eq2[sel[2],] <- manip
+#
+# fix 876:922 2012:on and return to data
+vec <- c(230876:230922)
+vec <- which(eq2$edosecn %in% vec)
+manip <- eq2[vec,]
+manip <- within(manip, y2012 <- tmp.proj(baseyr = 2020, yr = 2012))
+manip <- within(manip, y2013 <- tmp.proj(baseyr = 2020, yr = 2013))
+manip <- within(manip, y2014 <- tmp.proj(baseyr = 2020, yr = 2014))
+manip <- within(manip, y2015 <- tmp.proj(baseyr = 2020, yr = 2015))
+manip <- within(manip, y2016 <- tmp.proj(baseyr = 2020, yr = 2016))
+manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
 manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
 manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
 manip <- within(manip, times.manip <- times.manip + 1)
-eq2[sel[-1:-3],] <- manip
+eq2[vec,] <- manip
+#
+# fix 965 967 970 2017:on and return to data
+vec <- c(230965,230967,230970)
+vec <- which(eq2$edosecn %in% vec)
+manip <- eq2[vec,]
+manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
+manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
+manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
+manip <- within(manip, times.manip <- times.manip + 1)
+eq2[vec,] <- manip
+#
+# fix 975:1003 2021:on and return to data
+vec <- c(230975:231003)
+vec <- which(eq2$edosecn %in% vec)
+manip <- eq2[vec,]
+manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
+manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
+manip <- within(manip, times.manip <- times.manip + 1)
+eq2[vec,] <- manip
+#
 # indicate manip
 manip <- eq3[sel,]
 manip <- within(manip, {
@@ -955,47 +1021,48 @@ manip <- within(manip, {
     y2010 <- y2011 <- y2012 <- y2013 <- NA;
 })
 eq3[sel,] <- manip
-#
-# item 2
-sel <- c(205,874,875:922,965,967,970,975:1003)
-sel <- 230000 + sel   # turn into edosecn
-sel <- which(eq2$edosecn %in% sel) # turn to indices
-manip <- eq2[sel,]
-# aggregate split populations for pi
-manip$p18_2010b <- sum(eq2$p18_2010[sel], na.rm = TRUE)
-manip$p18_2020b <- sum(eq2$p18_2020[sel], na.rm = TRUE)
-manip <- within(manip, pi <-  (p18_2020b / p18_2010b) ^ (1 / (2020 - 2010)) ); # rate of change
-# return to data for piecemeal manip
-eq2[sel,] <- manip
-# fix seccion 874
-sel <- c(874,965,967)
-sel <- 230000 + sel   # turn into edosecn
-sel <- which(eq2$edosecn %in% sel) # turn to indices
-manip <- eq2[sel,]
-manip$y2020[2:3] <- 0 # none appears in 2018 lisnom, jungle?
-# project 17-on and return to data
-manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
-manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
-manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
-manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
-manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
-# project 12-on in 874 (should be done separately, but 965 967 have non pop
-manip <- within(manip, y2012 <- tmp.proj(baseyr = 2020, yr = 2012))
-manip <- within(manip, y2013 <- tmp.proj(baseyr = 2020, yr = 2013))
-manip <- within(manip, y2014 <- tmp.proj(baseyr = 2020, yr = 2014))
-manip <- within(manip, y2015 <- tmp.proj(baseyr = 2020, yr = 2015))
-manip <- within(manip, y2016 <- tmp.proj(baseyr = 2020, yr = 2016))
-manip$y2012[2:3] <- manip$y2013[2:3] <- manip$y2014[2:3] <- manip$y2015[2:3] <- manip$y2016[2:3] <- NA
-# return to data and indicate manip
-manip <- within(manip, times.manip <- times.manip + 1)
-eq2[sel,] <- manip
-manip <- eq3[sel,]
-manip <- within(manip, {
-    action <-  orig.dest <- "";  when <- NA;
-    action2 <- orig.dest2 <- ""; when2 <- NA;
-})
-eq3[sel,] <- manip
-#
+
+
+## # item 2 ---  should have been fixed in "item 3" above 
+## sel <- c(205,874,875:922,965,967,970,975:1003)
+## sel <- 230000 + sel   # turn into edosecn
+## sel <- which(eq2$edosecn %in% sel) # turn to indices
+## manip <- eq2[sel,]
+## # aggregate split populations for pi
+## manip$p18_2010b <- sum(eq2$p18_2010[sel], na.rm = TRUE)
+## manip$p18_2020b <- sum(eq2$p18_2020[sel], na.rm = TRUE)
+## manip <- within(manip, pi <-  (p18_2020b / p18_2010b) ^ (1 / (2020 - 2010)) ); # rate of change
+## # return to data for piecemeal manip
+## eq2[sel,] <- manip
+## # fix seccion 874
+## sel <- c(874,965,967)
+## sel <- 230000 + sel   # turn into edosecn
+## sel <- which(eq2$edosecn %in% sel) # turn to indices
+## manip <- eq2[sel,]
+## manip$y2020[2:3] <- 0 # none appears in 2018 lisnom, jungle?
+## # project 17-on and return to data
+## manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+## manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+## manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
+## manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
+## manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
+## # project 12-on in 874 (should be done separately, but 965 967 have non pop
+## manip <- within(manip, y2012 <- tmp.proj(baseyr = 2020, yr = 2012))
+## manip <- within(manip, y2013 <- tmp.proj(baseyr = 2020, yr = 2013))
+## manip <- within(manip, y2014 <- tmp.proj(baseyr = 2020, yr = 2014))
+## manip <- within(manip, y2015 <- tmp.proj(baseyr = 2020, yr = 2015))
+## manip <- within(manip, y2016 <- tmp.proj(baseyr = 2020, yr = 2016))
+## manip$y2012[2:3] <- manip$y2013[2:3] <- manip$y2014[2:3] <- manip$y2015[2:3] <- manip$y2016[2:3] <- NA
+## # return to data and indicate manip
+## manip <- within(manip, times.manip <- times.manip + 1)
+## eq2[sel,] <- manip
+## manip <- eq3[sel,]
+## manip <- within(manip, {
+##     action <-  orig.dest <- "";  when <- NA;
+##     action2 <- orig.dest2 <- ""; when2 <- NA;
+## })
+## eq3[sel,] <- manip
+
 ## LA CAGUE, LO DE JUSTO ARRIBA YA LO HABIA HECHO AQUI ABAJO
 ## # item 1
 ## i <- which(eq2$edosecn==161976)
@@ -1207,6 +1274,7 @@ manip <- eq2[sel,]
 manip$p18_2010b <- sum(eq2$p18_2010[sel], na.rm = TRUE)
 manip$p18_2020b <- sum(eq2$p18_2020[sel], na.rm = TRUE)
 manip <- within(manip, pi <-  (p18_2020b / p18_2010b) ^ (1 / (2020 - 2010)) ); # rate of change
+tmp <- manip$pi[1] # save to paste across the board
 # return to data for piecemeal manip
 eq2[sel,] <- manip
 # manip seccion 1706 (simplified since seccion 2722 has no pop in 2020)
@@ -1224,6 +1292,23 @@ manip <- within(manip, y2018 <- tmp.proj(baseyr = 2010, yr = 2018))
 manip <- within(manip, y2019 <- tmp.proj(baseyr = 2010, yr = 2019))
 # seccion 2722
 manip$y2017[2] <- manip$y2018[2] <- manip$y2019[2] <- manip$y2020[2] <- manip$y2021[2] <- manip$y2022[2] <- 0
+# return to data and indicate manip
+manip <- within(manip, times.manip <- times.manip + 1)
+eq2[sel,] <- manip
+manip <- eq3[sel,]
+manip <- within(manip, {
+    action <-  orig.dest <- "";  when <- NA;
+    action2 <- orig.dest2 <- ""; when2 <- NA;
+})
+eq3[sel,] <- manip
+# 
+# new secciones post 2020
+sel <- which(eq3$edosecn %in% c(192883:192897))
+manip <- eq2[sel,]
+manip$pi <- tmp
+# project 21:22
+manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
+manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
 # return to data and indicate manip
 manip <- within(manip, times.manip <- times.manip + 1)
 eq2[sel,] <- manip
@@ -1264,20 +1349,44 @@ manip <- within(manip, {
 eq3[sel,] <- manip
 
 # 2017 split.to2
-sel <- which(eq2$edosecn %in% c(190129,192196,192197,192198:192229,192711:192716))
+sel <- which(eq2$edosecn %in% c(192197,192711:192716))
 manip <- eq2[sel,]
-manip[1,]
 # aggregate split populations for pi
 manip$p18_2010b <- sum(eq2$p18_2010[sel], na.rm = TRUE)
 manip$p18_2020b <- sum(eq2$p18_2020[sel], na.rm = TRUE)
 manip <- within(manip, pi <-  (p18_2020b / p18_2010b) ^ (1 / (2020 - 2010)) ); # rate of change for other secciones
-# return to data for piecemeal manip
+# 2011-16
+manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
+manip <- within(manip, y2012 <- tmp.proj(baseyr = 2010, yr = 2012))
+manip <- within(manip, y2013 <- tmp.proj(baseyr = 2010, yr = 2013))
+manip <- within(manip, y2014 <- tmp.proj(baseyr = 2010, yr = 2014))
+manip <- within(manip, y2015 <- tmp.proj(baseyr = 2010, yr = 2015))
+manip <- within(manip, y2016 <- tmp.proj(baseyr = 2010, yr = 2016))
+# 2017-22
+manip$y2020[7] <- 0 # why seccion 2716 missing fr censo 2020?
+manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
+manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
+manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
+# return to data and indicate manip
+manip <- within(manip, times.manip <- times.manip + 1)
 eq2[sel,] <- manip
-# fix 129
-sel <- which(eq2$edosecn %in% c(190129))
+manip <- eq3[sel,]
+manip <- within(manip, {
+    action <- orig.dest <- ""; when <- NA;
+    action2 <- orig.dest2 <- ""; when2 <- NA;
+})
+eq3[sel,] <- manip
+#
+# fix 2009 change
+sel <- which(eq2$edosecn %in% 190129)
 manip <- eq2[sel,]
-# project 1997-2009
-manip <- within(manip, pi <-  (p18_2010b / p18_2005) ^ (1 / (2010 - 2005)) ); # rate of change
+vec <- which(eq2$edosecn %in% c(190129,192196:192229))
+# aggregate split populations for pi
+manip$p18_2010b <- sum(eq2$p18_2010[vec], na.rm = TRUE)
+manip <- within(manip, pi <-  (p18_2010b / p18_2005) ^ (1 / (2010 - 2005)) ); # rate of change for other secciones
+# project 1997-2008
 manip <- within(manip, y2010 <- p18_2010b)
 manip <- within(manip, y1997 <- tmp.proj(baseyr = 2010, yr = 1997))
 manip <- within(manip, y1998 <- tmp.proj(baseyr = 2010, yr = 1998))
@@ -1301,10 +1410,9 @@ manip <- within(manip, {
 })
 eq3[sel,] <- manip
 #
-# fix 2196:2229
+# fix 2196:2229 in 2009
 sel <- which(eq2$edosecn %in% c(192196:192229))
 manip <- eq2[sel,]
-manip[1,]
 manip <- within(manip, y2009 <- tmp.proj(baseyr = 2010, yr = 2009))
 # return to data and indicate manip
 manip <- within(manip, times.manip <- times.manip + 1)
@@ -1312,29 +1420,6 @@ eq2[sel,] <- manip
 manip <- eq3[sel,]
 manip <- within(manip, {
     action <- orig.dest <- ""; when <- NA;
-})
-eq3[sel,] <- manip
-
-# fix 2197
-sel <- which(eq2$edosecn %in% c(192197))
-manip <- eq2[sel,]
-# 2011-16
-manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
-manip <- within(manip, y2012 <- tmp.proj(baseyr = 2010, yr = 2012))
-manip <- within(manip, y2013 <- tmp.proj(baseyr = 2010, yr = 2013))
-manip <- within(manip, y2014 <- tmp.proj(baseyr = 2010, yr = 2014))
-manip <- within(manip, y2015 <- tmp.proj(baseyr = 2010, yr = 2015))
-manip <- within(manip, y2016 <- tmp.proj(baseyr = 2010, yr = 2016))
-# 2009
-manip <- within(manip, pi <-  (p18_2020 / p18_2010) ^ (1 / (2020 - 2010)) ); # rate of change
-manip <- within(manip, y2009 <- tmp.proj(baseyr = 2010, yr = 2009))
-# return to data and indicate manip
-manip <- within(manip, times.manip <- times.manip + 1)
-eq2[sel,] <- manip
-manip <- eq3[sel,]
-manip <- within(manip, {
-    action <- orig.dest <- ""; when <- NA;
-    action2 <- orig.dest2 <- ""; when2 <- NA;
 })
 eq3[sel,] <- manip
 #
@@ -1421,9 +1506,6 @@ eq2[sel,c(1,6:11)] # all sp.fr then sp.to
 ##     action  <- "";      when  <- NA;    orig.dest  <- "";
 ## })
 ## eq3[sel,] <- manip
-
-# verify no more when2 remaining
-sel <- which(!is.na(eq3$when2))
 
 # vectors picking census column that is not NA
 #aorb05 <- apply(X=eq2[,c("p18_2005","p18_2005b","y2005")], MARGIN=1, FUN=function(X)
@@ -1826,18 +1908,236 @@ for (i in sel){
 }
 
 
+#########################
+## merged.to 2010:2020 ##
+#########################
+sel <- which(eq3$action=="merged.to" & eq3$when>2010 & eq3$when<2020)
+for (i in sel){
+    #i <- sel[1]
+    manip <- eq2[i,] # duplicate obs for manipulation
+    vec <- eval(parse(text = manip$orig.dest))
+    vec <- manip$edon*10000 + vec   # turn into edosecn
+    vec <- which(eq2$edosecn %in% vec) # turn to indices
+    # expand manip to include receiving sección
+    vec <- unique(union(i, vec))
+    vec.minus <- setdiff(vec,i)
+    manip <- eq2[vec,] # duplicate obs for manipulation
+    # aggregate split populations
+    ## manip$p18_2010b <- with(eq2, sum(aorb10[vec]))
+    ## manip$p18_2020b <- with(eq2, sum(aorb20[vec]))
+    manip$p18_2010b <- sum(eq2$p18_2010[vec], na.rm = TRUE)
+    manip$p18_2020b <- sum(eq2$p18_2020[vec], na.rm = TRUE)
+    manip <- within(manip, pi <-  (p18_2020b / p18_2010b) ^ (1 / (2020 - 2010)) ); # rate of change
+    if (manip$when[1]>2011) manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
+    if (manip$when[1]>2012) manip <- within(manip, y2012 <- tmp.proj(baseyr = 2010, yr = 2012))
+    if (manip$when[1]>2013) manip <- within(manip, y2013 <- tmp.proj(baseyr = 2010, yr = 2013))
+    if (manip$when[1]>2014) manip <- within(manip, y2014 <- tmp.proj(baseyr = 2010, yr = 2014))
+    if (manip$when[1]>2015) manip <- within(manip, y2015 <- tmp.proj(baseyr = 2010, yr = 2015))
+    if (manip$when[1]>2016) manip <- within(manip, y2016 <- tmp.proj(baseyr = 2010, yr = 2016))
+    if (manip$when[1]>2017) manip <- within(manip, y2017 <- tmp.proj(baseyr = 2010, yr = 2017))
+    if (manip$when[1]>2018) manip <- within(manip, y2018 <- tmp.proj(baseyr = 2010, yr = 2018))
+    if (manip$when[1]>2019) manip <- within(manip, y2019 <- tmp.proj(baseyr = 2010, yr = 2019))
+    # fix receiving end (NAs reemerge in vanishing sección)
+    if (manip$when[1]<=2011) manip <- within(manip, y2011 <- tmp.proj(baseyr = 2020, yr = 2011))
+    if (manip$when[1]<=2012) manip <- within(manip, y2012 <- tmp.proj(baseyr = 2020, yr = 2012))
+    if (manip$when[1]<=2013) manip <- within(manip, y2013 <- tmp.proj(baseyr = 2020, yr = 2013))
+    if (manip$when[1]<=2014) manip <- within(manip, y2014 <- tmp.proj(baseyr = 2020, yr = 2014))
+    if (manip$when[1]<=2015) manip <- within(manip, y2015 <- tmp.proj(baseyr = 2020, yr = 2015))
+    if (manip$when[1]<=2016) manip <- within(manip, y2016 <- tmp.proj(baseyr = 2020, yr = 2016))
+    if (manip$when[1]<=2017) manip <- within(manip, y2017 <- tmp.proj(baseyr = 2020, yr = 2017))
+    if (manip$when[1]<=2018) manip <- within(manip, y2018 <- tmp.proj(baseyr = 2020, yr = 2018))
+    if (manip$when[1]<=2019) manip <- within(manip, y2019 <- tmp.proj(baseyr = 2020, yr = 2019))
+    # return to data
+    manip <- within(manip, {
+        times.manip <- times.manip + 1;
+    })
+    eq2[vec,] <- manip
+    # indicate manip
+    manip <- eq3[vec,]
+    manip <- within(manip, {
+        action  <- "";      when  <- NA;    orig.dest  <- "";
+    })
+    eq3[vec,] <- manip
+}
+
+# merged.to 2010 need 1-on-1 manip bec 3 merged to a splitting seccion
+sel <- which(eq3$action=="merged.to" & eq3$when==2010)
+eq2[sel,c(1,6:13)]
+# fix 21369
+sel <- which(eq3$edosecn %in% c(21294,21369,21738:21806)) #21786
+manip <- eq2[sel,] # duplicate obs for manipulation
+## sel <- eval(parse(text = manip$orig.dest))
+## sel <- manip$edon*10000 + sel   # turn into edosecn
+## sel <- which(eq2$edosecn %in% sel) # turn to indices
+# aggregate split populations
+## manip$p18_2010b <- with(eq2, sum(aorb10[sel]))
+## manip$p18_2020b <- with(eq2, sum(aorb20[sel]))
+manip$p18_2005b <- sum(eq2$p18_2005[sel], na.rm = TRUE)
+manip$p18_2010b <- sum(eq2$p18_2010[sel], na.rm = TRUE)
+manip$p18_2020b <- sum(eq2$p18_2020[sel], na.rm = TRUE)
+manip <- within(manip, pi <-  (p18_2020b / p18_2010b) ^ (1 / (2020 - 2010)) ); # rate of change
+# return to data for piecemeal manip
+eq2[sel,] <- manip
+# 1369
+manip <- eq2[sel[2],]
+manip <- within(manip, y1997 <- tmp.proj(baseyr = 2005, yr = 1997))
+manip <- within(manip, y1998 <- tmp.proj(baseyr = 2005, yr = 1998))
+manip <- within(manip, y1999 <- tmp.proj(baseyr = 2005, yr = 1999))
+manip <- within(manip, y2000 <- tmp.proj(baseyr = 2005, yr = 2000))
+manip <- within(manip, y2001 <- tmp.proj(baseyr = 2005, yr = 2001))
+manip <- within(manip, y2002 <- tmp.proj(baseyr = 2005, yr = 2002))
+manip <- within(manip, y2003 <- tmp.proj(baseyr = 2005, yr = 2003))
+manip <- within(manip, y2004 <- tmp.proj(baseyr = 2005, yr = 2004))
+manip <- within(manip, y2006 <- tmp.proj(baseyr = 2005, yr = 2006))
+manip <- within(manip, y2007 <- tmp.proj(baseyr = 2005, yr = 2007))
+manip <- within(manip, y2008 <- tmp.proj(baseyr = 2005, yr = 2008))
+manip <- within(manip, y2009 <- tmp.proj(baseyr = 2005, yr = 2009))
+# return to data
+manip <- within(manip, {
+    times.manip <- times.manip + 1;
+})
+eq2[sel,] <- manip
+# indicate manip
+manip <- eq3[sel,]
+manip <- within(manip, {
+    action  <- "";      when  <- NA;    orig.dest  <- "";
+    action2  <- "";      when2  <- NA;    orig.dest2  <- "";
+    action3  <- "";      when3  <- NA;    orig.dest3  <- "";
+})
+eq3[sel,] <- manip
+#
+# fix 10776 777 119 
+sel <- which(eq3$edosecn %in% c(100776,100777,100779,101392,101393))
+manip <- eq2[sel,] # duplicate obs for manipulation
+# aggregate split populations
+## manip$p18_2010b <- with(eq2, sum(aorb10[sel]))
+## manip$p18_2020b <- with(eq2, sum(aorb20[sel]))
+manip$p18_2005b <- sum(eq2$p18_2005[sel], na.rm = TRUE)
+manip$p18_2010b <- sum(eq2$p18_2010[sel], na.rm = TRUE)
+manip$p18_2020b <- sum(eq2$p18_2020[sel], na.rm = TRUE)
+manip <- within(manip, pi <-  (p18_2020b / p18_2010b) ^ (1 / (2020 - 2010)) ); # rate of change
+# return to data for piecemeal manip
+eq2[sel,] <- manip
+# pre-2010
+manip <- eq2[sel[1:3],]
+manip <- within(manip, y1997 <- tmp.proj(baseyr = 2005, yr = 1997))
+manip <- within(manip, y1998 <- tmp.proj(baseyr = 2005, yr = 1998))
+manip <- within(manip, y1999 <- tmp.proj(baseyr = 2005, yr = 1999))
+manip <- within(manip, y2000 <- tmp.proj(baseyr = 2005, yr = 2000))
+manip <- within(manip, y2001 <- tmp.proj(baseyr = 2005, yr = 2001))
+manip <- within(manip, y2002 <- tmp.proj(baseyr = 2005, yr = 2002))
+manip <- within(manip, y2003 <- tmp.proj(baseyr = 2005, yr = 2003))
+manip <- within(manip, y2004 <- tmp.proj(baseyr = 2005, yr = 2004))
+manip <- within(manip, y2006 <- tmp.proj(baseyr = 2005, yr = 2006))
+manip <- within(manip, y2007 <- tmp.proj(baseyr = 2005, yr = 2007))
+manip <- within(manip, y2008 <- tmp.proj(baseyr = 2005, yr = 2008))
+manip <- within(manip, y2009 <- tmp.proj(baseyr = 2005, yr = 2009))
+manip <- within(manip, y2010 <- NA)
+manip <- within(manip, y2020 <- NA)
+# return to data
+manip <- within(manip, {
+    times.manip <- times.manip + 1;
+})
+eq2[sel[1:3],] <- manip
+# indicate manip
+manip <- eq3[sel,]
+manip <- within(manip, {
+    action  <- "";      when  <- NA;    orig.dest  <- "";
+    action2  <- "";      when2  <- NA;    orig.dest2  <- "";
+    action3  <- "";      when3  <- NA;    orig.dest3  <- "";
+})
+eq3[sel,] <- manip
+#
+# fix 152716 2717
+sel <- which(eq3$edosecn %in% c(152716,152717))
+manip <- eq2[sel,] # duplicate obs for manipulation
+# aggregate split populations
+manip$p18_2005b <- 318 # use 2006 lisnom in 2717
+manip$p18_2010b <- sum(eq2$p18_2010[sel], na.rm = TRUE)
+manip$y2010[1] <- 1 # 2716 not in conteo nor elec2006
+manip <- within(manip, pi <-  (p18_2010b / p18_2005b) ^ (1 / (2010 - 2005)) ); # rate of change
+manip <- within(manip, y1997 <- tmp.proj(baseyr = 2010, yr = 1997))
+manip <- within(manip, y1998 <- tmp.proj(baseyr = 2010, yr = 1998))
+manip <- within(manip, y1999 <- tmp.proj(baseyr = 2010, yr = 1999))
+manip <- within(manip, y2000 <- tmp.proj(baseyr = 2010, yr = 2000))
+manip <- within(manip, y2001 <- tmp.proj(baseyr = 2010, yr = 2001))
+manip <- within(manip, y2002 <- tmp.proj(baseyr = 2010, yr = 2002))
+manip <- within(manip, y2003 <- tmp.proj(baseyr = 2010, yr = 2003))
+manip <- within(manip, y2004 <- tmp.proj(baseyr = 2010, yr = 2004))
+manip <- within(manip, y2005 <- tmp.proj(baseyr = 2010, yr = 2005))
+manip <- within(manip, y2006 <- tmp.proj(baseyr = 2010, yr = 2006))
+manip <- within(manip, y2007 <- tmp.proj(baseyr = 2010, yr = 2007))
+manip <- within(manip, y2008 <- tmp.proj(baseyr = 2010, yr = 2008))
+manip <- within(manip, y2009 <- tmp.proj(baseyr = 2010, yr = 2009))
+# return to data
+manip <- within(manip, {
+    times.manip <- times.manip + 1;
+})
+eq2[sel[1:3],] <- manip
+# indicate manip
+manip <- eq3[sel,]
+manip <- within(manip, {
+    action  <- "";      when  <- NA;    orig.dest  <- "";
+    action2  <- "";      when2  <- NA;    orig.dest2  <- "";
+    action3  <- "";      when3  <- NA;    orig.dest3  <- "";
+})
+eq3[sel,] <- manip
+
+##########
+## 2020 ##
+##########
+sel <- which(eq3$action=="split.to" & eq3$when==2020)
+for (i in sel){
+    #i <- sel[1]
+    manip <- eq2[i,] # duplicate obs for manipulation
+    vec <- eval(parse(text = manip$orig.dest))
+    vec <- manip$edon*10000 + vec   # turn into edosecn
+    manip$case <- ifelse(manip$edosecn %in% vec, "no.baja", "baja") # did seccion survive the split? (baja means no) 
+    vec <- which(eq2$edosecn %in% vec) # turn to indices
+    vec.plus  <- union(i,vec)   # seccion and its targets (in case vec excludes dropped seccion) 
+    vec.minus <- setdiff(vec, i) # targets w/o seccion (for use when seccion was dropped)
+    # aggregate split populations
+    #manip$p18_2010b <- with(eq2, sum(aorb10[vec]))
+    manip$p18_2010b <- sum(eq2$p18_2010[vec.plus], na.rm = TRUE)
+    manip$p18_2020b <- sum(eq2$p18_2020[vec.plus], na.rm = TRUE)
+    manip <- within(manip, pi <-  (p18_2020b / p18_2010) ^ (1 / (2020 - 2010)) ); # rate of change
+    tmp <- manip$pi # save to paste across the board
+    # expand to include new secciones
+    manip <- eq2[vec.plus,] # duplicate obs for manipulation
+    manip$pi <- tmp
+    # fix 2011:19
+    manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
+    manip <- within(manip, y2012 <- tmp.proj(baseyr = 2010, yr = 2012))
+    manip <- within(manip, y2013 <- tmp.proj(baseyr = 2010, yr = 2013))
+    manip <- within(manip, y2014 <- tmp.proj(baseyr = 2010, yr = 2014))
+    manip <- within(manip, y2015 <- tmp.proj(baseyr = 2010, yr = 2015))
+    manip <- within(manip, y2016 <- tmp.proj(baseyr = 2010, yr = 2016))
+    manip <- within(manip, y2017 <- tmp.proj(baseyr = 2010, yr = 2017))
+    manip <- within(manip, y2018 <- tmp.proj(baseyr = 2010, yr = 2018))
+    manip <- within(manip, y2019 <- tmp.proj(baseyr = 2010, yr = 2019))
+    # fix 2021:22
+    manip <- within(manip, y2021 <- tmp.proj(baseyr = 2020, yr = 2021))
+    manip <- within(manip, y2022 <- tmp.proj(baseyr = 2020, yr = 2022))
+    # return to data
+    manip <- within(manip, {
+        times.manip <- times.manip + 1;
+    })
+    eq2[vec.plus,] <- manip
+    # indicate manip
+    manip <- eq3[vec.plus,]
+    manip <- within(manip, {
+        action  <- "";      when  <- NA;    orig.dest  <- "";
+#        action2  <- "";      when2  <- NA;    orig.dest2  <- "";
+#        action3  <- "";      when3  <- NA;    orig.dest3  <- "";
+    })
+    eq3[vec.plus,] <- manip
+}
+
 # Now check remaining split.from ??
-with(eq3, table(pre20=when<2020, action, useNA = "always"))
-x
-sel <- which(eq3$action=="split.from" & eq3$when>2010 & eq3$when<2020)
-sel <- which(eq3$edosecn %in% c(192197,230205))
+with(eq3, table(when, action, useNA = "always"))
+sel <- which(eq3$action=="?")
 eq2$edosecn[sel]
 eq2[sel,c(1,6:13)]
-x
-
-sel <- which(eq2$edosecn %in% c(21338,21868:21942))
-manip <- eq2[sel,]
-manip[1,]
 x
 
 ###############

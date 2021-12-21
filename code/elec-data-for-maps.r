@@ -2469,7 +2469,6 @@ eq$orig.dest3[sel] <- paste0("c(", eq$orig.dest3[sel], ")")
 # pob18
 
 
-
 pob18[1,]
 table(eq$action)
 table(eq$action2)
