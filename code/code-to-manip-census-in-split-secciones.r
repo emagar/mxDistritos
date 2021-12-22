@@ -2140,78 +2140,80 @@ eq2$edosecn[sel]
 eq2[sel,c(1,6:13)]
 x
 
-###############
-## merged.to ##
-###############
-sel <- which(eq3$action=="merged.to" & eq3$when==2010)
-#eq3$when[sel]
-for (i in sel){
-    #i <- sel[60]
-    manip <- eq2[i,] # duplicate obs for manipulation
-    vec <- eval(parse(text = manip$orig.dest))
-    vec <- manip$edon*10000 + vec   # turn into edosecn
-    manip$case <- ifelse(manip$edosecn %in% vec, "no.baja", "baja") # did seccion survive the split? (baja means no) 
-    vec <- which(eq2$edosecn %in% vec) # turn to indices
-    vec.plus  <- union(vec, i)   # seccion and its targets (in case vec excludes dropped seccion) 
-    vec.minus <- setdiff(vec, i) # targets w/o seccion (for use when seccion was dropped)
-    # aggregate split populations
-    manip$p18_2005b <- with(eq2, sum(aorb05[vec.plus]))
-    manip$p18_2010b <- with(eq2, sum(aorb10[vec]))
-    #manip$p18_2020b <- with(eq2, sum(aorb20[vec]))
-    manip <- within(manip, {y2005 <- p18_2005b; y2010 <- p18_2010b;}) # use aggregates to compute pi
-    manip <- within(manip, pi <-  (y2010 / y2005) ^ (1 / (2010 - 2005)) ); # rate of change
-    # recover original pop 2005 for projection
-    manip <- within(manip, y2005 <- p18_2005)
-    # re-project pre-2010 where needed
-    if (manip$when>1997) manip <- within(manip, y1997 <- tmp.proj(baseyr = 2005, yr = 1997))
-    if (manip$when>1998) manip <- within(manip, y1998 <- tmp.proj(baseyr = 2005, yr = 1998))
-    if (manip$when>1999) manip <- within(manip, y1999 <- tmp.proj(baseyr = 2005, yr = 1999))
-    if (manip$when>2000) manip <- within(manip, y2000 <- tmp.proj(baseyr = 2005, yr = 2000))
-    if (manip$when>2001) manip <- within(manip, y2001 <- tmp.proj(baseyr = 2005, yr = 2001))
-    if (manip$when>2002) manip <- within(manip, y2002 <- tmp.proj(baseyr = 2005, yr = 2002))
-    if (manip$when>2003) manip <- within(manip, y2003 <- tmp.proj(baseyr = 2005, yr = 2003))
-    if (manip$when>2004) manip <- within(manip, y2004 <- tmp.proj(baseyr = 2005, yr = 2004))
-    if (manip$when>2005) manip <- within(manip, y2005 <- tmp.proj(baseyr = 2005, yr = 2005))
-    if (manip$when>2006) manip <- within(manip, y2006 <- tmp.proj(baseyr = 2005, yr = 2006))
-    if (manip$when>2007) manip <- within(manip, y2007 <- tmp.proj(baseyr = 2005, yr = 2007))
-    if (manip$when>2008) manip <- within(manip, y2008 <- tmp.proj(baseyr = 2005, yr = 2008))
-    if (manip$when>2009) manip <- within(manip, y2009 <- tmp.proj(baseyr = 2005, yr = 2009))
-    # return to data
-    manip <- within(manip, times.manip <- times.manip + 1)
-    eq2[i,] <- manip
-    # indicate manipulation
-    manip <- eq3[i,] 
-    manip <- within(manip, {
-        action  <- "";      when  <- NA;    orig.dest  <- "";
-    })
-    eq3[i,] <- manip
-}
-
-# verify if any unmanip left
-with(eq3, table(pre10=when<2020, action, useNA = "always"))
-
-with(eq3, table(pre20=when<2020, action, useNA = "always"))
-x
-
-# monitor
-paste(manip$when, manip$when2, manip$when3)
-paste(manip$action, manip$action2, manip$action3)
-paste(manip$orig.dest, manip$orig.dest2, manip$orig.dest3)
-x
-
-    
-# debug
-with(eq2, table(times.manip, paste0(dpre05done, d0510done, d1020done, dpost20done)))
-x
-
-
-
-# groups 
-g1 <- which(eq2$when < 2005 | eq2$when %in% 2006:2009) # project with 2005-2010 slope, define start point
-g2 <- which(eq2$when %in% 2011:2019 | eq2$when > 2020) # project with 2010-2020 slope, define start point
-g3 <- which(eq2==2005) # inspect
-g4 <- which(eq2==2010)
-g5 <- which(eq2==2020)
+## DROP
+##
+## ###############
+## ## merged.to ##
+## ###############
+## sel <- which(eq3$action=="merged.to" & eq3$when==2010)
+## #eq3$when[sel]
+## for (i in sel){
+##     #i <- sel[60]
+##     manip <- eq2[i,] # duplicate obs for manipulation
+##     vec <- eval(parse(text = manip$orig.dest))
+##     vec <- manip$edon*10000 + vec   # turn into edosecn
+##     manip$case <- ifelse(manip$edosecn %in% vec, "no.baja", "baja") # did seccion survive the split? (baja means no) 
+##     vec <- which(eq2$edosecn %in% vec) # turn to indices
+##     vec.plus  <- union(vec, i)   # seccion and its targets (in case vec excludes dropped seccion) 
+##     vec.minus <- setdiff(vec, i) # targets w/o seccion (for use when seccion was dropped)
+##     # aggregate split populations
+##     manip$p18_2005b <- with(eq2, sum(aorb05[vec.plus]))
+##     manip$p18_2010b <- with(eq2, sum(aorb10[vec]))
+##     #manip$p18_2020b <- with(eq2, sum(aorb20[vec]))
+##     manip <- within(manip, {y2005 <- p18_2005b; y2010 <- p18_2010b;}) # use aggregates to compute pi
+##     manip <- within(manip, pi <-  (y2010 / y2005) ^ (1 / (2010 - 2005)) ); # rate of change
+##     # recover original pop 2005 for projection
+##     manip <- within(manip, y2005 <- p18_2005)
+##     # re-project pre-2010 where needed
+##     if (manip$when>1997) manip <- within(manip, y1997 <- tmp.proj(baseyr = 2005, yr = 1997))
+##     if (manip$when>1998) manip <- within(manip, y1998 <- tmp.proj(baseyr = 2005, yr = 1998))
+##     if (manip$when>1999) manip <- within(manip, y1999 <- tmp.proj(baseyr = 2005, yr = 1999))
+##     if (manip$when>2000) manip <- within(manip, y2000 <- tmp.proj(baseyr = 2005, yr = 2000))
+##     if (manip$when>2001) manip <- within(manip, y2001 <- tmp.proj(baseyr = 2005, yr = 2001))
+##     if (manip$when>2002) manip <- within(manip, y2002 <- tmp.proj(baseyr = 2005, yr = 2002))
+##     if (manip$when>2003) manip <- within(manip, y2003 <- tmp.proj(baseyr = 2005, yr = 2003))
+##     if (manip$when>2004) manip <- within(manip, y2004 <- tmp.proj(baseyr = 2005, yr = 2004))
+##     if (manip$when>2005) manip <- within(manip, y2005 <- tmp.proj(baseyr = 2005, yr = 2005))
+##     if (manip$when>2006) manip <- within(manip, y2006 <- tmp.proj(baseyr = 2005, yr = 2006))
+##     if (manip$when>2007) manip <- within(manip, y2007 <- tmp.proj(baseyr = 2005, yr = 2007))
+##     if (manip$when>2008) manip <- within(manip, y2008 <- tmp.proj(baseyr = 2005, yr = 2008))
+##     if (manip$when>2009) manip <- within(manip, y2009 <- tmp.proj(baseyr = 2005, yr = 2009))
+##     # return to data
+##     manip <- within(manip, times.manip <- times.manip + 1)
+##     eq2[i,] <- manip
+##     # indicate manipulation
+##     manip <- eq3[i,] 
+##     manip <- within(manip, {
+##         action  <- "";      when  <- NA;    orig.dest  <- "";
+##     })
+##     eq3[i,] <- manip
+## }
+##
+## # verify if any unmanip left
+## with(eq3, table(pre10=when<2020, action, useNA = "always"))
+##
+## with(eq3, table(pre20=when<2020, action, useNA = "always"))
+## x
+##
+## # monitor
+## paste(manip$when, manip$when2, manip$when3)
+## paste(manip$action, manip$action2, manip$action3)
+## paste(manip$orig.dest, manip$orig.dest2, manip$orig.dest3)
+## x
+##
+##    
+## # debug
+## with(eq2, table(times.manip, paste0(dpre05done, d0510done, d1020done, dpost20done)))
+## x
+##
+##
+##
+## # groups 
+## g1 <- which(eq2$when < 2005 | eq2$when %in% 2006:2009) # project with 2005-2010 slope, define start point
+## g2 <- which(eq2$when %in% 2011:2019 | eq2$when > 2020) # project with 2010-2020 slope, define start point
+## g3 <- which(eq2==2005) # inspect
+## g4 <- which(eq2==2010)
+## g5 <- which(eq2==2020)
 
 #
 ################################
