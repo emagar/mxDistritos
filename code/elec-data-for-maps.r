@@ -2466,16 +2466,24 @@ sel <- grep("[|]", eq$orig.dest3)
 eq$orig.dest3[sel] <- gsub("[|]",",", eq$orig.dest3[sel])
 eq$orig.dest3[sel] <- paste0("c(", eq$orig.dest3[sel], ")")
 
-# pob18
 
+##########################################################################################
+## generate yearly linear projections of pob18 (routine takes care of reseccionamiento) ##
+##########################################################################################
 
-pob18[1,]
-table(eq$action)
-table(eq$action2)
-table(eq$action3)
-    sel.split <- which(eq$action=="split.to")
-    info <- eq[sel.split, c("edon","seccion","orig.dest","when")]
-    info$edosecn <- info$edon*10000+info$seccion
+# start by making a generic object for manipulation
+generic <- pob18
+head(generic)
+colnames(generic) <- c("edosecn","cen_2005","cen_2010","cen_2020")
+#
+source(paste0(wd, "code/code-to-manip-census-in-split-secciones.r"))
+# 
+# output is an object named eq2, rename it
+sel <- c("edosecn", paste0("y", 1997:2022)) # keep select columns only
+dim(pob18)
+dim(eq2)
+pob18y <- eq2[,sel] # bring name original
+x
 
 
 # 13ago2021: figure why source below uses object info that is created until line ~3073!!!
