@@ -913,18 +913,21 @@ for (i in 10:32){
     tmp2005 <- read.csv( paste0("/home/eric/Downloads/Desktop/MXelsCalendGovt/censos/secciones/eceg_2005/", edos[i], "/", i, "_", edos[i], "_pob.csv"), stringsAsFactors = FALSE)
     tmp18 <- rbind(tmp18, tmp2005[, grep("ENTIDAD|SECCION|POB_TOT|EDQUI0[1-4]", colnames(tmp2005))])
 }
-rm(tmp2005)
 # drop seccion=0
 tmp18 <- tmp18[-which(tmp18$SECCION==0),]
-# EDQUI04 covers ages 15:19, so drop one two-fifths
+# EDQUI04 covers ages 15:19, drop two-fifths (assumes yearly cohorts equal size)
 tmp18$EDQUI04 <- as.integer(tmp18$EDQUI04 * .6)
 # p18
 tmp18$p18_2005 <- tmp18$POB_TOT - tmp18$EDQUI01 - tmp18$EDQUI02 - tmp18$EDQUI03 - tmp18$EDQUI04
 #
 tmp18$edosecn <- tmp18$ENTIDAD*10000 + tmp18$SECCION
 tmp18 <- tmp18[, c("edosecn","p18_2005")]
-# add missing secciones
+# add missing secciones (tmp adds up all secciones reported in yearly federal returns)
+sel <- which(tmp18$edosecn %notin% tmp$edosecn)
+tmp18$edosecn[sel]
+c(nrow(tmp), nrow(tmp18))
 tmp18  <- merge(x=tmp, y=tmp18,  by = "edosecn", all = TRUE)
+c(nrow(tmp), nrow(tmp18))
 tmp18 <- tmp18[, -grep("d[0-9]", colnames(tmp18))]
 # add to pop object
 pob18 <- tmp18
@@ -932,11 +935,11 @@ pob18 <- tmp18
 # 2010
 tmp18 <- data.frame()
 for (i in 1:9){
-    tmp2010 <- read.csv( paste0("/home/eric/Downloads/Desktop/MXelsCalendGovt/censos/secciones/eceg_2010/", edos[i], "/secciones_0", i, ".csv"), stringsAsFactors = FALSE)
+    tmp2010 <- read.csv( paste0("/home/eric/Desktop/MXelsCalendGovt/censos/secciones/eceg_2010/", edos[i], "/secciones_0", i, ".csv"), stringsAsFactors = FALSE)
     tmp18 <- rbind(tmp18, tmp2010[, grep("ENTIDAD|CLAVEGEO|P_18YMAS$", colnames(tmp2010))])
 }
 for (i in 10:32){
-    tmp2010 <- read.csv( paste0("/home/eric/Downloads/Desktop/MXelsCalendGovt/censos/secciones/eceg_2010/", edos[i], "/secciones_", i, ".csv"), stringsAsFactors = FALSE)
+    tmp2010 <- read.csv( paste0("/home/eric/Desktop/MXelsCalendGovt/censos/secciones/eceg_2010/", edos[i], "/secciones_", i, ".csv"), stringsAsFactors = FALSE)
     tmp18 <- rbind(tmp18, tmp2010[, grep("ENTIDAD|CLAVEGEO|P_18YMAS$", colnames(tmp2010))])
 }
 rm(tmp2010)
@@ -2470,7 +2473,7 @@ eq$orig.dest3[sel] <- paste0("c(", eq$orig.dest3[sel], ")")
 ##########################################################################################
 ## generate yearly linear projections of pob18 (routine takes care of reseccionamiento) ##
 ##########################################################################################
-
+eric x 7ene21
 # start by making a generic object for manipulation
 generic <- pob18
 head(generic)
@@ -2479,11 +2482,11 @@ colnames(generic) <- c("edosecn","cen_2005","cen_2010","cen_2020")
 source(paste0(wd, "code/code-to-manip-census-in-split-secciones.r"))
 # 
 # output is an object named eq2, rename it
+head(eq2)
 sel <- c("edosecn", paste0("y", 1997:2022)) # keep select columns only
-dim(pob18)
-dim(eq2)
 pob18y <- eq2[,sel] # bring name original
-x
+
+
 
 
 # 13ago2021: figure why source below uses object info that is created until line ~3073!!!

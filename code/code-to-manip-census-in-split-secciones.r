@@ -9,14 +9,23 @@ eq2 <- eq2[, c("edosecn","edon","seccion","inegi","ife","action","orig.dest","wh
 eq2 <- merge(x = eq2, y = generic, by = "edosecn", all.x = TRUE, all.y = FALSE)
 # will receive counterfactual sums
 eq2$cen_2020b <- eq2$cen_2010b <- eq2$cen_2005b <- NA
-#
+
+# monitor orig/new obs in eq2 after merge
+#dim(eq); dim(eq2)
+#which(eq$edosecn %notin% eq2$edosecn)
+#which(eq2$edosecn %notin% eq$edosecn)
+#sel <- which(duplicated(generic$edosecn)==TRUE)
+#generic$edosecn[sel[1]]
+#sel <- which(generic$edosecn==70004)
+#pob18[sel,]
+
 eq2 <- within(eq2, {
     pi <- NA;
     case <- NA;
     times.manip <- 0;
     #a <- b <- NA;
     y1997 <- y1998 <- y1999 <- y2000 <- y2001 <- y2002 <- y2003 <- y2004 <- y2005 <- y2006 <- y2007 <- y2008 <- y2009 <- y2010 <- y2011 <- y2012 <- y2013 <- y2014 <- y2015 <- y2016 <- y2017 <- y2018 <- y2019 <- y2020 <- y2021 <- y2022 <- NA;
-    })
+})
 
 ##############################
 ## municipio changes ignored #
@@ -44,8 +53,8 @@ eq2[sel,] <- manip
 # eq3 will receive manipulation indications and generate NAs needed in time series projections
 eq3 <- eq2
 eq3 <- eq3[, c("edosecn","action","orig.dest","when","action2","orig.dest2","when2","action3","orig.dest3","when3",
-               paste0("y",1997:2022))]
-eq3[,paste0("y",1997:2022)] <- 1
+               paste0("y", 1997:2022))]
+eq3[,paste0("y", 1997:2022)] <- 1
 
 ## # DROP
 ## # secciones that cannot be fixed for census data projection
@@ -167,36 +176,34 @@ manip <- within(manip, {
 eq2[sel,] <- manip
 
 
-
 ################################
 ## handle special cases first ##
 ################################
 # fix 10487
-## 2003  2005  2008  2010
-##  366   366   366
-##  408   408   408
-##  459   459   459
-##      \ 487---378
+## 2003  2004 2005  2008  2010
+##  366   366  366   366
+##  408   408  408   408
+##  459   459  459   459
+##      \ 487  487---378
 #no.manip <- c(10487) # eg. 10487 created in 2004 with bits of three secciones (mun limits), then merged to 10378 in 2008
 sel <- which(eq2$edosecn %in% c(10366,10378,10408,10459,10487))
 manip <- eq2[sel,]
 # aggregate split populations
 manip$cen_2005b <- sum(eq2$cen_2005[sel], na.rm = TRUE)
 manip$cen_2010b <- sum(eq2$cen_2010[sel], na.rm = TRUE)
-#manip$cen_2020b <- sum(eq2$cen_2020[sel], na.rm = TRUE)
-#manip <- within(manip, {y2005 <- cen_2005b; y2010 <- cen_2010b;}) # use aggregates to compute pi
 manip <- within(manip, pi <-  (cen_2010b - cen_2005b) / (2010 - 2005) ); # rate of change
 # return to data for piecemeal manip
 eq2[sel,] <- manip
+#
 # manip 487
 manip <- eq2[sel[5],]
-# project 2004-08
+# project 2004-2007
 manip <- within(manip, y2004 <- tmp.proj(baseyr = 2005, yr = 2004))
 manip <- within(manip, y2005 <- tmp.proj(baseyr = 2005, yr = 2005))
 manip <- within(manip, y2006 <- tmp.proj(baseyr = 2005, yr = 2006))
 manip <- within(manip, y2007 <- tmp.proj(baseyr = 2005, yr = 2007))
 tmp <- manip$y2005 # keep to subtract below
-# indicate and return to data
+# return to data and indicate manipulation
 manip <- within(manip, times.manip <- times.manip + 1)
 eq2[sel[5],] <- manip
 manip <- eq3[sel[5],]
@@ -205,33 +212,32 @@ manip <- within(manip, {
     action2 <- "";      when2 <- NA;    orig.dest2 <- "";
     action3 <- "";      when3 <- NA;    orig.dest3 <- "";
 })
-eq3[sel[c(1,3,4)],] <- manip
-manip <- within(manip, y2004 <- tmp.proj(baseyr = 2005, yr = 2004))
-# manip 366 408 459
-manip <- eq2[sel[c(1,3,4)],]
-manip$y2005 <- manip$y2005 + tmp/3 # add split seccion by thirds
-# re-project
-manip <- within(manip, y1997 <- tmp.proj(baseyr = 2005, yr = 1997))
-manip <- within(manip, y1998 <- tmp.proj(baseyr = 2005, yr = 1998))
-manip <- within(manip, y1999 <- tmp.proj(baseyr = 2005, yr = 1999))
-manip <- within(manip, y2000 <- tmp.proj(baseyr = 2005, yr = 2000))
-manip <- within(manip, y2001 <- tmp.proj(baseyr = 2005, yr = 2001))
-manip <- within(manip, y2002 <- tmp.proj(baseyr = 2005, yr = 2002))
-manip <- within(manip, y2003 <- tmp.proj(baseyr = 2005, yr = 2003))
-manip <- within(manip, y2005 <- cen_2005)
-# indicate and return to data
-manip <- within(manip, times.manip <- times.manip + 1)
-eq2[sel[c(1,2,4)],] <- manip
-manip <- eq3[sel[c(1,2,4)],]
+eq3[sel[5],] <- manip
+# manip 366 408 459: since split seccion has pop2005=31, will leave these three untouched
+## manip <- eq2[sel[c(1,3,4)],]
+## manip$y2005 <- manip$y2005 + tmp/3 # add split seccion by thirds
+## # re-project
+## manip <- within(manip, y1997 <- tmp.proj(baseyr = 2005, yr = 1997))
+## manip <- within(manip, y1998 <- tmp.proj(baseyr = 2005, yr = 1998))
+## manip <- within(manip, y1999 <- tmp.proj(baseyr = 2005, yr = 1999))
+## manip <- within(manip, y2000 <- tmp.proj(baseyr = 2005, yr = 2000))
+## manip <- within(manip, y2001 <- tmp.proj(baseyr = 2005, yr = 2001))
+## manip <- within(manip, y2002 <- tmp.proj(baseyr = 2005, yr = 2002))
+## manip <- within(manip, y2003 <- tmp.proj(baseyr = 2005, yr = 2003))
+## manip <- within(manip, y2005 <- cen_2005)
+## # return to data
+## manip <- within(manip, times.manip <- times.manip + 1)
+## eq2[sel[c(1,3,4)],] <- manip
+# indicate manipulation
+manip <- eq3[sel[c(1,3,4)],]
 manip <- within(manip, {
     action  <- "";      when  <- NA;    orig.dest  <- "";
     action2 <- "";      when2 <- NA;    orig.dest2 <- "";
     action3 <- "";      when3 <- NA;    orig.dest3 <- "";
 })
-eq3[sel[c(1,2,4)],] <- manip
-manip <- within(manip, y2004 <- tmp.proj(baseyr = 2005, yr = 2004))
+eq3[sel[c(1,3,4)],] <- manip
 # manip 378
-manip <- eq2[sel[3],]
+manip <- eq2[sel[2],]
 manip$cen_2005b <- manip$y2005 + tmp 
 manip <- within(manip, pi <-  (cen_2010 - cen_2005b) / (2010 - 2005) ); # rate of change
 ## # project 2008-09
@@ -251,25 +257,25 @@ manip <- within(manip, y2006 <- tmp.proj(baseyr = 2005, yr = 2006))
 manip <- within(manip, y2007 <- tmp.proj(baseyr = 2005, yr = 2007))
 # indicate and return to data
 manip <- within(manip, times.manip <- times.manip + 1)
-eq2[sel[3],] <- manip
-manip <- eq3[sel[3],]
+eq2[sel[2],] <- manip
+manip <- eq3[sel[2],]
 manip <- within(manip, {
     action  <- "";      when  <- NA;    orig.dest  <- "";
     action2 <- "";      when2 <- NA;    orig.dest2 <- "";
     action3 <- "";      when3 <- NA;    orig.dest3 <- "";
 })
-eq3[sel[3],] <- manip
-manip <- within(manip, y2004 <- tmp.proj(baseyr = 2005, yr = 2004))
+eq3[sel[2],] <- manip
+
 #
 # bits of 19 852&2333 split to create 2727:2731 --- when 3
-sel <- which(eq2$edosecn %in% c(192333,192727:192731)); # ignoro 190852, chica y cuya pob cambió poco
+sel <- which(eq2$edosecn %in% c(190852, 192333, 192727:192731)); # ignoro 190852, chica y cuya pob cambió poco
 manip <- eq2[sel,]
 # aggregate split populations
-manip$cen_2010b <- sum(eq2$cen_2010[sel[-2:-6]])
+manip$cen_2010b <- sum(eq2$cen_2010[sel[1:2]])
 manip$cen_2020b <- sum(eq2$cen_2020[sel])
 #manip <- within(manip, {y2005 <- cen_2005b; y2010 <- cen_2010b;}) # use aggregates to compute pi
 manip <- within(manip, pi <-  (cen_2020b - cen_2010b) / (2020 - 2010) ); # rate of change
-# re-project full pop up to 2001
+# re-project full pop 2011:2016
 manip <- within(manip, y2011 <- tmp.proj(baseyr = 2010, yr = 2011))
 manip <- within(manip, y2012 <- tmp.proj(baseyr = 2010, yr = 2012))
 manip <- within(manip, y2013 <- tmp.proj(baseyr = 2010, yr = 2013))
