@@ -2485,7 +2485,29 @@ source(paste0(wd, "code/code-to-manip-census-in-split-secciones.r"))
 head(eq2)
 sel <- c("edosecn", paste0("y", 1997:2022)) # keep select columns only
 pob18y <- eq2[,sel] # bring name original
+rm(eq2, eq3) # clean
+ls()
+# compare lisnom to p18 projection
+head(v21s)
+tmp <- pob18y[, c("edosecn", "y2021")]
+tmp$p18 <- tmp[,2]
+head(tmp)
+tmp2 <-  v21s[, c("edosecn","lisnom")]
+tmp $v1 <- 1
+tmp2$v2 <- 2
+tmp <- merge(x = tmp, y = tmp2, by = "edosecn", all = TRUE)
+tmp$orig <- "neither"
+tmp$orig[tmp$v1==1] <- "p18y"
+tmp$orig[tmp$v2==2] <- "v09s"
+tmp$orig[tmp$v1==1 & tmp$v2==2] <- "both"
+table(tmp$orig)
+tmp <- within(tmp, dif <- abs(lisnom - p18) / lisnom)
+summary(tmp$dif)
 
+tmp <- tmp[order(-tmp$dif),]
+tmp[70721:70730,]
+tail(tmp)
+x
 
 
 
@@ -3005,6 +3027,36 @@ for (i in non.nas){
     data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
     data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
     #
+    ##################################
+    ## predict 2024 with last 5 els ##
+    ##################################
+    year <- 2024
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2024[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2024$pan   [[i]] <- reg.pan
+    regs.2024$left  [[i]] <- reg.left  
+    regs.2024$oth   [[i]] <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left
+    #
     # ALTERNATIVE: exp(predict.lm(reg.pan,    newdata = new.d, interval = "confidence"))
     # #########################################################################
     ## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
@@ -3060,7 +3112,7 @@ for (i in non.nas){
 ##############################################################################################
 #
 # clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
-rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.2021, vhat.left, vhat.pan, vhat.pri)
+rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.2021, vhat.2024, vhat.left, vhat.pan, vhat.pri)
 
 
 ##################################################################
@@ -3258,6 +3310,7 @@ extendCoal.2012 <- tmp.func(year=2012)
 extendCoal.2015 <- tmp.func(year=2015)
 extendCoal.2018 <- tmp.func(year=2018)
 extendCoal.2021 <- tmp.func(year=2021)
+extendCoal.2024 <- tmp.func(year=2024)
 #rm(extendCoal.2015) # clean memory
 
 # plug inegi into data for export
@@ -3269,6 +3322,7 @@ extendCoal.2012 <- merge(x = extendCoal.2012, y = tmp, by = "ife", all = TRUE)
 extendCoal.2015 <- merge(x = extendCoal.2015, y = tmp, by = "ife", all = TRUE)
 extendCoal.2018 <- merge(x = extendCoal.2018, y = tmp, by = "ife", all = TRUE)
 extendCoal.2021 <- merge(x = extendCoal.2021, y = tmp, by = "ife", all = TRUE)
+extendCoal.2024 <- merge(x = extendCoal.2024, y = tmp, by = "ife", all = TRUE)
 
 # if missing ife code, that wrongly adds a rown with NAs, drop 
 sel <- which(is.na(extendCoal.2006$ife))
@@ -3279,6 +3333,7 @@ if (length(sel)>0){
     extendCoal.2015 <- extendCoal.2015[-sel,];
     extendCoal.2018 <- extendCoal.2018[-sel,];
     extendCoal.2021 <- extendCoal.2021[-sel,];
+    extendCoal.2024 <- extendCoal.2024[-sel,];
 }
 
 # drop some columns
@@ -3288,6 +3343,7 @@ extendCoal.2012 <- within(extendCoal.2012, yr <- edosecn <- NULL)
 extendCoal.2015 <- within(extendCoal.2015, yr <- edosecn <- NULL)
 extendCoal.2018 <- within(extendCoal.2018, yr <- edosecn <- NULL)
 extendCoal.2021 <- within(extendCoal.2021, yr <- edosecn <- NULL)
+extendCoal.2024 <- within(extendCoal.2024, yr <- edosecn <- NULL)
 
 # more cleaning
 rm(add.split,cs,sel.split)
@@ -3317,6 +3373,9 @@ if (agg=="m") {
     #
     write.csv(extendCoal.2021,
               file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2024,
+              file = paste(wd, "data/dipfed-municipio-vhat-2024.csv", sep = ""), row.names = FALSE)
 }
 if (agg=="s") {
     write.csv(extendCoal.2009,
@@ -3330,6 +3389,12 @@ if (agg=="s") {
     #
     write.csv(extendCoal.2018,
               file = paste(wd, "data/dipfed-seccion-vhat-2018.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2021,
+              file = paste(wd, "data/dipfed-seccion-vhat-2021.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2024,
+              file = paste(wd, "data/dipfed-seccion-vhat-2024.csv", sep = ""), row.names = FALSE)
 }
 
 # save municipal regression objects
@@ -3340,6 +3405,7 @@ save(regs.2012, file = paste(wd, "data/dipfed-municipio-regs-2012.RData", sep = 
 save(regs.2015, file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""), compress = "gzip")
 save(regs.2018, file = paste(wd, "data/dipfed-municipio-regs-2018.RData", sep = ""), compress = "gzip")
 save(regs.2021, file = paste(wd, "data/dipfed-municipio-regs-2021.RData", sep = ""), compress = "gzip")
+save(regs.2024, file = paste(wd, "data/dipfed-municipio-regs-2024.RData", sep = ""), compress = "gzip")
 
 # save sección regression objects
 save(mean.regs, file = paste(wd, "data/too-big-4-github/dipfed-seccion-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
@@ -3347,6 +3413,7 @@ save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2009
 save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2012.RData", sep = ""), compress = "gzip")
 save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2015.RData", sep = ""), compress = "gzip")
 save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2018.RData", sep = ""), compress = "gzip")
+save(regs.2021, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2021.RData", sep = ""), compress = "gzip")
 
 # load regression object
 load(file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""))
