@@ -919,9 +919,10 @@ tmp18 <- tmp18[-which(tmp18$SECCION==0),]
 tmp18$EDQUI04 <- as.integer(tmp18$EDQUI04 * .6)
 # p18
 tmp18$p18_2005 <- tmp18$POB_TOT - tmp18$EDQUI01 - tmp18$EDQUI02 - tmp18$EDQUI03 - tmp18$EDQUI04
+tmp18$ptot_2005 <- tmp18$POB_TOT
 #
 tmp18$edosecn <- tmp18$ENTIDAD*10000 + tmp18$SECCION
-tmp18 <- tmp18[, c("edosecn","p18_2005")]
+tmp18 <- tmp18[, c("edosecn", "p18_2005", "ptot_2005")]
 # add missing secciones (tmp adds up all secciones reported in yearly federal returns)
 sel <- which(tmp18$edosecn %notin% tmp$edosecn)
 tmp18$edosecn[sel]
@@ -936,11 +937,11 @@ pob18 <- tmp18
 tmp18 <- data.frame()
 for (i in 1:9){
     tmp2010 <- read.csv( paste0("/home/eric/Desktop/MXelsCalendGovt/censos/secciones/eceg_2010/", edos[i], "/secciones_0", i, ".csv"), stringsAsFactors = FALSE)
-    tmp18 <- rbind(tmp18, tmp2010[, grep("ENTIDAD|CLAVEGEO|P_18YMAS$", colnames(tmp2010))])
+    tmp18 <- rbind(tmp18, tmp2010[, grep("ENTIDAD|CLAVEGEO|P_18YMAS$|POBTOT", colnames(tmp2010))])
 }
 for (i in 10:32){
     tmp2010 <- read.csv( paste0("/home/eric/Desktop/MXelsCalendGovt/censos/secciones/eceg_2010/", edos[i], "/secciones_", i, ".csv"), stringsAsFactors = FALSE)
-    tmp18 <- rbind(tmp18, tmp2010[, grep("ENTIDAD|CLAVEGEO|P_18YMAS$", colnames(tmp2010))])
+    tmp18 <- rbind(tmp18, tmp2010[, grep("ENTIDAD|CLAVEGEO|P_18YMAS$|POBTOT", colnames(tmp2010))])
 }
 rm(tmp2010)
 # get seccion
@@ -949,7 +950,8 @@ tmp18$seccion <- as.numeric(lastn(tmp18$CLAVEGEO, 4))
 #
 tmp18$edosecn <- tmp18$ENTIDAD*10000 + tmp18$seccion
 tmp18$p18_2010 <- tmp18$P_18YMAS
-tmp18 <- tmp18[, c("edosecn","p18_2010")]
+tmp18$ptot_2010 <- tmp18$POBTOT
+tmp18 <- tmp18[, c("edosecn", "p18_2010", "ptot_2010")]
 # add missing secciones
 tmp18  <- merge(x=tmp, y=tmp18,  by = "edosecn", all = TRUE)
 tmp18 <- tmp18[, -grep("d[0-9]", colnames(tmp18))]
@@ -960,8 +962,9 @@ head(pob18)
 # 2020
 tmp18 <- read.csv("/home/eric/Downloads/Desktop/MXelsCalendGovt/censos/secciones/eceg_2020/conjunto_de_datos/INE_SECCION_2020.csv", stringsAsFactors = FALSE)[, c(2,5,7,13)]
 tmp18$p18_2020 <- tmp18$POBTOT - tmp18$P_0A17
+tmp18$ptot_2020 <- tmp18$POBTOT
 tmp18$edosecn <- tmp18$ENTIDAD*10000 + tmp18$SECCION
-tmp18 <- tmp18[, c("edosecn","p18_2020")]
+tmp18 <- tmp18[, c("edosecn", "p18_2020", "ptot_2020")]
 # add missing secciones
 tmp18  <- merge(x=tmp, y=tmp18,  by = "edosecn", all = TRUE)
 tmp18 <- tmp18[, -grep("d[0-9]", colnames(tmp18))]
@@ -970,10 +973,16 @@ pob18 <- merge(pob18, tmp18, by = "edosecn", all = TRUE)
 head(pob18)
 #
 # will need cleaning with reseccionamiento functions
-table(is.na(pob18$p18_2005), is.na(pob18$p18_2010))
-table(is.na(pob18$p18_2005), is.na(pob18$p18_2020))
-table(is.na(pob18$p18_2010), is.na(pob18$p18_2020))
+table(y2005=is.na(pob18$p18_2005), y2010=is.na(pob18$p18_2010))
+table(y2005=is.na(pob18$p18_2005), y2020=is.na(pob18$p18_2020))
+table(y2010=is.na(pob18$p18_2010), y2020=is.na(pob18$p18_2020))
 rm(lastn,tmp18,tmp,add.edon.secn,sel,sel.r) # clean
+#
+# SEPARATE PTOT FROM P18
+pobtot <- pob18
+pob18  <- pob18 [, grep("edosecn|^p18",  colnames(pob18) )]
+pobtot <- pobtot[, grep("edosecn|^ptot", colnames(pobtot))]
+head(pobtot); head(pob18)
 
 
 #################################################
@@ -2392,7 +2401,7 @@ Cuando haya codificado historia de AMGE:
 14) [X] Fix seccion action and to.from
 15) [ ] Fix pob18 missing secciones in order to project inter-census years for turnout
 
-# temporary for debugging
+## TEMPORARY FOR DEBUGGING
 #save.image("../../datosBrutos/not-in-git/tmp.RData")
 
 rm(list = ls())
@@ -2402,16 +2411,16 @@ setwd(dd)
 load("../../datosBrutos/not-in-git/tmp.RData")
 
 # this may be needed in case coal dummies cause troubles below
-v94m <-  within(v94m,  dpanc <- dpric <- dprdc <- NULL)
-v97m <-  within(v97m,  dpanc <- dpric <- dprdc <- NULL)
-v00m <-  within(v00m,  dpanc <- dpric <- dprdc <- NULL)
-v03m <-  within(v03m,  dpanc <- dpric <- dprdc <- NULL)
-v06m <-  within(v06m,  dpanc <- dpric <- dprdc <- NULL)
-v09m <-  within(v09m,  dpanc <- dpric <- dprdc <- dptc <- NULL)
-v12m <-  within(v12m,  dpanc <- dpric <- dprdc <- NULL)
-v15m <-  within(v15m,  dpanc <- dpric <- dprdc <- dmorenac <- NULL)
-v18m <-  within(v18m,  dpanc <- dpric <- dmorenac <- NULL)
-v21m <-  within(v21m,  dpanc <- dpric <- dmorenac <- NULL)
+v94m  <-  within(v94m,  dpanc <- dpric <- dprdc <- NULL)
+v97m  <-  within(v97m,  dpanc <- dpric <- dprdc <- NULL)
+v00m  <-  within(v00m,  dpanc <- dpric <- dprdc <- NULL)
+v03m  <-  within(v03m,  dpanc <- dpric <- dprdc <- NULL)
+v06m  <-  within(v06m,  dpanc <- dpric <- dprdc <- NULL)
+v09m  <-  within(v09m,  dpanc <- dpric <- dprdc <- dptc <- NULL)
+v12m  <-  within(v12m,  dpanc <- dpric <- dprdc <- NULL)
+v15m  <-  within(v15m,  dpanc <- dpric <- dprdc <- dmorenac <- NULL)
+v18m  <-  within(v18m,  dpanc <- dpric <- dmorenac <- NULL)
+v21m  <-  within(v21m,  dpanc <- dpric <- dmorenac <- NULL)
 v21mw <- within(v21mw, dpanc <- dpric <- dmorenac <- NULL)
 
 #########################################################################################
@@ -2473,7 +2482,18 @@ eq$orig.dest3[sel] <- paste0("c(", eq$orig.dest3[sel], ")")
 ##########################################################################################
 ## generate yearly linear projections of pob18 (routine takes care of reseccionamiento) ##
 ##########################################################################################
-eric x 7ene21
+# fix seccion with p18=ptot
+sel <- which(pob18$edosecn==120348)
+pob18$p18_2005[sel] <- 100 # set to 45% ptot, as in 2010
+# fix seccion 152717 --- inside campo militar 1, casilla prob moved to contiguous seccion
+## 2006 lisnom=318
+## 2009 lisnom=312
+## 2012 lisnom=156
+## 2015-on vanished
+sel <- which(pob18$edosecn==152717)
+pob18$p18_2020[sel] <- 1
+pobtot$ptot_2020[sel] <- 1
+#
 # start by making a generic object for manipulation
 generic <- pob18
 head(generic)
@@ -2482,12 +2502,157 @@ colnames(generic) <- c("edosecn","cen_2005","cen_2010","cen_2020")
 source(paste0(wd, "code/code-to-manip-census-in-split-secciones.r"))
 # 
 # output is an object named eq2, rename it
-head(eq2)
-sel <- c("edosecn", paste0("y", 1997:2022)) # keep select columns only
-pob18y <- eq2[,sel] # bring name original
+eq2[1,]
+table(eq2$times.manip, eq2$action, useNA = "always")
+eq2$dmanip <- as.numeric(eq2$times.manip>1)
+#sel <- c("edosecn", paste0("y", 1997:2022), "dmanip") # keep select columns only
+pob18y <- eq2#[,sel] # rename year-by-year projections
 rm(eq2, eq3) # clean
-ls()
+
+##########################################################################################
+## generate yearly linear projections of pobtot (routine takes care of reseccionamiento) ##
+##########################################################################################
+# start by making a generic object for manipulation
+generic <- pobtot
+head(generic)
+colnames(generic) <- c("edosecn","cen_2005","cen_2010","cen_2020")
+#
+source(paste0(wd, "code/code-to-manip-census-in-split-secciones.r"))
+# 
+# output is an object named eq2, rename it
+eq2[1,]
+eq2$dmanip <- as.numeric(eq2$times.manip>1)
+#sel <- c("edosecn", paste0("y", 1997:2022), "dmanip") # keep select columns only
+pobtoty <- eq2#[,sel] # rename year-by-year projections
+rm(eq2, eq3) # clean
+
+########################################################
+## there are negative projections, make those equal 1 ##
+########################################################
+# pob18
+sel.c <- paste0("y", 1997:2022) # yearly projection cols
+sel <- which(apply(X=pob18y[,sel.c], 1, min) < 0) # row w neg values
+tmp <- pob18y[,sel.c]
+tmp[tmp<=0] <- 1
+pob18y[,sel.c] <- tmp
+# pobtot
+sel <- which(apply(X=pobtoty[,sel.c], 1, min) < 0) # row w neg values
+tmp <- pobtoty[,sel.c]
+tmp[tmp<=0] <- 1
+pobtoty[,sel.c] <- tmp
+tmp[2,]
+
+# fix seccion 152716, v=83 in 1994, v=88 in 2000, v=0 in 2003 pop= 0 in 2005 (merged to 2717 in 2010) --- will make p18=170 ptot=200 constant since 1997
+sel <- which(pobtoty$edosecn==152716)
+selc <- grep("y199[7-9]|y200[0-2]", colnames(pob18y))
+pobtoty[sel,selc] <- 200
+pob18y[sel,selc] <- 170
+selc <- grep("y200[3-9]|y201[0-9]|y202[0-9]", colnames(pob18y))
+pobtoty[sel,selc] <- 1
+pob18y[sel,selc] <- 1
+
+# fix seccion 190439
+sel <- which(pobtoty$edosecn==190439)
+selc <- grep("y200[5-9]|y201[0-9]|y202[0-9]", colnames(pob18y))
+pobtoty[sel,selc] <- 1
+pob18y[sel,selc] <- 1
+selc <- grep("y2003", colnames(pob18y))
+pobtoty[sel,selc] <- 37000
+pob18y[sel,selc] <- 20000
+selc <- grep("y2004", colnames(pob18y))
+pobtoty[sel,selc] <- 50000
+pob18y[sel,selc] <- 30000
+
 # compare lisnom to p18 projection
+share <- cbind(edosecn=pob18y$edosecn,
+               pob18y[,sel.c] / pobtoty[,sel.c])
+summary(share)
+share[1,]
+
+# there are anomalies in censo yrs
+summary(share[,"y2005"]>.999)
+summary(share[,"y2010"]>.999)
+summary(share[,"y2020"]>.999)
+sel <- which(share[,"y2005"]>.999)
+tmp <- data.frame(edosecn=pob18y$edosecn[sel],
+                  p18=pob18y[sel,"y2005"],
+                  ptot=pobtoty[sel,"y2005"],
+                  dif=pob18y[sel,"y2005"]-pobtoty[sel,"y2005"])
+table(tmp$dif)
+summary(tmp$p18)
+
+sel1 <- which(tmp$p18>20)
+tmp[sel1,]
+
+sel1 <- which(pobtoty$edosecn==152716)
+data.frame(y=1997:2022, p18=t(pob18y[sel1,sel.c]), ptot=t(pobtoty[sel1,sel.c]))
+
+sel <- which(as.integer(pobtoty$edosecn/10000)==9) # pick one edon
+lo <- 0; hi <- 7000
+plot(x=c(lo, hi), y=c(lo, hi), type = "n", xlab = "p18", ylab = "ptot")
+for (i in sel){
+    points(x=pob18y[i,sel.c], y=pobtoty[i,sel.c], pch=19, cex = .75, col = rgb(1,0,0, alpha = .15))
+}
+
+#
+lo <- 0; hi <- 3; plot(1997:2022, seq(lo,hi,length.out = 26), type = "n"); abline(v=c(2005,2010,2020), lty=2)
+plot(1997:2022, seq(lo,hi,length.out = 26), type = "n"); abline(v=2005,2010,2020)
+sel <- which(as.integer(pobtoty$edosecn/10000)==1)
+for (i in sel){
+    lines(1997:2022, share[i,-1], lwd = .25)
+    #if (pobtoty$dmanip==0) lines(1997:2022, share[i,-1], lwd = .5)
+    }
+
+sel <- which(as.integer(pobtoty$edosecn/10000)==2)
+lo <- 0; hi <- 10000
+plot(x=c(lo, hi), y=c(0, 3), type = "n", xlab = "ptot", ylab = "p18/ptot")
+for (i in sel){
+    points(x=pobtoty[i,sel.c], y=share[i,sel.c], pch=19, cex = 1, col = rgb(1,0,0, alpha = .25))
+}
+
+# manipulate out-of-range projections
+data.frame(matrix(1:9, nrow = 3))
+
+tmp.mean <- mean(as.matrix(share[,sel.c]), na.rm = TRUE) # will force out-of-range projections to mean
+
+sel <- which(pobtoty[,sel.c[1]]== 1   &   pob18y[,sel.c[1]]==1) # rows equal 1 in both
+
+head(pobtoty[sel,])
+head(pob18y[sel,])
+lo <- 0; hi <- 10000
+plot(x=c(lo, hi), y=c(0, 3), type = "n", xlab = "ptot", ylab = "p18/ptot")
+for (i in sel){
+    i <- sel[1]
+    plot(pobtoty[i,sel.c], pob18y[i,sel.c])
+    points(x=pobtoty[i,sel.c], y=share[i,sel.c], pch=19, cex = 1, col = rgb(1,0,0, alpha = .25))
+}
+
+x
+
+tmp <-  pob18y [, c("edosecn", "y2021")]
+tmp2 <- pobtoty[, c("edosecn", "y2021")]
+colnames(tmp) <- c("edosecn","p18")
+colnames(tmp2) <- c("edosecn","ptot")
+share <- data.frame(edosecn = tmp[,1],
+                    sh = tmp[,-1] / tmp2[,-1])
+head(share)
+
+tmp <- merge(tmp, tmp2, by = "edosecn")
+tmp <- within(tmp, sh <-  p18 / ptot)
+summary(tmp$sh)
+head(tmp)
+sel <- which(tmp$ptot<0)
+
+
+for(i in sel){
+    i <- 1 # debug
+    plot(pobtoty[sel[i], -1])
+}
+
+
+tmp <- tmp[order(tmp$sh),]
+head(tmp)
+
 head(v21s)
 tmp <- pob18y[, c("edosecn", "y2021")]
 tmp$p18 <- tmp[,2]

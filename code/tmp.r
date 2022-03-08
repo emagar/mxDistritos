@@ -14,13 +14,6 @@ increment = (20-10) / (10-5) = 10/5 = 2 by year
 therefore p_6 = p_5 + 2*1 or p_6 = p_10 - 2*4 
 
 
-head(tmp18)
-table(duplicated(pob18$edosecn))
-table(duplicated(tmp18$edosecn))
-table(duplicated(generic$edosecn), as.integer(generic$edosecn/10000))
-sel <- which(duplicated(generic$edosecn)==TRUE)
-table(generic$edosecn[sel])
-head(generic)
 
 
 
