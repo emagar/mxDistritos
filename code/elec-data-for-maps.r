@@ -2465,8 +2465,6 @@ tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 eq$check <- NULL # drop column meant to clean within excel file
 
-
-
 # rewrite eq$orig.dest as vectors
 sel <- grep("[|]", eq$orig.dest)
 eq$orig.dest[sel] <- gsub("[|]",",", eq$orig.dest[sel])
@@ -2493,6 +2491,9 @@ pob18$p18_2005[sel] <- 100 # set to 45% ptot, as in 2010
 sel <- which(pob18$edosecn==152717)
 pob18$p18_2020[sel] <- 1
 pobtot$ptot_2020[sel] <- 1
+# fix 5 secciones in censo 2020 with ptot<p18 (all tiny)
+sel <- which(pob18$edosecn %in% c(51480, 143253, 250329, 250640, 252415))
+pobtot$ptot_2020[sel] <- pob18$p18_2020[sel]
 #
 # start by making a generic object for manipulation
 generic <- pob18
@@ -2541,16 +2542,13 @@ tmp <- pobtoty[,sel.c]
 tmp[tmp<=0] <- 1
 pobtoty[,sel.c] <- tmp
 tmp[2,]
-
-# fix seccion 152716, v=83 in 1994, v=88 in 2000, v=0 in 2003 pop= 0 in 2005 (merged to 2717 in 2010) --- will make p18=170 ptot=200 constant since 1997
+# fix 152716 v=83 in 1994, v=88 in 2000, v=0 in 2003 pop=0 in 2005 (merged to 2717 in 2010)---make p18=170=ptot constant since 1997
 sel <- which(pobtoty$edosecn==152716)
 selc <- grep("y199[7-9]|y200[0-2]", colnames(pob18y))
-pobtoty[sel,selc] <- 200
-pob18y[sel,selc] <- 170
+pobtoty[sel,selc] <- pob18y[sel,selc] <- 170
 selc <- grep("y200[3-9]|y201[0-9]|y202[0-9]", colnames(pob18y))
 pobtoty[sel,selc] <- 1
 pob18y[sel,selc] <- 1
-
 # fix seccion 190439
 sel <- which(pobtoty$edosecn==190439)
 selc <- grep("y200[5-9]|y201[0-9]|y202[0-9]", colnames(pob18y))
@@ -2563,70 +2561,56 @@ selc <- grep("y2004", colnames(pob18y))
 pobtoty[sel,selc] <- 50000
 pob18y[sel,selc] <- 30000
 
-# compare lisnom to p18 projection
-share <- cbind(edosecn=pob18y$edosecn,
-               pob18y[,sel.c] / pobtoty[,sel.c])
-summary(share)
-share[1,]
+## ######################################
+## ## compare lisnom to p18 projection ##
+## ######################################
+## share <- cbind(edosecn=pob18y$edosecn,
+##                pob18y[,sel.c] / pobtoty[,sel.c])
+## summary(share)
+## share[1,]
+## # there are units where p18=ptot---they're either small or special (eg 152717 is inside campo militar 1)
+## summary(share[,"y2005"]>.999)
+## summary(share[,"y2010"]>.999)
+## summary(share[,"y2020"]>.999)
+## sel <- which(share[,"y2005"]>.999)
+## tmp <- data.frame(edosecn=pob18y$edosecn[sel],
+##                   p18=pob18y[sel,"y2005"],
+##                   ptot=pobtoty[sel,"y2005"],
+##                   dif=pob18y[sel,"y2005"]-pobtoty[sel,"y2005"])
+## table(tmp$dif)
+## summary(tmp$p18)
+## sel <- which(share[,"y2010"]>.999)
+## tmp <- data.frame(edosecn=pob18y$edosecn[sel],
+##                   p18=pob18y[sel,"y2010"],
+##                   ptot=pobtoty[sel,"y2010"],
+##                   dif=pob18y[sel,"y2010"]-pobtoty[sel,"y2010"])
+## table(tmp$dif)
+## summary(tmp$p18)
+## sel1 <- which(tmp$p18>20)
+## tmp[sel1,]
+## #
+## sel <- which(share[,"y2020"]>.999)
+## tmp <- data.frame(edosecn=pob18y$edosecn[sel],
+##                   p18=pob18y[sel,"y2020"],
+##                   ptot=pobtoty[sel,"y2020"],
+##                   dif=pob18y[sel,"y2020"]-pobtoty[sel,"y2020"])
+## table(tmp$dif)
+## summary(tmp$p18)
+## sel1 <- which(tmp$p18>20)
+## tmp[sel1,]
 
-# there are anomalies in censo yrs
-summary(share[,"y2005"]>.999)
-summary(share[,"y2010"]>.999)
-summary(share[,"y2020"]>.999)
-sel <- which(share[,"y2005"]>.999)
-tmp <- data.frame(edosecn=pob18y$edosecn[sel],
-                  p18=pob18y[sel,"y2005"],
-                  ptot=pobtoty[sel,"y2005"],
-                  dif=pob18y[sel,"y2005"]-pobtoty[sel,"y2005"])
-table(tmp$dif)
-summary(tmp$p18)
-
-sel1 <- which(tmp$p18>20)
-tmp[sel1,]
-
-sel1 <- which(pobtoty$edosecn==152716)
-data.frame(y=1997:2022, p18=t(pob18y[sel1,sel.c]), ptot=t(pobtoty[sel1,sel.c]))
-
-sel <- which(as.integer(pobtoty$edosecn/10000)==9) # pick one edon
-lo <- 0; hi <- 7000
+# good number of projections below 45degree line
+sel <- which(as.integer(pobtoty$edosecn/10000)==24) # pick one edon
+lo <- 0; hi <- 12000
 plot(x=c(lo, hi), y=c(lo, hi), type = "n", xlab = "p18", ylab = "ptot")
 for (i in sel){
     points(x=pob18y[i,sel.c], y=pobtoty[i,sel.c], pch=19, cex = .75, col = rgb(1,0,0, alpha = .15))
 }
-
-#
-lo <- 0; hi <- 3; plot(1997:2022, seq(lo,hi,length.out = 26), type = "n"); abline(v=c(2005,2010,2020), lty=2)
-plot(1997:2022, seq(lo,hi,length.out = 26), type = "n"); abline(v=2005,2010,2020)
-sel <- which(as.integer(pobtoty$edosecn/10000)==1)
-for (i in sel){
-    lines(1997:2022, share[i,-1], lwd = .25)
-    #if (pobtoty$dmanip==0) lines(1997:2022, share[i,-1], lwd = .5)
-    }
-
-sel <- which(as.integer(pobtoty$edosecn/10000)==2)
-lo <- 0; hi <- 10000
-plot(x=c(lo, hi), y=c(0, 3), type = "n", xlab = "ptot", ylab = "p18/ptot")
-for (i in sel){
-    points(x=pobtoty[i,sel.c], y=share[i,sel.c], pch=19, cex = 1, col = rgb(1,0,0, alpha = .25))
-}
+abline(a=0,b=1)
 
 # manipulate out-of-range projections
-data.frame(matrix(1:9, nrow = 3))
-
 tmp.mean <- mean(as.matrix(share[,sel.c]), na.rm = TRUE) # will force out-of-range projections to mean
-
 sel <- which(pobtoty[,sel.c[1]]== 1   &   pob18y[,sel.c[1]]==1) # rows equal 1 in both
-
-head(pobtoty[sel,])
-head(pob18y[sel,])
-lo <- 0; hi <- 10000
-plot(x=c(lo, hi), y=c(0, 3), type = "n", xlab = "ptot", ylab = "p18/ptot")
-for (i in sel){
-    i <- sel[1]
-    plot(pobtoty[i,sel.c], pob18y[i,sel.c])
-    points(x=pobtoty[i,sel.c], y=share[i,sel.c], pch=19, cex = 1, col = rgb(1,0,0, alpha = .25))
-}
-
 x
 
 tmp <-  pob18y [, c("edosecn", "y2021")]
@@ -2641,13 +2625,6 @@ tmp <- merge(tmp, tmp2, by = "edosecn")
 tmp <- within(tmp, sh <-  p18 / ptot)
 summary(tmp$sh)
 head(tmp)
-sel <- which(tmp$ptot<0)
-
-
-for(i in sel){
-    i <- 1 # debug
-    plot(pobtoty[sel[i], -1])
-}
 
 
 tmp <- tmp[order(tmp$sh),]
