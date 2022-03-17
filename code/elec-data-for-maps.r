@@ -2608,6 +2608,14 @@ for (i in sel){
 }
 abline(a=0,b=1)
 
+tmp <- pobtoty[sel,sel.c] - pob18y[sel,sel.c]
+tmp.f <- function(x) min(x, na.rm = TRUE)
+sel1 <- which(apply(X=tmp, 1, FUN=tmp.f) < 0)
+
+pobtoty[sel[sel1[1]],sel.c]
+pob18y[sel[sel1[1]],sel.c]
+pobtoty[sel[sel1[1]],sel.c] - pob18y[sel[sel1[1]],sel.c]
+
 # manipulate out-of-range projections
 tmp.mean <- mean(as.matrix(share[,sel.c]), na.rm = TRUE) # will force out-of-range projections to mean
 sel <- which(pobtoty[,sel.c[1]]== 1   &   pob18y[,sel.c[1]]==1) # rows equal 1 in both
