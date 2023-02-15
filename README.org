@@ -1,6 +1,6 @@
 #+TITLE: Recent Mexican electoral geography
 #+AUTHOR: Eric Magar
-Last revision: 2020-08-20
+Last revision: 2023-02-15
 
 # Export to md: M-x org-md-export-to-markdown
 
@@ -9,6 +9,7 @@ Last revision: 2020-08-20
 - Email: emagar at itam dot mx
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [[https://cartografia.ife.org.mx/sige7/?cartografia][here]]). Data in this repo is prepared for mapping and preliminary/basic statistical analysis.
 * Recent changes
+- 2023-02-15: Appended new secciones electorales created since 2020 in files below ~equivSecc~. 
 - 2020-08-20: Fixed raw vote aggregates and winners for new municipalities. Problem affected split municipality in years before the creation of the new unit.  
 - 2020-09-04: Fixed regression estimates and predicted quantities for new municipalities. When a new municipality splits from its parent unit, predicting with the recent past requires manipulating sección vote aggregates to remove lost territory.  
 * Files in the repository and how to cite them
@@ -36,8 +37,8 @@ Measures of federal deputy elections at two geographic levels are distributed: m
 ** Redistricting and /reseccionamiento/ 
 - ~equivSecc/docsRedistReseccRemunic/~ = folder contains numerous documents prepared by INE/IFE explaining redistricting criteria, changes in sección delimitations (/reseccionamiento/), and changes in a state's municipalities.
   + *Citation for these documents*: [[https://ine.mx][Instituto Nacional Electoral (various years)]].
-- ~equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv~ and ~.xlsx~ = historical record of /secciones electorales/ nationwide since 1994 in comma-separated and excel format, respectively. Secciones, which do not traverse municipal borders, are the basic building blocks for districting at both the federal and state levels (see Magar et al. 2017, fn. 9). Each row reports one sección (approx. 69,000 total) and the district it belonged to in four federal congressional district maps (maps inaugurated in 1979, 1997, 2006, and 2018). It also reports the district it would have belonged to in the 2013 map that was rejected prior to adoption. A small but important number of secciones suffered changes through time (the official term is /reseccionamiento/)---most frequently due to under- or over-population, but also after court rulings modifying state or municipal borders; see the `OBSERVACIONES` and its right-adjacent variables). For this reason, the dataset maps secciones-to-districts at each federal election since 1994.  
-  + This dataset consolidates and extends excel sheets that IFE/INE distributes periodically. 
+- ~equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv~ and ~.xlsx~ = historical record of /secciones electorales/ nationwide since 1994 in comma-separated and excel format, respectively. Secciones, which do not traverse municipal borders, are the basic building blocks for districting at both the federal and state levels (see Magar et al. 2017, fn. 9). Each row reports one sección (approx. 71,000 total) and the district it belonged to in four federal congressional district maps (maps inaugurated in 1979, 1997, 2006, and 2018). It also reports the district it would have belonged to in the 2013 map that was rejected prior to adoption. A small but important number of secciones suffered changes through time (the official term is /reseccionamiento/)---most frequently due to under- or over-population, but also after court rulings modifying state or municipal borders; see the `OBSERVACIONES` and its right-adjacent variables). For this reason, the dataset maps secciones-to-districts at each federal election since 1994.  
+  + This dataset consolidates and extends excel sheets that IFE/INE distributes periodically. While built upon that IFE circulated in the 2010s, it has been drastically edited to include recent information.
   + *Citation for this dataset*: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, /Political Geography/ 57(1):1-12. 
 ** Comparative maps and shapefiles
 - ~mapasComparados/~ = *DESCRIPTION UNDER CONSTRUCTION*
