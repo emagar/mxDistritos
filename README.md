@@ -1,24 +1,24 @@
-- [Description of *Recent Mexican electoral geography* repository](#org14809ba)
-- [Recent changes](#orga7b4a1a)
-- [Files in the repository and how to cite them](#org85f48ad)
-  - [Measures of recent party performance for use in maps](#orgc67b13a)
-    - [Code](#org06df2a7)
-    - [Data](#org2862e7b)
-  - [Redistricting and *reseccionamiento*](#org84ae91a)
-  - [Comparative maps and shapefiles](#org2cf8311)
-  - [Descriptive plots and literature](#org1201039)
-- [Variables in the datasets <a id="orgf66ca65"></a>](#orgf216a9f)
-  - [Observation identifiers](#org123c3aa)
-  - [Vote returns and party performance (in `vhat` files)](#org510478e)
-  - [Vote returns (in `vraw` files)](#org31d5575)
-  - [Redistricting and *reseccionamiento* <a id="orgb210735"></a>](#org0e40873)
-- [Note on electoral coalitions <a id="org4a1aa34"></a>](#org48479c2)
-- [Acknowledgements](#orgc609c0e)
+- [Description of *Recent Mexican electoral geography* repository](#orgd003735)
+- [Recent changes](#org84dbe52)
+- [Files in the repository and how to cite them](#org6000b27)
+  - [Measures of recent party performance for use in maps](#orgb97c801)
+    - [Code](#org722e7f5)
+    - [Data](#orgd53cc31)
+  - [Redistricting and *reseccionamiento*](#orgffc6234)
+  - [Comparative maps and shapefiles](#org7c3f4f9)
+  - [Descriptive plots and literature](#orgaff6da4)
+- [Variables in the datasets <a id="orgbf1d6ac"></a>](#org196afa2)
+  - [Observation identifiers](#orgfcf2c2d)
+  - [Vote returns and party performance (in `vhat` files)](#org6609302)
+  - [Vote returns (in `vraw` files)](#orge8ef140)
+  - [Redistricting and *reseccionamiento* <a id="org4dc58d7"></a>](#orgfea6362)
+- [Note on electoral coalitions <a id="org7bcef20"></a>](#org57e6eeb)
+- [Acknowledgements](#orgf05b436)
 
 Last revision: 2023-02-15
 
 
-<a id="org14809ba"></a>
+<a id="orgd003735"></a>
 
 # Description of *Recent Mexican electoral geography* repository
 
@@ -28,7 +28,7 @@ Last revision: 2023-02-15
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [here](https://cartografia.ife.org.mx/sige7/?cartografia)). Data in this repo is prepared for mapping and preliminary/basic statistical analysis.
 
 
-<a id="orga7b4a1a"></a>
+<a id="org84dbe52"></a>
 
 # Recent changes
 
@@ -37,33 +37,33 @@ The repository contains maps of Mexican districts used to elect representatives 
 -   2020-09-04: Fixed regression estimates and predicted quantities for new municipalities. When a new municipality splits from its parent unit, predicting with the recent past requires manipulating sección vote aggregates to remove lost territory.
 
 
-<a id="org85f48ad"></a>
+<a id="org6000b27"></a>
 
 # Files in the repository and how to cite them
 
 You are free to download and modify the data (see the LICENSE document) provided you give proper credit to this source. Unless otherwise noted below the file descriptor, the cite is Eric Magar (2019) Recent Mexican electoral geography repository, <https://github.com/emagar/mxDistritos>.
 
 
-<a id="orgc67b13a"></a>
+<a id="orgb97c801"></a>
 
 ## Measures of recent party performance for use in maps
 
 
-<a id="org06df2a7"></a>
+<a id="org722e7f5"></a>
 
 ### Code
 
--   `code/elec-data-for-maps.r` <a id="orgffb820e"></a> = code manipulates polling place vote returns in federal deputy elections 1994&#x2013;2018 for use in maps. Data are aggregated up to the municipal- and sección-levels for analysis.
+-   `code/elec-data-for-maps.r` <a id="org6da5873"></a> = code manipulates polling place vote returns in federal deputy elections 1994&#x2013;2018 for use in maps. Data are aggregated up to the municipal- and sección-levels for analysis.
 -   `code/get-winners.r` = code with sub-routine to produce unit winners (invoked within `elec-data-for-maps.r`).
 -   `code/resecc-deal-with-splits.r` = code to re-aggregate split oversized secciones in order to preserve time-series in the analysis (invoked within `elec-data-for-maps.r`).
 -   `code/triplots-etc.r` = code to plot recent party performance quantities (plots saved in `graph/` folder).
 
 
-<a id="org2862e7b"></a>
+<a id="orgd53cc31"></a>
 
 ### Data
 
-Measures of federal deputy elections at two geographic levels are distributed: municipalities (files with `municipio` in name) and secciones electorales (files with `seccion` in name). Quantities of interest are available for 2006, 2009, 2012, 2015, and 2018. Variable descriptions [here](#orgf66ca65).
+Measures of federal deputy elections at two geographic levels are distributed: municipalities (files with `municipio` in name) and secciones electorales (files with `seccion` in name). Quantities of interest are available for 2006, 2009, 2012, 2015, and 2018. Variable descriptions [here](#orgbf1d6ac).
 
 -   `data/*-vhat-*.csv` files = electoral statistics calculated from federal diputado single-member district elections 2006&#x2013;2018. Measures of interest are (a) the parties' **vote shares** in the unit-year; (b) the **change** in vote share in the unit-year since last election; (c) the **predicted vote share** for the unit-year out of each party's performance in the unit in the previous five federal diputado elections; (d) estimates of each **party's core support** in the unit for the whole period; (e) estimates of each **party's beta volatility** in the unit for the whole period (`code/elec-data-for-maps.r` was used to prepare these files; 2006 unavailable at sección level due to data missing comparable sección IDs for 1991).
 -   `data/*-win.csv` files = more measures of interest: (a) unit-year **winners** in the period (i.e., party with most votes); (b) **margins** of victory in the unit-year (i.e., winner's vote share minus runner-up's vote share); (c) the **frequency of party victories** in the unit between 1994 and 2018 (`code/get-winners.r` was used to prepare these files).
@@ -73,7 +73,7 @@ Measures of federal deputy elections at two geographic levels are distributed: m
 -   (`data/dipfed-seccion-regs-*.RData` and `data/dipfed-seccion-mean-regs.RData` files = sección-level regression summary statistics **not included** in repository due to large size (![img](./graph/readme-math/about-66k.svg) regressions per party-year). Files are available upon [request](mailto:emagar@gmail.com).)
 
 
-<a id="org84ae91a"></a>
+<a id="orgffc6234"></a>
 
 ## Redistricting and *reseccionamiento*
 
@@ -84,7 +84,7 @@ Measures of federal deputy elections at two geographic levels are distributed: m
     -   **Citation for this dataset**: Eric Magar, Alejandro Trelles, Micah Altman, and Michael P. McDonald (2017) Components of partisan bias originating from single-member districts in multi-party systems: An application to Mexico, *Political Geography* 57(1):1-12.
 
 
-<a id="org2cf8311"></a>
+<a id="org7c3f4f9"></a>
 
 ## Comparative maps and shapefiles
 
@@ -100,7 +100,7 @@ Measures of federal deputy elections at two geographic levels are distributed: m
 -   `redisProcess/maps-with-all-poposals/2013/fed/` = one comma-separated file for each state describing the federal redistricting process in 2013 (i.e., a map that was never adopted). Files have the same format as those above.
 
 
-<a id="org1201039"></a>
+<a id="orgaff6da4"></a>
 
 ## Descriptive plots and literature
 
@@ -109,14 +109,14 @@ Measures of federal deputy elections at two geographic levels are distributed: m
 -   `lit/` = folder with relevant literature.
 
 
-<a id="orgf216a9f"></a>
+<a id="org196afa2"></a>
 
-# Variables in the datasets <a id="orgf66ca65"></a>
+# Variables in the datasets <a id="orgbf1d6ac"></a>
 
 Variables are not necessarily included in every dataset distributed.
 
 
-<a id="org123c3aa"></a>
+<a id="orgfcf2c2d"></a>
 
 ## Observation identifiers
 
@@ -130,15 +130,15 @@ Variables are not necessarily included in every dataset distributed.
 -   `mun` = municipality's name.
 
 
-<a id="org510478e"></a>
+<a id="org6609302"></a>
 
 ## Vote returns and party performance (in `vhat` files)
 
 `vhat` files report vote shares and simplify the party field to three major competitors and a residual \`others\` category.
 
--   `pan` = vote share won by the PAN and allies, see the [note on parties and coalitions](#org4a1aa34).
--   `pri` = vote share won by the PRI and allies, see the [note on parties and coalitions](#org4a1aa34).
--   `left` = vote share won by the left and allies, see [note on parties and coalitions](#org4a1aa34).
+-   `pan` = vote share won by the PAN and allies, see the [note on parties and coalitions](#org7bcef20).
+-   `pri` = vote share won by the PRI and allies, see the [note on parties and coalitions](#org7bcef20).
+-   `left` = vote share won by the left and allies, see [note on parties and coalitions](#org7bcef20).
 -   (`oth` = vote share of candidates fielded by minor parties is not reported. It is 1 &#x2013; pan &#x2013; pri &#x2013; left and therefore fully determined.)
 -   `efec` = valid votes in the unit (total votes cast for parties minus void and null ballots).
 -   `d.pan`, `d.pri`, `d.left` = party's vote share change since last election (first differences, i.e., pan<sub>yr</sub> &#x2013; pan<sub>yr-3</sub> and so forth).
@@ -154,15 +154,15 @@ Variables are not necessarily included in every dataset distributed.
 -   `n.win.oth` = number of time some party or coalition other than those listed above finished first in the unit between 1994 and 2018.
 
 
-<a id="org31d5575"></a>
+<a id="orge8ef140"></a>
 
 ## Vote returns (in `vraw` files)
 
-`vraw` files report absolute votes for **all** parties in the congressional race. See the note on [coalitions](#org4a1aa34) in different years.
+`vraw` files report absolute votes for **all** parties in the congressional race. See the note on [coalitions](#org7bcef20) in different years.
 
 -   `edon`, `seccion`, `ife`, `inegi` = unit identifiers (see above).
 -   `disn` = federal district the unit belongs to in the current congressional election.
--   `d94`, `d97`, `d00`, `d03`, `d06`, `d09`, `d12`, `d15`, and `d18` = dummies equal 1 if the sección was utilized in the 1994, 1997, &#x2026;, 2018 congressional elections, respectively; equal 0 otherwise. Indicates [*reseccionamiento*](#orgb210735). Only included in the 1994 file to economize on redundancy.
+-   `d94`, `d97`, `d00`, `d03`, `d06`, `d09`, `d12`, `d15`, and `d18` = dummies equal 1 if the sección was utilized in the 1994, 1997, &#x2026;, 2018 congressional elections, respectively; equal 0 otherwise. Indicates [*reseccionamiento*](#org4dc58d7). Only included in the 1994 file to economize on redundancy.
 -   `efec` = valid votes in the unit (total votes cast for parties minus void and null ballots).
 -   `lisnom` = total registered voters (*lista nominal*) in the unit. Available for selected years only.
 -   `pan`, `pri`, `prd`, and `left` = votes cast for major parties running without partners in the district the unit belongs to.
@@ -171,36 +171,29 @@ Variables are not necessarily included in every dataset distributed.
 -   Remainder columns report votes cast for minor parties.
 
 
-<a id="org0e40873"></a>
+<a id="orgfea6362"></a>
 
-## Redistricting and *reseccionamiento* <a id="orgb210735"></a>
+## Redistricting and *reseccionamiento* <a id="org4dc58d7"></a>
 
 Apart from redistricting, the election board routinely adopts [changes](https://portalanterior.ine.mx/archivos3/portal/historico/recursos/IFE-v2/DS/DS-CG/DS-SesionesCG/CG-acuerdos/2016/08_Agosto/CGor201608-26/CGor201608-26-ap-6-x1.pdf) in its geographic units when *secciones electorales* become over- or under-sized. Variables in this set are sección-level.
 
--   `split` = equals 0 for secciones that remained unchanged in the period, otherwise indicates the year sección was split into smaller units due to oversize. Estimation of some of the quantities reported involved re-aggregating new units into their oversized parent sección in order to preserve the full vote returns time series. See [code](#orgffb820e) for details.
--   `new` = equals 0 for secciones that remained unchanged in the period, otherwise indicates the year sección was created by splitting an oversized sección into smaller units. Estimation of some of the quantities reported involved re-aggregating these smaller units into their oversized parent in order to preserve the full vote returns time series. See [code](#orgffb820e) for details.
--   `dis1994` = federal district of the 1976 map that sección belonged to at the 1994 election.
--   `dis1997` = federal district of the 1997 map that sección belonged to at the 1997 election.
--   `dis2000` = federal district of the 1997 map that sección belonged to at the 2000 election.
--   `dis2003` = federal district of the 1997 map that sección belonged to at the 2003 election.
--   `dis2006` = federal district of the 2006 map that sección belonged to at the 2006 election.
--   `dis2009` = federal district of the 2006 map that sección belonged to at the 2009 election.
--   `dis2012` = federal district of the 2006 map that sección belonged to at the 2012 election.
--   `dis2013` = federal district of the 2013 map that sección belonged to; 2013 map was never adopted.
--   `dis2015` = federal district of the 2006 map that sección belonged to at the 2015 election.
--   `dis2018` = federal district of the 2018 map that sección belonged to at the 2018 election.
+-   `split` = equals 0 for secciones that remained unchanged in the period, otherwise indicates the year sección was split into smaller units due to oversize. Estimation of some of the quantities reported involved re-aggregating new units into their oversized parent sección in order to preserve the full vote returns time series. See [code](#org6da5873) for details.
+-   `new` = equals 0 for secciones that remained unchanged in the period, otherwise indicates the year sección was created by splitting an oversized sección into smaller units. Estimation of some of the quantities reported involved re-aggregating these smaller units into their oversized parent in order to preserve the full vote returns time series. See [code](#org6da5873) for details.
+-   `dis1979` = district the sección belonged in the 1979 map (used in the 1979 to 1994 federal elections, inclusive).
+-   `dis1997` = district the sección belonged in the 1997 map (used in the 1997 to 2003 federal elections, inclusive).
+-   `dis2006` = district the sección belonged in the 2006 map (used in the 2006 to 2015 federal elections, inclusive).
+-   `dis2013` = district the sección belonged in the 2018 map (used in the 2018 and 2021 federal elections).
+-   `dis2018` = district the sección belonged in the 2013 map (the 2013 map was never adopted).
 -   `OBSERVACIONES` = character string describing changes that a sección may have suffered through time in the source;
--   `action` = character string indicates change that sección may have suffered: *merged* if it was integrated into a neighboring sección due to under-population; *split* if it was subdivided into two or more new secciones due to over-population; *new* if it was created from a split sección; *munic* if it arose to accommodate a change in intermunicipal border lines; *stateChg* if it arose to accommodate a change in interstate border lines.
--   `fr.to` = character string indicates whether sección arose *from* another sección (eg. after latter was split) or was incorported *to* another sección (eg. latter absorbed it when both were merged).
--   `orig.dest` = when sección was subdivided, indicates sección number(s) that arose; when sección was merged, indicates which one absorbed it.
--   `when` = year the change took place.
--   `color` = character string indicated the cell color in the original excel sheet (secciones that suffered contemporaneous changes shared the same color).
+-   `action`, `action2`, `action3` = character string indicates change that sección may have suffered: *merged.to* if integrated into a neighboring sección, usually due to under-population; *split.to* if subdivided into new secciones, usually due to over-population; *split.from* if it arose from a split sección; *mun.chg* if municipal delimitations changed around the sección; *state.chg* if it arose to accommodate a change in interstate border lines.
+-   `orig.dest`, `orig.dest2`, `orig.dest3` = when sección was subdivided, indicates sección number(s) that arose; when sección was merged, indicates which one absorbed it.
+-   `when`, `when2`, `when3` = year the change took place.
 -   `coment` = character string with comments (in mostly Spanish).
 
 
-<a id="org48479c2"></a>
+<a id="org57e6eeb"></a>
 
-# Note on electoral coalitions <a id="org4a1aa34"></a>
+# Note on electoral coalitions <a id="org7bcef20"></a>
 
 Electoral alliances in congressional races, which often were limited to a subset of single-member districts, are extended nationwide for analyticial convenience. In some cases, noted below, they are extended to a year it did not occur for the same reason. Details for each party follow.
 
@@ -210,7 +203,7 @@ Electoral alliances in congressional races, which often were limited to a subset
 -   A residual "others" category sums the votes for parties other than those listed above for analysis. In 1991 the parties whose votes are summed are PARM, PDM, PFCRN, PPS, PEM, and PRT; in 1994 PPS, PFCRN, PARM, UNO-PDM, PT, and PVEM; in 1997 PC, PT, PVEM, PPS, and PDM; in 2000 PCD, PARM and DS; in 2003 PSN, PAS, MP, PLM, and FC; in 2006 PNA and ASDC; in 2009 PNA and PSD; in 2012 PNA only; in 2015 MC, PNA, PH, and a handful of independent candidates; and in 2018 a handful of independent candidates.
 
 
-<a id="orgc609c0e"></a>
+<a id="orgf05b436"></a>
 
 # Acknowledgements
 
