@@ -6,7 +6,7 @@
 ## el contenido queda guardado en un archivo de datos.
 ## sólo tiene que correrse en caso de cambios.
 rm(list=ls())
-options(width = 140)
+options(width = 110)
 #
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
@@ -14,7 +14,6 @@ wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 # cambiar por cartografía 2017 en /home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/shp/disfed2018
 # también preparé cartografía 2020   <---  OJO
 md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
-
 setwd(dd)
 
 ###############################################
@@ -30,7 +29,7 @@ ag.sec <- function(d=d, sel.c=sel.c){
     d <- d[-sel.r,]
     return(d)
 }
-
+#
 ##########################################################################
 ## function to replace character/factor cells with numeric value or NA; ##
 ## then chg NAs w 0s                                                    ##
@@ -46,18 +45,48 @@ to.num <- function(d = d, sel.c = sel.c){
     d[,sel.c] <- tmp.d;       # return manipulated data
     return(d)
 }
-
+#
+##################################################################################
+## function splitting coalition vote in proportion to votes won by each in unit ##
+##################################################################################
+apportion_v <- function(dat=NA, members=NA, joint=NA){
+    if (length(members)==0 | length(joint)) stop
+    dummy <- paste0("d",joint) # dummy indicating coalition in unit
+    sel.r <- which(dat[,dummy]==1 & dat[,joint]>0) # rows with a coalition and non-zero joint vote
+    sel.c <- which(colnames(dat) %in% members)   # target columns
+    tmp_v <- dat[sel.r,sel.c]              # subset individual contribs for manipulation
+    tmp_j <- dat[sel.r,joint]              # subset joint votes for manipulation
+    tmp_w <- tmp_v / rowSums(tmp_v)      # weights
+    tmp_w[is.na(tmp_w)] <- 1/ncol(tmp_w) # indeterminates to even split (eg. pt=0 mc=0 pt.mc=10)
+    tmp_m <- round(tmp_v + tmp_j * tmp_w, 1) # manipulated version
+    #
+    dat[sel.r,sel.c] <- tmp_m # return manipulation to member's columns
+    dat[sel.r,joint] <- 0     # joint vote to zero
+    return(dat)
+}
+#
+###############################################
+## function to fill sel.c column NAs to zero ##
+###############################################
+na2zero <- function(dat=NA, sel.c){
+    tmp <- dat[,sel.c] # subset for manipulation
+    tmp[is.na(tmp)] <- 0
+    dat[,sel.c] <- tmp # return manipulation to data
+    return(dat)
+}
 
 ###################################
 ## ############################# ##
 ## ## read seccion-level data ## ##
 ## ############################# ##
 ###################################
+
 ## ##########
 ## ## 1991 ##
 ## ##########
 ## d <- read.csv("dip1991.csv", header=TRUE, stringsAsFactors=FALSE)
 ## d <- d[order(d$edon, d$seccion),]
+## # prep/indicate vote columns
 ## sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
 ## d <- to.num(d,sel.c) # clean data
 ## d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + pdm + prt + pem + pt)
@@ -68,59 +97,72 @@ to.num <- function(d = d, sel.c = sel.c){
 ## d <- ag.sec(d, sel.c)
 ## # clean
 ## d <- within(d, casilla <- NULL)
-## v91 <- d
-#
+## #
+## v91_agg <- v91_split <- d
+
 ##########
 ## 1994 ##
 ##########
 d <- read.csv("dip1994.csv", header=TRUE, stringsAsFactors=FALSE)
-d <- d[order(d$edon, d$seccion),]
-sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- to.num(d,sel.c) # clean data
-d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + uno.pdm + pt + pvem)
-d <- within(d, tot <- nul <- nr <- NULL)
-sel.r <- grep("Anulada", d$STATUS) # casillas anuladas
-d[sel.r,sel.c] <- 0 # anuladas to 0
+d <- d[order(d$edon, d$seccion),] # sort
+# vote columns selector
+sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","lisnom")
+# clean data
+#table(d$status)
+#table(d$nota)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+d$dextra <- 0; d$dextra[grep("extraordinaria", d$nota)] <- 1                       # special elections
+sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                           # voided casillas to zero
+d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + uno.pdm + pt + pvem) # valid vote
+d <- within(d, tot <- nul <- nr <- nota <- status <- casilla <- NULL)              # economize columns
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 ## coalition dummies
 d <- within(d, dpanc <- dpric <- dprdc <- 0)
-# clean
-d <- within(d, casilla <- STATUS <- ID_ELEC <- NULL)
-v94 <- d
 #
+# rename vote returns objects for analysis
+v94_agg <- v94_split <- d
+
 ##########
 ## 1997 ##
 ##########
 d <- read.csv("dip1997.csv", header=TRUE, stringsAsFactors=FALSE)
-d <- d[order(d$edon, d$seccion),]
-sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
-d <- to.num(d,sel.c) # clean data
-d <- within(d, efec <- pan + pri + prd + pc + pt + pvem + pps + pdm)
-d <- within(d, tot <- nul <- nr <- NULL)
-sel.r <- grep("MR", d$STATUS) # casillas anuladas
-d[sel.r,sel.c] <- 0 # anuladas to 0
+d <- d[order(d$edon, d$seccion),] # sort
+# vote columns selector
+sel.c <-            c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","lisnom")
+# clean
+#table(d$status)
+#table(d$note)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+d <- within(d, efec <- pan + pri + prd + pc + pt + pvem + pps + pdm)               # valid vote
+sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                           # voided casillas to zero
+d <- within(d, tot <- nul <- nr <- status <- note <- casilla <- NULL)              # economize cols
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 ## coalition dummies
 d <- within(d, dpanc <- dpric <- dprdc <- 0)
-# clean
-d <- within(d, casilla <- STATUS <- ID_ELEC <- NULL)
-v97 <- d
 #
+# rename vote returns objects for analysis
+v97_agg <- v97_split <- d
+
 ##########
 ## 2000 ##
 ##########
 d <- read.csv("dip2000.csv", header=TRUE, stringsAsFactors=FALSE)
-d <- d[order(d$edon, d$seccion),]
-colnames(d)[which(colnames(d)=="ac")] <- "panc" # "pan-pvem"
-colnames(d)[which(colnames(d)=="am")] <- "prdc" # "prd y muchos más"
-sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec")
-d <- to.num(d,sel.c) # clean data
-d <- within(d, efec <- panc + pri + prdc + pcd + parm + dsppn)
-d <- within(d, tot <- nul <- nr <- NULL)
-sel.r <- grep("MR", d$status) # casillas anuladas
-d[sel.r,sel.c] <- 0 # anuladas to 0
+d <- d[order(d$edon, d$seccion),] # sort
+# vote columns selector
+colnames(d)[which(colnames(d)=="pan.pvem")]             <- "panc"
+colnames(d)[which(colnames(d)=="prd.pt.conve.pas.psn")] <- "prdc"
+sel.c <-            c("panc","pri","prdc","pcd","parm","dsppn","efec","lisnom")
+# clean data
+#table(d$status)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                           # voided casillas to zero
+d <- within(d, efec <- panc + pri + prdc + pcd + parm + dsppn)                     # valid vote
+d <- within(d, tot <- nul <- nr <- status <- nota <- casilla <- NULL)              # economize columns
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 # district coalition dummies
@@ -131,24 +173,26 @@ d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >
 d$dprdc <- as.numeric(d$dprdc>0)
 table(d$dpanc, useNA = "always")
 table(d$dprdc, useNA = "always")
-# clean
-d <- within(d, casilla <- status <- ID_ELEC <- NULL)
-v00 <- d
 #
+# rename vote returns objects for analysis
+v00_agg <- d
+
 ##########
 ## 2003 ##
 ##########
 d <- read.csv( "dip2003.csv", header=TRUE, , stringsAsFactors=FALSE)
-d <- d[order(d$edon, d$seccion),]
-colnames(d)[which(colnames(d)=="apt")] <- "pric" # "pri-pvem"
-sel.c <- c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric","efec")
-d <- to.num(d,sel.c) # clean data
-d <- within(d, efec <- pan + pri + prd + pt + pvem + conve + psn + pas + mp + plm + fc + pric)
-d <- within(d, tot <- nul <- nr <- NULL)
-#
-sel.r <- grep("MR|[Nn]o ", d$status) # casillas anuladas no instaladas
-d[sel.r,sel.c] <- 0 # anuladas to 0
-#
+d <- d[order(d$edon, d$seccion),] # sort
+# vote columns selector
+colnames(d)[which(colnames(d)=="pri.pvem")] <- "pric" # "pri-pvem"
+sel.c <-            c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric","efec","lisnom")
+# clean
+#table(d$status)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+d$dextra <- as.numeric(d$nota=="eleccion extraordinaria 2004")                     # special elections
+sel.r <- grep("Anulada|instalada|entregado", d$status); d[sel.r,sel.c] <- 0        # voided casillas to zero
+d <- within(d, efec <- pan + pri + prd + pt + pvem + conve + psn + pas + mp + plm + fc + pric) # valid vote
+d <- within(d, tot <- nul <- nr <- nota <- status <- casilla <- NULL)              # economize columns
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 # district coalition dummies
@@ -163,25 +207,27 @@ d[sel,] <- within(d[sel,], {
     pric <- pri + pric + pvem;
     pri <- pvem <- 0
 })
-# clean
-d <- within(d, casilla <- status <- ID_ELEC <- NULL)
-v03 <- d
 #
+# rename vote returns objects for analysis
+v03_agg <- d
+
 ##########
 ## 2006 ##
 ##########
 d <- read.csv( "dip2006.csv", header=TRUE, , stringsAsFactors=FALSE)
-d <- d[order(d$edon, d$seccion),]
-# rename cols
-colnames(d)[which(colnames(d)=="apm")] <- "pric" # "pri-pvem"
-colnames(d)[which(colnames(d)=="pbt")] <- "prdc" # "prd-pt-conve"
-colnames(d)[which(colnames(d)=="panal")] <- "pna" 
-sel.c <- c("pan","pric","prdc","pna","asdc","efec","lisnom")
-d <- to.num(d,sel.c) # clean data
-d <- within(d, efec <- pan + pric + prdc + pna + asdc)
-d <- within(d, tot <- nul <- nr <- NULL)
-sel.r <- grep("Anulada|No ", d$status) # casillas anuladas no instaladas
-d[sel.r,sel.c] <- 0 # anuladas to 0
+d <- d[order(d$edon, d$seccion),] # sort
+# vote columns selector
+colnames(d)[which(colnames(d)=="pri.pvem")]     <- "pric"
+colnames(d)[which(colnames(d)=="prd.pt.conve")] <- "prdc"
+sel.c <-            c("pan","pric","prdc","pna","asdc","efec","lisnom")
+#
+# clean
+#table(d$status)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+sel.r <- grep("Anulada|instalada", d$status); d[sel.r,sel.c] <- 0                  # voided casillas to zero
+d <- within(d, efec <- pan + pric + prdc + pna + asdc)                             # valid vote
+d <- within(d, tot <- nul <- nr <- status <- casilla <- NULL)                      # economize columns
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 ## coalition dummies
@@ -189,26 +235,28 @@ d <- within(d, {
     dpanc <- 0;
     dpric <- dprdc <- 1
 })
-# clean
-d <- within(d, casilla <- ID_ELEC <- ord <- status <- nota <- valid <- NULL)
-v06 <- d
 #
+# rename vote returns objects for analysis
+v06_agg <- d
+
 ##########
 ## 2009 ##
 ##########
 d <- read.csv( "dip2009.csv", header=TRUE, , stringsAsFactors=FALSE)
-d <- d[order(d$edon, d$seccion),]
-colnames(d)[which(colnames(d)=="PRIMERO_MEXICO")] <- "pric" # pri-pvem
-colnames(d)[which(colnames(d)=="SALVEMOS_MEXICO")] <- "ptc" # pt-conve"
-colnames(d)[which(colnames(d)=="panal")] <- "pna"
-sel.c <- c("pan","pri","prd","pvem","pt","conve","pna","psd","pric","ptc","efec","lisnom")
-d <- to.num(d,sel.c) # clean data
-d <- within(d, efec <- pan + pri + prd + pvem + pt + conve + pna + psd + pric + ptc)
-d <- within(d, tot <- nul <- nr <- NULL)
-sel.r <- grep("NO INSTALADA|SIN ACTA|NO ENTREGADO", d$status)
-sel.r2 <- grep("ANULADA", d$tepjf) # casillas anuladas no instaladas
-sel.r <- union(sel.r, sel.r2); rm(sel.r2)
-d[sel.r,sel.c] <- 0 # anuladas to 0
+d <- d[order(d$edon, d$seccion),] # sort
+# vote columns selector
+colnames(d)[which(colnames(d)=="pri.pvem")] <- "pric"
+colnames(d)[which(colnames(d)=="pt.conve")] <- "ptc"
+sel.c <-            c("pan","pri","prd","pvem","pt","conve","pna","psd","pric","ptc","efec","lisnom")
+# clean data
+#table(d$status)
+#table(d$tepjf)
+d <- to.num(d,sel.c)                                                               # numericize
+sel.r <- grep("instalada|entregado|sin acta", d$status, ignore.case = TRUE)        # voided casillas to zero
+sel.r <- c(sel.r, grep("Anulada",             d$tepjf, ignore.case = TRUE))        # voided casillas to zero
+d[sel.r,sel.c] <- 0                                                                # voided casillas to zero
+d <- within(d, efec <- pan + pri + prd + pvem + pt + conve + pna + psd + pric + ptc) # valid vote
+d <- within(d, tot <- nul <- nr <- tepjf <- status <- casilla <- NULL)             # economize columns
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 # district coalition dummies
@@ -220,50 +268,53 @@ d$dptc <- ave(d$ptc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)   # if >
 d$dptc <- as.numeric(d$dptc>0)
 table(d$dpric, useNA = "always")
 table(d$dptc, useNA = "always")
-# aggregate coalitions where present for correct winner assesment
-sel <- which(d$dpric==1)
-d[sel,] <- within(d[sel,], {
-    pric <- pri + pric + pvem;
-    pri <- pvem <- 0
-})
 # clean
-d <- within(d, circun <- edo <- cabecera <- munn <- casilla <- status <- tepjf <- NULL)
-v09 <- d
+d <- within(d, nr <- nul <- tot <- casilla <- status <- tepjf <- NULL)
+#####################################################################
+## aggregate coalitions where present for correct winner assesment ##
+#####################################################################
+d_agg <- d # duplicate for manipulation
+sel.r <- which(d_agg$dpric==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    pric <- pri + pric + pvem;
+    pri <- pvem <- 0;
+})
+sel.r <- which(d_agg$dptc==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    ptc <- pt + conve + ptc;
+    pt <- conve <- 0;
+})
+##############################################################
+## split coalition votes according to contributions in unit ##
+##############################################################
+d_split <- d # duplicate for manipulation
+d_split <- apportion_v(dat=d_split, members=c("pri","pvem"), joint="pric")
+d_split <- apportion_v(dat=d_split, members=c("pt","conve"), joint="ptc")
 #
+# rename vote returns objects for analysis
+v09_agg <- d_agg
+v09_split <- d_split
+
 ##########
 ## 2012 ##
 ##########
 d <- read.csv( "dip2012.csv", header=TRUE, , stringsAsFactors=FALSE)
-colnames(d)[which(colnames(d)=="ID_ESTADO")] <- "edon"
-colnames(d)[which(colnames(d)=="D_DISTRITO")] <- "disn"
-colnames(d)[which(colnames(d)=="ID_CASILLA")] <- "casilla"
-colnames(d)[which(colnames(d)=="SECCION")] <- "seccion"
-colnames(d)[which(colnames(d)=="LISTA_NOMINAL_CASILLA")] <- "lisnom"
-colnames(d)[which(colnames(d)=="ID_MUNICIPIO")] <- "munn"
-colnames(d)[which(colnames(d)=="NUMERO_VOTOS_VALIDOS")] <- "efec"
-colnames(d)[which(colnames(d)=="NUM_VOTOS_NULOS")] <- "nul"
-colnames(d)[which(colnames(d)=="NUM_VOTOS_CAN_NREG")] <- "nr"
-colnames(d)[which(colnames(d)=="TOTAL_VOTOS")] <- "tot"
-d <- within(d, ORDEN <- LISTA_NOMINAL <- TIPO_RECUENTO <- ID_GRUPO <- VOTOS_RESERVADOS <- BOLETAS_INUTILIZADAS <- EXT_CONTIGUA <- TIPO_CANDIDATURA <- CASILLA <- NULL)
-d <- d[order(d$edon, d$seccion),]
-colnames(d)[which(colnames(d)=="PAN")]   <- "pan"
-colnames(d)[which(colnames(d)=="PRI")]   <- "pri"
-colnames(d)[which(colnames(d)=="PRD")]   <- "prd"
-colnames(d)[which(colnames(d)=="PVEM")]  <- "pvem"
-colnames(d)[which(colnames(d)=="PT")]    <- "pt"
-colnames(d)[which(colnames(d)=="MC")]    <- "mc"
-colnames(d)[which(colnames(d)=="PANAL")] <- "pna"
-colnames(d)[which(colnames(d)=="PRI_PVEM")] <- "pric"
-d <- within(d, prdc <- PRD_PT_MC  + PRD_PT  + PRD_MC  + PT_MC)
-d <- within(d,         PRD_PT_MC <- PRD_PT <- PRD_MC <- PT_MC <- NULL)
-#
+d <- d[order(d$edon, d$seccion),] # sort
+# vote columns selector
+colnames(d)[which(colnames(d)=="pri.pvem")]  <- "pric"
+colnames(d)[which(colnames(d)=="prd.pt.mc")] <- "prdc"
 sel.c <-            c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom")
-d <- to.num(d,sel.c) # clean data
-d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + pric + prdc)
-d <- within(d, tot <- nul <- nr <- NULL)
-# recode status
-table(d$ESTATUS_ACTA) # missing codebook, quizás 3 y 4 que sólo tienen NAs sean anulados/noentregados o algo así
-d[which(d$ESTATUS_ACTA==3),]
+# clean data
+#table(d$status)
+#table(d$tepjf)
+#table(d$nota)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+sel.r <- grep("Anulada", d$tepjf, ignore.case = TRUE)                              # voided casillas to zero
+sel.r <- c(sel.r, grep("instalada|entregado", d$status, ignore.case = TRUE))       # voided casillas to zero
+d[sel.r,sel.c] <- 0                                                                # voided casillas to zero
+d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + pric + prdc)       # valid vote
+d <- within(d, tot <- nul <- nr <- status <- tepjf <- casilla <- NULL)             # economize columns
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 # coalition dummies
@@ -274,82 +325,118 @@ d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)   # if
 d$dprdc <- as.numeric(d$dprdc>0)
 table(d$dpric, useNA = "always")
 table(d$dprdc, useNA = "always")
-# aggregate coalitions where present for correct winner assesment
-sel <- which(d$dpric==1)
-d[sel,] <- within(d[sel,], {
-    pric <- pri + pric + pvem;
-    pri <- pvem <- 0
-})
-sel <- which(d$dprdc==1)
-d[sel,] <- within(d[sel,], {
-    prdc <- prd + prdc + pt + mc;
-    prd <- pt <- mc <- 0
-})
-# clean
-d <- within(d, casilla <- TIPO_CASILLA <- ESTATUS_ACTA <- NULL)
-v12 <- d
 #
+#####################################################################
+## aggregate coalitions where present for correct winner assesment ##
+#####################################################################
+d_agg <- d # duplicate for manipulation
+sel.r <- which(d_agg$dpric==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    pric <- pri + pric + pvem;
+    pri <- pvem <- 0;
+})
+sel.r <- which(d_agg$dprdc==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    prdc <- prd + pt + mc + prdc;
+    prd <- pt <- mc <- 0;
+})
+##############################################################
+## split coalition votes according to contributions in unit ##
+##############################################################
+d_split <- d # duplicate for manipulation
+d_split <- apportion_v(dat=d_split, members=c("pri","pvem"), joint="pric")
+d_split <- apportion_v(dat=d_split, members=c("prd", "pt","mc"), joint="prdc")
+#
+# rename vote returns objects for analysis
+v12_agg <- d_agg
+v12_split <- d_split
+
 ##########
 ## 2015 ##
 ##########
 d <- read.csv( "dip2015.csv", header=TRUE, , stringsAsFactors=FALSE)
-d <- d[order(d$edon, d$seccion),]
-#
-colnames(d)[which(colnames(d)=="panal")] <- "pna"
-colnames(d)[which(colnames(d)=="pri_pvem")] <- "pric"
-colnames(d)[which(colnames(d)=="prd_pt")] <- "prdc"
-#
-sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom")
-d <- to.num(d,sel.c) # clean data
-#
-d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + morena + ph + pes + pric + prdc + indep1 + indep2)
-d <- within(d, tot <- nul <- nr <- NULL)
-#
-d$dpanc <- 0
+d <- d[order(d$edon, d$seccion),] # sort
+# vote columns selector
+colnames(d)[which(colnames(d)=="pan.pna")]  <- "panc"
+colnames(d)[which(colnames(d)=="pri.pvem")] <- "pric"
+colnames(d)[which(colnames(d)=="prd.pt")]   <- "prdc"
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","panc","pric","prdc","indep1","indep2","efec","lisnom")
+# clean data
+#table(d$status)
+#table(d$tepjf)
+#table(d$nota)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+sel.r <- grep("suspensión|instalada|entregado", d$status, ignore.case = TRUE)      # voided casillas to zero
+sel.r <- c(sel.r, grep("Anulada", d$tepjf, ignore.case = TRUE))                    # voided casillas to zero
+d[sel.r,sel.c] <- 0                                                                # voided casillas to zero
+d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + morena + ph + pes + panc + pric + prdc + indep1 + indep2) # valid votes
+# district coalition dummies
+d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)
+d$dpanc <- as.numeric(d$dpanc>0)
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dprdc <- as.numeric(d$dprdc>0)
 d$dmorenac <- 0
+table(d$dpanc, useNA = "always")
 table(d$dpric, useNA = "always")
 table(d$dprdc, useNA = "always")
-# aggregate coalitions where present for correct winner assesment
-sel <- which(d$dpric==1)
-d[sel,] <- within(d[sel,], {
-    pric <- pri + pric + pvem;
-    pri <- pvem <- 0
-})
-sel <- which(d$dprdc==1)
-d[sel,] <- within(d[sel,], {
-    prdc <- prd + prdc + pt;
-    prd <- pt <- 0
-})
-#
-sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
-d[sel.r,sel.c] <- 0 # anuladas to 0
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
 # clean
-d <- within(d, ord <- ID_CASILLA <- TIPO_CASILLA <- EXT_CONTIGUA <- OBSERVACIONES <- NULL)
-v15 <- d
+d <- within(d, casilla <- tot <- nul <- nr <- status <- tepjf <- nota <- NULL)
 #
+#####################################################################
+## aggregate coalitions where present for correct winner assesment ##
+#####################################################################
+d_agg <- d # duplicate for manipulation
+sel.r <- which(d_agg$dpanc==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    panc <- pan + panc + pna;
+    pan <- pna <- 0;
+})
+sel.r <- which(d_agg$dpric==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    pric <- pri + pric + pvem;
+    pri <- pvem <- 0;
+})
+sel.r <- which(d_agg$dprdc==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    prdc <- prd + pt + prdc;
+    prd <- pt <- 0;
+})
+##############################################################
+## split coalition votes according to contributions in unit ##
+##############################################################
+d_split <- d # duplicate for manipulation
+d_split <- apportion_v(dat=d_split, members=c("pan","pna"), joint="panc")
+d_split <- apportion_v(dat=d_split, members=c("pri","pvem"), joint="pric")
+d_split <- apportion_v(dat=d_split, members=c("prd", "pt"), joint="prdc")
+#
+# rename vote returns objects for analysis
+v15_agg <- d_agg
+v15_split <- d_split
+
 ##########
 ## 2018 ##
 ##########
 d <- read.csv( "dip2018.csv", header=TRUE, , stringsAsFactors=FALSE)
-d <- d[order(d$edon, d$seccion),]
-#
-colnames(d)[which(colnames(d)=="panal")]          <- "pna"
-colnames(d)[which(colnames(d)=="pan.prd.mc")]     <- "panc"
-colnames(d)[which(colnames(d)=="pri.pvem.panal")] <- "pric"
-colnames(d)[which(colnames(d)=="pt.morena.pes")]  <- "morenac"
-#
+d <- d[order(d$edon, d$seccion),] # sort
+# vote columns selector
+colnames(d)[which(colnames(d)=="pan.prd.mc")]    <- "panc"
+colnames(d)[which(colnames(d)=="pri.pvem.pna")]  <- "pric"
+colnames(d)[which(colnames(d)=="pt.morena.pes")] <- "morenac"
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom")
-d <- to.num(d,sel.c) # clean data
-#
-d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + morena + pes + panc + pric + morenac + indep1 + indep2)
-d <- within(d, nr <- nul <- tot <- NULL)
-#
+# clean data
+#table(d$nota)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+sel.r <- grep("suspensi.n|no instalada|no entregado", d$nota, ignore.case = TRUE)  # voided casillas to zero
+#table(d$nota[sel.r])
+d[sel.r,sel.c] <- 0                                                                # voided casillas to zero
+d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + morena + pes + panc + pric + morenac + indep1 + indep2) # valid vote
+d <- within(d, nr <- nul <- tot <- nota <- casilla  <- NULL)                       # economize columns
 # district coalition dummies
 d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpanc <- as.numeric(d$dpanc>0)
@@ -360,142 +447,95 @@ d$dmorenac <- as.numeric(d$dmorenac>0)
 table(d$dpanc, useNA = "always")
 table(d$dpric, useNA = "always")
 table(d$dmorenac, useNA = "always")
-# aggregate coalitions where present for correct winner assesment
-sel <- which(d$dpanc==1)
-d[sel,] <- within(d[sel,], {
-    panc <- pan + panc + prd + mc;
-    pan <- prd <- mc <- 0
+#
+#####################################################################
+## aggregate coalitions where present for correct winner assesment ##
+#####################################################################
+d_agg <- d # duplicate for manipulation
+sel.r <- which(d_agg$dpanc==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    panc <- pan + prd + mc + panc;
+    pan <- prd <- mc <- 0;
 })
-sel <- which(d$dpric==1)
-d[sel,] <- within(d[sel,], {
+sel.r <- which(d_agg$dpric==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
     pric <- pri + pric + pvem + pna;
-    pri <- pvem <- pna <- 0
+    pri <- pvem <- pna <- 0;
 })
-sel <- which(d$dmorenac==1)
-d[sel,] <- within(d[sel,], {
-    morenac <- morena + morenac + pt + pes;
-    morena <- pt  <- pes <- 0
+sel.r <- which(d_agg$dmorenac==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    morenac <- morena + pt + pes + morenac;
+    morena <- pt <- pes <- 0;
 })
+##############################################################
+## split coalition votes according to contributions in unit ##
+##############################################################
+d_split <- d # duplicate for manipulation
+d_split <- apportion_v(dat=d_split, members=c("pan","prd","mc"), joint="panc")
+d_split <- apportion_v(dat=d_split, members=c("pri","pvem","pna"), joint="pric")
+d_split <- apportion_v(dat=d_split, members=c("morena", "pt","pes"), joint="morenac")
 #
-# sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
-#d[sel.r,sel.c] <- 0 # anuladas to 0
-## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
-# clean
-d <- within(d, edo <- cabecera <- casn <- TIPO_CASILLA <- NULL)
-v18 <- d
-#
-##############################################################################################
-## 2021                                                                                     ##
-## Note: generates v21w version for winner assessment,                                      ##
-## then v21 (for analysis) with pri separate from pan+prd and pvem separate from morena+pt  ##
-## Might want to also separate prd and pt, respectively, and extend this to previous years? ##
-##############################################################################################
+# rename vote returns objects for analysis
+v18_agg <- d_agg
+v18_split <- d_split
+
+##########
+## 2021 ##
+##########
 d <- read.csv( "dip2021.csv", header=TRUE, , stringsAsFactors=FALSE)
-d <- d[order(d$edon, d$seccion),]
-d <- within(d, cabecera <- ID_CASILLA <- TIPO_CASILLA <- EXT_CONTIGUA <- CASILLA <- FECHA_HORA <- NULL)
-d <- within(d, nr <- nul <- total <- NULL)
-#
-# efec
-tmp <- d[,c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","pan.pri.prd","pvem.pt.morena")]
-tmp[is.na(tmp)] <- 0
-d[,c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","pan.pri.prd","pvem.pt.morena")] <- tmp
-d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + morena + pes + rsp + fxm + indep + pan.pri.prd + pvem.pt.morena)
-#
-# assign 2021 pan-pri-prd coalition to pan and pri in proportion to votes each won by itself
-tmp <- d[,c("pan","pri")]
-tmp[which(rowSums(tmp)==0),] <- tmp[which(rowSums(tmp)==0),] + 1 # avoid zero denominators (0,0 will turn into half and half)
-tmp <- tmp/rowSums(tmp) # two-party shares
-pan21pri <- tmp # retain rel shares to give coal winners to bigger of both
-#
-d$panc <- round(d$pan.pri.prd * pan21pri[,1], 2) # pan's proportional votes
-d$pric <- round(d$pan.pri.prd * pan21pri[,2], 2) # pri's proportional votes
-d$pan.pri.prd <- NULL
-#
-# assign 2021 pvem-pt-morena coalition to morena and pvem in proportion to votes each won by itself
-tmp <- d[,c("morena","pvem")]
-tmp[which(rowSums(tmp)==0),] <- tmp[which(rowSums(tmp)==0),] + 1 # avoid zero denominators (0,0 will turn into half and half)
-tmp <- tmp/rowSums(tmp) # two-party shares
-morena21pvem <- tmp # retain rel shares to give coal winners to bigger of both
-#
-d$morenac <- round(d$pvem.pt.morena * morena21pvem[,1], 2) # pan's proportional votes
-d$pvemc   <- round(d$pvem.pt.morena * morena21pvem[,2], 2) # pri's proportional votes
-d$pvem.pt.morena <- NULL
-#
-sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","lisnom","efec")
-d <- to.num(d,sel.c) # clean data
+d <- d[order(d$edon, d$seccion),] # sort
+# drop voto extranjero
+table(d$edon[which(d$seccion==0)])
+d <- d[-which(d$seccion==0),]
+# vote columns selector
+colnames(d)[which(colnames(d)=="pan.pri.prd")]    <- "panc"
+colnames(d)[which(colnames(d)=="pvem.pt.morena")] <- "morenac"
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","morenac","efec","lisnom")
+# clean data
+#table(d$observaciones)
+#table(d$tepjf)
+#table(d$nota)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+sel.r <- grep("anulada", d$tepjf, ignore.case = TRUE)                              # voided casillas to zero
+sel.r <- c(sel.r, grep("sin boletas|no recibido|suspensi.n|no instalada|no entregado", d$observaciones, ignore.case = TRUE)) # voided casillas to zero
+d[sel.r,sel.c] <- 0                                                                # voided casillas to zero
+d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + morena + pes + rsp + fxm + indep + panc + morenac) # valid vote
+d <- within(d, nr <- nul <- total <- observaciones <- tepjf <- casilla <- NULL)    # economize columns
 #
 # district coalition dummies
 d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpanc <- as.numeric(d$dpanc>0)
-d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
-d$dpric <- as.numeric(d$dpric>0)
 d$dmorenac <- ave(d$morenac, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dmorenac <- as.numeric(d$dmorenac>0)
 table(d$dpanc, useNA = "always")
-table(d$dpric, useNA = "always")
 table(d$dmorenac, useNA = "always")
-# aggregate full coalitions where present for correct winner assessment
-d2 <- d
-sel <- which(d2$dpanc==1) # assigns all va por mex to pan here --- will rely on pan21pri later to assign properly
-d2[sel,] <- within(d2[sel,], {
-    panc <- pan + panc + pri + pric + prd;
-    pan <- pri <- pric <- prd <- 0
+#
+#####################################################################
+## aggregate coalitions where present for correct winner assesment ##
+#####################################################################
+d_agg <- d # duplicate for manipulation
+sel.r <- which(d_agg$dpanc==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    panc <- pan + pri + prd + panc;
+    pan <- pri <- prd <- 0;
 })
-sel <- which(d2$dmorenac==1)
-d2[sel,] <- within(d2[sel,], {
-    morenac <- pvem + pt + morena + morenac;
-    pvem <- pt <- morena <- 0
+sel.r <- which(d_agg$dmorenac==1)
+d_agg[sel.r,] <- within(d_agg[sel.r,], {
+    morenac <- morena + pvem + pt + morenac;
+    morena <- pvem <- pt <- 0;
 })
+##############################################################
+## split coalition votes according to contributions in unit ##
+##############################################################
+d_split <- d # duplicate for manipulation
+d_split <- apportion_v(dat=d_split, members=c("pan","pri", "prd"), joint="panc")
+d_split <- apportion_v(dat=d_split, members=c("morena", "pvem", "pt"), joint="morenac")
 #
-# coalition manipulation for analysis -- OJO: splits coalitions, so often misses correct winner
-## # COMMENTED THIS BLOC TO RETAIN COALITION PARTY BREAKDOWN
-## sel <- which(d$dpanc==1)
-## d[sel,] <- within(d[sel,], {
-##     panc <- pan + panc + prd; # remove prd?
-##     pan <- prd <- 0
-## })
-## sel <- which(d$dpric==1)
-## d[sel,] <- within(d[sel,], {
-##     pric <- pri + pric;
-##     pri <- 0
-## })
-## sel <- which(d$dmorenac==1)
-## d[sel,] <- within(d[sel,], {
-##     morenac <- pt + morena + morenac;
-##     pt <- morena <- 0
-# })
-## sel <- which(d$dmorenac==1)
-## d[sel,] <- within(d[sel,], {
-##     morenac <- pvem + pvemc;
-##     pvem <- 0
-## })
-#
-# sel.r <- grep("E6|E7", d$OBSERVACIONES) # casillas no instaladas
-#d[sel.r,sel.c] <- 0 # anuladas to 0
-#
-## aggregate seccion-level votes ##
-pan21pri$pan <- ave(pan21pri$pan, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
-pan21pri$pri <- ave(pan21pri$pri, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
-pan21pri <- pan21pri[-which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE),]
-pan21pri <- round((pan21pri / rowSums(pan21pri)), 3) # shares add to 1
-#
-morena21pvem$morena <- ave(morena21pvem$morena, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
-morena21pvem$pvem <- ave(morena21pvem$pvem, as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE) # w same-sized casillas, sum ok
-morena21pvem <- morena21pvem[-which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE),]
-morena21pvem <- round((morena21pvem / rowSums(morena21pvem)), 3) # shares add to 1
-#
-d <-  ag.sec(d, sel.c)
-d2 <- ag.sec(d2, sel.c)
-# drop seccion=0
-sel <- which(d$seccion==0)
-d            <-            d[-sel,]
-d2           <-           d2[-sel,]
-pan21pri     <-     pan21pri[-sel,]
-morena21pvem <- morena21pvem[-sel,]
-v21 <- d
-v21w <- d2
-# head(v21) # debug
+# rename vote returns objects for analysis
+v21_agg <- d_agg
+v21_split <- d_split
+
 
 # clean
 rm(d,sel.c,tmp)
@@ -748,7 +788,7 @@ windis$e21[which(windis$e21=="morenac")] <- lab[which(windis$e21=="morenac")]
 rm(vot,etiq)
 rm(v21dw,tmp.w,tmp.w2) # drop to avoid confusion
 #
-write.csv(windis, file = paste(dd, "dfdf2006-2021winners.csv", sep = ""))
+write.csv(windis, file = paste(dd, "dfdf2006-on-winners.csv", sep = ""))
 
 # 'not in' function
 source("/home/eric/Dropbox/data/useful-functions/notin.r")
@@ -773,7 +813,12 @@ if (length(sel)>0){
 ## }
 
 # get municipio info to merge into votes
-muns <- eq[, c("edon", "seccion", "ife", "inegi", "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021")]
+muns <- eq[, c("edon", "seccion", "ife", "inegi",
+               "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021")]
+
+# get federal district info to merge into votes
+disf <- eq[, c("edon", "seccion", "ife", "inegi",
+               "dis1979", "dis1997", "dis2006", "dis2013", "dis2018")]
 
 # match yearly observations (secciones)
 #dim(v06); dim(v09); dim(v12); dim(v15) # something amiss in 2009?
@@ -832,7 +877,7 @@ tmp.w2 <- morena21pvem
 tmp.w2 <- cbind(tmp.w2, edosecn=v21w$edosecn)
 
 
-# dummies d91 to d18 indicate if seccion exists each year
+# dummies d91 d94 ... indicate secciones existing each year
 ## tmp <- merge(x=v91[,c("edosecn","d91")], y=v94[,c("edosecn","d94")], by = "edosecn", all = TRUE)
 ## tmp <- merge(x=tmp,                      y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
 tmp <- merge(x=v94[,c("edosecn","d94")], y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
@@ -984,6 +1029,15 @@ pob18  <- pob18 [, grep("edosecn|^p18",  colnames(pob18) )]
 pobtot <- pobtot[, grep("edosecn|^ptot", colnames(pobtot))]
 head(pobtot); head(pob18)
 
+######################################################
+##    consolidate districts before secciones are    ##
+##    manipulated to deal with reseccionamiento     ##
+######################################################
+## eg. 1979 map federal election counterfactuals    ##
+## to clean 1988 vote (cf. cantú, but longitudinal) ##
+######################################################
+
+
 
 #################################################
 ## consolidate municipios before secciones are ##
@@ -1042,9 +1096,9 @@ rm(ife.inegi)
 save.image(paste0(wd, "data/too-big-4-github/tmp.RData"))
 
 
-#################################################
-## function to aggregate municipio-level votes ##
-#################################################
+################################################
+## function aggregating municipio-level votes ##
+################################################
 ag.mun <- function(d=d, sel.c=sel.c, grouping=d$ife){
     for (i in 1:length(sel.c)){
         # d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$inegi, FUN=sum, na.rm=TRUE) # use inegi codes
@@ -2337,7 +2391,6 @@ v12s <- within(v12s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2
 v15s <- within(v15s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
 v18s <- within(v18s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
 v21s <- within(v21s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-
 #
 #write.csv(v91s, file = paste(wd, "data/dipfed-seccion-vraw-1991.csv", sep = ""), row.names = FALSE)
 write.csv(v94s, file = paste(wd, "data/dipfed-seccion-vraw-1994.csv", sep = ""), row.names = FALSE)
