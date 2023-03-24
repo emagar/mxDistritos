@@ -793,7 +793,9 @@ write.csv(windis, file = paste(dd, "dfdf2006-on-winners.csv", sep = ""))
 # 'not in' function
 source("/home/eric/Dropbox/data/useful-functions/notin.r")
 
-# get equivalencias seccionales
+###################################
+## get equivalencias seccionales ##
+###################################
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 eq$check <- NULL # drop column meant to clean within excel file
@@ -812,11 +814,15 @@ if (length(sel)>0){
 ##     print("All eq-secciones in v object")
 ## }
 
-# get municipio info to merge into votes
+############################################
+## get municipio info to merge into votes ##
+############################################
 muns <- eq[, c("edon", "seccion", "ife", "inegi",
                "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021")]
 
-# get federal district info to merge into votes
+###################################################
+## get federal district info to merge into votes ##
+###################################################
 disf <- eq[, c("edon", "seccion", "ife", "inegi",
                "dis1979", "dis1997", "dis2006", "dis2013", "dis2018")]
 
@@ -1036,7 +1042,7 @@ head(pobtot); head(pob18)
 ## eg. 1979 map federal election counterfactuals    ##
 ## to clean 1988 vote (cf. cantú, but longitudinal) ##
 ######################################################
-
+DUPLICAR BLOQUE MUNICIPAL PARA ADAPTARLO A DISTRITOS
 
 
 #################################################
