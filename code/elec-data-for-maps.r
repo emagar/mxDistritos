@@ -86,18 +86,24 @@ na2zero <- function(dat=NA, sel.c){
 ## ##########
 ## d <- read.csv("dip1991.csv", header=TRUE, stringsAsFactors=FALSE)
 ## d <- d[order(d$edon, d$seccion),]
-## # prep/indicate vote columns
-## sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## d <- to.num(d,sel.c) # clean data
-## d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + pdm + prt + pem + pt)
-## sel.r <- grep("Anulada", d$estatus) # casillas anuladas
-## d[sel.r,sel.c] <- 0 # anuladas to 0
-## d <- within(d, tot <- nul <- nr <- estatus <- NULL)
+## # vote columns selector
+## sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec","lisnom")
+## # clean data
+## #table(d$note)
+## #table(d$status)
+## d <- to.num(d,sel.c)                                                               # numericize
+## d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+## d$dextra <- 0; d$dextra[grep("extraordinaria", d$note)] <- 1                       # special elections
+## sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                           # voided casillas to zero
+## d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + pdm + prt + pem + pt)# valid vote
+## d <- within(d, tot <- nul <- nr <- note <- status <- casilla <- NULL)              # economize columns
 ## ## aggregate seccion-level votes ##
 ## d <- ag.sec(d, sel.c)
-## # clean
-## d <- within(d, casilla <- NULL)
-## #
+## ## coalition dummies
+## d <- within(d, dpanc <- dpric <- dprdc <- 0)
+## ##############################################
+## ## rename vote returns objects for analysis ##
+## ##############################################
 ## v91_agg <- v91_split <- d
 
 ##########
@@ -120,8 +126,9 @@ d <- within(d, tot <- nul <- nr <- nota <- status <- casilla <- NULL)           
 d <- ag.sec(d, sel.c)
 ## coalition dummies
 d <- within(d, dpanc <- dpric <- dprdc <- 0)
-#
-# rename vote returns objects for analysis
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v94_agg <- v94_split <- d
 
 ##########
@@ -143,8 +150,9 @@ d <- within(d, tot <- nul <- nr <- status <- note <- casilla <- NULL)           
 d <- ag.sec(d, sel.c)
 ## coalition dummies
 d <- within(d, dpanc <- dpric <- dprdc <- 0)
-#
-# rename vote returns objects for analysis
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v97_agg <- v97_split <- d
 
 ##########
@@ -173,8 +181,9 @@ d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >
 d$dprdc <- as.numeric(d$dprdc>0)
 table(d$dpanc, useNA = "always")
 table(d$dprdc, useNA = "always")
-#
-# rename vote returns objects for analysis
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v00_agg <- d
 
 ##########
@@ -201,14 +210,18 @@ d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >
 d$dpric <- as.numeric(d$dpric>0)
 table(d$dpric, useNA = "always")
 d$dprdc <- 0
-# aggregate coalitions where present for correct winner assesment
-sel <- which(d$dpric==1)
-d[sel,] <- within(d[sel,], {
-    pric <- pri + pric + pvem;
-    pri <- pvem <- 0
-})
-#
-# rename vote returns objects for analysis
+## # aggregate coalitions where present for correct winner assesment # REDUNDANT
+## table(d$dpric)
+## table(d$pri[sel])
+## table(d$pvem[sel])
+## sel <- which(d$dpric==1)
+## d[sel,] <- within(d[sel,], {
+##     pric <- pri + pric + pvem;
+##     pri <- pvem <- 0
+## })
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v03_agg <- d
 
 ##########
@@ -235,8 +248,9 @@ d <- within(d, {
     dpanc <- 0;
     dpric <- dprdc <- 1
 })
-#
-# rename vote returns objects for analysis
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v06_agg <- d
 
 ##########
@@ -268,8 +282,6 @@ d$dptc <- ave(d$ptc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)   # if >
 d$dptc <- as.numeric(d$dptc>0)
 table(d$dpric, useNA = "always")
 table(d$dptc, useNA = "always")
-# clean
-d <- within(d, nr <- nul <- tot <- casilla <- status <- tepjf <- NULL)
 #####################################################################
 ## aggregate coalitions where present for correct winner assesment ##
 #####################################################################
@@ -284,14 +296,17 @@ d_agg[sel.r,] <- within(d_agg[sel.r,], {
     ptc <- pt + conve + ptc;
     pt <- conve <- 0;
 })
-##############################################################
-## split coalition votes according to contributions in unit ##
-##############################################################
+# ptc coal across the board
+d_agg$pt <- d_agg$conve <- NULL
+#############################################################
+## split coalition vote according to contributions in unit ##
+#############################################################
 d_split <- d # duplicate for manipulation
 d_split <- apportion_v(dat=d_split, members=c("pri","pvem"), joint="pric")
 d_split <- apportion_v(dat=d_split, members=c("pt","conve"), joint="ptc")
-#
-# rename vote returns objects for analysis
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v09_agg <- d_agg
 v09_split <- d_split
 
@@ -325,7 +340,6 @@ d$dprdc <- ave(d$prdc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)   # if
 d$dprdc <- as.numeric(d$dprdc>0)
 table(d$dpric, useNA = "always")
 table(d$dprdc, useNA = "always")
-#
 #####################################################################
 ## aggregate coalitions where present for correct winner assesment ##
 #####################################################################
@@ -340,14 +354,17 @@ d_agg[sel.r,] <- within(d_agg[sel.r,], {
     prdc <- prd + pt + mc + prdc;
     prd <- pt <- mc <- 0;
 })
-##############################################################
-## split coalition votes according to contributions in unit ##
-##############################################################
+# prdc across the board
+d_agg$prd <- d_agg$pt <- d_agg$mc <- NULL
+#############################################################
+## split coalition vote according to contributions in unit ##
+#############################################################
 d_split <- d # duplicate for manipulation
 d_split <- apportion_v(dat=d_split, members=c("pri","pvem"), joint="pric")
 d_split <- apportion_v(dat=d_split, members=c("prd", "pt","mc"), joint="prdc")
-#
-# rename vote returns objects for analysis
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v12_agg <- d_agg
 v12_split <- d_split
 
@@ -371,6 +388,7 @@ sel.r <- grep("suspensión|instalada|entregado", d$status, ignore.case = TRUE)  
 sel.r <- c(sel.r, grep("Anulada", d$tepjf, ignore.case = TRUE))                    # voided casillas to zero
 d[sel.r,sel.c] <- 0                                                                # voided casillas to zero
 d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + morena + ph + pes + panc + pric + prdc + indep1 + indep2) # valid votes
+d <- within(d, tot <- nul <- nr <- status <- tepjf <- nota <- casilla <- NULL)     # economize columns
 # district coalition dummies
 d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE)
 d$dpanc <- as.numeric(d$dpanc>0)
@@ -384,9 +402,6 @@ table(d$dpric, useNA = "always")
 table(d$dprdc, useNA = "always")
 ## aggregate seccion-level votes ##
 d <- ag.sec(d, sel.c)
-# clean
-d <- within(d, casilla <- tot <- nul <- nr <- status <- tepjf <- nota <- NULL)
-#
 #####################################################################
 ## aggregate coalitions where present for correct winner assesment ##
 #####################################################################
@@ -413,8 +428,9 @@ d_split <- d # duplicate for manipulation
 d_split <- apportion_v(dat=d_split, members=c("pan","pna"), joint="panc")
 d_split <- apportion_v(dat=d_split, members=c("pri","pvem"), joint="pric")
 d_split <- apportion_v(dat=d_split, members=c("prd", "pt"), joint="prdc")
-#
-# rename vote returns objects for analysis
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v15_agg <- d_agg
 v15_split <- d_split
 
@@ -447,7 +463,8 @@ d$dmorenac <- as.numeric(d$dmorenac>0)
 table(d$dpanc, useNA = "always")
 table(d$dpric, useNA = "always")
 table(d$dmorenac, useNA = "always")
-#
+## aggregate seccion-level votes ##
+d <- ag.sec(d, sel.c)
 #####################################################################
 ## aggregate coalitions where present for correct winner assesment ##
 #####################################################################
@@ -467,15 +484,16 @@ d_agg[sel.r,] <- within(d_agg[sel.r,], {
     morenac <- morena + pt + pes + morenac;
     morena <- pt <- pes <- 0;
 })
-##############################################################
-## split coalition votes according to contributions in unit ##
-##############################################################
+#############################################################
+## split coalition vote according to contributions in unit ##
+#############################################################
 d_split <- d # duplicate for manipulation
 d_split <- apportion_v(dat=d_split, members=c("pan","prd","mc"), joint="panc")
 d_split <- apportion_v(dat=d_split, members=c("pri","pvem","pna"), joint="pric")
 d_split <- apportion_v(dat=d_split, members=c("morena", "pt","pes"), joint="morenac")
-#
-# rename vote returns objects for analysis
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v18_agg <- d_agg
 v18_split <- d_split
 
@@ -502,7 +520,6 @@ sel.r <- c(sel.r, grep("sin boletas|no recibido|suspensi.n|no instalada|no entre
 d[sel.r,sel.c] <- 0                                                                # voided casillas to zero
 d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + morena + pes + rsp + fxm + indep + panc + morenac) # valid vote
 d <- within(d, nr <- nul <- total <- observaciones <- tepjf <- casilla <- NULL)    # economize columns
-#
 # district coalition dummies
 d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpanc <- as.numeric(d$dpanc>0)
@@ -510,7 +527,8 @@ d$dmorenac <- ave(d$morenac, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) 
 d$dmorenac <- as.numeric(d$dmorenac>0)
 table(d$dpanc, useNA = "always")
 table(d$dmorenac, useNA = "always")
-#
+## aggregate seccion-level votes ##
+d <- ag.sec(d, sel.c)
 #####################################################################
 ## aggregate coalitions where present for correct winner assesment ##
 #####################################################################
@@ -525,270 +543,376 @@ d_agg[sel.r,] <- within(d_agg[sel.r,], {
     morenac <- morena + pvem + pt + morenac;
     morena <- pvem <- pt <- 0;
 })
-##############################################################
-## split coalition votes according to contributions in unit ##
-##############################################################
+#############################################################
+## split coalition vote according to contributions in unit ##
+#############################################################
 d_split <- d # duplicate for manipulation
 d_split <- apportion_v(dat=d_split, members=c("pan","pri", "prd"), joint="panc")
 d_split <- apportion_v(dat=d_split, members=c("morena", "pvem", "pt"), joint="morenac")
-#
-# rename vote returns objects for analysis
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
 v21_agg <- d_agg
 v21_split <- d_split
 
-
 # clean
-rm(d,sel.c,tmp)
+rm(d,d_agg,d_split,sel.c,sel.r,to.num,apportion_v,na2zero,ag.sec)
 
-################################
-## district winners 2006-2021 ##
-################################
-v06d <- v06; v09d <- v09; v12d <- v12; v15d <- v15; v18d <- v18; v21d <- v21; v21dw <- v21w # dw for winners
-v06d <- within(v06d, {
-    pan   <- ave(pan,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pric  <- ave(pric, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    prdc  <- ave(prdc, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pna   <- ave(pna,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    asdc  <- ave(asdc, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-})
-v06d <- v06d[duplicated(v06d$edon*100 + v06d$disn)==FALSE,]
-v06d <- v06d[order(v06d$edon*100, v06d$disn),]
-#
-v09d <- within(v09d, {
-    pan  <- ave(pan,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pri  <- ave(pri,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pric <- ave(pric, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    prd  <- ave(prd,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pvem <- ave(pvem, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pna  <- ave(pna,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    psd  <- ave(psd,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    ptc  <- ave(ptc,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-})
-v09d <- v09d[duplicated(v09d$edon*100 + v09d$disn)==FALSE,]
-v09d <- v09d[order(v09d$edon*100, v09d$disn),]
-#
-v12d <- within(v12d, {
-    pan <-  ave(pan,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pri <-  ave(pri,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pric <- ave(pric, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    prdc <- ave(prdc, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pvem <- ave(pvem, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pna <-  ave(pna,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-})
-v12d <- v12d[duplicated(v12d$edon*100 + v12d$disn)==FALSE,]
-v12d <- v12d[order(v12d$edon*100, v12d$disn),]
-#
-v15d <- within(v15d, {
-    pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    prd <-    ave(prd,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pvem <-   ave(pvem,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pt <-     ave(pt,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    mc <-     ave(mc,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pna <-    ave(pna,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    morena <- ave(morena, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    ph <-     ave(ph,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pes <-    ave(pes,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    indep1 <- ave(indep1, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    indep2 <- ave(indep2, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    prdc <-   ave(prdc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-})
-v15d <- v15d[duplicated(v15d$edon*100 + v15d$disn)==FALSE,]
-v15d <- v15d[order(v15d$edon*100, v15d$disn),]
-#
-v18d <- within(v18d, {
-    pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    prd <-    ave(prd,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pvem <-   ave(pvem,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pt <-     ave(pt,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    mc <-     ave(mc,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pna <-    ave(pna,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    morena <- ave(morena, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pes <-    ave(pes,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    panc <-   ave(panc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    morenac<- ave(morenac,as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    indep1 <- ave(indep1, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    indep2 <- ave(indep2, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-})
-v18d <- v18d[duplicated(v18d$edon*100 + v18d$disn)==FALSE,]
-v18d <- v18d[order(v18d$edon*100, v18d$disn),]
-#
-v21d <- within(v21d, {
-    pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    prd <-    ave(prd,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pvem <-   ave(pvem,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pt <-     ave(pt,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    mc <-     ave(mc,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    morena <- ave(morena, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pes <-    ave(pes,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    rsp <-    ave(rsp,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    fxm <-    ave(fxm,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    panc <-   ave(panc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    morenac<- ave(morenac,as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    indep <- ave(indep, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-})
-v21d <- v21d[duplicated(v21d$edon*100 + v21d$disn)==FALSE,]
-v21d <- v21d[order(v21d$edon*100, v21d$disn),]
-#
-tmp.w  <- pan21pri     # agg dis 2-pty shares
-tmp.w2 <- morena21pvem # agg dis 2-pty shares
-tmp.w$pan     <- ave(tmp.w$pan,     as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
-tmp.w$pri     <- ave(tmp.w$pri,     as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
-tmp.w2$morena <- ave(tmp.w2$morena, as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
-tmp.w2$pvem   <- ave(tmp.w2$pvem,   as.factor(v21w$edon*100 + v21w$disn), FUN=sum, na.rm=TRUE);
-v21dw <- within(v21dw, {
-    pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    prd <-    ave(prd,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pvem <-   ave(pvem,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pt <-     ave(pt,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    mc <-     ave(mc,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    morena <- ave(morena, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pes <-    ave(pes,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    rsp <-    ave(rsp,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    fxm <-    ave(fxm,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    panc <-   ave(panc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE); # should all be zero
-    morenac<- ave(morenac,as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    indep <-  ave(indep, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-    efec  <-  ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
-})
-tmp.w  <- tmp.w [duplicated(v21dw$edon*100 + v21dw$disn)==FALSE,]
-tmp.w2 <- tmp.w2[duplicated(v21dw$edon*100 + v21dw$disn)==FALSE,]
-v21dw <- v21dw[duplicated(v21dw$edon*100 + v21dw$disn)==FALSE,]
-tmp.w  <- tmp.w [order(v21dw$edon*100, v21dw$disn),]
-tmp.w2 <- tmp.w2[order(v21dw$edon*100, v21dw$disn),]
-v21dw <- v21dw[order(v21dw$edon*100, v21dw$disn),]
-tmp.w  <- round((tmp.w / rowSums(tmp.w)), 3) # shares add to 1
-tmp.w2 <- round((tmp.w2/ rowSums(tmp.w2)), 3) # shares add to 1
-tmp.w[1:5,]
-tmp.w2[1:5,]
-#
-windis <- v15d[,c("edon","disn")] # will receive data
-#
-# handy function to sort one data frame by order of another, matching data frame
-source("/home/eric/Dropbox/data/useful-functions/sortBy.r")
-## # example
-## v <- data.frame(c1=c(30,15,3), c2=c(10,25,2), c3=c(20,35,4))
-## w <- data.frame(c1=c("thirty","fifteen","three"), c2=c("ten","twenty-five","two"), c3=c("twenty","thirty-five","four"))
-## v.sorted <- t(apply(v, 1, function(x) sort(x, decreasing = TRUE))) # sort each row of df -- http://stackoverflow.com/questions/6063881/sorting-rows-alphabetically
-## w.sorted <- sortBy(target = w, By = v)
-## sortBy(target = v, By = v)
-#
-# 2006
-vot <- v06d[,c("pan","pric","prdc","pna","asdc")]
-vot[is.na(vot)==TRUE] <- 0 # drop NAs
-# crea objeto de etiquetas
-etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
-colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
-#
-etiq <- sortBy(target = etiq, By = vot)
-vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
-#
-windis$e06 <- etiq[,1] 
-## runnerup$e06 <- etiq[,2]
-## mg$e06 <- (vot[,1] - vot[,2]) / rowSums(vot)
-## enp$e06 <- 1/rowSums((vot/rowSums(vot))^2)
-#
-# 2009
-vot <- v09d[,c("pan","pri","prd","pvem","pna","psd","pric","ptc")]
-vot[is.na(vot)==TRUE] <- 0 # drop NAs
-# crea objeto de etiquetas
-etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
-colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
-#
-etiq <- sortBy(target = etiq, By = vot)
-vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
-#
-windis$e09 <- etiq[,1] 
-## runnerup$e09 <- etiq[,2]
-## mg$e09 <- (vot[,1] - vot[,2]) / rowSums(vot)
-## enp$e09 <- 1/rowSums((vot/rowSums(vot))^2)
-#
-# 2012
-vot <- v12d[,c("pan","pri","pvem","pna","pric","prdc")]
-vot[is.na(vot)==TRUE] <- 0 # drop NAs
-# crea objeto de etiquetas
-etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
-colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
-#
-etiq <- sortBy(target = etiq, By = vot)
-vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
-#
-windis$e12 <- etiq[,1] 
-## runnerup$e12 <- etiq[,2]
-## mg$e12 <- (vot[,1] - vot[,2]) / rowSums(vot)
-## enp$e12 <- 1/rowSums((vot/rowSums(vot))^2)
-#
-# 2015
-vot <- v15d[,c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","indep1","indep2","pric","prdc")]
-vot[is.na(vot)==TRUE] <- 0 # drop NAs
-# crea objeto de etiquetas
-etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
-colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
-#
-etiq <- sortBy(target = etiq, By = vot)
-vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
-#
-windis$e15 <- etiq[,1]
-## runnerup$e15 <- etiq[,2]
-## mg$e15 <- (vot[,1] - vot[,2]) / rowSums(vot)
-## enp$e15 <- 1/rowSums((vot/rowSums(vot))^2)
-#
-# 2018
-vot <- v18d[,c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","indep1","indep2","panc","pric","morenac")]
-vot[is.na(vot)==TRUE] <- 0 # drop NAs
-# crea objeto de etiquetas
-etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
-colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
-#
-etiq <- sortBy(target = etiq, By = vot)
-vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
-#
-windis$e18 <- etiq[,1]
-## runnerup$e15 <- etiq[,2]
-## mg$e15 <- (vot[,1] - vot[,2]) / rowSums(vot)
-## enp$e15 <- 1/rowSums((vot/rowSums(vot))^2)
-#
-# 2021 -- uses v21dw instead of v21d
-vot <- v21dw[,c("pan","pri","prd","pvem","pt","mc","morena","pes","fxm","rsp","indep","panc","pric","morenac")]
-vot[is.na(vot)==TRUE] <- 0 # drop NAs
-# crea objeto de etiquetas
-etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
-colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
-#
-etiq <- sortBy(target = etiq, By = vot)
-vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
-#
-windis$e21 <- etiq[,1]
+## commented 26mar2023, needs work in 2021 to allocate pan.pri.prd win to largest
+## ################################
+## ## district winners 1994-2021 ##
+## ################################
+## #v91d <- v91_agg;
+## v94d <- v94_agg; v97d <- v97_agg; v00d <- v00_agg; v03d <- v03_agg; v06d <- v06_agg; v09d <- v09_agg; v12d <- v12_agg; v15d <- v15_agg; v18d <- v18_agg; v21d <- v21_agg
+## v94d <- within(v94d, {
+##     pan <-   ave(pan,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pri <-   ave(pri,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pps <-   ave(pps,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prd <-   ave(prd,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pfcrn <- ave(pfcrn,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     parm <-  ave(parm,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     uno.pdm<-ave(uno.pdm, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pt <-    ave(pt,      as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pvem <-  ave(pvem,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v94d <- v94d[duplicated(v94d$edon*100 + v94d$disn)==FALSE,]
+## v94d <- v94d[order(v94d$edon*100, v94d$disn),]
+## #
+## v97d <- within(v97d, {
+##     pan <-   ave(pan,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pri <-   ave(pri,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prd <-   ave(prd,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pc <-    ave(pc,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pt <-    ave(pt,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pvem <-  ave(pvem,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pps <-   ave(pps,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pdm <-   ave(pdm,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v97d <- v97d[duplicated(v97d$edon*100 + v97d$disn)==FALSE,]
+## v97d <- v97d[order(v97d$edon*100, v97d$disn),]
+## #
+## v00d <- within(v00d, {
+##     panc <-  ave(panc,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pri <-   ave(pri,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prdc <-  ave(prdc,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pcd <-   ave(pcd,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     parm <-  ave(parm,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     dsppn <- ave(dsppn, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v00d <- v00d[duplicated(v00d$edon*100 + v00d$disn)==FALSE,]
+## v00d <- v00d[order(v00d$edon*100, v00d$disn),]
+## #
+## v03d <- within(v03d, {
+##     pan <-   ave(pan,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pri <-   ave(pri,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prd <-   ave(prd,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pt <-    ave(pt,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pvem <-  ave(pvem,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     conve <- ave(conve, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     psn <-   ave(psn,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pas <-   ave(pas,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     mp <-    ave(mp,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     plm <-   ave(plm,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     fc <-    ave(fc,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pric <-  ave(pric,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v03d <- v03d[duplicated(v03d$edon*100 + v03d$disn)==FALSE,]
+## v03d <- v03d[order(v03d$edon*100, v03d$disn),]
+## #
+## v06d <- within(v06d, {
+##     pan   <- ave(pan,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pric  <- ave(pric, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prdc  <- ave(prdc, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pna   <- ave(pna,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     asdc  <- ave(asdc, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v06d <- v06d[duplicated(v06d$edon*100 + v06d$disn)==FALSE,]
+## v06d <- v06d[order(v06d$edon*100, v06d$disn),]
+## #
+## v09d <- within(v09d, {
+##     pan  <- ave(pan,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pri  <- ave(pri,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prd  <- ave(prd,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pvem <- ave(pvem, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pna  <- ave(pna,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     psd  <- ave(psd,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pric <- ave(pric, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     ptc  <- ave(ptc,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v09d <- v09d[duplicated(v09d$edon*100 + v09d$disn)==FALSE,]
+## v09d <- v09d[order(v09d$edon*100, v09d$disn),]
+## #
+## v12d <- within(v12d, {
+##     pan <-  ave(pan,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pri <-  ave(pri,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pvem <- ave(pvem, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pna <-  ave(pna,  as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pric <- ave(pric, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prdc <- ave(prdc, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v12d <- v12d[duplicated(v12d$edon*100 + v12d$disn)==FALSE,]
+## v12d <- v12d[order(v12d$edon*100, v12d$disn),]
+## #
+## v15d <- within(v15d, {
+##     pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prd <-    ave(prd,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pvem <-   ave(pvem,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pt <-     ave(pt,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     mc <-     ave(mc,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pna <-    ave(pna,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     morena <- ave(morena, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     ph <-     ave(ph,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pes <-    ave(pes,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     panc <-   ave(panc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prdc <-   ave(prdc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     indep1 <- ave(indep1, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     indep2 <- ave(indep2, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v15d <- v15d[duplicated(v15d$edon*100 + v15d$disn)==FALSE,]
+## v15d <- v15d[order(v15d$edon*100, v15d$disn),]
+## #
+## v18d <- within(v18d, {
+##     pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prd <-    ave(prd,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pvem <-   ave(pvem,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pt <-     ave(pt,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     mc <-     ave(mc,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pna <-    ave(pna,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     morena <- ave(morena, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pes <-    ave(pes,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     panc <-   ave(panc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     morenac<- ave(morenac,as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     indep1 <- ave(indep1, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     indep2 <- ave(indep2, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v18d <- v18d[duplicated(v18d$edon*100 + v18d$disn)==FALSE,]
+## v18d <- v18d[order(v18d$edon*100, v18d$disn),]
+## #
+## v21d <- within(v21d, {
+##     pan <-    ave(pan,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pri <-    ave(pri,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     prd <-    ave(prd,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pvem <-   ave(pvem,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pt <-     ave(pt,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     mc <-     ave(mc,     as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     morena <- ave(morena, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     pes <-    ave(pes,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     rsp <-    ave(rsp,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     fxm <-    ave(fxm,    as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     indep <- ave(indep, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     panc <-   ave(panc,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## #    pric <-   ave(pric,   as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     morenac<- ave(morenac,as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+##     efec  <- ave(efec, as.factor(edon*100 + disn), FUN=sum, na.rm=TRUE);
+## })
+## v21d <- v21d[duplicated(v21d$edon*100 + v21d$disn)==FALSE,]
+## v21d <- v21d[order(v21d$edon*100, v21d$disn),]
+## #
+## windis <- v15d[,c("edon","disn")] # will receive data
+## #
+## # handy function to sort one data frame by order of another, matching data frame
+## source("/home/eric/Dropbox/data/useful-functions/sortBy.r")
+## ## # example
+## ## v <- data.frame(c1=c(30,15,3), c2=c(10,25,2), c3=c(20,35,4))
+## ## w <- data.frame(c1=c("thirty","fifteen","three"), c2=c("ten","twenty-five","two"), c3=c("twenty","thirty-five","four"))
+## ## v.sorted <- t(apply(v, 1, function(x) sort(x, decreasing = TRUE))) # sort each row of df -- http://stackoverflow.com/questions/6063881/sorting-rows-alphabetically
+## ## w.sorted <- sortBy(target = w, By = v)
+## ## sortBy(target = v, By = v)
+## #
+## # 1994
+## vot <- v94d[,c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem")]
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e94 <- etiq[,1] 
+## #
+## # 1997
+## vot <- v97d[,c("pan","pri","prd","pc","pt","pvem","pps","pdm")]
+## vot[is.na(vot)==TRUE] <- 0 # drop NAs
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e97 <- etiq[,1] 
+## #
+## # 2000
+## vot <- v00d[,c("panc","pri","prdc","pcd","parm","dsppn")]
+## vot[is.na(vot)==TRUE] <- 0 # drop NAs
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e00 <- etiq[,1] 
+## #
+## # 2003
+## vot <- v03d[,c("pan","pri","prd","pt","pvem","conve","psn","pas","mp","plm","fc","pric")]
+## vot[is.na(vot)==TRUE] <- 0 # drop NAs
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e03 <- etiq[,1] 
+## #
+## # 2006
+## vot <- v06d[,c("pan","pric","prdc","pna","asdc")]
+## vot[is.na(vot)==TRUE] <- 0 # drop NAs
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e06 <- etiq[,1] 
+## ## runnerup$e06 <- etiq[,2]
+## ## mg$e06 <- (vot[,1] - vot[,2]) / rowSums(vot)
+## ## enp$e06 <- 1/rowSums((vot/rowSums(vot))^2)
+## #
+## # 2009
+## vot <- v09d[,c("pan","pri","prd","pvem","pna","psd","pric","ptc")]
+## vot[is.na(vot)==TRUE] <- 0 # drop NAs
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e09 <- etiq[,1] 
+## ## runnerup$e09 <- etiq[,2]
+## ## mg$e09 <- (vot[,1] - vot[,2]) / rowSums(vot)
+## ## enp$e09 <- 1/rowSums((vot/rowSums(vot))^2)
+## #
+## # 2012
+## vot <- v12d[,c("pan","pri","pvem","pna","pric","prdc")]
+## vot[is.na(vot)==TRUE] <- 0 # drop NAs
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e12 <- etiq[,1] 
+## ## runnerup$e12 <- etiq[,2]
+## ## mg$e12 <- (vot[,1] - vot[,2]) / rowSums(vot)
+## ## enp$e12 <- 1/rowSums((vot/rowSums(vot))^2)
+## #
+## # 2015
+## vot <- v15d[,c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","panc","pric","prdc","indep1","indep2")]
+## vot[is.na(vot)==TRUE] <- 0 # drop NAs
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e15 <- etiq[,1]
+## ## runnerup$e15 <- etiq[,2]
+## ## mg$e15 <- (vot[,1] - vot[,2]) / rowSums(vot)
+## ## enp$e15 <- 1/rowSums((vot/rowSums(vot))^2)
+## #
+## # 2018
+## vot <- v18d[,c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2")]
+## vot[is.na(vot)==TRUE] <- 0 # drop NAs
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e18 <- etiq[,1]
+## ## runnerup$e15 <- etiq[,2]
+## ## mg$e15 <- (vot[,1] - vot[,2]) / rowSums(vot)
+## ## enp$e15 <- 1/rowSums((vot/rowSums(vot))^2)
+## #
+## # 2021 -- uses v21dw instead of v21d
+## vot <- v21d[,c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","morenac")]
+## vot[is.na(vot)==TRUE] <- 0 # drop NAs
+## # crea objeto de etiquetas
+## etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
+## colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
+## #
+## etiq <- sortBy(target = etiq, By = vot)
+## vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
+## #
+## windis$e21 <- etiq[,1]
+## #
+## # assign coal win to bigger of pan or pri in district---PENDING, USE v21_split instead of w
+## lab <- apply(tmp.w, 1, max)
+## lab <- ifelse(tmp.w$pan==lab, "panc", "pric")
+## windis$e21[which(windis$e21=="panc")] <- lab[which(windis$e21=="panc")]
+## # assign coal win to bigger of morena or pvem in district
+## lab <- apply(tmp.w2, 1, max)
+## lab <- ifelse(tmp.w2$morena==lab, "morenac", "pvemc")
+## windis$e21[which(windis$e21=="morenac")] <- lab[which(windis$e21=="morenac")]
+## ## runnerup$e21 <- etiq[,2]
+## ## mg$e21 <- (vot[,1] - vot[,2]) / rowSums(vot)
+## ## enp$e21 <- 1/rowSums((vot/rowSums(vot))^2)
+## #
+## rm(vot,etiq)
+## rm(v21dw,tmp.w,tmp.w2) # drop to avoid confusion
+## #
+## write.csv(windis, file = paste(dd, "dfdf2006-on-winners.csv", sep = ""))
 
-# assign coal win to bigger of pan or pri in district
-lab <- apply(tmp.w, 1, max)
-lab <- ifelse(tmp.w$pan==lab, "panc", "pric")
-windis$e21[which(windis$e21=="panc")] <- lab[which(windis$e21=="panc")]
-# assign coal win to bigger of morena or pvem in district
-lab <- apply(tmp.w2, 1, max)
-lab <- ifelse(tmp.w2$morena==lab, "morenac", "pvemc")
-windis$e21[which(windis$e21=="morenac")] <- lab[which(windis$e21=="morenac")]
-## runnerup$e21 <- etiq[,2]
-## mg$e21 <- (vot[,1] - vot[,2]) / rowSums(vot)
-## enp$e21 <- 1/rowSums((vot/rowSums(vot))^2)
-#
-rm(vot,etiq)
-rm(v21dw,tmp.w,tmp.w2) # drop to avoid confusion
-#
-write.csv(windis, file = paste(dd, "dfdf2006-on-winners.csv", sep = ""))
+###############################################################################
+## keep split vote objects only for analysis                                 ##
+## OJO: 2000, 2003, and 2006 have joint coalition vote only                  ##
+## OJO: assumes pan=panc in 00, pri=pric in 03 and 06, prd=prdc in 00 and 06 ##
+###############################################################################
+#91 <- v91_split
+v94 <- v94_split
+v97 <- v97_split
+v00 <- v00_agg
+v03 <- v03_agg
+v06 <- v06_agg
+v09 <- v09_split
+v12 <- v12_split
+v15 <- v15_split
+v18 <- v18_split
+v21 <- v21_split
+# free memory
+rm(
+#    v91_split, v91_agg,
+    v94_split, v94_agg,
+    v97_split, v97_agg,
+               v00_agg,
+               v03_agg,
+               v06_agg,
+    v09_split, v09_agg,
+    v12_split, v12_agg,
+    v15_split, v15_agg,
+    v18_split, v18_agg,
+    v21_split, v21_agg
+   )
 
 # 'not in' function
 source("/home/eric/Dropbox/data/useful-functions/notin.r")
@@ -799,20 +923,32 @@ source("/home/eric/Dropbox/data/useful-functions/notin.r")
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
 eq$check <- NULL # drop column meant to clean within excel file
-# any secciones missing?
-tmp <- v21 # which year to evaluate
-sel <- which(as.factor(tmp$edon+tmp$seccion/10000) %notin% as.factor(eq$edon+eq$seccion/10000))
-if (length(sel)>0){
-    tmp$edon[sel]+tmp$seccion[sel]/10000
-} else {
-    print("All v-secciones in eq object")
+# check: any secciones missing from eq?
+miss_secc <- function(dat=v21_split){ # defaults to 2021
+    tmp <- deparse(substitute(dat)) # extract object's name
+    sel <- which(as.factor(dat$edon+dat$seccion/10000) %notin% as.factor(eq$edon+eq$seccion/10000))
+    if (length(sel)>0){
+        dat$edon[sel]+dat$seccion[sel]/10000
+#        print(c(tmp, ": ", dat$edon[sel]+dat$seccion[sel]/10000))
+    } else {
+        print(paste0(tmp, ": All v-secciones in eq object"))
+    }
 }
-## sel <- which(as.factor(eq$edon+eq$seccion/10000) %notin% as.factor(tmp$edon+tmp$seccion/10000))
-## if (length(sel)>0){
-##     eq$edon[sel]+eq$seccion[sel]/10000
-## } else {
-##     print("All eq-secciones in v object")
-## }
+miss_secc(dat=v94)
+miss_secc(dat=v97)
+miss_secc(dat=v00)
+miss_secc(dat=v03)
+miss_secc(dat=v06)
+miss_secc(dat=v09)
+miss_secc(dat=v12)
+miss_secc(dat=v15)
+miss_secc(dat=v18)
+miss_secc(dat=v21) # some 2021 secciones not in eq, all break sequence so must be temporary
+#                  # OJO: will drop them to keep things square (still no clue about them)
+sel.r <-          which(v21$edon==17 & v21$seccion>=5000)
+sel.r <- c(sel.r, which(v21$edon==19 & v21$seccion>=9000))
+v21 <- v21[-sel.r,]
+rm(miss_secc,sel.r,tmp) # clean
 
 ############################################
 ## get municipio info to merge into votes ##
@@ -872,16 +1008,6 @@ v21 <- within(v21, {
     edosecn <- edon*10000 + seccion;
     d21    <- 1;
 })
-v21w <- within(v21w, {
-    edosecn <- edon*10000 + seccion;
-    d21    <- 1;
-})
-# add edosecn to pan21pri and morena21pvem
-tmp.w  <- pan21pri
-tmp.w  <- cbind(tmp.w,  edosecn=v21w$edosecn)
-tmp.w2 <- morena21pvem
-tmp.w2 <- cbind(tmp.w2, edosecn=v21w$edosecn)
-
 
 # dummies d91 d94 ... indicate secciones existing each year
 ## tmp <- merge(x=v91[,c("edosecn","d91")], y=v94[,c("edosecn","d94")], by = "edosecn", all = TRUE)
@@ -897,7 +1023,7 @@ tmp <- merge(x=tmp,                      y=v18[,c("edosecn","d18")], by = "edose
 tmp <- merge(x=tmp,                      y=v21[,c("edosecn","d21")], by = "edosecn", all = TRUE)
 
 ## v91$d91 <-
-v94$d94 <- v97$d97 <- v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- v21$d21 <- v21w$d21 <- NULL # clean
+v94$d94 <- v97$d97 <- v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- v21$d21 <- NULL # clean
 #
 # adds any missing secciones to each object
 #v91  <- merge(x=tmp, y=v91,  by = "edosecn", all = TRUE)
@@ -911,11 +1037,13 @@ v12  <- merge(x=tmp, y=v12,  by = "edosecn", all = TRUE)
 v15  <- merge(x=tmp, y=v15,  by = "edosecn", all = TRUE)
 v18  <- merge(x=tmp, y=v18,  by = "edosecn", all = TRUE)
 v21  <- merge(x=tmp, y=v21,  by = "edosecn", all = TRUE)
-v21w <- merge(x=tmp, y=v21w, by = "edosecn", all = TRUE)
-tmp.w  <- merge(x=tmp, y=tmp.w,  by = "edosecn", all = TRUE)
-tmp.w2 <- merge(x=tmp, y=tmp.w2, by = "edosecn", all = TRUE)
-# verify dimensionality
-## dim(v91);
+## v21w <- merge(x=tmp, y=v21w, by = "edosecn", all = TRUE)
+## tmp.w  <- merge(x=tmp, y=tmp.w,  by = "edosecn", all = TRUE)
+## tmp.w2 <- merge(x=tmp, y=tmp.w2, by = "edosecn", all = TRUE)
+###########################
+## verify dimensionality ##
+###########################
+dim(v21);
 nrow(v94)==nrow(v97)
 nrow(v97)==nrow(v00)
 nrow(v00)==nrow(v03)
@@ -925,9 +1053,6 @@ nrow(v06)==nrow(v12)
 nrow(v12)==nrow(v15)
 nrow(v15)==nrow(v18)
 nrow(v18)==nrow(v21)
-nrow(v21)==nrow(v21w)
-nrow(v21w)==nrow(tmp.w)
-nrow(tmp.w)==nrow(tmp.w2)
 # fill in missing edon and seccion numbers
 add.edon.secn <- function(x) {
     within(x, {
@@ -946,9 +1071,7 @@ v12 <- add.edon.secn(v12)
 v15 <- add.edon.secn(v15)
 v18 <- add.edon.secn(v18)
 v21 <- add.edon.secn(v21)
-v21w<- add.edon.secn(v21w)
-tmp.w  <- add.edon.secn(tmp.w)
-tmp.w2 <- add.edon.secn(tmp.w2)
+rm(add.edon.secn,tmp) # clean
 
 #########################
 ## READ/PREP pop>18yrs ##
