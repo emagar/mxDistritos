@@ -1,16 +1,3 @@
-# 1994
-v94d[1,]
-vot <- v94d[,c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem")]
-vot[is.na(vot)==TRUE] <- 0 # drop NAs
-# crea objeto de etiquetas
-etiq <- data.frame(matrix(rep(colnames(vot), nrow(vot)), nrow=nrow(vot), byrow = TRUE), stringsAsFactors = FALSE)
-colnames(etiq) <- paste("l", 1:ncol(vot), sep = "")
-#
-etiq <- sortBy(target = etiq, By = vot)
-vot <- t(apply(vot, 1, function(x) sort(x, decreasing = TRUE)))
-#
-windis$e94 <- etiq[,1] 
-#
 
 
 ######################################################
@@ -23,10 +10,6 @@ windis$e94 <- etiq[,1]
 DUPLICAR BLOQUE MUNICIPAL PARA ADAPTARLO A DISTRITOS
 
 
-#################################################
-## consolidate municipios before secciones are ##
-## manipulated to deal with reseccionamiento   ##
-#################################################
 disf$edosecn <- disf$edon*10000 + disf$seccion
 # add municipio names to votes
 sel.drop <- which(colnames(disf) %in% c("edon","seccion")) # do not merge these columns
@@ -40,78 +23,42 @@ v09 <- merge(x = v09,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y
 v12 <- merge(x = v12,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v12$munn <- NULL
 v15 <- merge(x = v15,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
 v18 <- merge(x = v18,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
-v21 <- merge(x = v21,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
-v21w<- merge(x = v21w, y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
+v21 <- merge(x = v21,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v21$munn <- NULL
 #
 rm(disf)
-
-#######################################################
-## correct ife codes in secciones that changed munic ##
-#######################################################
-ife.inegi <- eq[,c("inegi","ife")] # correct inegi where ife changed
-ife.inegi <- ife.inegi[duplicated(ife.inegi$ife)==FALSE,]
-library(plyr)
-v94$ife <- v94$ife1994
-v94$inegi <- mapvalues(v94$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v97$ife <- v97$ife1997
-v97$inegi <- mapvalues(v97$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v00$ife <- v00$ife2000
-v00$inegi <- mapvalues(v00$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v03$ife <- v03$ife2003
-v03$inegi <- mapvalues(v03$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v06$ife <- v06$ife2006
-v06$inegi <- mapvalues(v06$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v09$ife <- v09$ife2009
-v09$inegi <- mapvalues(v09$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v12$ife <- v12$ife2012
-v12$inegi <- mapvalues(v12$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v15$ife <- v15$ife2015
-v15$inegi <- mapvalues(v15$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v18$ife <- v18$ife2018
-v18$inegi <- mapvalues(v18$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v21$ife <- v21$ife2021
-v21$inegi <- mapvalues(v21$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-v21w$ife <- v21w$ife2021
-v21w$inegi <- mapvalues(v21w$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-rm(ife.inegi)
-
-
+#
 # save all to restore after exporting raw vote manipulations (11jul2021: maybe redundant, check when working with seccion aggs)
-save.image(paste0(wd, "data/too-big-4-github/tmp.RData"))
-
+save.image("../../datosBrutos/not-in-git/tmp-restore.RData")
 
 ################################################
-## function aggregating municipio-level votes ##
+## function aggregating district-level votes ##
 ################################################
-ag.mun <- function(d=d, sel.c=sel.c, grouping=d$ife){
+ag.dis <- function(d=d, sel.c=sel.c, grouping=NA){
     for (i in 1:length(sel.c)){
-        # d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$inegi, FUN=sum, na.rm=TRUE) # use inegi codes
-        # d[,sel.c[i]] <- ave(d[,sel.c[i]], d$edon*1000+d$ife, FUN=sum, na.rm=TRUE) # use ife codes
-        d[,sel.c[i]] <- ave(d[,sel.c[i]],              grouping, FUN=sum, na.rm=TRUE) # use ife codes
+        d[,sel.c[i]] <- ave(d[,sel.c[i]], grouping, FUN=sum, na.rm=TRUE)
     }
-    # sel.r <- which(duplicated(d$edon*1000+d$inegi)==TRUE) # use inegi codes
-    # sel.r <- which(duplicated(d$edon*1000+d$ife)==TRUE) # use ife codes
-    sel.r <- which(duplicated(grouping)==TRUE) # use ife codes
+    sel.r <- which(duplicated(grouping)==TRUE)
     d <- d[-sel.r,]
     return(d)
 }
-#################################
-## aggregate municipio returns ##
-#################################
-## ##########
-## ## 1991 ## OJO: seccion identifiers are wrong, 1991 mun aggregates are loaded later
-## ##########
-## d <- v91; d[is.na(d)] <- 0
-## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## d <- ag.mun(d,sel.c)
-## d$edosecn <- d$seccion <- NULL
-## v91m <- d
+
+################################
+## aggregate district returns ##
+################################
+##########
+## 1991 ## OJO: 1991 seccion identifiers are wrong, but can aggregate with disn/ife (no counterfactuals, though)
+##########
+d <- v91; d[is.na(d)] <- 0
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
+d <- ag.dis(d,sel.c)
+d$edosecn <- d$seccion <- NULL
+v91m <- d
 ##########
 ## 1994 ##
 ##########
 d <- v94; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -122,7 +69,7 @@ v94m <- d
 ##########
 d <- v97; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -133,7 +80,7 @@ v97m <- d
 ##########
 d <- v00; d[is.na(d)] <- 0
 sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$dpanc <- as.numeric(d$dpanc>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- NULL
@@ -146,7 +93,7 @@ v00m <- d
 ##########
 d <- v03; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$dpric <- as.numeric(d$dpric>0)
 d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
@@ -158,7 +105,7 @@ v03m <- d
 ##########
 d <- v06; d[is.na(d)] <- 0
 sel.c <- c("pan","pric","prdc","pna","asdc","efec")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -169,7 +116,7 @@ v06m <- d
 ##########
 d <- v09; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$dpric <- as.numeric(d$dpric>0)
 d$dptc <- as.numeric(d$dptc>0)
 d$edosecn <- d$seccion <- NULL
@@ -182,7 +129,7 @@ v09m <- d
 ##########
 d <- v12; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- NULL
@@ -195,7 +142,7 @@ v12m <- d
 ##########
 d <- v15; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- NULL
@@ -208,7 +155,7 @@ v15m <- d
 ##########
 d <- v18; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -222,7 +169,7 @@ v18m <- d
 ##########
 d <- v21; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -236,7 +183,7 @@ v21m <- d
 ######################
 d <- v21w; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c)
+d <- ag.dis(d,sel.c)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -306,7 +253,7 @@ v91m <- d
 #################################
 ## d <- v91; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2006)
+## d <- ag.dis(d,sel.c, grouping=d$ife2006)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2006 # use appropriate ife code
 ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -315,7 +262,7 @@ v91m <- d
 ## #
 ## d <- v91; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2009)
+## d <- ag.dis(d,sel.c, grouping=d$ife2009)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2009 # use appropriate ife code
 ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -324,7 +271,7 @@ v91m <- d
 ## #
 ## d <- v91; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2012)
+## d <- ag.dis(d,sel.c, grouping=d$ife2012)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2012 # use appropriate ife code
 ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -333,7 +280,7 @@ v91m <- d
 ## #
 ## d <- v91; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2015)
+## d <- ag.dis(d,sel.c, grouping=d$ife2015)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2015 # use appropriate ife code
 ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -342,7 +289,7 @@ v91m <- d
 ## #
 ## d <- v91; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2018)
+## d <- ag.dis(d,sel.c, grouping=d$ife2018)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2018 # use appropriate ife code
 ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -351,7 +298,7 @@ v91m <- d
 ## #
 ## d <- v91; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2021)
+## d <- ag.dis(d,sel.c, grouping=d$ife2021)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2021 # use appropriate ife code
 ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -360,7 +307,7 @@ v91m <- d
 ## #
 ## ## d <- v91; d[is.na(d)] <- 0
 ## ## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-## ## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## ## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## ## d$ife <- d$ife2024 # use appropriate ife code
 ## ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -371,7 +318,7 @@ v91m <- d
 #################################
 d <- v94; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2006
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -379,7 +326,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v94m.cf06 <- d
 #
 d <- v94; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2009
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -388,7 +335,7 @@ v94m.cf09 <- d
 #
 d <- v94; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d <- ag.dis(d,sel.c, grouping=d$ife2012)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2012
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -397,7 +344,7 @@ v94m.cf12 <- d
 #
 d <- v94; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d <- ag.dis(d,sel.c, grouping=d$ife2015)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2015
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -406,7 +353,7 @@ v94m.cf15 <- d
 #
 d <- v94; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d <- ag.dis(d,sel.c, grouping=d$ife2018)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2018
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -415,7 +362,7 @@ v94m.cf18 <- d
 #
 d <- v94; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d <- ag.dis(d,sel.c, grouping=d$ife2021)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2021
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -424,7 +371,7 @@ v94m.cf21 <- d
 #
 ## d <- v94; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2024
 ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -435,7 +382,7 @@ v94m.cf21 <- d
 #################################
 d <- v97; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2006
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -443,7 +390,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v97m.cf06 <- d
 #
 d <- v97; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2009
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -451,7 +398,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v97m.cf09 <- d
 #
 d <- v97; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d <- ag.dis(d,sel.c, grouping=d$ife2012)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2012
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -460,7 +407,7 @@ v97m.cf12 <- d
 #
 d <- v97; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d <- ag.dis(d,sel.c, grouping=d$ife2015)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2015
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -469,7 +416,7 @@ v97m.cf15 <- d
 #
 d <- v97; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d <- ag.dis(d,sel.c, grouping=d$ife2018)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2018
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -478,7 +425,7 @@ v97m.cf18 <- d
 #
 d <- v97; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d <- ag.dis(d,sel.c, grouping=d$ife2021)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2021
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -487,7 +434,7 @@ v97m.cf21 <- d
 #
 ## d <- v97; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2024
 ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -498,7 +445,7 @@ v97m.cf21 <- d
 #################################
 d <- v00; d[is.na(d)] <- 0
 sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$dpanc <- as.numeric(d$dpanc>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -508,7 +455,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v00m.cf06 <- d
 #
 d <- v00; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$dpanc <- as.numeric(d$dpanc>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -518,7 +465,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v00m.cf09 <- d
 #
 d <- v00; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d <- ag.dis(d,sel.c, grouping=d$ife2012)
 d$dpanc <- as.numeric(d$dpanc>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -528,7 +475,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v00m.cf12 <- d
 #
 d <- v00; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d <- ag.dis(d,sel.c, grouping=d$ife2015)
 d$dpanc <- as.numeric(d$dpanc>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -539,7 +486,7 @@ v00m.cf15 <- d
 #
 d <- v00; d[is.na(d)] <- 0
 sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d <- ag.dis(d,sel.c, grouping=d$ife2018)
 d$dpanc <- as.numeric(d$dpanc>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -550,7 +497,7 @@ v00m.cf18 <- d
 #
 d <- v00; d[is.na(d)] <- 0
 sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$dpanc <- as.numeric(d$dpanc>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -561,7 +508,7 @@ v00m.cf21 <- d
 #
 ## d <- v00; d[is.na(d)] <- 0
 ## sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## d$dpanc <- as.numeric(d$dpanc>0)
 ## d$dprdc <- as.numeric(d$dprdc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -574,7 +521,7 @@ v00m.cf21 <- d
 #################################
 d <- v03; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$dpric <- as.numeric(d$dpric>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2006
@@ -583,7 +530,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v03m.cf06 <- d
 #
 d <- v03; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$dpric <- as.numeric(d$dpric>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2009
@@ -592,7 +539,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v03m.cf09 <- d
 #
 d <- v03; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d <- ag.dis(d,sel.c, grouping=d$ife2012)
 d$dpric <- as.numeric(d$dpric>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2012
@@ -601,7 +548,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v03m.cf12 <- d
 #
 d <- v03; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d <- ag.dis(d,sel.c, grouping=d$ife2015)
 d$dpric <- as.numeric(d$dpric>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2015
@@ -610,7 +557,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v03m.cf15 <- d
 #
 d <- v03; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d <- ag.dis(d,sel.c, grouping=d$ife2018)
 d$dpric <- as.numeric(d$dpric>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2018
@@ -620,7 +567,7 @@ v03m.cf18 <- d
 #
 d <- v03; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d <- ag.dis(d,sel.c, grouping=d$ife2021)
 d$dpric <- as.numeric(d$dpric>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2021
@@ -630,7 +577,7 @@ v03m.cf21 <- d
 #
 ## d <- v03; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2024
@@ -643,7 +590,7 @@ v03m.cf21 <- d
 ## # UNNEEDED
 ## d <- v06; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pric","prdc","pna","asdc","efec")
-## d <- ag.mun(d,sel.c, grouping=d$ife2009)
+## d <- ag.dis(d,sel.c, grouping=d$ife2009)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
 ## d$ife <- d$ife2009
 ## d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -652,7 +599,7 @@ v03m.cf21 <- d
 #
 d <- v06; d[is.na(d)] <- 0
 sel.c <- c("pan","pric","prdc","pna","asdc","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2009
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -660,7 +607,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v06m.cf09 <- d
 #
 d <- v06; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d <- ag.dis(d,sel.c, grouping=d$ife2012)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2012
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -668,7 +615,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v06m.cf12 <- d
 #
 d <- v06; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d <- ag.dis(d,sel.c, grouping=d$ife2015)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2015
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -676,7 +623,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v06m.cf15 <- d
 #
 d <- v06; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d <- ag.dis(d,sel.c, grouping=d$ife2018)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2018
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -684,7 +631,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v06m.cf18 <- d
 #
 d <- v06; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d <- ag.dis(d,sel.c, grouping=d$ife2021)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2021
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -693,7 +640,7 @@ v06m.cf21 <- d
 #
 d <- v06; d[is.na(d)] <- 0
 sel.c <- c("pan","pric","prdc","pna","asdc","efec")
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$edosecn <- d$seccion <- d$disn <- NULL
 d$ife <- d$ife2009
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
@@ -704,7 +651,7 @@ v06m.cf24 <- d
 #################################
 d <- v09; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$dpric <- as.numeric(d$dpric>0)
 d$dptc <- as.numeric(d$dptc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -716,7 +663,7 @@ v09m.cf06 <- d
 ## UNNEEDED
 ## d <- v09; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
-## d <- ag.mun(d,sel.c, grouping=d$ife2009)
+## d <- ag.dis(d,sel.c, grouping=d$ife2009)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$dptc <- as.numeric(d$dptc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -727,7 +674,7 @@ v09m.cf06 <- d
 #
 d <- v09; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d <- ag.dis(d,sel.c, grouping=d$ife2012)
 d$dpric <- as.numeric(d$dpric>0)
 d$dptc <- as.numeric(d$dptc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -737,7 +684,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v09m.cf12 <- d
 #
 d <- v09; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d <- ag.dis(d,sel.c, grouping=d$ife2015)
 d$dpric <- as.numeric(d$dpric>0)
 d$dptc <- as.numeric(d$dptc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -747,7 +694,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v09m.cf15 <- d
 #
 d <- v09; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d <- ag.dis(d,sel.c, grouping=d$ife2018)
 d$dpric <- as.numeric(d$dpric>0)
 d$dptc <- as.numeric(d$dptc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -757,7 +704,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v09m.cf18 <- d
 #
 d <- v09; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d <- ag.dis(d,sel.c, grouping=d$ife2021)
 d$dpric <- as.numeric(d$dpric>0)
 d$dptc <- as.numeric(d$dptc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -767,7 +714,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v09m.cf21 <- d
 #
 ## d <- v09; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$dptc <- as.numeric(d$dptc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -780,7 +727,7 @@ v09m.cf21 <- d
 #################################
 d <- v12; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -791,7 +738,7 @@ v12m.cf06 <- d
 #
 d <- v12; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -803,7 +750,7 @@ v12m.cf09 <- d
 ## # UNNEEDED
 ## d <- v12; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
-## d <- ag.mun(d,sel.c, grouping=d$ife2012)
+## d <- ag.dis(d,sel.c, grouping=d$ife2012)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$dprdc <- as.numeric(d$dprdc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -814,7 +761,7 @@ v12m.cf09 <- d
 #
 d <- v12; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d <- ag.dis(d,sel.c, grouping=d$ife2015)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -824,7 +771,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v12m.cf15 <- d
 #
 d <- v12; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d <- ag.dis(d,sel.c, grouping=d$ife2018)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -834,7 +781,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v12m.cf18 <- d
 #
 d <- v12; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d <- ag.dis(d,sel.c, grouping=d$ife2021)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -844,7 +791,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v12m.cf21 <- d
 #
 ## d <- v12; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$dprdc <- as.numeric(d$dprdc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -854,7 +801,7 @@ v12m.cf21 <- d
 ## v12m.cf24 <- d
 ## #
 ## d <- v12; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2027)
+## d <- ag.dis(d,sel.c, grouping=d$ife2027)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$dprdc <- as.numeric(d$dprdc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -867,7 +814,7 @@ v12m.cf21 <- d
 #################################
 d <- v15; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -878,7 +825,7 @@ v15m.cf06 <- d
 #
 d <- v15; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -889,7 +836,7 @@ v15m.cf09 <- d
 #
 d <- v15; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d <- ag.dis(d,sel.c, grouping=d$ife2012)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -901,7 +848,7 @@ v15m.cf12 <- d
 ## # UNNEEDED
 ## d <- v15; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
-## d <- ag.mun(d,sel.c, grouping=d$ife2015)
+## d <- ag.dis(d,sel.c, grouping=d$ife2015)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$dprdc <- as.numeric(d$dprdc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -912,7 +859,7 @@ v15m.cf12 <- d
 #
 d <- v15; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d <- ag.dis(d,sel.c, grouping=d$ife2018)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -922,7 +869,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v15m.cf18 <- d
 #
 d <- v15; d[is.na(d)] <- 0
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d <- ag.dis(d,sel.c, grouping=d$ife2021)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- d$disn <- NULL
@@ -932,7 +879,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v15m.cf21 <- d
 #
 ## d <- v15; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$dprdc <- as.numeric(d$dprdc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -942,7 +889,7 @@ v15m.cf21 <- d
 ## v15m.cf24 <- d
 ## #
 ## d <- v15; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2027)
+## d <- ag.dis(d,sel.c, grouping=d$ife2027)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$dprdc <- as.numeric(d$dprdc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -952,7 +899,7 @@ v15m.cf21 <- d
 ## v15m.cf27 <- d
 ## #
 ## d <- v15; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2030)
+## d <- ag.dis(d,sel.c, grouping=d$ife2030)
 ## d$dpric <- as.numeric(d$dpric>0)
 ## d$dprdc <- as.numeric(d$dprdc>0)
 ## d$edosecn <- d$seccion <- d$disn <- NULL
@@ -965,7 +912,7 @@ v15m.cf21 <- d
 #################################
 d <- v18; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -977,7 +924,7 @@ v18m.cf06 <- d
 #
 d <- v18; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -989,7 +936,7 @@ v18m.cf09 <- d
 #
 d <- v18; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d <- ag.dis(d,sel.c, grouping=d$ife2012)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1001,7 +948,7 @@ v18m.cf12 <- d
 #
 d <- v18; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d <- ag.dis(d,sel.c, grouping=d$ife2015)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1014,7 +961,7 @@ v18m.cf15 <- d
 ## # UNNEEDED
 ## d <- v18; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
-## d <- ag.mun(d,sel.c, grouping=d$ife2018)
+## d <- ag.dis(d,sel.c, grouping=d$ife2018)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1026,7 +973,7 @@ v18m.cf15 <- d
 #
 d <- v18; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2021)
+d <- ag.dis(d,sel.c, grouping=d$ife2021)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1037,7 +984,7 @@ d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 v18m.cf21 <- d
 #
 ## d <- v18; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1048,7 +995,7 @@ v18m.cf21 <- d
 ## v18m.cf24 <- d
 ## #
 ## d <- v18; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2027)
+## d <- ag.dis(d,sel.c, grouping=d$ife2027)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1059,7 +1006,7 @@ v18m.cf21 <- d
 ## v18m.cf27 <- d
 ## #
 ## d <- v18; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2030)
+## d <- ag.dis(d,sel.c, grouping=d$ife2030)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1070,7 +1017,7 @@ v18m.cf21 <- d
 ## v18m.cf30 <- d
 ## #
 ## d <- v18; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2033)
+## d <- ag.dis(d,sel.c, grouping=d$ife2033)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1084,7 +1031,7 @@ v18m.cf21 <- d
 #################################
 d <- v21; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2006)
+d <- ag.dis(d,sel.c, grouping=d$ife2006)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1096,7 +1043,7 @@ v21m.cf06 <- d
 #
 d <- v21; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2009)
+d <- ag.dis(d,sel.c, grouping=d$ife2009)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1108,7 +1055,7 @@ v21m.cf09 <- d
 #
 d <- v21; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2012)
+d <- ag.dis(d,sel.c, grouping=d$ife2012)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1120,7 +1067,7 @@ v21m.cf12 <- d
 #
 d <- v21; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2015)
+d <- ag.dis(d,sel.c, grouping=d$ife2015)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1132,7 +1079,7 @@ v21m.cf15 <- d
 #
 d <- v21; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.mun(d,sel.c, grouping=d$ife2018)
+d <- ag.dis(d,sel.c, grouping=d$ife2018)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1145,7 +1092,7 @@ v21m.cf18 <- d
 ## # UNNEEDED
 ## d <- v21; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-## d <- ag.mun(d,sel.c, grouping=d$ife2021)
+## d <- ag.dis(d,sel.c, grouping=d$ife2021)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1157,7 +1104,7 @@ v21m.cf18 <- d
 #
 ## d <- v21; d[is.na(d)] <- 0
 ## sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-## d <- ag.mun(d,sel.c, grouping=d$ife2024)
+## d <- ag.dis(d,sel.c, grouping=d$ife2024)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1167,7 +1114,7 @@ v21m.cf18 <- d
 ## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 ## v21m.cf24 <- d
 ## d <- v21; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2027)
+## d <- ag.dis(d,sel.c, grouping=d$ife2027)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1177,7 +1124,7 @@ v21m.cf18 <- d
 ## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 ## v21m.cf27 <- d
 ## d <- v21; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2030)
+## d <- ag.dis(d,sel.c, grouping=d$ife2030)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1187,7 +1134,7 @@ v21m.cf18 <- d
 ## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 ## v21m.cf30 <- d
 ## d <- v21; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2033)
+## d <- ag.dis(d,sel.c, grouping=d$ife2033)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)
@@ -1197,7 +1144,7 @@ v21m.cf18 <- d
 ## d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
 ## v21m.cf33 <- d
 ## d <- v21; d[is.na(d)] <- 0
-## d <- ag.mun(d,sel.c, grouping=d$ife2036)
+## d <- ag.dis(d,sel.c, grouping=d$ife2036)
 ## d$dpanc    <- as.numeric(d$dpanc>0)
 ## d$dpric    <- as.numeric(d$dpric>0)
 ## d$dmorenac <- as.numeric(d$dmorenac>0)

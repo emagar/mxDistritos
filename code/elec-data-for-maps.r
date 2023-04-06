@@ -19,13 +19,18 @@ setwd(dd)
 ###############################################
 ## function to aggregate seccion-level votes ##
 ###############################################
-ag.sec <- function(d=d, sel.c=sel.c){
+ag.sec <- function(d=d, sel.c=sel.c, y1991=FALSE){
     sel.c <- which(colnames(d) %in% sel.c); # extract indices
     for (i in sel.c){
         #i <- sel.c[1] #debug
-        d[,i] <- ave(d[,i], as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE)
+        if (y1991==FALSE){
+            d[,i] <- ave(d[,i], as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE)
+            sel.r <- which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE)
+        } else {
+            d[,i] <- ave(d[,i], as.factor(d$ife*1000000+d$disn*10000+d$seccion), FUN=sum, na.rm=TRUE)
+            sel.r <- which(duplicated(as.factor(d$ife*1000000+d$disn*10000+d$seccion))==TRUE)
+        }
     }
-    sel.r <- which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE)
     d <- d[-sel.r,]
     return(d)
 }
@@ -81,30 +86,30 @@ na2zero <- function(dat=NA, sel.c){
 ## ############################# ##
 ###################################
 
-## ##########
-## ## 1991 ##
-## ##########
-## d <- read.csv("dip1991.csv", header=TRUE, stringsAsFactors=FALSE)
-## d <- d[order(d$edon, d$seccion),]
-## # vote columns selector
-## sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec","lisnom")
-## # clean data
-## #table(d$note)
-## #table(d$status)
-## d <- to.num(d,sel.c)                                                               # numericize
-## d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
-## d$dextra <- 0; d$dextra[grep("extraordinaria", d$note)] <- 1                       # special elections
-## sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                           # voided casillas to zero
-## d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + pdm + prt + pem + pt)# valid vote
-## d <- within(d, tot <- nul <- nr <- note <- status <- casilla <- NULL)              # economize columns
-## ## aggregate seccion-level votes ##
-## d <- ag.sec(d, sel.c)
-## ## coalition dummies
-## d <- within(d, dpanc <- dpric <- dprdc <- 0)
-## ##############################################
-## ## rename vote returns objects for analysis ##
-## ##############################################
-## v91_agg <- v91_split <- d
+##########
+## 1991 ## OJO: 1991 seccion ids incomparable to later ones, yet possible to aggregate disn/ife (no counterfactuals, though)
+##########
+d <- read.csv("dip1991.csv", header=TRUE, stringsAsFactors=FALSE)
+d <- d[order(d$edon, d$seccion),]
+# vote columns selector
+sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec","lisnom")
+# clean data
+#table(d$note)
+#table(d$status)
+d <- to.num(d,sel.c)                                                               # numericize
+d <- na2zero(dat=d)                                                                # NAs to zero in sel.c
+d$dextra <- 0; d$dextra[grep("extraordinaria", d$note)] <- 1                       # special elections
+sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                           # voided casillas to zero
+d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + pdm + prt + pem + pt)# valid vote
+d <- within(d, tot <- nul <- nr <- note <- status <- casilla <- NULL)              # economize columns
+## aggregate seccion-level votes ##
+d <- ag.sec(d, sel.c, y1991=TRUE)
+## coalition dummies
+d <- within(d, dpanc <- dpric <- dprdc <- 0)
+##############################################
+## rename vote returns objects for analysis ##
+##############################################
+v91_agg <- v91_split <- d
 
 ##########
 ## 1994 ##
@@ -1012,34 +1017,31 @@ v21 <- within(v21, {
 # dummies d91 d94 ... indicate secciones existing each year
 ## tmp <- merge(x=v91[,c("edosecn","d91")], y=v94[,c("edosecn","d94")], by = "edosecn", all = TRUE)
 ## tmp <- merge(x=tmp,                      y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
-tmp <- merge(x=v94[,c("edosecn","d94")], y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
-tmp <- merge(x=tmp,                      y=v00[,c("edosecn","d00")], by = "edosecn", all = TRUE)
-tmp <- merge(x=tmp,                      y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
-tmp <- merge(x=tmp,                      y=v06[,c("edosecn","d06")], by = "edosecn", all = TRUE)
-tmp <- merge(x=tmp,                      y=v09[,c("edosecn","d09")], by = "edosecn", all = TRUE)
-tmp <- merge(x=tmp,                      y=v12[,c("edosecn","d12")], by = "edosecn", all = TRUE)
-tmp <- merge(x=tmp,                      y=v15[,c("edosecn","d15")], by = "edosecn", all = TRUE)
-tmp <- merge(x=tmp,                      y=v18[,c("edosecn","d18")], by = "edosecn", all = TRUE)
-tmp <- merge(x=tmp,                      y=v21[,c("edosecn","d21")], by = "edosecn", all = TRUE)
+tmp.all.sec <- merge(x=v94[,c("edosecn","d94")], y=v97[,c("edosecn","d97")], by = "edosecn", all = TRUE)
+tmp.all.sec <- merge(x=tmp.all.sec,                      y=v00[,c("edosecn","d00")], by = "edosecn", all = TRUE)
+tmp.all.sec <- merge(x=tmp.all.sec,                      y=v03[,c("edosecn","d03")], by = "edosecn", all = TRUE)
+tmp.all.sec <- merge(x=tmp.all.sec,                      y=v06[,c("edosecn","d06")], by = "edosecn", all = TRUE)
+tmp.all.sec <- merge(x=tmp.all.sec,                      y=v09[,c("edosecn","d09")], by = "edosecn", all = TRUE)
+tmp.all.sec <- merge(x=tmp.all.sec,                      y=v12[,c("edosecn","d12")], by = "edosecn", all = TRUE)
+tmp.all.sec <- merge(x=tmp.all.sec,                      y=v15[,c("edosecn","d15")], by = "edosecn", all = TRUE)
+tmp.all.sec <- merge(x=tmp.all.sec,                      y=v18[,c("edosecn","d18")], by = "edosecn", all = TRUE)
+tmp.all.sec <- merge(x=tmp.all.sec,                      y=v21[,c("edosecn","d21")], by = "edosecn", all = TRUE)
 
 ## v91$d91 <-
 v94$d94 <- v97$d97 <- v00$d00 <- v03$d03 <- v06$d06 <- v09$d09 <- v12$d12 <- v15$d15 <- v18$d18 <- v21$d21 <- NULL # clean
 #
 # adds any missing secciones to each object
-#v91  <- merge(x=tmp, y=v91,  by = "edosecn", all = TRUE)
-v94  <- merge(x=tmp, y=v94,  by = "edosecn", all = TRUE)
-v97  <- merge(x=tmp, y=v97,  by = "edosecn", all = TRUE)
-v00  <- merge(x=tmp, y=v00,  by = "edosecn", all = TRUE)
-v03  <- merge(x=tmp, y=v03,  by = "edosecn", all = TRUE)
-v06  <- merge(x=tmp, y=v06,  by = "edosecn", all = TRUE)
-v09  <- merge(x=tmp, y=v09,  by = "edosecn", all = TRUE)
-v12  <- merge(x=tmp, y=v12,  by = "edosecn", all = TRUE)
-v15  <- merge(x=tmp, y=v15,  by = "edosecn", all = TRUE)
-v18  <- merge(x=tmp, y=v18,  by = "edosecn", all = TRUE)
-v21  <- merge(x=tmp, y=v21,  by = "edosecn", all = TRUE)
-## v21w <- merge(x=tmp, y=v21w, by = "edosecn", all = TRUE)
-## tmp.w  <- merge(x=tmp, y=tmp.w,  by = "edosecn", all = TRUE)
-## tmp.w2 <- merge(x=tmp, y=tmp.w2, by = "edosecn", all = TRUE)
+#v91 <- merge(x=tmp.all.sec, y=v91, by = "edosecn", all = TRUE)
+v94  <- merge(x=tmp.all.sec, y=v94, by = "edosecn", all = TRUE)
+v97  <- merge(x=tmp.all.sec, y=v97, by = "edosecn", all = TRUE)
+v00  <- merge(x=tmp.all.sec, y=v00, by = "edosecn", all = TRUE)
+v03  <- merge(x=tmp.all.sec, y=v03, by = "edosecn", all = TRUE)
+v06  <- merge(x=tmp.all.sec, y=v06, by = "edosecn", all = TRUE)
+v09  <- merge(x=tmp.all.sec, y=v09, by = "edosecn", all = TRUE)
+v12  <- merge(x=tmp.all.sec, y=v12, by = "edosecn", all = TRUE)
+v15  <- merge(x=tmp.all.sec, y=v15, by = "edosecn", all = TRUE)
+v18  <- merge(x=tmp.all.sec, y=v18, by = "edosecn", all = TRUE)
+v21  <- merge(x=tmp.all.sec, y=v21, by = "edosecn", all = TRUE)
 ###########################
 ## verify dimensionality ##
 ###########################
@@ -1060,7 +1062,7 @@ add.edon.secn <- function(x) {
         seccion <- edosecn - edon*10000;
     })
 }
-## v91 <- add.edon.secn(v91)
+#v91 <- add.edon.secn(v91)
 v94 <- add.edon.secn(v94)
 v97 <- add.edon.secn(v97)
 v00 <- add.edon.secn(v00)
@@ -1071,7 +1073,18 @@ v12 <- add.edon.secn(v12)
 v15 <- add.edon.secn(v15)
 v18 <- add.edon.secn(v18)
 v21 <- add.edon.secn(v21)
-rm(add.edon.secn,tmp) # clean
+# clean
+rm(add.edon.secn)
+
+# save for debugging
+save.image("../../datosBrutos/not-in-git/tmp-debug.RData")
+
+# load image
+rm(list=ls())
+options(width = 130)
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load(file="../../datosBrutos/not-in-git/tmp-debug.RData")
 
 #########################
 ## READ/PREP pop>18yrs ##
@@ -1098,11 +1111,11 @@ tmp18$ptot_2005 <- tmp18$POB_TOT
 tmp18$edosecn <- tmp18$ENTIDAD*10000 + tmp18$SECCION
 tmp18 <- tmp18[, c("edosecn", "p18_2005", "ptot_2005")]
 # add missing secciones (tmp adds up all secciones reported in yearly federal returns)
-sel <- which(tmp18$edosecn %notin% tmp$edosecn)
+sel <- which(tmp18$edosecn %notin% tmp.all.sec$edosecn)
 tmp18$edosecn[sel]
-c(nrow(tmp), nrow(tmp18))
-tmp18  <- merge(x=tmp, y=tmp18,  by = "edosecn", all = TRUE)
-c(nrow(tmp), nrow(tmp18))
+c(nrow(tmp.all.sec), nrow(tmp18))
+tmp18  <- merge(x=tmp.all.sec, y=tmp18,  by = "edosecn", all = TRUE)
+c(nrow(tmp.all.sec), nrow(tmp18))
 tmp18 <- tmp18[, -grep("d[0-9]", colnames(tmp18))]
 # add to pop object
 pob18 <- tmp18
@@ -1127,7 +1140,7 @@ tmp18$p18_2010 <- tmp18$P_18YMAS
 tmp18$ptot_2010 <- tmp18$POBTOT
 tmp18 <- tmp18[, c("edosecn", "p18_2010", "ptot_2010")]
 # add missing secciones
-tmp18  <- merge(x=tmp, y=tmp18,  by = "edosecn", all = TRUE)
+tmp18  <- merge(x=tmp.all.sec, y=tmp18,  by = "edosecn", all = TRUE)
 tmp18 <- tmp18[, -grep("d[0-9]", colnames(tmp18))]
 # add to pop object
 pob18 <- merge(pob18, tmp18, by = "edosecn", all = TRUE)
@@ -1140,7 +1153,7 @@ tmp18$ptot_2020 <- tmp18$POBTOT
 tmp18$edosecn <- tmp18$ENTIDAD*10000 + tmp18$SECCION
 tmp18 <- tmp18[, c("edosecn", "p18_2020", "ptot_2020")]
 # add missing secciones
-tmp18  <- merge(x=tmp, y=tmp18,  by = "edosecn", all = TRUE)
+tmp18  <- merge(x=tmp.all.sec, y=tmp18,  by = "edosecn", all = TRUE)
 tmp18 <- tmp18[, -grep("d[0-9]", colnames(tmp18))]
 # add to pop object
 pob18 <- merge(pob18, tmp18, by = "edosecn", all = TRUE)
@@ -1150,7 +1163,7 @@ head(pob18)
 table(y2005=is.na(pob18$p18_2005), y2010=is.na(pob18$p18_2010))
 table(y2005=is.na(pob18$p18_2005), y2020=is.na(pob18$p18_2020))
 table(y2010=is.na(pob18$p18_2010), y2020=is.na(pob18$p18_2020))
-rm(lastn,tmp18,tmp,add.edon.secn,sel,sel.r) # clean
+rm(lastn,tmp18,tmp.all.sec,add.edon.secn,sel,sel.r) # clean
 #
 # SEPARATE PTOT FROM P18
 pobtot <- pob18
@@ -1185,8 +1198,8 @@ v09 <- merge(x = v09,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y
 v12 <- merge(x = v12,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v12$munn <- NULL
 v15 <- merge(x = v15,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
 v18 <- merge(x = v18,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
-v21 <- merge(x = v21,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
-v21w<- merge(x = v21w, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
+v21 <- merge(x = v21,  y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v21$munn <- NULL
+v21w<- merge(x = v21w, y = muns[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v21w$munn <- NULL
 #
 rm(muns)
 
