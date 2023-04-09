@@ -1,213 +1,190 @@
+# save all to restore after manipulating district aggregates
+save.image("../../datosBrutos/not-in-git/tmp-restore.RData")
 
 
-######################################################
-##    consolidate districts before secciones are    ##
-##    manipulated to deal with reseccionamiento     ##
-######################################################
+#############################################################
+##   consolidate districts & municipios before secciones   ##
+##   are manipulated to deal with reseccionamiento         ##
+#############################################################
 ## eg. 1979 map federal election counterfactuals    ##
 ## to clean 1988 vote (cf. cantú, but longitudinal) ##
 ######################################################
-DUPLICAR BLOQUE MUNICIPAL PARA ADAPTARLO A DISTRITOS
-
-
-disf$edosecn <- disf$edon*10000 + disf$seccion
-# add municipio names to votes
-sel.drop <- which(colnames(disf) %in% c("edon","seccion")) # do not merge these columns
-# v91 <- merge(x = v91, y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v91$munn <- NULL
-v94 <- merge(x = v94,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v94$munn <- NULL
-v97 <- merge(x = v97,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v97$munn <- NULL
-v00 <- merge(x = v00,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v00$munn <- NULL
-v03 <- merge(x = v03,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v03$munn <- NULL
-v06 <- merge(x = v06,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v06$munn <- NULL
-v09 <- merge(x = v09,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v09$munn <- NULL
-v12 <- merge(x = v12,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v12$munn <- NULL
-v15 <- merge(x = v15,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
-v18 <- merge(x = v18,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
-v21 <- merge(x = v21,  y = disf[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v21$munn <- NULL
+mundis$edosecn <- mundis$edon*10000 + mundis$seccion
+# add counterfactual district and municipios to votes
+sel.drop <- which(colnames(mundis) %in% c("edon","seccion","ife")) # do not merge these repeated columns
+# v91 <- merge(x = v91, y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v91$munn <- NULL
+v94 <- merge(x = v94,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v94$munn <- NULL
+v97 <- merge(x = v97,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v97$munn <- NULL
+v00 <- merge(x = v00,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v00$munn <- NULL
+v03 <- merge(x = v03,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v03$munn <- NULL
+v06 <- merge(x = v06,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v06$munn <- NULL
+v09 <- merge(x = v09,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v09$munn <- NULL
+v12 <- merge(x = v12,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v12$munn <- NULL
+v15 <- merge(x = v15,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v15$munn <- NULL
+v18 <- merge(x = v18,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v18$munn <- NULL
+v21 <- merge(x = v21,  y = mundis[,-sel.drop], by = "edosecn", all.x = TRUE, all.y = FALSE); v21$munn <- NULL
 #
-rm(disf)
-#
-# save all to restore after exporting raw vote manipulations (11jul2021: maybe redundant, check when working with seccion aggs)
-save.image("../../datosBrutos/not-in-git/tmp-restore.RData")
+rm(mundis)
 
-################################################
-## function aggregating district-level votes ##
-################################################
-ag.dis <- function(d=d, sel.c=sel.c, grouping=NA){
-    for (i in 1:length(sel.c)){
-        d[,sel.c[i]] <- ave(d[,sel.c[i]], grouping, FUN=sum, na.rm=TRUE)
-    }
-    sel.r <- which(duplicated(grouping)==TRUE)
-    d <- d[-sel.r,]
-    return(d)
-}
-
-################################
-## aggregate district returns ##
-################################
+##############################################
+## aggregate district and municipio returns ##
+##############################################
 ##########
 ## 1991 ## OJO: 1991 seccion identifiers are wrong, but can aggregate with disn/ife (no counterfactuals, though)
 ##########
 d <- v91; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec")
-d <- ag.dis(d,sel.c)
 d$edosecn <- d$seccion <- NULL
-v91m <- d
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=TRUE)
+#dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE) # missing seccion ids to get this in 1991
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
+v91d <- d
 ##########
 ## 1994 ##
 ##########
 d <- v94; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec")
-d <- ag.dis(d,sel.c)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","lisnom")
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
+d$disn <- NULL
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v94m <- d
+v94d <- d
 ##########
 ## 1997 ##
 ##########
 d <- v97; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec")
-d <- ag.dis(d,sel.c)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","lisnom")
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
+d$disn <- NULL
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v97m <- d
+v97d <- d
 ##########
 ## 2000 ##
 ##########
 d <- v00; d[is.na(d)] <- 0
-sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","dpanc","dprdc")
-d <- ag.dis(d,sel.c)
+sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","lisnom","dpanc","dprdc")
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
 d$dpanc <- as.numeric(d$dpanc>0)
 d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v00m <- d
+v00d <- d
 ##########
 ## 2003 ##
 ##########
 d <- v03; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","dpric")
-d <- ag.dis(d,sel.c)
-d$dpric <- as.numeric(d$dpric>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
+sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","lisnom","dpric")
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
+d$dpric <- as.numeric(d$dpric>0)
+d$disn <- NULL
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v03m <- d
+v03d <- d
 ##########
 ## 2006 ##
 ##########
 d <- v06; d[is.na(d)] <- 0
-sel.c <- c("pan","pric","prdc","pna","asdc","efec")
-d <- ag.dis(d,sel.c)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
+sel.c <- c("pan","pric","prdc","pna","asdc","efec","lisnom")
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
+d$disn <- NULL
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v06m <- d
+v06d <- d
 ##########
 ## 2009 ##
 ##########
 d <- v09; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc")
-d <- ag.dis(d,sel.c)
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
 d$dpric <- as.numeric(d$dpric>0)
 d$dptc <- as.numeric(d$dptc>0)
-d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v09m <- d
+v09d <- d
 ##########
 ## 2012 ##
 ##########
 d <- v12; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc")
-d <- ag.dis(d,sel.c)
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
-d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v12m <- d
+v12d <- d
 ##########
 ## 2015 ##
 ##########
 d <- v15; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc")
-d <- ag.dis(d,sel.c)
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
 d$dpric <- as.numeric(d$dpric>0)
 d$dprdc <- as.numeric(d$dprdc>0)
 d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v15m <- d
+v15d <- d
 ##########
 ## 2018 ##
 ##########
 d <- v18; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.dis(d,sel.c)
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
-d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v18m <- d
+v18d <- d
 ##########
 ## 2021 ##
 ##########
 d <- v21; d[is.na(d)] <- 0
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.dis(d,sel.c)
+d$edosecn <- d$seccion <- NULL               # drop seccion ids
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
+dd   <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE)
+dd79 <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=TRUE)
+dm   <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=TRUE)
 d$dpanc    <- as.numeric(d$dpanc>0)
 d$dpric    <- as.numeric(d$dpric>0)
 d$dmorenac <- as.numeric(d$dmorenac>0)
-d$edosecn <- d$seccion <- NULL
 d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v21m <- d
-######################
-## 2021 for winners ##
-######################
-d <- v21w; d[is.na(d)] <- 0
-sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac")
-d <- ag.dis(d,sel.c)
-d$dpanc    <- as.numeric(d$dpanc>0)
-d$dpric    <- as.numeric(d$dpric>0)
-d$dmorenac <- as.numeric(d$dmorenac>0)
-d$edosecn <- d$seccion <- NULL
-d$disn <- NULL
-d <- d[,-grep("^d[0-9]{2}$", colnames(d))]   # drop seccion-yr dummies
-d <- d[,-grep("^ife[0-9]{4}$", colnames(d))] # drop ife-yr vars
-v21mw <- d
-# agg mun winner
-#tmp <- tmp.w2 # duplicate to debug
-#tmp.w2 <- tmp # restore to debug
-tmp.w <- cbind(tmp.w, ife=v21w$ife) # add ife code
-tmp.w$pan[is.na(tmp.w$pan)] <- 0; tmp.w$pri[is.na(tmp.w$pri)] <- 0
-tmp.w$pan <- ave(tmp.w$pan, tmp.w$ife, FUN=sum, na.rm=TRUE) # use ife codes
-tmp.w$pri <- ave(tmp.w$pri, tmp.w$ife, FUN=sum, na.rm=TRUE) # use ife codes
-tmp.w <- tmp.w[duplicated(tmp.w$ife)==FALSE, c("pan","pri","ife")]
-tmp.w[,c("pan","pri")] <- round(tmp.w[,c("pan","pri")] / rowSums(tmp.w[,c("pan","pri")]), 3) # shares add to 1
-#
-tmp.w2 <- cbind(tmp.w2, ife=v21w$ife) # add ife code
-tmp.w2$morena[is.na(tmp.w2$morena)] <- 0; tmp.w2$pvem[is.na(tmp.w2$pvem)] <- 0
-tmp.w2$morena <- ave(tmp.w2$morena, tmp.w2$ife, FUN=sum, na.rm=TRUE) # use ife codes
-tmp.w2$pvem <- ave(tmp.w2$pvem, tmp.w2$ife, FUN=sum, na.rm=TRUE) # use ife codes
-tmp.w2 <- tmp.w2[duplicated(tmp.w2$ife)==FALSE, c("morena","pvem","ife")]
-tmp.w2[,c("morena","pvem")] <- round(tmp.w2[,c("morena","pvem")] / rowSums(tmp.w2[,c("morena","pvem")]), 3) # shares add to 1
+v21d <- d
 
 ####################################################################################
 ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly     ##

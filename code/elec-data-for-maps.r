@@ -19,21 +19,43 @@ setwd(dd)
 ###############################################
 ## function to aggregate seccion-level votes ##
 ###############################################
-ag.sec <- function(d=d, sel.c=sel.c, y1991=FALSE){
-    sel.c <- which(colnames(d) %in% sel.c); # extract indices
+my_agg <- function(d=d, sel.c=sel.c, by=NA, y1991=FALSE){
+    d <- d              # assign mem
+    sel.c <- sel.c      # assign mem
+    if (is.na(by)==TRUE){ # default is aggregate secciones when by==NA
+        if (y1991==FALSE){
+            by <- as.factor(d$edon*10000+d$seccion) # seccion indicator post 1991
+        } else {
+            by <- as.factor(d$ife*1000000+d$disn*10000+d$seccion) # seccion indicator 1991
+        }
+    } else { # to aggregate by something else (e.g. dis1979 or disn or ife)
+        by <- d[,which(colnames(d) %in% by)] # duplicate column that will serve as aggregator
+        by <- as.factor(by)
+    }
+    sel.c <- which(colnames(d) %in% sel.c); # extract indices of selected columns
     for (i in sel.c){
         #i <- sel.c[1] #debug
-        if (y1991==FALSE){
-            d[,i] <- ave(d[,i], as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE)
-            sel.r <- which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE)
-        } else {
-            d[,i] <- ave(d[,i], as.factor(d$ife*1000000+d$disn*10000+d$seccion), FUN=sum, na.rm=TRUE)
-            sel.r <- which(duplicated(as.factor(d$ife*1000000+d$disn*10000+d$seccion))==TRUE)
-        }
+        d[,i] <- ave(d[,i], by, FUN=sum, na.rm=TRUE) # sum up
     }
+    sel.r <- which(duplicated(by)==TRUE)         # drop duplicate obs
     d <- d[-sel.r,]
     return(d)
 }
+## ag.sec <- function(d=d, sel.c=sel.c, y1991=FALSE){
+##     sel.c <- which(colnames(d) %in% sel.c); # extract indices
+##     for (i in sel.c){
+##         #i <- sel.c[1] #debug
+##         if (y1991==FALSE){
+##             d[,i] <- ave(d[,i], as.factor(d$edon*10000+d$seccion), FUN=sum, na.rm=TRUE)
+##             sel.r <- which(duplicated(as.factor(d$edon*10000+d$seccion))==TRUE)
+##         } else {
+##             d[,i] <- ave(d[,i], as.factor(d$ife*1000000+d$disn*10000+d$seccion), FUN=sum, na.rm=TRUE)
+##             sel.r <- which(duplicated(as.factor(d$ife*1000000+d$disn*10000+d$seccion))==TRUE)
+##         }
+##     }
+##     d <- d[-sel.r,]
+##     return(d)
+## }
 #
 ##########################################################################
 ## function to replace character/factor cells with numeric value or NA; ##
@@ -82,7 +104,7 @@ na2zero <- function(dat=NA, sel.c){
 
 ###################################
 ## ############################# ##
-## ## read seccion-level data ## ##
+## ## read casilla-level data ## ##
 ## ############################# ##
 ###################################
 
@@ -103,7 +125,7 @@ sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                        
 d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + pdm + prt + pem + pt)# valid vote
 d <- within(d, tot <- nul <- nr <- note <- status <- casilla <- NULL)              # economize columns
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c, y1991=TRUE)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=TRUE) #ag.sec(d, sel.c)
 ## coalition dummies
 d <- within(d, dpanc <- dpric <- dprdc <- 0)
 ##############################################
@@ -128,7 +150,8 @@ sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                        
 d <- within(d, efec <- pan + pri + pps + prd + pfcrn + parm + uno.pdm + pt + pvem) # valid vote
 d <- within(d, tot <- nul <- nr <- nota <- status <- casilla <- NULL)              # economize columns
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d2 <- d # debug
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 ## coalition dummies
 d <- within(d, dpanc <- dpric <- dprdc <- 0)
 ##############################################
@@ -152,7 +175,7 @@ d <- within(d, efec <- pan + pri + prd + pc + pt + pvem + pps + pdm)            
 sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                           # voided casillas to zero
 d <- within(d, tot <- nul <- nr <- status <- note <- casilla <- NULL)              # economize cols
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 ## coalition dummies
 d <- within(d, dpanc <- dpric <- dprdc <- 0)
 ##############################################
@@ -177,7 +200,7 @@ sel.r <- which(d$status=="Anulada"); d[sel.r,sel.c] <- 0                        
 d <- within(d, efec <- panc + pri + prdc + pcd + parm + dsppn)                     # valid vote
 d <- within(d, tot <- nul <- nr <- status <- nota <- casilla <- NULL)              # economize columns
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 # district coalition dummies
 d$dpanc <- ave(d$panc, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
 d$dpanc <- as.numeric(d$dpanc>0)
@@ -208,7 +231,7 @@ sel.r <- grep("Anulada|instalada|entregado", d$status); d[sel.r,sel.c] <- 0     
 d <- within(d, efec <- pan + pri + prd + pt + pvem + conve + psn + pas + mp + plm + fc + pric) # valid vote
 d <- within(d, tot <- nul <- nr <- nota <- status <- casilla <- NULL)              # economize columns
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 # district coalition dummies
 d$dpanc <- 0
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
@@ -247,7 +270,7 @@ sel.r <- grep("Anulada|instalada", d$status); d[sel.r,sel.c] <- 0               
 d <- within(d, efec <- pan + pric + prdc + pna + asdc)                             # valid vote
 d <- within(d, tot <- nul <- nr <- status <- casilla <- NULL)                      # economize columns
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 ## coalition dummies
 d <- within(d, {
     dpanc <- 0;
@@ -277,7 +300,7 @@ d[sel.r,sel.c] <- 0                                                             
 d <- within(d, efec <- pan + pri + prd + pvem + pt + conve + pna + psd + pric + ptc) # valid vote
 d <- within(d, tot <- nul <- nr <- tepjf <- status <- casilla <- NULL)             # economize columns
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 # district coalition dummies
 d$dpanc <- 0
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
@@ -336,7 +359,7 @@ d[sel.r,sel.c] <- 0                                                             
 d <- within(d, efec <- pan + pri + prd + pvem + pt + mc + pna + pric + prdc)       # valid vote
 d <- within(d, tot <- nul <- nr <- status <- tepjf <- casilla <- NULL)             # economize columns
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 # coalition dummies
 d$dpanc <- 0
 d$dpric <- ave(d$pric, as.factor(d$edon*100+d$disn), FUN=sum, na.rm=TRUE) # if >0 will infer district coalition
@@ -406,7 +429,7 @@ table(d$dpanc, useNA = "always")
 table(d$dpric, useNA = "always")
 table(d$dprdc, useNA = "always")
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 #####################################################################
 ## aggregate coalitions where present for correct winner assesment ##
 #####################################################################
@@ -469,7 +492,7 @@ table(d$dpanc, useNA = "always")
 table(d$dpric, useNA = "always")
 table(d$dmorenac, useNA = "always")
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 #####################################################################
 ## aggregate coalitions where present for correct winner assesment ##
 #####################################################################
@@ -533,7 +556,7 @@ d$dmorenac <- as.numeric(d$dmorenac>0)
 table(d$dpanc, useNA = "always")
 table(d$dmorenac, useNA = "always")
 ## aggregate seccion-level votes ##
-d <- ag.sec(d, sel.c)
+d <- my_agg(d=d, sel.c=sel.c, by=NA, y1991=FALSE) #ag.sec(d, sel.c)
 #####################################################################
 ## aggregate coalitions where present for correct winner assesment ##
 #####################################################################
@@ -561,7 +584,7 @@ v21_agg <- d_agg
 v21_split <- d_split
 
 # clean
-rm(d,d_agg,d_split,sel.c,sel.r,to.num,apportion_v,na2zero,ag.sec)
+rm(d,d_agg,d_split,sel.c,sel.r,to.num,apportion_v,na2zero)
 
 ## commented 26mar2023, needs work in 2021 to allocate pan.pri.prd win to largest
 ## ################################
@@ -955,24 +978,19 @@ sel.r <- c(sel.r, which(v21$edon==19 & v21$seccion>=9000))
 v21 <- v21[-sel.r,]
 rm(miss_secc,sel.r,tmp) # clean
 
-############################################
-## get municipio info to merge into votes ##
-############################################
-muns <- eq[, c("edon", "seccion", "ife", "inegi",
-               "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021")]
-
-###################################################
-## get federal district info to merge into votes ##
-###################################################
-disf <- eq[, c("edon", "seccion", "ife", "inegi",
-               "dis1979", "dis1997", "dis2006", "dis2013", "dis2018")]
+########################################################################
+## get counterfactual municipio and district info to merge into votes ##
+########################################################################
+mundis <- eq[, c("edon", "seccion", "ife", "inegi",
+                 "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021", 
+                 "dis1979", "dis1997", "dis2006", "dis2013", "dis2018")]
 
 # match yearly observations (secciones)
 #dim(v06); dim(v09); dim(v12); dim(v15) # something amiss in 2009?
-## v91 <- within(v91, {
-##     edosecn <- edon*10000 + seccion;
-##     d91     <- 1;
-## })
+v91 <- within(v91, {
+    edosecn <- ife*1000000 + disn*10000 + seccion
+    d91     <- 1;
+})
 v94 <- within(v94, {
     edosecn <- edon*10000 + seccion;
     d94     <- 1;
