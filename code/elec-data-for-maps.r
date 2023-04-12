@@ -931,12 +931,21 @@ rm(
     v21_split, v21_agg
    )
 
+#########################################################################################
+## OJO: Code code/manip-dis1979-dis2018-to-assign-dropped-secciones.r                  ##
+## ran independently 12apr2023 to infer counterfactual federal districts               ##
+## when reseccionamiento occurred. Output was incorportated into excel sheet           ##
+## redistrict/ife.ine/equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv             ##
+## Might need to run it again if changes to original file occurred                     ##
+#########################################################################################
+
 ###################################
 ## get equivalencias seccionales ##
 ###################################
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
-eq$check <- NULL # drop column meant to clean within excel file
+# drop secciones whose numbers have never been used
+sel <- which(eq$baja==1992); eq <- eq[-sel,]; rm(sel)
 # check: any secciones missing from eq?
 miss_secc <- function(dat=v21_split){ # defaults to 2021
     tmp <- deparse(substitute(dat)) # extract object's name
@@ -2984,21 +2993,10 @@ load(paste0(wd, "data/too-big-4-github/tmp-mun.RData"))
 ## Note 16jul2021: why not do this before manipulating municipios, ##
 ## which now have been manipulated in ife.1991, ife.1994 etc.?     ##
 #####################################################################
+code/manip-dis1979-dis2018-to-assign-dropped-secciones.r
+does this for federal districts. Adapt it to also deal with
+couterfactual secciones
 
-# get equivalencias seccionales again (avoids re-running all code above after excel-eq suffered maginal changes) 
-tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
-eq <- read.csv(tmp, stringsAsFactors = FALSE)
-
-# rewrite eq$orig.dest as vectors
-sel <- grep("[|]", eq$orig.dest)
-eq$orig.dest[sel] <- gsub("[|]",",", eq$orig.dest[sel])
-eq$orig.dest[sel] <- paste0("c(", eq$orig.dest[sel], ")")
-sel <- grep("[|]", eq$orig.dest2)
-eq$orig.dest2[sel] <- gsub("[|]",",", eq$orig.dest2[sel])
-eq$orig.dest2[sel] <- paste0("c(", eq$orig.dest2[sel], ")")
-sel <- grep("[|]", eq$orig.dest3)
-eq$orig.dest3[sel] <- gsub("[|]",",", eq$orig.dest3[sel])
-eq$orig.dest3[sel] <- paste0("c(", eq$orig.dest3[sel], ")")
 
 
 ## ##########################################################################################

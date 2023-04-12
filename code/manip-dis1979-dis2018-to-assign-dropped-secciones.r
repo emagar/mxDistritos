@@ -1,13 +1,23 @@
-#####################################################################
-## Manipulate reseccionamiento cases to preserve them in analysis. ##
-## Note: will not affect municipal aggregates, done above.         ##
-## Note 16jul2021: why not do this before manipulating municipios, ##
-## which now have been manipulated in ife.1991, ife.1994 etc.?     ##
-#####################################################################
+##############################################################################
+## Manipulate dis1979 dis1997 dis2006 dis2018 to remove 0s.                 ##
+## Incorporates reseccionamiento info to infer districts that dropped       ##
+## secciones would have belonged to in past/future maps.                    ##
+##                                                                          ##
+## Note: the output of this script was incorporates 12apr2023 into          ##
+## redistrict/ife.ine/equivSecc/tablaEquivalenciasSeccionalesDesde1994.xls. ##
+## It might be needed again when new maps are produced or changes to the    ##
+## excel file occur.                                                        ##
+##                                                                          ##
+## Author: Eric Magar                                                       ##
+## Contact: emagar at itam dot mx                                           ##
+## Date: 12apr2023                                                          ##
+##############################################################################
 
-# get equivalencias seccionales again (avoids re-running all code above after excel-eq suffered maginal changes) 
+# get equivalencias seccionales again (restores some secciones dropped)
 tmp <- paste(wd, "equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv", sep = "")
 eq <- read.csv(tmp, stringsAsFactors = FALSE)
+## # drop secciones whose numbers have never been used --- comment to save output matching excel-eq
+## sel <- which(eq$baja==1992); eq <- eq[-sel,]; rm(sel)
 rm(tmp)
 
 # rewrite eq$orig.dest as vectors
@@ -21,14 +31,12 @@ sel <- grep("[|]", eq$orig.dest3)
 eq$orig.dest3[sel] <- gsub("[|]",",", eq$orig.dest3[sel])
 eq$orig.dest3[sel] <- paste0("c(", eq$orig.dest3[sel], ")")
 
-#######################
-## clean eq elements ##
-#######################
-# should verify whether or not modified secciones' dis1979 dis1997 dis2006 dis2018 have consistent 0s before/after action's when...
+##############################################
+## Add missing counterfactual fed districts ##
+## Run block twice (maybe more) to handle   ##
+## secciones that changed more than once    ##
+##############################################
 
-##############################################
-## add missing counterfactual fed districts ##
-##############################################
 ################
 ## split.from ##
 ################
@@ -229,9 +237,19 @@ if (length(sel)>0){
     eq[sel,] <- eqs # return to data
 }
 
+#######################
+## check/save output ##
+#######################
 eq[1,]
-# export manipulated districts for manual comaprison in excel
+table(eq$dis1979==0)
+table(eq$dis1997==0)
+table(eq$dis2006==0)
+table(eq$dis2018==0)
+eq$ord[which(eq$dis2018==0)]
+# export manipulated districts for manual comparison/incorporation in excel
 write.csv(eq[,c("ord","dis1979","dis1997","dis2006","dis2018")], file="../../../redistrict/ife.ine/equivSecc/tmp.csv", row.names=FALSE)
+
+# clean
 rm(d,sel,sel.c,sel.drop,whens,eqs,or.de,target,i) # clean
 
 
