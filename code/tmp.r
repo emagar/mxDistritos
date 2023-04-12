@@ -133,7 +133,7 @@ if (length(sel)>0){
 ## split.to ##
 ##############
 # action proceeds forward
-sel <- which(eq$action=="split.to")
+sel <- which(eq$action=="split.to" | eq$action=="merged.to")
 if (length(sel)>0){
     eqs <- eq[sel,] # subset for manipulation
     orig.dests <- eq$orig.dest[sel] # extract
@@ -165,7 +165,7 @@ if (length(sel)>0){
     eq[sel,] <- eqs # return to data
 }
 # action 2
-sel <- which(eq$action2=="split.to")
+sel <- which(eq$action2=="split.to" | eq$action2=="merged.to")
 if (length(sel)>0){
     eqs <- eq[sel,] # subset for manipulation
     orig.dests <- eq$orig.dest2[sel] # extract
@@ -197,7 +197,7 @@ if (length(sel)>0){
     eq[sel,] <- eqs # return to data
 }
 # action 3
-sel <- which(eq$action3=="split.to")
+sel <- which(eq$action3=="split.to" | eq$action3=="merged.to")
 if (length(sel)>0){
     eqs <- eq[sel,] # subset for manipulation
     orig.dests <- eq$orig.dest3[sel] # extract
@@ -229,7 +229,9 @@ if (length(sel)>0){
     eq[sel,] <- eqs # return to data
 }
 
-
-rm(sel,eqs,or.de,target,i) # clean
+eq[1,]
+# export manipulated districts for manual comaprison in excel
+write.csv(eq[,c("ord","dis1979","dis1997","dis2006","dis2018")], file="../../../redistrict/ife.ine/equivSecc/tmp.csv", row.names=FALSE)
+rm(d,sel,sel.c,sel.drop,whens,eqs,or.de,target,i) # clean
 
 
