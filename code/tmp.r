@@ -1,0 +1,945 @@
+Determine level of aggregation to work with here by
+choosing s, m, d. Creates v.. objects matching chosen unit.
+agg <- c("s","m","d")[3]
+if (agg %notin% c("m","s","d")) print("Error: Unit must be s, m, or d")
+if (agg=="s") {
+    ## v91 <- v91m;
+    v94 <- v94s; v97 <- v97s; 
+    v00 <- v00s; v03 <- v03s; v06 <- v06s; v09 <- v09s; v12 <- v12s; v15 <- v15s; v18 <- v18s; v21 <- v21s;
+}
+if (agg=="m") {
+    v91 <- v91m;
+    v94 <- v94m; v97 <- v97m; 
+    v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m; v21 <- v21m;
+}
+if (agg=="d") {
+    v91 <- v91d;
+    v94 <- v94d; v97 <- v97d; 
+    v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v18 <- v18d; v21 <- v21d;
+}
+
+############################################
+## prepare manipulated party objects      ##
+## for time-series and alpha regressions  ##
+## After 2024 election, uncheck/add lines ##
+############################################
+#
+# version 1: extend partial coalitions across the board
+# shares
+pan <- data.frame(v91 =  with(v91, ifelse(efec==0, NA,  pan                    / efec)), # comment if agg=="s"
+                  v94 =  with(v94, ifelse(efec==0, NA,  pan                    / efec)),
+                  v97 =  with(v97, ifelse(efec==0, NA,  pan                    / efec)),
+                  v00 =  with(v00, ifelse(efec==0, NA,  panc                   / efec)),
+                  v03 =  with(v03, ifelse(efec==0, NA,  pan                    / efec)),
+                  v06 =  with(v06, ifelse(efec==0, NA,  pan                    / efec)),
+                  v09 =  with(v09, ifelse(efec==0, NA,  pan                    / efec)),
+                  v12 =  with(v12, ifelse(efec==0, NA,  pan                    / efec)),
+                  v15 =  with(v15, ifelse(efec==0, NA,  pan                    / efec)),
+                  v18 =  with(v18, ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),   # drop mc?
+                  v21 =  with(v21, ifelse(efec==0, NA, (pan + panc + prd)      / efec)))   # drop prd?
+pan <- round(pan, 3)
+#
+pri <- data.frame(v91 =  with(v91, ifelse(efec==0, NA,  pri                      / efec)),
+                  v94 =  with(v94, ifelse(efec==0, NA,  pri                      / efec)),
+                  v97 =  with(v97, ifelse(efec==0, NA,  pri                      / efec)),
+                  v00 =  with(v00, ifelse(efec==0, NA,  pri                      / efec)),
+                  v03 =  with(v03, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+                  v06 =  with(v06, ifelse(efec==0, NA,  pric                     / efec)),
+                  v09 =  with(v09, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+                  v12 =  with(v12, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+                  v15 =  with(v15, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+                  v18 =  with(v18, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+                  v21 =  with(v21, ifelse(efec==0, NA,  pri                      / efec))) # coal vote to pan+prd ok?
+pri <- round(pri, 3)
+#
+left <- data.frame(v91 = with(v91, ifelse(efec==0, NA,  prd                             / efec)),
+                   v94 = with(v94, ifelse(efec==0, NA,  prd                             / efec)),
+                   v97 = with(v97, ifelse(efec==0, NA,  prd                             / efec)),
+                   v00 = with(v00, ifelse(efec==0, NA,  prdc                            / efec)),
+                   v03 = with(v03, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+                   v06 = with(v06, ifelse(efec==0, NA,  prdc                            / efec)),
+                   v09 = with(v09, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+                   v12 = with(v12, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+                   v15 = with(v15, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+                   v18 = with(v18, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+                   v21 = with(v21, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))) # drop pt + pvem?
+left <- round(left, 3)
+#
+oth <- data.frame(v91 =  with(v91, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+                  v94 =  with(v94, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+                  v97 =  with(v97, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+                  v00 =  with(v00, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+                  v03 =  with(v03, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+                  v06 =  with(v06, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+                  v09 =  with(v09, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+                  v12 =  with(v12, ifelse(efec==0, NA,  pna                                       / efec)),
+                  v15 =  with(v15, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+                  v18 =  with(v18, ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
+                  v21 =  with(v21, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec)))
+oth <- round(oth, 3)
+#
+efec <- data.frame(v91 = v91$efec,
+                   v94 = v94$efec,
+                   v97 = v97$efec,
+                   v00 = v00$efec,
+                   v03 = v03$efec,
+                   v06 = v06$efec,
+                   v09 = v09$efec,
+                   v12 = v12$efec,
+                   v15 = v15$efec,
+                   v18 = v18$efec,
+                   v21 = v21$efec)
+#
+lisnom <- data.frame(v91 = v91$lisnom,
+                     v94 = v94$lisnom,
+                     v97 = v97$lisnom,
+                     v00 = v00$lisnom,
+                     v03 = v03$lisnom,
+                     v06 = v06$lisnom,
+                     v09 = v09$lisnom,
+                     v12 = v12$lisnom,
+                     v15 = v15$lisnom,
+                     v18 = v18$lisnom,
+                     v21 = v21$lisnom)
+#
+# transpose to plug columns into new data.frames
+pan    <- t(pan)
+pri    <- t(pri)
+left   <- t(left)
+oth    <- t(oth)
+efec   <- t(efec)
+lisnom <- t(lisnom)
+#
+
+extendCoal <- as.list(rep(NA, nrow(v00))) # empty list will receive one data.frame per unit
+if (agg=="m"){
+    names(extendCoal) <- v00$ife
+    # replicate for counterfactual munic data for regressions
+    extendCoal.cf06 <- extendCoal.cf09 <- extendCoal.cf12 <- extendCoal.cf15 <- extendCoal.cf18 <- extendCoal.cf21 <- extendCoal
+}
+if (agg=="d"){
+    names(extendCoal) <- v00$disn
+    # replicate for counterfactual munic data for regressions
+    extendCoal.cf79 <- extendCoal.cf97 <- extendCoal.cf06 <- extendCoal.cf18 <- extendCoal
+}
+if (agg=="s") names(extendCoal) <- v00$edon*10000 + v00$seccion # untested
+# loop over municipios/secciones
+for (i in 1:nrow(v00)){
+    #i <- 81 # debug
+    message(sprintf("loop %s of %s", i, nrow(v00)))
+    # votes with actual municipios to plug into distributed data
+    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3),
+                      pan  = pan[,i],
+                      pri  = pri[,i],
+                      left = left[,i],
+                      oth  = oth[,i],
+                      efec = efec[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
+    # fill info to new list
+    extendCoal[[i]] <- tmp
+}
+
+##################################
+## datos para regresión de alfa ##
+##################################
+#
+#############################################################################################################
+## Nota 16jul2021: al añadir datos 2021 cambiarán todas las alfas y betas! Una solución fácil (que usaré)  ##
+## y otra que requiere más coco. La fácil es reestimar con 2021 e identificar el commit que reportaba la   ##
+## versión hasta 2018. La otra: definir una ventana temporal (como cinco elecciones) para producir alfas   ##
+## y betas cada elección: alfa.2006, alfa.2009, etc. Debería poder investigar cómo usan esto en el Capital ##
+## Asset Pricing Model...                                                                                  ##
+#############################################################################################################
+yr.means <- data.frame(yr = seq(1991,2021,3),
+                       pan    = rep(NA,11),
+                       pri    = rep(NA,11),
+                       left   = rep(NA,11),
+                       oth    = rep(NA,11))
+#cs <- function(x) colSums(x, na.rm=TRUE)
+if (agg=="s"){
+    cs <- function(x) colSums(x[x$dunbaja==0,], na.rm=TRUE) # drops secciones that received aggregates upon splitting
+} else {
+    cs <- function(x) colSums(x, na.rm=TRUE) # 21jul2021: stopped working, asked for numeric, replaced with sum
+}
+#
+# change with v91s when available
+yr.means$pan   [1] <-  cs(v91)["pan"]                                                      / cs(v91)["efec"]
+yr.means$pri   [1] <-  cs(v91)["pri"]                                                      / cs(v91)["efec"]
+yr.means$left  [1] <-  cs(v91)["prd"]                                                      / cs(v91)["efec"]
+yr.means$oth   [1] <- (cs(v91)["efec"] - cs(v91)["pan"] - cs(v91)["pri"] - cs(v91)["prd"]) / cs(v91)["efec"]
+#
+yr.means$pan   [2] <-  cs(v94s)["pan"]                                                         / cs(v94s)["efec"]
+yr.means$pri   [2] <-  cs(v94s)["pri"]                                                         / cs(v94s)["efec"]
+yr.means$left  [2] <-  cs(v94s)["prd"]                                                         / cs(v94s)["efec"]
+yr.means$oth   [2] <- (cs(v94s)["efec"] - cs(v94s)["pan"] - cs(v94s)["pri"] - cs(v94s)["prd"]) / cs(v94s)["efec"]
+#                
+yr.means$pan   [3] <-  cs(v97s)["pan"]                                                         / cs(v97s)["efec"]
+yr.means$pri   [3] <-  cs(v97s)["pri"]                                                         / cs(v97s)["efec"]
+yr.means$left  [3] <-  cs(v97s)["prd"]                                                         / cs(v97s)["efec"]
+yr.means$oth   [3] <- (cs(v97s)["efec"] - cs(v97s)["pan"] - cs(v97s)["pri"] - cs(v97s)["prd"]) / cs(v97s)["efec"]
+#                
+yr.means$pan   [4] <-  cs(v00s)["panc"]                    / cs(v00s)["efec"]
+yr.means$pri   [4] <-  cs(v00s)["pri"]                     / cs(v00s)["efec"]
+yr.means$left  [4] <-  cs(v00s)["prdc"]                    / cs(v00s)["efec"]
+yr.means$oth   [4] <- (cs(v00s)["pcd"] + cs(v00s)["parm"]) / cs(v00s)["efec"]
+#                
+yr.means$pan   [5] <-  cs(v03s)["pan"]                                                                         / cs(v03s)["efec"]
+yr.means$pri   [5] <- (cs(v03s)["pri"] + cs(v03s)["pric"] + cs(v03s)["pvem"])                                  / cs(v03s)["efec"]
+yr.means$left  [5] <- (cs(v03s)["prd"] + cs(v03s)["pt"]   + cs(v03s)["conve"])                                 / cs(v03s)["efec"]
+yr.means$oth   [5] <- (cs(v03s)["psn"] + cs(v03s)["pas"]  + cs(v03s)["mp"] + cs(v03s)["plm"] + cs(v03s)["fc"]) / cs(v03s)["efec"]
+#                
+yr.means$pan   [6] <-  cs(v06s)["pan"]                     / cs(v06s)["efec"]
+yr.means$pri   [6] <-  cs(v06s)["pric"]                    / cs(v06s)["efec"]
+yr.means$left  [6] <-  cs(v06s)["prdc"]                    / cs(v06s)["efec"]
+yr.means$oth   [6] <- (cs(v06s)["pna"] + cs(v06s)["asdc"]) / cs(v06s)["efec"]
+#                
+yr.means$pan   [7] <-  cs(v09s)["pan"]                                                           / cs(v09s)["efec"]
+yr.means$pri   [7] <- (cs(v09s)["pri"] + cs(v09s)["pric"] + cs(v09s)["pvem"])                    / cs(v09s)["efec"]
+yr.means$left  [7] <- (cs(v09s)["prd"] + cs(v09s)["pt"]   + cs(v09s)["ptc"] + cs(v09s)["conve"]) / cs(v09s)["efec"]
+yr.means$oth   [7] <- (cs(v09s)["pna"] + cs(v09s)["psd"])                                        / cs(v09s)["efec"]
+#                
+yr.means$pan   [8] <-  cs(v12s)["pan"]                                                       / cs(v12s)["efec"]
+yr.means$pri   [8] <- (cs(v12s)["pri"] + cs(v12s)["pric"] + cs(v12s)["pvem"])                / cs(v12s)["efec"]
+yr.means$left  [8] <- (cs(v12s)["prd"] + cs(v12s)["prdc"] + cs(v12s)["pt"] + cs(v12s)["mc"]) / cs(v12s)["efec"]
+yr.means$oth   [8] <-  cs(v12s)["pna"]                                                       / cs(v12s)["efec"]
+#                
+yr.means$pan   [9] <-  cs(v15s)["pan"]                                                                                / cs(v15s)["efec"]
+yr.means$pri   [9] <- (cs(v15s)["pri"] + cs(v15s)["pric"] + cs(v15s)["pvem"])                                         / cs(v15s)["efec"]
+yr.means$left  [9] <- (cs(v15s)["prd"] + cs(v15s)["prdc"] + cs(v15s)["pt"] + cs(v15s)["morena"] + cs(v15s)["pes"])    / cs(v15s)["efec"]
+yr.means$oth   [9] <- (cs(v15s)["mc"]  + cs(v15s)["pna"]  + cs(v15s)["ph"] + cs(v15s)["indep1"] + cs(v15s)["indep2"]) / cs(v15s)["efec"]
+#
+yr.means$pan   [10] <- (cs(v18s)["pan"]    + cs(v18s)["panc"]    + cs(v18s)["prd"]  + cs(v18s)["mc"])  / cs(v18s)["efec"]
+yr.means$pri   [10] <- (cs(v18s)["pri"]    + cs(v18s)["pric"]    + cs(v18s)["pvem"] + cs(v18s)["pna"]) / cs(v18s)["efec"]
+yr.means$left  [10] <- (cs(v18s)["morena"] + cs(v18s)["morenac"] + cs(v18s)["pt"]   + cs(v18s)["pes"]) / cs(v18s)["efec"]
+yr.means$oth   [10] <- (cs(v18s)["indep1"] + cs(v18s)["indep2"])                                       / cs(v18s)["efec"]
+#
+yr.means$pan   [11] <- (cs(v21s)["pan"]    + cs(v21s)["panc"]    + cs(v21s)["prd"])                                       / cs(v21s)["efec"]
+yr.means$pri   [11] <- (cs(v21s)["pri"]    + cs(v21s)["pric"])                                                            / cs(v21s)["efec"]
+yr.means$left  [11] <- (cs(v21s)["morena"] + cs(v21s)["morenac"] + cs(v21s)["pt"]  + cs(v21s)["pvem"])                    / cs(v21s)["efec"]
+yr.means$oth   [11] <- (cs(v21s)["mc"]     + cs(v21s)["pes"]     + cs(v21s)["rsp"] + cs(v21s)["fxm"] + cs(v21s)["indep"]) / cs(v21s)["efec"]
+#
+yr.means <- within(yr.means, mean.rpan    <- pan  / pri)
+yr.means <- within(yr.means, mean.rleft   <- left / pri)
+yr.means <- within(yr.means, mean.roth    <- oth  / pri)
+#
+yr.means[,2:8] <- round(yr.means[,2:8], 3)
+#
+# plug into data
+for (i in 1:nrow(v00)){
+    #i <- 2 # debug
+    extendCoal     [[i]] <- cbind(extendCoal     [[i]], yr.means[,6:8])
+#    extendCoal.cf06[[i]] <- cbind(extendCoal.cf06[[i]], yr.means[,6:8])
+#    extendCoal.cf09[[i]] <- cbind(extendCoal.cf09[[i]], yr.means[,6:8])
+#    extendCoal.cf12[[i]] <- cbind(extendCoal.cf12[[i]], yr.means[,6:8])
+#    extendCoal.cf15[[i]] <- cbind(extendCoal.cf15[[i]], yr.means[,6:8])
+#    extendCoal.cf18[[i]] <- cbind(extendCoal.cf18[[i]], yr.means[,6:8])
+#    extendCoal.cf21[[i]] <- cbind(extendCoal.cf21[[i]], yr.means[,6:8])
+}
+
+##############################################
+## # backwards                              ##
+## 1988 <- 1991 1994 1997 2000 2003         ##
+## 1991 <- 1994 1997 2000 2003 2006         ##
+## 1994 <- 1997 2000 2003 2006 2009         ##
+## 1997 <- 2000 2003 2006 2009 2012         ##
+## 2000 <- 2003 2006 2009 2012 2015         ##
+## 2003 <- 2006 2009 2012 2015 2018         ##
+## 2006 <- 2009 2012 2015 2018 2021         ##
+##                                          ##
+## # forward                                ##
+##         2009 2012 2015 2018 2021 -> 2024 ##
+##         2006 2009 2012 2015 2018 -> 2021 ##
+##         2003 2006 2009 2012 2015 -> 2018 ##
+##         2000 2003 2006 2009 2012 -> 2015 ##
+##         1997 2000 2003 2006 2009 -> 2012 ##
+##         1994 1997 2000 2003 2006 -> 2009 ##
+##         1991 1994 1997 2000 2003 -> 2006 ##
+##############################################
+
+
+
+#################################################################################################
+## - should also try jags estimation to get post-sample of vhats and alphas                    ##
+## - report mg effect of unit change in bar(v) at year's level instead of betahat (cf. Linzer) ##
+#################################################################################################
+#
+###############################
+## código de las regresiones ##
+###############################
+vhat.2024 <- vhat.2021 <- vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <- vhat.2006 <- 
+        data.frame(pan    = rep(NA, nrow(v00)),
+                   pri  = rep(NA, nrow(v00)),
+                   left = rep(NA, nrow(v00))) # will receive vote estimates
+#
+alphahat <- data.frame(pan    = rep(NA, nrow(v00)),
+                       pri    = rep(NA, nrow(v00)),
+                       left   = rep(NA, nrow(v00))) # will receive municipio's alphas
+betahat <- data.frame(pan    = rep(NA, nrow(v00)),
+                      left   = rep(NA, nrow(v00)),
+                      oth    = rep(NA, nrow(v00))) # will receive municipio's betas (none for pri)
+#
+tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
+                                   # regression per municipio, each used to
+                                   # predict votes in 2006:2021
+# add names
+if (agg=="m") names(tmp) <- v00$ife
+if (agg=="s") names(tmp) <- v00$edon*10000 + v00$seccion # untested
+#
+regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <- regs.2021 <- 
+    list(pan    = tmp,
+         left   = tmp,
+         oth    = tmp,
+         readme = "No pri regs because DVs are pri-ratios")
+#
+mean.regs <- list(pan    = tmp,
+                  left   = tmp,
+                  oth    = tmp,
+                  readme = "No pri regs bec DVs are pri-ratios")
+# drop list elements that still have NAs from loop
+# (happens with some secciones)
+non.nas <- lapply(extendCoal, sum)
+non.nas <- unlist(non.nas)
+non.nas                     # debug
+extendCoal[[206]]           # debug: 20jul2021 NA due to unreported sole sección in cps municipio
+which(is.na(non.nas)==TRUE) # debug
+non.nas <- which(is.na(non.nas)==FALSE)
+#length(non.nas)
+#    
+for (i in non.nas){
+    #i <- 81 # debug
+    #i <- 44508 # debug
+    message(sprintf("loop %s of %s", i, max(non.nas)))
+    # subset data to single unit
+    data.tmp <- extendCoal[[i]]
+    #
+    # add first-differences
+    tmp.ln <- nrow(data.tmp)
+    data.tmp$d.pan    <- data.tmp$pan    - c(NA,data.tmp$pan   [-tmp.ln])
+    data.tmp$d.pri    <- data.tmp$pri    - c(NA,data.tmp$pri   [-tmp.ln])
+    data.tmp$d.left   <- data.tmp$left   - c(NA,data.tmp$left  [-tmp.ln])
+    rm(tmp.ln)
+    #
+    ##################################
+    ## predict 2006 with last 5 els ## ojo: v91 needed
+    ##################################
+    year <- 2006
+    reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2006[i,] <- c(vhat.pan, vhat.pri, vhat.left)
+    regs.2006$pan[[i]]    <- reg.pan
+    regs.2006$left[[i]]   <- reg.left
+    regs.2006$oth[[i]]    <- reg.oth
+    #                                                                    ##############################
+    #                                                                    # DO THESE WHEN PREDICTING   #
+    #                                                                    # FIRST YEAR ONLY:           #
+    data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
+    data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                  ##############################
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left
+    #
+    ##################################
+    ## predict 2009 with last 5 els ##
+    ##################################
+    year <- 2009
+    reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2009[i,] <- c(vhat.pan, vhat.pri, vhat.left)
+    regs.2009$pan[[i]]    <- reg.pan
+    regs.2009$left[[i]]   <- reg.left
+    regs.2009$oth[[i]]    <- reg.oth
+    ## #                                                                    ##############################
+    ## #                                                                    # DO THESE WHEN PREDICTING   #
+    ## #                                                                    # FIRST YEAR ONLY:           #
+    ## data.tmp$vhat.left   <- data.tmp$vhat.pri <- data.tmp$vhat.pan <- NA # slots for projections      #
+    ## data.tmp$bhat.left   <- data.tmp$bhat.pan <- NA                      # slots for slope estimates  #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan                     ##############################
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left
+    #
+    ##################################
+    ## predict 2012 with last 5 els ##
+    ##################################
+    year <- 2012
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left <-   lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2012[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2012$pan[[i]]    <- reg.pan
+    regs.2012$left[[i]]   <- reg.left  
+    regs.2012$oth[[i]]    <- reg.oth
+    # add unit id to name to list element
+    if (agg=="m"){
+        names(regs.2012$pan) [i] <- extendCoal[[i]]$ife[1]
+        names(regs.2012$left)[i] <- extendCoal[[i]]$ife[1]
+        names(regs.2012$oth) [i] <- extendCoal[[i]]$ife[1]
+    }
+    if (agg=="s"){
+        names(regs.2012$pan) [i] <- extendCoal[[i]]$edosecn[1]
+        names(regs.2012$left)[i] <- extendCoal[[i]]$edosecn[1]
+        names(regs.2012$oth) [i] <- extendCoal[[i]]$edosecn[1]
+    }
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
+    #
+    ##################################
+    ## predict 2015 with last 5 els ##
+    ##################################
+    year <- 2015
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2015[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2015$pan[[i]]    <- reg.pan
+    regs.2015$left[[i]] <- reg.left  
+    regs.2015$oth[[i]]    <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
+    #
+    ##################################
+    ## predict 2018 with last 5 els ##
+    ##################################
+    year <- 2018
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2018[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2018$pan   [[i]] <- reg.pan
+    regs.2018$left  [[i]] <- reg.left  
+    regs.2018$oth   [[i]] <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
+    #
+    ##################################
+    ## predict 2021 with last 5 els ##
+    ##################################
+    year <- 2021
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2021[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2021$pan   [[i]] <- reg.pan
+    regs.2021$left  [[i]] <- reg.left  
+    regs.2021$oth   [[i]] <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left  
+    #
+    ##################################
+    ## predict 2024 with last 5 els ##
+    ##################################
+    year <- 2024
+    reg.pan <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.left   <- lm(formula = log(left  /pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    reg.oth <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left  )$coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.2024[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    regs.2024$pan   [[i]] <- reg.pan
+    regs.2024$left  [[i]] <- reg.left  
+    regs.2024$oth   [[i]] <- reg.oth
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left  
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left
+    #
+    # ALTERNATIVE: exp(predict.lm(reg.pan,    newdata = new.d, interval = "confidence"))
+    # #########################################################################
+    ## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
+    #########################################################################
+    reg.pan    <- lm(formula = log(pan/pri)    ~ mean.rpan, data = data.tmp)
+    reg.left   <- lm(formula = log(left  /pri) ~ mean.rleft  , data = data.tmp)
+    reg.oth    <- lm(formula = log(oth/pri)    ~ mean.roth, data = data.tmp)
+    #
+    # point prediction alpha with mean at zero 
+    new.d <- data.frame(mean.rpan = 0)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    new.d <- data.frame(mean.rleft   = 0)
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    new.d <- data.frame(mean.roth = 0)
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    #
+    #c(vhat.pan, vhat.pri, vhat.left, 1-vhat.pan-vhat.pri-vhat.left)
+    alphahat[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    betahat[i,1] <- coef(reg.pan)   [2]
+    betahat[i,2] <- coef(reg.left  )[2]
+    betahat[i,3] <- coef(reg.oth)   [2]
+    mean.regs$pan   [[i]] <- reg.pan
+    mean.regs$left  [[i]] <- reg.left  
+    mean.regs$oth   [[i]] <- reg.oth
+    #
+    # add alphas and betas for whole period
+    data.tmp$alphahat.left   <- data.tmp$alphahat.pri <- data.tmp$alphahat.pan <- NA # open slots for alphas
+    data.tmp$betahat.left   <- data.tmp$betahat.pan <- NA # open slots for betas
+    data.tmp$alphahat.pan    <- alphahat$pan   [i]
+    data.tmp$alphahat.pri    <- alphahat$pri   [i]
+    data.tmp$alphahat.left   <- alphahat$left  [i]
+    data.tmp$betahat.pan    <- betahat$pan   [i]
+    data.tmp$betahat.left   <- betahat$left  [i]
+    data.tmp$betahat.oth    <- betahat$oth   [i]
+    data.tmp <- round(data.tmp,3)
+    #
+    ########################################################
+    ## optional: plug vhats alphas betas back into data   ##
+    ########################################################
+    data.tmp <- within(data.tmp, {
+        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
+        oth <- NULL; # drop compositional vote complement
+        betahat.oth <- NULL; # drop this beta
+        #betahat.pan <- betahat.left   <- betahat.oth <- NULL; # drop betas
+    })
+    extendCoal[[i]] <- data.tmp
+}
+##############################################################################################
+## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
+##############################################################################################
+#
+# clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
+rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.2021, vhat.2024, vhat.left, vhat.pan, vhat.pri)
+
+
+##################################################################
+## ESTIMATE MANIPULATED MUNICIPAL REGRESSIONS (NEW MUN FIX)     ##
+## AND MANIPULATE regs AND extendCoal OBJECTS WHERE APPROPRIATE ##
+##################################################################
+if (agg=="m"){
+    source("code/code-to-run-counterfactual-mun-regs.r")
+}
+
+# restore
+non.nas <- non.nas.orig; rm(non.nas.orig)
+
+# tmp for debugging
+#save.image("data/too-big-4-github/tmp4.RData")
+
+rm(list = ls())
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(wd)
+load("data/too-big-4-github/tmp4.RData")
+ls()
+
+
+# clean, all this is saved in extendCoal, mean.regs, regs.2006, regs.2009, regs.2012, regs.2015, regs.2018
+extendCoalmanip[[1]]
+rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.left, vhat.pan, vhat.pri)
+
+# clean
+rm(v91manip, v94manip, v97manip, v00manip, v03manip, v06manip, v09manip, v12manip, v15manip, v18manip,
+   regs.2006manip, regs.2009manip, regs.2012manip, regs.2015manip, regs.2018manip, mean.regsmanip,
+   regs.2006manip2, regs.2009manip2, regs.2012manip2, regs.2015manip2, regs.2018manip2, mean.regsmanip2,
+   extendCoalmanip, extendCoalmanip2)
+rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
+rm(pan,pri,left,oth,efec)
+rm(sel,sel1,sel2,sel.to,sel.c,target.ife,i,tmp)
+
+# adds manipulation indicator to all data frames in list
+if (agg=="m") {
+    extendCoal <- sapply(extendCoal, simplify = FALSE, function(x) {
+        x$munchg <- 0;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg1994)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006);
+        x$munchg[sel] <- 1994;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg1997)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2009);
+        x$munchg[sel] <- 1997;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2000)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2012);
+        x$munchg[sel] <- 2000;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2003)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2015);
+        x$munchg[sel] <- 2003;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2006)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2018);
+        x$munchg[sel] <- 2006;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2009)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2009:2021);
+        x$munchg[sel] <- 2009;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2012)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2012:2024);
+        x$munchg[sel] <- 2012;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2015)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2015:2027);
+        x$munchg[sel] <- 2015;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2018)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2018:2030);
+        x$munchg[sel] <- 2018;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2021)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2021:2033);
+        x$munchg[sel] <- 2021;
+        return(x)
+    })
+    ## sel2 <- which(names(extendCoal) %in% chg2024)
+    ## extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+    ##     sel <- which(x$yr %in% 2024:2036);
+    ##     x$munchg[sel] <- 2024;
+    ##     return(x)
+    ## })
+}
+if (agg=="s") { # will be manipulated below
+    extendCoal <- sapply(extendCoal, simplify = FALSE, function(x) {
+        x$new <- x$split <- 0;
+        return(x)
+    })
+}
+
+######################################################################
+## manipulate split secciones (adding aggregate regression results) ##
+######################################################################
+if (agg=="s") {
+    sel.split <- which(eq$action=="split")
+    info <- eq[sel.split, c("edon","seccion","orig.dest","when")]
+    info$edosecn <- info$edon*10000+info$seccion
+    tmp <- v00s$edon*10000+v00s$seccion
+    sel.from <- which(tmp %in% info$edosecn)
+    #
+    for (i in 1:length(sel.from)){
+        #i <- 66 # debug
+        message(sprintf("loop %s of %s", i, length(sel.from)))
+        reg.from <- extendCoal[[sel.from[i]]] # counterfactual seccion with vhat alpha for aggregate post-split
+        #
+        # locate split's new secciones
+        sel.to <- as.numeric(unlist(strsplit(info$orig.dest[i], ":")))
+        sel.to <- seq(from = sel.to[1], to = sel.to[2], by = 1)
+        sel.to <- v00s$edon[sel.from[i]] * 10000 + sel.to
+        sel.to <- which(tmp %in% sel.to)
+        #
+        for (j in sel.to){ # loop over new secciones
+            #j <- sel.to[5] # debug
+            reg.to <- extendCoal[[j]]  # regression to manipulate
+            year <- info$when[i]               # year reseccionamiento
+            sel.na <- which(reg.to$yr <= year) # elections before reseccionamiento 
+            reg.to[sel.na,] <- within(reg.to[sel.na,], {
+                pan <- pri <- left <- d.pan <- d.pri <- d.left <- NA; # drop mean vote used, use NAs
+            })
+            # columns to manipulate
+            sel.col <- c("vhat.pan", "vhat.pri", "vhat.left", "bhat.pan", "bhat.left",  "alphahat.pan", "alphahat.pri", "alphahat.left", "betahat.pan", "betahat.left")
+            reg.to[,sel.col] <- reg.from[,sel.col] # from -> to
+            # indicate manipulation
+            reg.to$new[-sel.na] <- year
+            # return manipulated data
+            extendCoal[[j]] <- reg.to
+        }
+        # indicate manipulation
+        reg.from$split[-sel.na] <- year
+        # return manipulated data
+        extendCoal[[sel.from[i]]] <- reg.from
+    }
+}
+
+##########################################################################
+## generate data frame with one year's predictions/estimates for export ##
+##########################################################################
+tmp.func <- function(year) {
+    #year <- 2009         # debug
+    #X <- extendCoal[[1]] # debug
+    sel <- which(extendCoal[[1]]$yr==year) # which row reports year (symmetric in all other objects in list)
+    # generate list with selected row only in every municipio
+    tmp <- lapply(extendCoal, FUN = function(X) {
+        prune <- X[sel,]
+        return(prune)
+    })
+    # spot NAs in list
+    tmp.sel <- setdiff(1:length(extendCoal), non.nas)
+    # fill with same-dim NA data.frame
+    tmp.manip <- tmp[[non.nas[1]]]
+    tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
+    if (length(tmp.sel)>0) tmp[tmp.sel] <- lapply(tmp[tmp.sel], function(x) tmp.manip)
+    # turn into one dataframe
+    # table(summary(tmp)) # debug
+    tmp <- do.call("rbind", tmp)
+    rownames(tmp) <- NULL
+    ## # next block seems redundant 2sep2020
+    ## if (agg=="m") sel.col <- c("edon","ife","inegi")       # cols to merge when using municipios
+    ## if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi") # when using secciones
+    ## tmp <- cbind(tmp, v00[,sel.col])
+    ## rm(sel.col)
+    return(tmp)
+}
+
+extendCoal.2006 <- tmp.func(year=2006)
+extendCoal.2009 <- tmp.func(year=2009)
+extendCoal.2012 <- tmp.func(year=2012)
+extendCoal.2015 <- tmp.func(year=2015)
+extendCoal.2018 <- tmp.func(year=2018)
+extendCoal.2021 <- tmp.func(year=2021)
+extendCoal.2024 <- tmp.func(year=2024)
+#rm(extendCoal.2015) # clean memory
+
+# plug inegi into data for export
+tmp <- v21m[,c("ife","inegi")]
+#dim(tmp); dim(extendCoal.2006) # debug
+extendCoal.2006 <- merge(x = extendCoal.2006, y = tmp, by = "ife", all = TRUE)
+extendCoal.2009 <- merge(x = extendCoal.2009, y = tmp, by = "ife", all = TRUE)
+extendCoal.2012 <- merge(x = extendCoal.2012, y = tmp, by = "ife", all = TRUE)
+extendCoal.2015 <- merge(x = extendCoal.2015, y = tmp, by = "ife", all = TRUE)
+extendCoal.2018 <- merge(x = extendCoal.2018, y = tmp, by = "ife", all = TRUE)
+extendCoal.2021 <- merge(x = extendCoal.2021, y = tmp, by = "ife", all = TRUE)
+extendCoal.2024 <- merge(x = extendCoal.2024, y = tmp, by = "ife", all = TRUE)
+
+# if missing ife code, that wrongly adds a rown with NAs, drop 
+sel <- which(is.na(extendCoal.2006$ife))
+if (length(sel)>0){
+    extendCoal.2006 <- extendCoal.2006[-sel,];
+    extendCoal.2009 <- extendCoal.2009[-sel,];
+    extendCoal.2012 <- extendCoal.2012[-sel,];
+    extendCoal.2015 <- extendCoal.2015[-sel,];
+    extendCoal.2018 <- extendCoal.2018[-sel,];
+    extendCoal.2021 <- extendCoal.2021[-sel,];
+    extendCoal.2024 <- extendCoal.2024[-sel,];
+}
+
+# drop some columns
+extendCoal.2006 <- within(extendCoal.2006, yr <- edosecn <- NULL)
+extendCoal.2009 <- within(extendCoal.2009, yr <- edosecn <- NULL)
+extendCoal.2012 <- within(extendCoal.2012, yr <- edosecn <- NULL)
+extendCoal.2015 <- within(extendCoal.2015, yr <- edosecn <- NULL)
+extendCoal.2018 <- within(extendCoal.2018, yr <- edosecn <- NULL)
+extendCoal.2021 <- within(extendCoal.2021, yr <- edosecn <- NULL)
+extendCoal.2024 <- within(extendCoal.2024, yr <- edosecn <- NULL)
+
+# more cleaning
+rm(add.split,cs,sel.split)
+rm(info,new.d,non.nas,per.means,year)
+rm(yr.means)
+rm(tmp,data.tmp)
+
+
+##################
+## save to disk ##
+##################
+if (agg=="m") {
+    write.csv(extendCoal.2006,
+              file = paste(wd, "data/dipfed-municipio-vhat-2006.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2009,
+              file = paste(wd, "data/dipfed-municipio-vhat-2009.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2012,
+              file = paste(wd, "data/dipfed-municipio-vhat-2012.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2015,
+              file = paste(wd, "data/dipfed-municipio-vhat-2015.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2018,
+              file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2021,
+              file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2024,
+              file = paste(wd, "data/dipfed-municipio-vhat-2024.csv", sep = ""), row.names = FALSE)
+}
+if (agg=="s") {
+    write.csv(extendCoal.2009,
+              file = paste(wd, "data/dipfed-seccion-vhat-2009.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2012,
+              file = paste(wd, "data/dipfed-seccion-vhat-2012.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2015,
+              file = paste(wd, "data/dipfed-seccion-vhat-2015.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2018,
+              file = paste(wd, "data/dipfed-seccion-vhat-2018.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2021,
+              file = paste(wd, "data/dipfed-seccion-vhat-2021.csv", sep = ""), row.names = FALSE)
+    #
+    write.csv(extendCoal.2024,
+              file = paste(wd, "data/dipfed-seccion-vhat-2024.csv", sep = ""), row.names = FALSE)
+}
+
+# save municipal regression objects
+save(mean.regs, file = paste(wd, "data/dipfed-municipio-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(regs.2006, file = paste(wd, "data/dipfed-municipio-regs-2006.RData", sep = ""), compress = "gzip")
+save(regs.2009, file = paste(wd, "data/dipfed-municipio-regs-2009.RData", sep = ""), compress = "gzip")
+save(regs.2012, file = paste(wd, "data/dipfed-municipio-regs-2012.RData", sep = ""), compress = "gzip")
+save(regs.2015, file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""), compress = "gzip")
+save(regs.2018, file = paste(wd, "data/dipfed-municipio-regs-2018.RData", sep = ""), compress = "gzip")
+save(regs.2021, file = paste(wd, "data/dipfed-municipio-regs-2021.RData", sep = ""), compress = "gzip")
+save(regs.2024, file = paste(wd, "data/dipfed-municipio-regs-2024.RData", sep = ""), compress = "gzip")
+
+# save sección regression objects
+save(mean.regs, file = paste(wd, "data/too-big-4-github/dipfed-seccion-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2009.RData", sep = ""), compress = "gzip")
+save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2012.RData", sep = ""), compress = "gzip")
+save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2015.RData", sep = ""), compress = "gzip")
+save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2018.RData", sep = ""), compress = "gzip")
+save(regs.2021, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2021.RData", sep = ""), compress = "gzip")
+
+# load regression object
+load(file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""))
+ls()
+summary(regs.2015)
+summary.lm(regs.2015$oth[[1]])$coef[2,1]
+
+
+
+# version 2: coalitions only in districts where they happened
+## leftRealm <- data.frame(v00 = v00m$prdc / v00m$efec,
+##                         v03 = v03m$prd / v03m$efec,
+##                         v06 = v06m$prdc / v06m$efec,
+##                         v09 = v09m$prd / v09m$efec,
+##                         v12 = v12m$prdc / v12m$efec,
+##                         v15 = (v15m$prd * (1 - v15m$dprdc) + v15m$prdc * v15m$dprdc + v15m$morena) / v15m$efec,
+##                         v18 = (v18m$morena * (1 - v18m$dmorenac) + v18m$morenac * v18m$dmorenac) / v18m$efec)
+## esto no jala, parece que morena!=0 cuando dmorenac==1
+## morenaRealm[1,]
+# version 3: party's own vote plus proportional part of coal
+## morenaBrkm

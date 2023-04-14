@@ -1179,16 +1179,6 @@ rm(add.edon.secn,tmp.all.sec)
 ## pobtot <- pobtot[, grep("edosecn|^ptot", colnames(pobtot))]
 ## head(pobtot); head(pob18)
 
-# save all to restore after manipulating district/munic aggregates
-save.image("../../datosBrutos/not-in-git/tmp-restore.RData")
-
-# load image
-rm(list=ls())
-options(width = 110)
-dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-setwd(dd)
-load(file="../../datosBrutos/not-in-git/tmp-restore.RData")
-
 #############################################################
 ##   consolidate districts & municipios before secciones   ##
 ##   are manipulated to deal with reseccionamiento         ##
@@ -1268,6 +1258,17 @@ v18$inegi <- mapvalues(v18$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn
 v21$ife <- v21$ife2021
 v21$inegi <- mapvalues(v21$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
 rm(ife.inegi)
+
+# save all to restore after manipulating district/munic aggregates
+save.image("../../datosBrutos/not-in-git/tmp-restore.RData")
+
+# load image
+rm(list=ls())
+options(width = 110)
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load(file="../../datosBrutos/not-in-git/tmp-restore.RData")
+
 
 ##############################################
 ## aggregate district and municipio returns ##
@@ -1769,7 +1770,7 @@ d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
 v21m <- d                                      # rename object  
 
-# secciones that were added to keep v.. obects square have disn==0 
+# secciones added to keep v.. objects square have disn==0, drop their aggregates 
 sel.r <- which(v94d$disn==0); if (length(sel.r)>0) v94d <- v94d[-sel.r,]
 sel.r <- which(v97d$disn==0); if (length(sel.r)>0) v97d <- v97d[-sel.r,]
 sel.r <- which(v00d$disn==0); if (length(sel.r)>0) v00d <- v00d[-sel.r,]
@@ -1792,6 +1793,8 @@ dim(v12d)
 dim(v15d)
 dim(v18d)
 dim(v21d)
+
+13abr23: now prep all to re run dis and mun regressions
 
 ## ####################################################################################
 ## ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly     ##
@@ -1824,8 +1827,6 @@ d <- read.csv(paste(dd, "../municipios/dipfed1991.csv", sep = ""), header=TRUE, 
 d[is.na(d)] <- 0
 d$mun <- NULL
 v91m <- d
-
-13abr23: now prep all to re run dis and mun regressions
 
 ##################################################################################################
 ## Generate counterfactual municipal aggregates to use as regressors for each year's regressand ##
@@ -3205,9 +3206,8 @@ couterfactual secciones
 ## tail(tmp)
 ## x
 
+rm(d,d2,sel,sel.c,sel.drop,sel.r,tmp)
 
-
-# 13ago2021: figure why source below uses object info that is created until line ~3073!!!
 # 13ago2021: eq$action is not just "split" but "split to" or "split from" 
 source(paste(wd, "code/resecc-deal-with-splits.r", sep = ""))
 
