@@ -20,11 +20,12 @@ d <- v94; d[is.na(d)] <- 0
 d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
-d <- within(d, disn <- dis1979 <- dis1997 <- dis2013 <- dis2018 <- NULL) # drop unneeded district ids
+d$disn <- d$dis2006                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
 d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
-d <- d[moveme(names(d), "efec before lisnom; dis2006 after edon")] # order columns
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v94d06 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v94; d[is.na(d)] <- 0
