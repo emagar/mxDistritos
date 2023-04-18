@@ -1278,6 +1278,8 @@ load(file="../../datosBrutos/not-in-git/tmp-restore.RData")
 sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec","lisnom","dextra")
 # actual districts
 d <- v91; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=TRUE) # use aggregating function
 #d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 #d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1306,7 +1308,8 @@ v91m <- d                                      # rename object
 sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","lisnom","dextra")
 # actual districts
 d <- v94; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1318,7 +1321,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v94d <- d                                      # rename object  
 # 2006 counterfactual districts
 d <- v94; d[is.na(d)] <- 0
-### DROP DIS2006==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1331,7 +1333,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v94d06 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v94; d[is.na(d)] <- 0
-### DROP DIS2006==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1344,7 +1345,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v94d18 <- d                                    # rename object  
 # actual municipalities
 d <- v94; d[is.na(d)] <- 0
-### DROP ife==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1362,7 +1362,8 @@ v94m <- d                                      # rename object
 sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","lisnom","dextra")
 # actual districts
 d <- v97; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1374,7 +1375,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v97d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v97; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1387,7 +1387,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v97d79 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v97; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1400,7 +1399,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v97d06 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v97; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1413,7 +1411,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v97d18 <- d                                    # rename object  
 # actual municipalities
 d <- v97; d[is.na(d)] <- 0
-### DROP ife==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1431,7 +1428,8 @@ v97m <- d                                      # rename object
 sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","lisnom","dpanc","dprdc","dextra")
 # actual districts
 d <- v00; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1445,7 +1443,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v00d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v00; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1460,7 +1457,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v00d79 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v00; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1475,7 +1471,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v00d06 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v00; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1508,7 +1503,8 @@ v00m <- d                                      # rename object
 sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","lisnom","dpric","dextra")
 # actual districts
 d <- v03; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1521,7 +1517,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v03d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v03; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1535,7 +1530,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v03d79 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v03; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1549,7 +1543,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v03d06 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v03; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1580,7 +1573,8 @@ v03m <- d                                      # rename object
 sel.c <- c("pan","pric","prdc","pna","asdc","efec","lisnom","dpric","dprdc","dextra")
 # actual districts
 d <- v06; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1594,7 +1588,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v06d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v06; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1609,7 +1602,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v06d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v06; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1624,7 +1616,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v06d97 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v06; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1657,7 +1648,8 @@ v06m <- d                                      # rename object
 sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc","dextra")
 # actual districts
 d <- v09; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1671,7 +1663,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v09d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v09; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1686,7 +1677,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v09d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v09; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1701,7 +1691,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v09d97 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v09; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1734,7 +1723,8 @@ v09m <- d                                      # rename object
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc","dextra")
 # actual districts
 d <- v12; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1748,7 +1738,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v12d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v12; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1763,7 +1752,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v12d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v12; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1778,7 +1766,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v12d97 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v12; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1811,7 +1798,8 @@ v12m <- d                                      # rename object
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc","dextra")
 # actual districts
 d <- v15; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1826,7 +1814,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v15d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v15; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1842,7 +1829,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v15d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v15; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1858,7 +1844,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v15d97 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v15; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1893,7 +1878,8 @@ v15m <- d                                      # rename object
 sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac","dextra")
 # actual districts
 d <- v18; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1908,7 +1894,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v18d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v18; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1924,7 +1909,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v18d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v18; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1940,7 +1924,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v18d97 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v18; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1976,7 +1959,8 @@ v18m <- d                                      # rename object
 sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac","dextra")
 # actual districts
 d <- v21; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
 d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -1991,7 +1975,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v21d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v21; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -2007,7 +1990,6 @@ d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v21d79 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v21; d[is.na(d)] <- 0
-### DROP DIS==0 HERE IN EVERY BLOCK
 d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
 d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
 d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
@@ -2033,41 +2015,8 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
 d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
-#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
 d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
 v21m <- d                                      # rename object  
-
-# secciones added to keep v.. objects square have disn==0, drop their aggregates 
-sel.r <- which(v94d$disn==0); if (length(sel.r)>0) v94d <- v94d[-sel.r,]
-sel.r <- which(v97d$disn==0); if (length(sel.r)>0) v97d <- v97d[-sel.r,]
-sel.r <- which(v00d$disn==0); if (length(sel.r)>0) v00d <- v00d[-sel.r,]
-sel.r <- which(v03d$disn==0); if (length(sel.r)>0) v03d <- v03d[-sel.r,]
-sel.r <- which(v06d$disn==0); if (length(sel.r)>0) v06d <- v06d[-sel.r,]
-sel.r <- which(v09d$disn==0); if (length(sel.r)>0) v09d <- v09d[-sel.r,]
-sel.r <- which(v12d$disn==0); if (length(sel.r)>0) v12d <- v12d[-sel.r,]
-sel.r <- which(v15d$disn==0); if (length(sel.r)>0) v15d <- v15d[-sel.r,]
-sel.r <- which(v18d$disn==0); if (length(sel.r)>0) v18d <- v18d[-sel.r,]
-sel.r <- which(v21d$disn==0); if (length(sel.r)>0) v21d <- v21d[-sel.r,]
-#
-sel.r <- which(v97d79$disn==0); if (length(sel.r)>0) v97d79 <- v97d79[-sel.r,]
-sel.r <- which(v00d79$disn==0); if (length(sel.r)>0) v00d79 <- v00d79[-sel.r,]
-sel.r <- which(v03d79$disn==0); if (length(sel.r)>0) v03d79 <- v03d79[-sel.r,]
-sel.r <- which(v06d79$disn==0); if (length(sel.r)>0) v06d79 <- v06d79[-sel.r,]
-sel.r <- which(v09d79$disn==0); if (length(sel.r)>0) v09d79 <- v09d79[-sel.r,]
-sel.r <- which(v12d79$disn==0); if (length(sel.r)>0) v12d79 <- v12d79[-sel.r,]
-sel.r <- which(v15d79$disn==0); if (length(sel.r)>0) v15d79 <- v15d79[-sel.r,]
-sel.r <- which(v18d79$disn==0); if (length(sel.r)>0) v18d79 <- v18d79[-sel.r,]
-sel.r <- which(v21d79$disn==0); if (length(sel.r)>0) v21d79 <- v21d79[-sel.r,]
-#
-sel.r <- which(v94d18$disn==0); if (length(sel.r)>0) v94d18 <- v94d18[-sel.r,]
-sel.r <- which(v97d18$disn==0); if (length(sel.r)>0) v97d18 <- v97d18[-sel.r,]
-sel.r <- which(v00d18$disn==0); if (length(sel.r)>0) v00d18 <- v00d18[-sel.r,]
-sel.r <- which(v03d18$disn==0); if (length(sel.r)>0) v03d18 <- v03d18[-sel.r,]
-sel.r <- which(v06d18$disn==0); if (length(sel.r)>0) v06d18 <- v06d18[-sel.r,]
-sel.r <- which(v09d18$disn==0); if (length(sel.r)>0) v09d18 <- v09d18[-sel.r,]
-sel.r <- which(v12d18$disn==0); if (length(sel.r)>0) v12d18 <- v12d18[-sel.r,]
-sel.r <- which(v15d18$disn==0); if (length(sel.r)>0) v15d18 <- v15d18[-sel.r,]
-
 
 # verify nrow==300
 table(
