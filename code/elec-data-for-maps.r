@@ -2018,12 +2018,16 @@ d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
 v21m <- d                                      # rename object  
 
+# rename seccion vote objects
+v91s <- v91; v94s <- v94; v97s <- v97; v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18; v21s <- v21;
+rm(v91,v94, v97, v00, v03, v06, v09, v12, v15, v18, v21)
+
 # verify nrow==300
 table(
     c(nrow(v91d), nrow(v94d), nrow(v97d), nrow(v00d), nrow(v03d), nrow(v06d), nrow(v09d), nrow(v12d), nrow(v15d), nrow(v18d), nrow(v21d), nrow(v97d79), nrow(v00d79), nrow(v03d79), nrow(v06d79), nrow(v09d79), nrow(v12d79), nrow(v15d79), nrow(v18d79), nrow(v21d79), nrow(v94d18), nrow(v97d18), nrow(v00d18), nrow(v03d18), nrow(v06d18), nrow(v09d18), nrow(v12d18), nrow(v15d18))
 )
 
-13abr23: now prep all to re run dis and mun regressions
+18abr23: now prep all to re run dis and mun regressions
 
 ## ####################################################################################
 ## ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly     ##
@@ -3234,9 +3238,6 @@ dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
 setwd(wd)
 load(paste0(wd, "data/too-big-4-github/tmp.RData"))
-# rename seccion vote objects
-v94s <- v94; v97s <- v97; v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18; v21s <- v21;
-rm(v94, v97, v00, v03, v06, v09, v12, v15, v18, v21)
 # ignore NAs warning, inegi codes for new 2021 campeche munic still missing
 # reload manipulated munic votes
 load(paste0(wd, "data/too-big-4-github/tmp-mun.RData"))
