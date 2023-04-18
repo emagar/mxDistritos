@@ -8,7 +8,7 @@
 ## 2003d <- 2006d97 2009d97 2012d97 2015d97 2018d97                       ##
 ## 2006d <- 2009d   2012d   2015d   2018d06 2021d06                       ##
 ## # forward unit = districts                                             ##
-##          2009d18 2012d18 2015d18 2018d   2021d   -> 2024d              ##
+##          2009d18 2012d18 2015d18 2018d   2021d   -> 2024d18            ##
 ##          2006d18 2009d18 2012d18 2015d18 2018d   -> 2021d              ##
 ##          2003d18 2006d18 2009d18 2012d18 2015d18 -> 2018d              ##
 ##          2000d06 2003d06 2006d   2009d   2012d   -> 2015d              ##
@@ -412,7 +412,7 @@ lisnom <- data.frame(v91 = v91d$lisnom,
                      #v21d18 = v21d18$lisnom,
 
 #
-# transpose to plug columns into new data.frames
+# transpose to plug columns (units) into new data.frames
 pan    <- t(pan)
 pri    <- t(pri)
 left   <- t(left)
@@ -424,13 +424,13 @@ lisnom <- t(lisnom)
 if (agg=="m"){
     extendCoal <- as.list(rep(NA, nrow(v00m))) # empty list will receive one data.frame per unit
     names(extendCoal) <- v00m$ife
-    # replicate for counterfactual munic data for regressions
+    # replicate counterfactual units for regressions
     extendCoal.cf06 <- extendCoal.cf09 <- extendCoal.cf12 <- extendCoal.cf15 <- extendCoal.cf18 <- extendCoal.cf21 <- extendCoal
 }
 if (agg=="d"){
     extendCoal <- as.list(rep(NA, nrow(v00d))) # empty list will receive one data.frame per unit
     names(extendCoal) <- v00d$disn
-    # replicate for counterfactual munic data for regressions
+    # replicate counterfactual units for regressions
     extendCoal.cf79 <- extendCoal.cf97 <- extendCoal.cf06 <- extendCoal.cf18 <- extendCoal
 }
 if (agg=="s"){
@@ -438,7 +438,7 @@ if (agg=="s"){
     names(extendCoal) <- v00s$edon*10000 + v00s$seccion # untested
 }
 # loop over municipios/secciones
-for (i in 1:nrow(v00s)){
+for (i in 1:nrow(v00)){
     #i <- 81 # debug
     message(sprintf("loop %s of %s", i, nrow(v00)))
     # votes with actual municipios to plug into distributed data
@@ -481,7 +481,7 @@ for (i in 1:nrow(v00s)){
 ## y betas cada elección: alfa.2006, alfa.2009, etc. Debería poder investigar cómo usan esto en el Capital ##
 ## Asset Pricing Model...                                                                                  ##
 #############################################################################################################
-yr.means <- data.frame(yr = seq(1991,2021,3),
+yr.means <- data.frame(yr = seq(1991,2021,3), # 11 election-years
                        pan    = rep(NA,11),
                        pri    = rep(NA,11),
                        left   = rep(NA,11),
