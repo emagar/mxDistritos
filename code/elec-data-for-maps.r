@@ -1319,6 +1319,18 @@ d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v94d <- d                                      # rename object  
+# 1997 counterfactual districts
+d <- v94; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+v94d97 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v94; d[is.na(d)] <- 0
 d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
@@ -1988,6 +2000,21 @@ d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
 v21d79 <- d                                    # rename object  
+# 1997 counterfactual districts
+d <- v21; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+v21d97 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v21; d[is.na(d)] <- 0
 d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
@@ -2024,7 +2051,10 @@ rm(v91,v94, v97, v00, v03, v06, v09, v12, v15, v18, v21)
 
 # verify nrow==300
 table(
-    c(nrow(v91d), nrow(v94d), nrow(v97d), nrow(v00d), nrow(v03d), nrow(v06d), nrow(v09d), nrow(v12d), nrow(v15d), nrow(v18d), nrow(v21d), nrow(v97d79), nrow(v00d79), nrow(v03d79), nrow(v06d79), nrow(v09d79), nrow(v12d79), nrow(v15d79), nrow(v18d79), nrow(v21d79), nrow(v94d18), nrow(v97d18), nrow(v00d18), nrow(v03d18), nrow(v06d18), nrow(v09d18), nrow(v12d18), nrow(v15d18))
+    c(nrow(v91d), nrow(v94d), nrow(v97d), nrow(v00d), nrow(v03d), nrow(v06d), nrow(v09d), nrow(v12d), nrow(v15d), nrow(v18d), nrow(v21d), nrow(v97d79), nrow(v00d79), nrow(v03d79), nrow(v06d79), nrow(v09d79), nrow(v12d79), nrow(v15d79), nrow(v18d79), nrow(v21d79),
+      nrow(v94d97), nrow(v06d97), nrow(v09d97), nrow(v12d97), nrow(v15d97), nrow(v18d97), nrow(v21d97),
+      nrow(v94d06), nrow(v97d06), nrow(v00d06), nrow(v03d06), nrow(v18d06), nrow(v21d06),
+      nrow(v94d18), nrow(v97d18), nrow(v00d18), nrow(v03d18), nrow(v06d18), nrow(v09d18), nrow(v12d18), nrow(v15d18))
 )
 
 18abr23: now prep all to re run dis and mun regressions

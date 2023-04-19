@@ -1,5 +1,15 @@
+####################################################################
+## Script for autoregressive vote estimates and alpha regressions ##
+## invoked from code/elec-data-for-maps.r                         ##
+##                                                                ##
+## Author: Eric Magar                                             ##
+## emagar at itam dot mx                                          ##
+## Date: 17apr2023                                                ##
+## Last modified: 18apr2023                                       ##
+####################################################################
+    
 ############################################################################
-## # backwards unit = districts                                           ##
+## # backwards estimation, unit = districts                               ##
 ## 1988d <- 1991d   1994d   1997d79 2000d79 2003d79                       ##
 ## 1991d <- 1994d   1997d79 2000d79 2003d79 2006d79                       ##
 ## 1994d <- 1997d79 2000d79 2003d79 2006d79 2009d79                       ##
@@ -7,7 +17,7 @@
 ## 2000d <- 2003d   2006d97 2009d97 2012d97 2015d97                       ##
 ## 2003d <- 2006d97 2009d97 2012d97 2015d97 2018d97                       ##
 ## 2006d <- 2009d   2012d   2015d   2018d06 2021d06                       ##
-## # forward unit = districts                                             ##
+## # forward estimation, unit = districts                                 ##
 ##          2009d18 2012d18 2015d18 2018d   2021d   -> 2024d18            ##
 ##          2006d18 2009d18 2012d18 2015d18 2018d   -> 2021d              ##
 ##          2003d18 2006d18 2009d18 2012d18 2015d18 -> 2018d              ##
@@ -77,8 +87,8 @@ pand06 <- data.frame(
     v21 =  with(v21d06, ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
 )
 pand97 <- data.frame(
-    #v91 =  with(v91d97, ifelse(efec==0, NA,  pan                    / efec)), #comment if agg=="s"
-    #v94 =  with(v94d97, ifelse(efec==0, NA,  pan                    / efec)),
+    #v91 =  with(v91d97, ifelse(efec==0, NA,  pan                    / efec)), # comment if agg=="s"
+    v94 =  with(v94d97, ifelse(efec==0, NA,  pan                    / efec)),
     v97 =  with(v97d,   ifelse(efec==0, NA,  pan                    / efec)),
     v00 =  with(v00d,   ifelse(efec==0, NA,  panc                   / efec)),
     v03 =  with(v03d,   ifelse(efec==0, NA,  pan                    / efec)),
@@ -86,11 +96,11 @@ pand97 <- data.frame(
     v09 =  with(v09d97, ifelse(efec==0, NA,  pan                    / efec)),
     v12 =  with(v12d97, ifelse(efec==0, NA,  pan                    / efec)),
     v15 =  with(v15d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v18 =  with(v18d97, ifelse(efec==0, NA, (pan + panc + prd + mc) / efec))   # drop mc?
-    #v21 =  with(v21d97, ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
+    v18 =  with(v18d97, ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),  # drop mc?
+    v21 =  with(v21d97, ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
 )
 pand79 <- data.frame(
-    v91 =  with(v91d,   ifelse(efec==0, NA,  pan                    / efec)), #comment if agg=="s"
+    v91 =  with(v91d,   ifelse(efec==0, NA,  pan                    / efec)), # comment if agg=="s"
     v94 =  with(v94d,   ifelse(efec==0, NA,  pan                    / efec)),
     v97 =  with(v97d79, ifelse(efec==0, NA,  pan                    / efec)),
     v00 =  with(v00d79, ifelse(efec==0, NA,  panc                   / efec)),
@@ -135,7 +145,7 @@ prid06 <- data.frame(
 )
 prid97 <- data.frame(
     #v91 =  with(v91d97, ifelse(efec==0, NA,  pri                      / efec)),
-    #v94 =  with(v94d97, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94d97, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97d,   ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00d,   ifelse(efec==0, NA,  pri                      / efec)),
     v03 =  with(v03d,   ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
@@ -143,8 +153,8 @@ prid97 <- data.frame(
     v09 =  with(v09d97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
     v12 =  with(v12d97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
     v15 =  with(v15d97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v18 =  with(v18d97, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec))  # drop pvem + pna?
-    #v21 =  with(v21d97, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
+    v18 =  with(v18d97, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21d97, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prid79 <- data.frame(
     v91 =  with(v91d,   ifelse(efec==0, NA,  pri                      / efec)),
@@ -192,7 +202,7 @@ leftd06 <- data.frame(
 )
 leftd97 <- data.frame(
     #v91 = with(v91d97, ifelse(efec==0, NA,  prd                             / efec)),
-    #v94 = with(v94d97, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94d97, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97d,   ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00d,   ifelse(efec==0, NA,  prdc                            / efec)),
     v03 = with(v03d,   ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
@@ -200,8 +210,8 @@ leftd97 <- data.frame(
     v09 = with(v09d97, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
     v12 = with(v12d97, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
     v15 = with(v15d97, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
-    v18 = with(v18d97, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec))
-    #v21 = with(v21d97, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+    v18 = with(v18d97, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21d97, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftd79 <- data.frame(
     v91 = with(v91d,   ifelse(efec==0, NA,  prd                             / efec)),
@@ -249,7 +259,7 @@ othd06 <- data.frame(
 )
 othd97 <- data.frame(
     #v91 =  with(v91d97, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
-    #v94 =  with(v94d97, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v94 =  with(v94d97, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97d,   ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00d,   ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
     v03 =  with(v03d,   ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
@@ -257,8 +267,8 @@ othd97 <- data.frame(
     v09 =  with(v09d97, ifelse(efec==0, NA, (pna + psd)                                / efec)),
     v12 =  with(v12d97, ifelse(efec==0, NA,  pna                                       / efec)),
     v15 =  with(v15d97, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
-    v18 =  with(v18d97, ifelse(efec==0, NA, (indep1 + indep2)                          / efec))
-    #v21 =  with(v21d97, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+    v18 =  with(v18d97, ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
+    v21 =  with(v21d97, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othd79 <- data.frame(
     v91 =  with(v91d,   ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
@@ -306,7 +316,7 @@ efecd06 <- data.frame(
 )
 efecd97 <- data.frame(
     #v91 = v91d97$efec,
-    #v94 = v94d97$efec,
+    v94 = v94d97$efec,
     v97 = v97d  $efec,
     v00 = v00d  $efec,
     v03 = v03d  $efec,
@@ -314,8 +324,8 @@ efecd97 <- data.frame(
     v09 = v09d97$efec,
     v12 = v12d97$efec,
     v15 = v15d97$efec,
-    v18 = v18d97$efec
-    #v21 = v21d97$efec
+    v18 = v18d97$efec,
+    v21 = v21d97$efec
 )
 efecd79 <- data.frame(
     v91 = v91d  $efec,
@@ -359,7 +369,7 @@ lisnomd06 <- data.frame(
 )
 lisnomd97 <- data.frame(
     #v91 = v91d97$lisnom,
-    #v94 = v94d97$lisnom,
+    v94 = v94d97$lisnom,
     v97 = v97d  $lisnom,
     v00 = v00d  $lisnom,
     v03 = v03d  $lisnom,
@@ -367,8 +377,8 @@ lisnomd97 <- data.frame(
     v09 = v09d97$lisnom,
     v12 = v12d97$lisnom,
     v15 = v15d97$lisnom,
-    v18 = v18d97$lisnom
-    #v21 = v21d97$lisnom
+    v18 = v18d97$lisnom,
+    v21 = v21d97$lisnom
 )
 lisnomd79 <- data.frame(
     v91 = v91d  $lisnom,
@@ -418,26 +428,32 @@ lisnomd18 <- t(lisnomd18)
 ##     extendCoal.cf06 <- extendCoal.cf09 <- extendCoal.cf12 <- extendCoal.cf15 <- extendCoal.cf18 <- extendCoal.cf21 <- extendCoal
 ## }
 if (agg=="d"){
-    extendCoal <- as.list(rep(NA, nrow(v00d))) # empty list will receive one data.frame per unit
-    names(extendCoal) <- v00d$disn
+    tmp <- as.list(rep(NA, nrow(v00d))) # empty list will receive one data.frame per unit (v00d same-dim as all other vote objects)
     # replicate counterfactual units for regressions
-    extendCoal.cf79 <- extendCoal.cf97 <- extendCoal.cf06 <- extendCoal.cf18 <- extendCoal
+    extendCoald79 <- extendCoald97 <- extendCoald06 <- extendCoald18 <- tmp
+    rm(tmp)
+    names(extendCoald79) <- v94d$disn
+    names(extendCoald97) <- v97d$disn
+    names(extendCoald06) <- v06d$disn
+    names(extendCoald18) <- v18d$disn
 }
 ## if (agg=="s"){
 ##     extendCoal <- as.list(rep(NA, nrow(v00s))) # empty list will receive one data.frame per unit
 ##     names(extendCoal) <- v00s$edon*10000 + v00s$seccion # untested
 ## }
 # loop over municipios/secciones
-for (i in 1:nrow(v00)){
-    #i <- 81 # debug
-    message(sprintf("loop %s of %s", i, nrow(v00)))
-    # votes with actual municipios to plug into distributed data
+for (i in 1:nrow(v00d)){
+    i <- 81 # debug
+    message(sprintf("loop %s of %s", i, nrow(v00d)))
+    #########################
+    ## votes with 1979 map ##
+    #########################
     tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3),
-                      pan  = pan[,i],
-                      pri  = pri[,i],
-                      left = left[,i],
-                      oth  = oth[,i],
-                      efec = efec[,i])
+                      pan  = pand79[,i],
+                      pri  = prid79[,i],
+                      left = leftd79[,i],
+                      oth  = othd79[,i],
+                      efec = efecd79[,i])
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
@@ -455,9 +471,74 @@ for (i in 1:nrow(v00)){
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
     # add id
     if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="d") tmp$disn    <- v00$disn[i]
     if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
     # fill info to new list
-    extendCoal[[i]] <- tmp
+    extendCoald79[[i]] <- tmp
+    #
+    #########################
+    ## votes with 1997 map ##
+    #########################
+    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3),
+                      pan  = pand97[,i],
+                      pri  = prid97[,i],
+                      left = leftd97[,i],
+                      oth  = othd97[,i],
+                      efec = efecd97[,i])
+    tmp <- rbind(v91=c(1991,NA,NA,NA,NA,NA), tmp) # add 1991 with no     # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="d") tmp$ife     <- v00$disn[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
+    # fill info to new list
+    extendCoald97[[i]] <- tmp
+    #
+    #########################
+    ## votes with 2018 map ##
+    #########################
+    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3),
+                      pan  = pand18[,i],
+                      pri  = prid18[,i],
+                      left = leftd18[,i],
+                      oth  = othd18[,i],
+                      efec = efecd18[,i])
+    tmp <- rbind(v91=c(1991,NA,NA,NA,NA,NA), tmp) # add 1991 with no counterfactuals
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left[is.na(tmp$left)] <- per.means["left"];
+        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    if (agg=="m") tmp$ife     <- v00$ife[i]
+    if (agg=="d") tmp$disn    <- v00$disn[i]
+    if (agg=="s") tmp$edosecn <- v00$edon[i]*10000 + v00$seccion[i] # untested
+    # fill info to new list
+    extendCoald18[[i]] <- tmp
+    #
 }
 
 ##################################
@@ -549,12 +630,12 @@ yr.means[,2:8] <- round(yr.means[,2:8], 3)
 for (i in 1:nrow(v00)){
     #i <- 2 # debug
     extendCoal     [[i]] <- cbind(extendCoal     [[i]], yr.means[,6:8])
-#    extendCoal.cf06[[i]] <- cbind(extendCoal.cf06[[i]], yr.means[,6:8])
-#    extendCoal.cf09[[i]] <- cbind(extendCoal.cf09[[i]], yr.means[,6:8])
-#    extendCoal.cf12[[i]] <- cbind(extendCoal.cf12[[i]], yr.means[,6:8])
-#    extendCoal.cf15[[i]] <- cbind(extendCoal.cf15[[i]], yr.means[,6:8])
-#    extendCoal.cf18[[i]] <- cbind(extendCoal.cf18[[i]], yr.means[,6:8])
-#    extendCoal.cf21[[i]] <- cbind(extendCoal.cf21[[i]], yr.means[,6:8])
+#    extendCoald06[[i]] <- cbind(extendCoald06[[i]], yr.means[,6:8])
+#    extendCoald09[[i]] <- cbind(extendCoald09[[i]], yr.means[,6:8])
+#    extendCoald12[[i]] <- cbind(extendCoald12[[i]], yr.means[,6:8])
+#    extendCoald15[[i]] <- cbind(extendCoald15[[i]], yr.means[,6:8])
+#    extendCoald18[[i]] <- cbind(extendCoald18[[i]], yr.means[,6:8])
+#    extendCoald21[[i]] <- cbind(extendCoald21[[i]], yr.means[,6:8])
 }
 
 
