@@ -1288,6 +1288,7 @@ d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v91d <- d                                      # rename object  
 # actual municipalities
 d <- v91; d[is.na(d)] <- 0
@@ -1318,6 +1319,7 @@ d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v94d <- d                                      # rename object  
 # 1997 counterfactual districts
 d <- v94; d[is.na(d)] <- 0
@@ -1330,6 +1332,7 @@ d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v94d97 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v94; d[is.na(d)] <- 0
@@ -1342,6 +1345,7 @@ d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v94d06 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v94; d[is.na(d)] <- 0
@@ -1354,6 +1358,7 @@ d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v94d18 <- d                                    # rename object  
 # actual municipalities
 d <- v94; d[is.na(d)] <- 0
@@ -1365,7 +1370,6 @@ d$disn <- NULL                                 # drop actual distric ids
 d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
-#d[1,]
 v94m <- d                                      # rename object  
 
 ##########
@@ -1384,6 +1388,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v97d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v97; d[is.na(d)] <- 0
@@ -1396,6 +1401,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v97d79 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v97; d[is.na(d)] <- 0
@@ -1408,6 +1414,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v97d06 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v97; d[is.na(d)] <- 0
@@ -1420,6 +1427,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v97d18 <- d                                    # rename object  
 # actual municipalities
 d <- v97; d[is.na(d)] <- 0
@@ -1431,7 +1439,6 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$disn <- NULL                                 # drop actual distric ids
 d$edosecn <- d$seccion    <- NULL              # drop seccion ids
 d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
-d[1,]
 v97m <- d                                      # rename object  
 
 ##########
@@ -1452,6 +1459,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v00d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v00; d[is.na(d)] <- 0
@@ -1466,6 +1474,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v00d79 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v00; d[is.na(d)] <- 0
@@ -1480,6 +1489,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v00d06 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v00; d[is.na(d)] <- 0
@@ -1494,6 +1504,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v00d18 <- d                                    # rename object  
 # actual municipalities
 d <- v00; d[is.na(d)] <- 0
@@ -1526,6 +1537,7 @@ d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v03d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v03; d[is.na(d)] <- 0
@@ -1539,6 +1551,7 @@ d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v03d79 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v03; d[is.na(d)] <- 0
@@ -1552,6 +1565,7 @@ d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v03d06 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v03; d[is.na(d)] <- 0
@@ -1565,6 +1579,7 @@ d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
 d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v03d18 <- d                                    # rename object  
 # actual municipalities
 d <- v03; d[is.na(d)] <- 0
@@ -1597,6 +1612,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v06d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v06; d[is.na(d)] <- 0
@@ -1611,6 +1627,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v06d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v06; d[is.na(d)] <- 0
@@ -1625,6 +1642,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v06d97 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v06; d[is.na(d)] <- 0
@@ -1639,6 +1657,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v06d18 <- d                                    # rename object  
 # actual municipalities
 d <- v06; d[is.na(d)] <- 0
@@ -1672,6 +1691,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v09d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v09; d[is.na(d)] <- 0
@@ -1686,6 +1706,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v09d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v09; d[is.na(d)] <- 0
@@ -1700,6 +1721,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v09d97 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v09; d[is.na(d)] <- 0
@@ -1714,6 +1736,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v09d18 <- d                                    # rename object  
 # actual municipalities
 d <- v09; d[is.na(d)] <- 0
@@ -1747,6 +1770,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v12d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v12; d[is.na(d)] <- 0
@@ -1761,6 +1785,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v12d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v12; d[is.na(d)] <- 0
@@ -1775,6 +1800,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v12d97 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v12; d[is.na(d)] <- 0
@@ -1789,6 +1815,7 @@ d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v12d18 <- d                                    # rename object  
 # actual municipalities
 d <- v12; d[is.na(d)] <- 0
@@ -1823,6 +1850,7 @@ d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v15d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v15; d[is.na(d)] <- 0
@@ -1838,6 +1866,7 @@ d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v15d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v15; d[is.na(d)] <- 0
@@ -1853,6 +1882,7 @@ d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v15d97 <- d                                    # rename object  
 # 2018 counterfactual districts
 d <- v15; d[is.na(d)] <- 0
@@ -1868,6 +1898,7 @@ d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
 d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
 d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v15d18 <- d                                    # rename object  
 # actual municipalities
 d <- v15; d[is.na(d)] <- 0
@@ -1903,6 +1934,7 @@ d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
 d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v18d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v18; d[is.na(d)] <- 0
@@ -1918,6 +1950,7 @@ d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
 d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v18d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v18; d[is.na(d)] <- 0
@@ -1933,6 +1966,7 @@ d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
 d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v18d97 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v18; d[is.na(d)] <- 0
@@ -1948,6 +1982,7 @@ d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
 d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v18d06 <- d                                    # rename object  
 # actual municipalities
 d <- v18; d[is.na(d)] <- 0
@@ -1984,6 +2019,7 @@ d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
 d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v21d <- d                                      # rename object  
 # 1979 counterfactual districts
 d <- v21; d[is.na(d)] <- 0
@@ -1999,6 +2035,7 @@ d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
 d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v21d79 <- d                                    # rename object  
 # 1997 counterfactual districts
 d <- v21; d[is.na(d)] <- 0
@@ -2014,6 +2051,7 @@ d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
 d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v21d97 <- d                                    # rename object  
 # 2006 counterfactual districts
 d <- v21; d[is.na(d)] <- 0
@@ -2029,6 +2067,7 @@ d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
 d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
 v21d06 <- d                                    # rename object  
 # actual municipalities
 d <- v21; d[is.na(d)] <- 0
@@ -2051,10 +2090,7 @@ rm(v91,v94, v97, v00, v03, v06, v09, v12, v15, v18, v21)
 
 # verify nrow==300
 table(
-    c(nrow(v91d), nrow(v94d), nrow(v97d), nrow(v00d), nrow(v03d), nrow(v06d), nrow(v09d), nrow(v12d), nrow(v15d), nrow(v18d), nrow(v21d), nrow(v97d79), nrow(v00d79), nrow(v03d79), nrow(v06d79), nrow(v09d79), nrow(v12d79), nrow(v15d79), nrow(v18d79), nrow(v21d79),
-      nrow(v94d97), nrow(v06d97), nrow(v09d97), nrow(v12d97), nrow(v15d97), nrow(v18d97), nrow(v21d97),
-      nrow(v94d06), nrow(v97d06), nrow(v00d06), nrow(v03d06), nrow(v18d06), nrow(v21d06),
-      nrow(v94d18), nrow(v97d18), nrow(v00d18), nrow(v03d18), nrow(v06d18), nrow(v09d18), nrow(v12d18), nrow(v15d18))
+    c(nrow(v91d), nrow(v94d), nrow(v97d), nrow(v00d), nrow(v03d), nrow(v06d), nrow(v09d), nrow(v12d), nrow(v15d), nrow(v18d), nrow(v21d), nrow(v97d79), nrow(v00d79), nrow(v03d79), nrow(v06d79), nrow(v09d79), nrow(v12d79), nrow(v15d79), nrow(v18d79), nrow(v21d79), nrow(v94d97), nrow(v06d97), nrow(v09d97), nrow(v12d97), nrow(v15d97), nrow(v18d97), nrow(v21d97), nrow(v94d06), nrow(v97d06), nrow(v00d06), nrow(v03d06), nrow(v18d06), nrow(v21d06), nrow(v94d18), nrow(v97d18), nrow(v00d18), nrow(v03d18), nrow(v06d18), nrow(v09d18), nrow(v12d18), nrow(v15d18))
 )
 
 18abr23: now prep all to re run dis and mun regressions
