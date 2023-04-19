@@ -460,11 +460,12 @@ for (i in 1:nrow(v00d)){
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
-        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
-        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
-        tmp$left[is.na(tmp$left)] <- per.means["left"];
-        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
-        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -492,11 +493,12 @@ for (i in 1:nrow(v00d)){
     tmp <- rbind(v91=c(1991,NA,NA,NA,NA,NA,NA), tmp) # add 1991 with no     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
-        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
-        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
-        tmp$left[is.na(tmp$left)] <- per.means["left"];
-        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
-        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
+        tmp$pan   [is.na(tmp$pan)]   <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]   <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)]  <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]   <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -525,11 +527,12 @@ for (i in 1:nrow(v00d)){
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
-        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
-        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
-        tmp$left[is.na(tmp$left)] <- per.means["left"];
-        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
-        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -558,11 +561,12 @@ for (i in 1:nrow(v00d)){
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
-        tmp$pan [is.na(tmp$pan)]  <- per.means["pan"];
-        tmp$pri [is.na(tmp$pri)]  <- per.means["pri"];
-        tmp$left[is.na(tmp$left)] <- per.means["left"];
-        tmp$oth [is.na(tmp$oth)]  <- per.means["oth"];
-        tmp$efec[is.na(tmp$efec) | tmp$efec==0] <- 1
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
     }
     # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
     if (length(tmp[tmp==0])>0){
@@ -594,18 +598,22 @@ yr.means <- data.frame(yr = seq(1991,2021,3), # 11 election-years
                        pri    = rep(NA,11),
                        left   = rep(NA,11),
                        oth    = rep(NA,11))
-#cs <- function(x) colSums(x, na.rm=TRUE)
+# function to sum numeric columns
 if (agg=="s"){
     cs <- function(x) colSums(x[x$dunbaja==0,], na.rm=TRUE) # drops secciones that received aggregates upon splitting
 } else {
-    cs <- function(x) colSums(x, na.rm=TRUE) # 21jul2021: stopped working, asked for numeric, replaced with sum
+    cs <- function(x){
+        sel.nums <- unlist(lapply(x, is.numeric), use.names = FALSE) # selects only numeric columns in data frame
+        res <- colSums(x[,sel.nums], na.rm=TRUE)
+        return(res)
+    }
 }
 #
-# change with v91s when available
-yr.means$pan   [1] <-  cs(v91)["pan"]                                                      / cs(v91)["efec"]
-yr.means$pri   [1] <-  cs(v91)["pri"]                                                      / cs(v91)["efec"]
-yr.means$left  [1] <-  cs(v91)["prd"]                                                      / cs(v91)["efec"]
-yr.means$oth   [1] <- (cs(v91)["efec"] - cs(v91)["pan"] - cs(v91)["pri"] - cs(v91)["prd"]) / cs(v91)["efec"]
+# compute national mean vote
+yr.means$pan   [1] <-  cs(v91s)["pan"]                                                         / cs(v91s)["efec"]
+yr.means$pri   [1] <-  cs(v91s)["pri"]                                                         / cs(v91s)["efec"]
+yr.means$left  [1] <-  cs(v91s)["prd"]                                                         / cs(v91s)["efec"]
+yr.means$oth   [1] <- (cs(v91s)["efec"] - cs(v91s)["pan"] - cs(v91s)["pri"] - cs(v91s)["prd"]) / cs(v91s)["efec"]
 #
 yr.means$pan   [2] <-  cs(v94s)["pan"]                                                         / cs(v94s)["efec"]
 yr.means$pri   [2] <-  cs(v94s)["pri"]                                                         / cs(v94s)["efec"]
@@ -653,7 +661,7 @@ yr.means$left  [10] <- (cs(v18s)["morena"] + cs(v18s)["morenac"] + cs(v18s)["pt"
 yr.means$oth   [10] <- (cs(v18s)["indep1"] + cs(v18s)["indep2"])                                       / cs(v18s)["efec"]
 #
 yr.means$pan   [11] <- (cs(v21s)["pan"]    + cs(v21s)["panc"]    + cs(v21s)["prd"])                                       / cs(v21s)["efec"]
-yr.means$pri   [11] <- (cs(v21s)["pri"]    + cs(v21s)["pric"])                                                            / cs(v21s)["efec"]
+yr.means$pri   [11] <-  cs(v21s)["pri"]                                                                                   / cs(v21s)["efec"] # dropped cs(v21s)["pric"]
 yr.means$left  [11] <- (cs(v21s)["morena"] + cs(v21s)["morenac"] + cs(v21s)["pt"]  + cs(v21s)["pvem"])                    / cs(v21s)["efec"]
 yr.means$oth   [11] <- (cs(v21s)["mc"]     + cs(v21s)["pes"]     + cs(v21s)["rsp"] + cs(v21s)["fxm"] + cs(v21s)["indep"]) / cs(v21s)["efec"]
 #
@@ -664,15 +672,12 @@ yr.means <- within(yr.means, mean.roth    <- oth  / pri)
 yr.means[,2:8] <- round(yr.means[,2:8], 3)
 #
 # plug into data
-for (i in 1:nrow(v00)){
+for (i in 1:nrow(v00d)){
     #i <- 2 # debug
-    extendCoal     [[i]] <- cbind(extendCoal     [[i]], yr.means[,6:8])
-#    extendCoald06[[i]] <- cbind(extendCoald06[[i]], yr.means[,6:8])
-#    extendCoald09[[i]] <- cbind(extendCoald09[[i]], yr.means[,6:8])
-#    extendCoald12[[i]] <- cbind(extendCoald12[[i]], yr.means[,6:8])
-#    extendCoald15[[i]] <- cbind(extendCoald15[[i]], yr.means[,6:8])
-#    extendCoald18[[i]] <- cbind(extendCoald18[[i]], yr.means[,6:8])
-#    extendCoald21[[i]] <- cbind(extendCoald21[[i]], yr.means[,6:8])
+    extendCoald18[[i]] <- cbind(extendCoald18[[i]], yr.means[,6:8])
+    extendCoald06[[i]] <- cbind(extendCoald06[[i]], yr.means[,6:8])
+    extendCoald97[[i]] <- cbind(extendCoald97[[i]], yr.means[,6:8])
+    extendCoald79[[i]] <- cbind(extendCoald79[[i]], yr.means[,6:8])
 }
 
 
@@ -684,51 +689,103 @@ for (i in 1:nrow(v00)){
 ###############################
 ## código de las regresiones ##
 ###############################
-vhat.2024 <- vhat.2021 <- vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <- vhat.2006 <- 
-        data.frame(pan    = rep(NA, nrow(v00)),
-                   pri  = rep(NA, nrow(v00)),
-                   left = rep(NA, nrow(v00))) # will receive vote estimates
+vhat.1988 <- vhat.1991 <- 
+vhat.2024 <-                   # <--- OJO 19abr2021: this vhat.2024 assumes no redistricting in 2024, change when 2024 map available
+vhat.2021 <- vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <- vhat.2006 <- 
+    data.frame(pan  = rep(NA, nrow(v00d)),
+               pri  = rep(NA, nrow(v00d)),
+               left = rep(NA, nrow(v00d))) # will receive vote estimates
 #
-alphahat <- data.frame(pan    = rep(NA, nrow(v00)),
-                       pri    = rep(NA, nrow(v00)),
-                       left   = rep(NA, nrow(v00))) # will receive municipio's alphas
-betahat <- data.frame(pan    = rep(NA, nrow(v00)),
-                      left   = rep(NA, nrow(v00)),
-                      oth    = rep(NA, nrow(v00))) # will receive municipio's betas (none for pri)
+alphahat <- data.frame(pan    = rep(NA, nrow(v00d)),
+                       pri    = rep(NA, nrow(v00d)),
+                       left   = rep(NA, nrow(v00d))) # will receive municipio's alphas
+betahat <- data.frame(pan    = rep(NA, nrow(v00d)),
+                      left   = rep(NA, nrow(v00d)),
+                      oth    = rep(NA, nrow(v00d))) # will receive municipio's betas (none for pri)
 #
-tmp <- as.list(rep(NA, nrow(v00))) # empty list will receive one time-series
+tmp <- as.list(rep(NA, nrow(v00d))) # empty list will receive one time-series
                                    # regression per municipio, each used to
                                    # predict votes in 2006:2021
-# add names
-if (agg=="m") names(tmp) <- v00$ife
-if (agg=="s") names(tmp) <- v00$edon*10000 + v00$seccion # untested
+# add names to m and s (to d must be done yearly basis due to redistricting)
+if (agg=="m") names(tmp) <- v00d$ife
+if (agg=="s") names(tmp) <- v00d$edon*10000 + v00d$seccion # untested
+if (agg=="d"){
+    tmp18 <- tmp06 <- tmp97 <- tmp79 <- tmp # each map will receive district names
+    names(tmp79) <- v94d$disn
+    names(tmp97) <- v97d$disn
+    names(tmp06) <- v06d$disn
+    names(tmp18) <- v18d$disn
+}
 #
-regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <- regs.2021 <- 
-    list(pan    = tmp,
-         left   = tmp,
-         oth    = tmp,
-         readme = "No pri regs because DVs are pri-ratios")
+if (agg=="d"){
+    regs.1988 <- regs.1991 <-
+        list(pan    = tmp79,
+             left   = tmp79,
+             oth    = tmp79,
+             readme = "No pri regs because DVs are pri-ratios")
+    regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- 
+        list(pan    = tmp06,
+             left   = tmp06,
+             oth    = tmp06,
+             readme = "No pri regs because DVs are pri-ratios")
+    regs.2018 <- regs.2021 <- 
+        list(pan    = tmp18,
+             left   = tmp18,
+             oth    = tmp18,
+             readme = "No pri regs because DVs are pri-ratios")
+    # for district, one mean.reg per map
+    mean.regs.d79 <-
+        list(pan    = tmp79,
+             left   = tmp79,
+             oth    = tmp79,
+             readme = "No pri regs bec DVs are pri-ratios")
+    mean.regs.97 <-
+        list(pan    = tmp97,
+             left   = tmp97,
+             oth    = tmp97,
+             readme = "No pri regs bec DVs are pri-ratios")
+    mean.regs.d06 <-
+        list(pan    = tmp06,
+             left   = tmp06,
+             oth    = tmp06,
+             readme = "No pri regs bec DVs are pri-ratios")
+    mean.regs.d18 <-
+        list(pan    = tmp18,
+             left   = tmp18,
+             oth    = tmp18,
+             readme = "No pri regs bec DVs are pri-ratios")
+} else {
+    regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <- regs.2021 <- 
+        list(pan    = tmp,
+             left   = tmp,
+             oth    = tmp,
+             readme = "No pri regs because DVs are pri-ratios");
+    mean.regs <-
+        list(pan    = tmp,
+             left   = tmp,
+             oth    = tmp,
+             readme = "No pri regs bec DVs are pri-ratios")
+
+}
+rm(tmp,tmp79,tmp97,tmp06,tmp18)
+
 #
-mean.regs <- list(pan    = tmp,
-                  left   = tmp,
-                  oth    = tmp,
-                  readme = "No pri regs bec DVs are pri-ratios")
 # drop list elements that still have NAs from loop
 # (happens with some secciones)
-non.nas <- lapply(extendCoal, sum)
+non.nas <- lapply(extendCoald18, sum)
 non.nas <- unlist(non.nas)
 non.nas                     # debug
-extendCoal[[206]]           # debug: 20jul2021 NA due to unreported sole sección in cps municipio
+extendCoald18[[206]]           # debug: 20jul2021 NA due to unreported sole sección in cps municipio
 which(is.na(non.nas)==TRUE) # debug
 non.nas <- which(is.na(non.nas)==FALSE)
-#length(non.nas)
+length(non.nas)
 #    
 for (i in non.nas){
     #i <- 81 # debug
     #i <- 44508 # debug
     message(sprintf("loop %s of %s", i, max(non.nas)))
     # subset data to single unit
-    data.tmp <- extendCoal[[i]]
+    data.tmp <- extendCoald79[[i]]
     #
     # add first-differences
     tmp.ln <- nrow(data.tmp)
@@ -736,6 +793,42 @@ for (i in non.nas){
     data.tmp$d.pri    <- data.tmp$pri    - c(NA,data.tmp$pri   [-tmp.ln])
     data.tmp$d.left   <- data.tmp$left   - c(NA,data.tmp$left  [-tmp.ln])
     rm(tmp.ln)
+    #
+    ##################################
+    ## predict 1988 with next 5 els ##
+    ##################################
+    year <- 1988
+    reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+    reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+    reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+    #
+    new.d <- data.frame(yr = year)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+    bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+    bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
+    #
+    ## plug into results objects ##
+    vhat.1988[i,] <- c(vhat.pan, vhat.pri, vhat.left)
+    regs.1988$pan[[i]]    <- reg.pan
+    regs.1988$left[[i]]   <- reg.left
+    regs.1988$oth[[i]]    <- reg.oth
+    #
+    if ("vhat.pan"  %notin% colnames(data.tmp)) data.tmp$vhat.pan <- NA  # add slot for projections if absent
+    if ("vhat.pri"  %notin% colnames(data.tmp)) data.tmp$vhat.pri <- NA  # add slot for projections if absent
+    if ("vhat.left" %notin% colnames(data.tmp)) data.tmp$vhat.left <- NA # add slot for projections if absent
+    if ("bhat.pan"  %notin% colnames(data.tmp)) data.tmp$bhat.pan <- NA  # add slot for slope estimates if absent
+    if ("bhat.left" %notin% colnames(data.tmp)) data.tmp$bhat.left <- NA # add slot for slope estimates if absent
+    #
+    data.tmp$vhat.pan   [data.tmp$yr==year] <- vhat.pan   # input vote estimates
+    data.tmp$vhat.pri   [data.tmp$yr==year] <- vhat.pri
+    data.tmp$vhat.left  [data.tmp$yr==year] <- vhat.left
+    data.tmp$bhat.pan   [data.tmp$yr==year] <- bhat.pan   # input slope estimates
+    data.tmp$bhat.left  [data.tmp$yr==year] <- bhat.left
     #
     ##################################
     ## predict 2006 with last 5 els ## ojo: v91 needed

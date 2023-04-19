@@ -2093,7 +2093,7 @@ table(
     c(nrow(v91d), nrow(v94d), nrow(v97d), nrow(v00d), nrow(v03d), nrow(v06d), nrow(v09d), nrow(v12d), nrow(v15d), nrow(v18d), nrow(v21d), nrow(v97d79), nrow(v00d79), nrow(v03d79), nrow(v06d79), nrow(v09d79), nrow(v12d79), nrow(v15d79), nrow(v18d79), nrow(v21d79), nrow(v94d97), nrow(v06d97), nrow(v09d97), nrow(v12d97), nrow(v15d97), nrow(v18d97), nrow(v21d97), nrow(v94d06), nrow(v97d06), nrow(v00d06), nrow(v03d06), nrow(v18d06), nrow(v21d06), nrow(v94d18), nrow(v97d18), nrow(v00d18), nrow(v03d18), nrow(v06d18), nrow(v09d18), nrow(v12d18), nrow(v15d18))
 )
 
-18abr23: now prep all to re run dis and mun regressions
+19abr23: now prep all to re run dis and mun regressions
 
 ## ####################################################################################
 ## ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly     ##
