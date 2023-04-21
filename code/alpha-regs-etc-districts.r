@@ -375,7 +375,7 @@ lisnomd79 <- data.frame(
     v21 = v21d79$lisnom
 )
 #
-# transpose to plug columns (units) into new data.frames
+# transpose to plug columns (units) into new time-series data.frames
 pand79    <- t(pand79)
 pand97    <- t(pand97)
 pand06    <- t(pand06)
@@ -401,12 +401,9 @@ lisnomd97 <- t(lisnomd97)
 lisnomd06 <- t(lisnomd06)
 lisnomd18 <- t(lisnomd18)
 #
-
-if (agg=="d"){
-    tmp <- as.list(rep(NA, nrow(v00d))) # empty list will receive one data.frame per unit (v00d same-dim as all other vote objects)
-    # replicate counterfactual units for regressions
-    extendCoald79 <- extendCoald97 <- extendCoald06 <- extendCoald18 <- tmp
-}
+# will receive data for regressions, one per map
+tmp <- as.list(rep(NA, 300))
+extendCoald79 <- extendCoald97 <- extendCoald06 <- extendCoald18 <- tmp
 
 # loop over districts
 for (i in 1:300){
@@ -415,14 +412,13 @@ for (i in 1:300){
     #########################
     ## votes with 1979 map ##
     #########################
-    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3),
-                      pan  = pand79[,i],
-                      pri  = prid79[,i],
-                      left = leftd79[,i],
-                      oth  = othd79[,i],
-                      efec = efecd79[,i],
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
+                      pan    = pand79[,i],
+                      pri    = prid79[,i],
+                      left   = leftd79[,i],
+                      oth    = othd79[,i],
+                      efec   = efecd79[,i],
                       lisnom = lisnomd79[,i])
-    #tmp <- rbind(v91=c(1988,NA,NA,NA,NA,NA,NA), tmp) # add 1988 with no votes in dataset
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
@@ -440,23 +436,21 @@ for (i in 1:300){
     # re-compute shares to add to 1
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
     # add id
-    if (agg=="m") tmp$ife     <- v00m$ife[i]
-    if (agg=="d") tmp$disn    <- v94d$disn[i]
-    if (agg=="s") tmp$edosecn <- v00s$edon[i]*10000 + v00s$seccion[i] # untested
+    tmp$disn    <- v94d$disn[i]
     # fill info to new list
     extendCoald79[[i]] <- tmp
     # name list object
-    if (agg=="d") names(extendCoald79)[i] <- tmp$disn[1]
+    names(extendCoald79)[i] <- tmp$disn[1]
     #
     #########################
     ## votes with 1997 map ##
     #########################
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3),
-                      pan  = pand97[,i],
-                      pri  = prid97[,i],
-                      left = leftd97[,i],
-                      oth  = othd97[,i],
-                      efec = efecd97[,i],
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = pand97[,i],
+                      pri    = prid97[,i],
+                      left   = leftd97[,i],
+                      oth    = othd97[,i],
+                      efec   = efecd97[,i],
                       lisnom = lisnomd97[,i])
     tmp <- rbind(v91=c(1991,NA,NA,NA,NA,NA,NA), tmp) # add 1991 with no counterfactuals
     # replace NAs with period's mean
@@ -476,13 +470,11 @@ for (i in 1:300){
     # re-compute shares to add to 1
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
     # add id
-    if (agg=="m") tmp$ife     <- v00m$ife[i]
-    if (agg=="d") tmp$disn    <- v97d$disn[i]
-    if (agg=="s") tmp$edosecn <- v00s$edon[i]*10000 + v00s$seccion[i] # untested
+    tmp$disn    <- v97d$disn[i]
     # fill info to new list
     extendCoald97[[i]] <- tmp
     # name list object
-    if (agg=="d") names(extendCoald97)[i] <- tmp$disn[1]
+    names(extendCoald97)[i] <- tmp$disn[1]
     #
     #########################
     ## votes with 2006 map ##
@@ -512,13 +504,11 @@ for (i in 1:300){
     # re-compute shares to add to 1
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
     # add id
-    if (agg=="m") tmp$ife     <- v00m$ife[i]
-    if (agg=="d") tmp$disn    <- v06d$disn[i]
-    if (agg=="s") tmp$edosecn <- v00s$edon[i]*10000 + v00s$seccion[i] # untested
+    tmp$disn    <- v06d$disn[i]
     # fill info to new list
     extendCoald06[[i]] <- tmp
     # name list object
-    if (agg=="d") names(extendCoald06)[i] <- tmp$disn[1]
+    names(extendCoald06)[i] <- tmp$disn[1]
     #
     #########################
     ## votes with 2018 map ##
@@ -548,13 +538,11 @@ for (i in 1:300){
     # re-compute shares to add to 1
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
     # add id
-    if (agg=="m") tmp$ife     <- v00m$ife[i]
-    if (agg=="d") tmp$disn    <- v18d$disn[i]
-    if (agg=="s") tmp$edosecn <- v00s$edon[i]*10000 + v00$seccion[i] # untested
+    tmp$disn    <- v18d$disn[i]
     # fill info to new list
     extendCoald18[[i]] <- tmp
     # name list object
-    if (agg=="d") names(extendCoald18)[i] <- tmp$disn[1]
+    names(extendCoald18)[i] <- tmp$disn[1]
 }
 
 ##################################
@@ -579,6 +567,7 @@ cs <- function(x){
     res <- colSums(x[,sel.nums], na.rm=TRUE)
     return(res)
 }
+
 # compute national mean vote
 yr.means$pan   [1] <-  cs(v91s)["pan"]                                                         / cs(v91s)["efec"]
 yr.means$pri   [1] <-  cs(v91s)["pri"]                                                         / cs(v91s)["efec"]

@@ -5,7 +5,7 @@ authors:
     given-names: Eric
     orcid: https://orcid.org/0000-0002-6766-1677
 title: "Recent Mexican electoral geography"
-version: 2.0
+#version: 1.0
 #doi: 10.5281/zenodo.1234
 date-released: 2019-10-22
 last-revision: 2023-02-15
