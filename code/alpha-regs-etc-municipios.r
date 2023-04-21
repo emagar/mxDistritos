@@ -5,11 +5,11 @@
 ## Author: Eric Magar                                             ##
 ## emagar at itam dot mx                                          ##
 ## Date: 17apr2023                                                ##
-## Last modified: 20apr2023                                       ##
+## Last modified: 18apr2023                                       ##
 ####################################################################
-
+    
 ############################################################################
-## # backwards estimation/prediction, unit = districts                    ##
+## # backwards estimation, unit = districts                               ##
 ## 1988d <- 1991d   1994d   1997d79 2000d79 2003d79                       ##
 ## 1991d <- 1994d   1997d79 2000d79 2003d79 2006d79                       ##
 ## 1994d <- 1997d79 2000d79 2003d79 2006d79 2009d79                       ##
@@ -17,21 +17,40 @@
 ## 2000d <- 2003d   2006d97 2009d97 2012d97 2015d97                       ##
 ## 2003d <- 2006d97 2009d97 2012d97 2015d97 2018d97                       ##
 ## 2006d <- 2009d   2012d   2015d   2018d06 2021d06                       ##
-## # forward estimation/prediction, unit = districts                      ##
-##          1991d06 1994d06 1997d06 2000d06 2003d06 -> 2006d # no 1991d06 ##
-##          1994d06 1997d06 2000d06 2003d06 2006d   -> 2009d              ##
-##          1997d06 2000d06 2003d06 2006d   2009d   -> 2012d              ##
-##          2000d06 2003d06 2006d   2009d   2012d   -> 2015d              ##
-##          2003d18 2006d18 2009d18 2012d18 2015d18 -> 2018d              ##
-##          2006d18 2009d18 2012d18 2015d18 2018d   -> 2021d              ##
+## # forward estimation, unit = districts                                 ##
 ##          2009d18 2012d18 2015d18 2018d   2021d   -> 2024d18            ##
+##          2006d18 2009d18 2012d18 2015d18 2018d   -> 2021d              ##
+##          2003d18 2006d18 2009d18 2012d18 2015d18 -> 2018d              ##
+##          2000d06 2003d06 2006d   2009d   2012d   -> 2015d              ##
+##          1997d06 2000d06 2003d06 2006d   2009d   -> 2012d              ##
+##          1994d06 1997d06 2000d06 2003d06 2006d   -> 2009d              ##
+##          1991d06 1994d06 1997d06 2000d06 2003d06 -> 2006d # no 1991d06 ##
 ############################################################################
 
 #################################################################
 ## Determine level of aggregation to work with here by         ##
 ## choosing s, m, d. Creates v.. objects matching chosen unit. ##
 #################################################################
-agg <- "m"
+agg <- c("s","m","d")[3]
+if (agg %notin% c("m","s","d")) print("Error: Unit must be s, m, or d")
+
+## # 15abr23 this looks droppable: work with original factual/counter vote objects
+## # duplicate relevant vote objects for manipulation
+## if (agg=="s") {
+##     v91 <- v91s;
+##     v94 <- v94s; v97 <- v97s; 
+##     v00 <- v00s; v03 <- v03s; v06 <- v06s; v09 <- v09s; v12 <- v12s; v15 <- v15s; v18 <- v18s; v21 <- v21s;
+## }
+## if (agg=="m") {
+##     v91 <- v91m;
+##     v94 <- v94m; v97 <- v97m; 
+##     v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m; v21 <- v21m;
+## }
+## if (agg=="d") {
+##     v91 <- v91d;
+##     v94 <- v94d; v97 <- v97d; 
+##     v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v18 <- v18d; v21 <- v21d;
+## }
 
 ############################################
 ## prepare manipulated party objects      ##
@@ -402,14 +421,25 @@ lisnomd06 <- t(lisnomd06)
 lisnomd18 <- t(lisnomd18)
 #
 
+## if (agg=="m"){
+##     extendCoal <- as.list(rep(NA, nrow(v00m))) # empty list will receive one data.frame per unit
+##     names(extendCoal) <- v00m$ife
+##     # replicate counterfactual units for regressions
+##     extendCoal.cf06 <- extendCoal.cf09 <- extendCoal.cf12 <- extendCoal.cf15 <- extendCoal.cf18 <- extendCoal.cf21 <- extendCoal
+## }
+
 if (agg=="d"){
     tmp <- as.list(rep(NA, nrow(v00d))) # empty list will receive one data.frame per unit (v00d same-dim as all other vote objects)
     # replicate counterfactual units for regressions
     extendCoald79 <- extendCoald97 <- extendCoald06 <- extendCoald18 <- tmp
 }
 
-# loop over districts
-for (i in 1:300){
+## if (agg=="s"){
+##     extendCoal <- as.list(rep(NA, nrow(v00s))) # empty list will receive one data.frame per unit
+##     names(extendCoal) <- v00s$edon*10000 + v00s$seccion # untested
+## }
+# loop over municipios/secciones
+for (i in 1:nrow(v00d)){
     #i <- 81 # debug
     message(sprintf("loop %s of %s", i, nrow(v00d)))
     #########################
@@ -574,11 +604,16 @@ yr.means <- data.frame(yr = seq(1991,2021,3), # 11 election-years
                        left   = rep(NA,11),
                        oth    = rep(NA,11))
 # function to sum numeric columns
-cs <- function(x){
-    sel.nums <- unlist(lapply(x, is.numeric), use.names = FALSE) # selects only numeric columns in data frame
-    res <- colSums(x[,sel.nums], na.rm=TRUE)
-    return(res)
+if (agg=="s"){
+    cs <- function(x) colSums(x[x$dunbaja==0,], na.rm=TRUE) # drops secciones that received aggregates upon splitting
+} else {
+    cs <- function(x){
+        sel.nums <- unlist(lapply(x, is.numeric), use.names = FALSE) # selects only numeric columns in data frame
+        res <- colSums(x[,sel.nums], na.rm=TRUE)
+        return(res)
+    }
 }
+#
 # compute national mean vote
 yr.means$pan   [1] <-  cs(v91s)["pan"]                                                         / cs(v91s)["efec"]
 yr.means$pri   [1] <-  cs(v91s)["pri"]                                                         / cs(v91s)["efec"]
@@ -675,53 +710,82 @@ betahat <- data.frame(pan    = rep(NA, nrow(v00d)),
                       oth    = rep(NA, nrow(v00d))) # will receive municipio's betas (none for pri)
 #
 tmp <- as.list(rep(NA, nrow(v00d))) # empty list will receive one time-series
-                                    # regression per municipio, each used to
-                                    # predict votes in 2006:2024
+                                   # regression per municipio, each used to
+                                   # predict votes in 2006:2021
 # add names to m and s (to d must be done yearly basis due to redistricting)
-tmp18 <- tmp06 <- tmp97 <- tmp79 <- tmp # each map will receive district names
-names(tmp79) <- v94d$disn
-names(tmp97) <- v97d$disn
-names(tmp06) <- v06d$disn
-names(tmp18) <- v18d$disn
+if (agg=="m") names(tmp) <- v00d$ife
+if (agg=="s") names(tmp) <- v00d$edon*10000 + v00d$seccion # untested
+if (agg=="d"){
+    tmp18 <- tmp06 <- tmp97 <- tmp79 <- tmp # each map will receive district names
+    names(tmp79) <- v94d$disn
+    names(tmp97) <- v97d$disn
+    names(tmp06) <- v06d$disn
+    names(tmp18) <- v18d$disn
+}
 #
-regs.1988 <- regs.1991 <-
-    list(pan    = tmp79,
-         left   = tmp79,
-         oth    = tmp79,
-         readme = "No pri regs because DVs are pri-ratios")
-regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- 
-    list(pan    = tmp06,
-         left   = tmp06,
-         oth    = tmp06,
-         readme = "No pri regs because DVs are pri-ratios")
-regs.2018 <- regs.2021 <- regs.2024 <-  
-    list(pan    = tmp18,
-         left   = tmp18,
-         oth    = tmp18,
-         readme = "No pri regs because DVs are pri-ratios")
-# for districts, one mean.reg per map
-mean.regs.d79 <-
-    list(pan    = tmp79,
-         left   = tmp79,
-         oth    = tmp79,
-         readme = "No pri regs bec DVs are pri-ratios")
-mean.regs.d97 <-
-    list(pan    = tmp97,
-         left   = tmp97,
-         oth    = tmp97,
-         readme = "No pri regs bec DVs are pri-ratios")
-mean.regs.d06 <-
-    list(pan    = tmp06,
-         left   = tmp06,
-         oth    = tmp06,
-         readme = "No pri regs bec DVs are pri-ratios")
-mean.regs.d18 <-
-    list(pan    = tmp18,
-         left   = tmp18,
-         oth    = tmp18,
-         readme = "No pri regs bec DVs are pri-ratios")
+if (agg=="d"){
+    regs.1988 <- regs.1991 <-
+        list(pan    = tmp79,
+             left   = tmp79,
+             oth    = tmp79,
+             readme = "No pri regs because DVs are pri-ratios")
+    regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- 
+        list(pan    = tmp06,
+             left   = tmp06,
+             oth    = tmp06,
+             readme = "No pri regs because DVs are pri-ratios")
+    regs.2018 <- regs.2021 <- regs.2024 <-  
+        list(pan    = tmp18,
+             left   = tmp18,
+             oth    = tmp18,
+             readme = "No pri regs because DVs are pri-ratios")
+    # for district, one mean.reg per map
+    mean.regs.d79 <-
+        list(pan    = tmp79,
+             left   = tmp79,
+             oth    = tmp79,
+             readme = "No pri regs bec DVs are pri-ratios")
+    mean.regs.d97 <-
+        list(pan    = tmp97,
+             left   = tmp97,
+             oth    = tmp97,
+             readme = "No pri regs bec DVs are pri-ratios")
+    mean.regs.d06 <-
+        list(pan    = tmp06,
+             left   = tmp06,
+             oth    = tmp06,
+             readme = "No pri regs bec DVs are pri-ratios")
+    mean.regs.d18 <-
+        list(pan    = tmp18,
+             left   = tmp18,
+             oth    = tmp18,
+             readme = "No pri regs bec DVs are pri-ratios")
+} else {
+    regs.2006 <- regs.2009 <- regs.2012 <- regs.2015 <- regs.2018 <- regs.2021 <- 
+        list(pan    = tmp,
+             left   = tmp,
+             oth    = tmp,
+             readme = "No pri regs because DVs are pri-ratios");
+    mean.regs <-
+        list(pan    = tmp,
+             left   = tmp,
+             oth    = tmp,
+             readme = "No pri regs bec DVs are pri-ratios")
+}
 rm(tmp,tmp79,tmp97,tmp06,tmp18)
 
+#
+# drop list elements that still have NAs from loop
+# (happens with some secciones)
+non.nas <- lapply(extendCoald06, sum)
+non.nas <- unlist(non.nas)
+table(is.na(non.nas))
+non.nas                     # debug
+extendCoald18[[206]]           # debug: 20jul2021 NA due to unreported sole sección in cps municipio
+which(is.na(non.nas)==TRUE) # debug
+non.nas <- which(is.na(non.nas)==FALSE)
+length(non.nas)
+#    
 
 ###############################################################
 ## District 5-yr estimates that can be computed before 2024  ##
@@ -796,10 +860,10 @@ if (sel.map==1979){
     rm(add1988,tmp,tmp.1988)
 }
 
-for (i in 1:300){
+for (i in non.nas){
     #i <- 81 # debug
     #i <- 44508 # debug
-    message(sprintf("loop %s of %s", i, 300))
+    message(sprintf("loop %s of %s", i, max(non.nas)))
     # subset data to single unit
 if (sel.map==1979) data.tmp <- extendCoald79[[i]]
 if (sel.map==1997) data.tmp <- extendCoald97[[i]]
@@ -1392,6 +1456,28 @@ if (sel.map==2018) extendCoald18[[i]] <- data.tmp
 rm(alphahat, betahat, bhat.left, bhat.pan, reg.left, reg.oth, reg.pan, rhat.left, rhat.oth, rhat.pan, vhat.2006, vhat.2009, vhat.2012, vhat.2015, vhat.2018, vhat.2021, vhat.2024, vhat.left, vhat.pan, vhat.pri)
 
 
+##################################################################
+## ESTIMATE MANIPULATED MUNICIPAL REGRESSIONS (NEW MUN FIX)     ##
+## AND MANIPULATE regs AND extendCoal OBJECTS WHERE APPROPRIATE ##
+##################################################################
+if (agg=="m"){
+    source("code/code-to-run-counterfactual-mun-regs.r")
+}
+
+# restore
+non.nas <- non.nas.orig; rm(non.nas.orig)
+
+# tmp for debugging
+#save.image("data/too-big-4-github/tmp4.RData")
+
+rm(list = ls())
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+setwd(wd)
+load("data/too-big-4-github/tmp4.RData")
+ls()
+
+
 # clean
 rm(v91manip, v94manip, v97manip, v00manip, v03manip, v06manip, v09manip, v12manip, v15manip, v18manip,
    regs.2006manip, regs.2009manip, regs.2012manip, regs.2015manip, regs.2018manip, mean.regsmanip,
@@ -1401,6 +1487,129 @@ rm(v91,v94,v97,v00,v03,v06,v09,v12,v15,v18)
 rm(pan,pri,left,oth,efec)
 rm(sel,sel1,sel2,sel.to,sel.c,target.ife,i,tmp)
 
+# adds manipulation indicator to all data frames in list
+if (agg=="m") {
+    extendCoal <- sapply(extendCoal, simplify = FALSE, function(x) {
+        x$munchg <- 0;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg1994)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006);
+        x$munchg[sel] <- 1994;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg1997)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2009);
+        x$munchg[sel] <- 1997;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2000)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2012);
+        x$munchg[sel] <- 2000;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2003)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2015);
+        x$munchg[sel] <- 2003;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2006)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2006:2018);
+        x$munchg[sel] <- 2006;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2009)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2009:2021);
+        x$munchg[sel] <- 2009;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2012)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2012:2024);
+        x$munchg[sel] <- 2012;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2015)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2015:2027);
+        x$munchg[sel] <- 2015;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2018)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2018:2030);
+        x$munchg[sel] <- 2018;
+        return(x)
+    })
+    sel2 <- which(names(extendCoal) %in% chg2021)
+    extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+        sel <- which(x$yr %in% 2021:2033);
+        x$munchg[sel] <- 2021;
+        return(x)
+    })
+    ## sel2 <- which(names(extendCoal) %in% chg2024)
+    ## extendCoal[sel2] <- sapply(extendCoal[sel2], simplify = FALSE, function(x) {
+    ##     sel <- which(x$yr %in% 2024:2036);
+    ##     x$munchg[sel] <- 2024;
+    ##     return(x)
+    ## })
+}
+if (agg=="s") { # will be manipulated below
+    extendCoal <- sapply(extendCoal, simplify = FALSE, function(x) {
+        x$new <- x$split <- 0;
+        return(x)
+    })
+}
+
+######################################################################
+## manipulate split secciones (adding aggregate regression results) ##
+######################################################################
+if (agg=="s") {
+    sel.split <- which(eq$action=="split")
+    info <- eq[sel.split, c("edon","seccion","orig.dest","when")]
+    info$edosecn <- info$edon*10000+info$seccion
+    tmp <- v00s$edon*10000+v00s$seccion
+    sel.from <- which(tmp %in% info$edosecn)
+    #
+    for (i in 1:length(sel.from)){
+        #i <- 66 # debug
+        message(sprintf("loop %s of %s", i, length(sel.from)))
+        reg.from <- extendCoal[[sel.from[i]]] # counterfactual seccion with vhat alpha for aggregate post-split
+        #
+        # locate split's new secciones
+        sel.to <- as.numeric(unlist(strsplit(info$orig.dest[i], ":")))
+        sel.to <- seq(from = sel.to[1], to = sel.to[2], by = 1)
+        sel.to <- v00s$edon[sel.from[i]] * 10000 + sel.to
+        sel.to <- which(tmp %in% sel.to)
+        #
+        for (j in sel.to){ # loop over new secciones
+            #j <- sel.to[5] # debug
+            reg.to <- extendCoal[[j]]  # regression to manipulate
+            year <- info$when[i]               # year reseccionamiento
+            sel.na <- which(reg.to$yr <= year) # elections before reseccionamiento 
+            reg.to[sel.na,] <- within(reg.to[sel.na,], {
+                pan <- pri <- left <- d.pan <- d.pri <- d.left <- NA; # drop mean vote used, use NAs
+            })
+            # columns to manipulate
+            sel.col <- c("vhat.pan", "vhat.pri", "vhat.left", "bhat.pan", "bhat.left",  "alphahat.pan", "alphahat.pri", "alphahat.left", "betahat.pan", "betahat.left")
+            reg.to[,sel.col] <- reg.from[,sel.col] # from -> to
+            # indicate manipulation
+            reg.to$new[-sel.na] <- year
+            # return manipulated data
+            extendCoal[[j]] <- reg.to
+        }
+        # indicate manipulation
+        reg.from$split[-sel.na] <- year
+        # return manipulated data
+        extendCoal[[sel.from[i]]] <- reg.from
+    }
+}
 
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
@@ -1424,6 +1633,11 @@ tmp.func <- function(year) {
     # table(summary(tmp)) # debug
     tmp <- do.call("rbind", tmp)
     rownames(tmp) <- NULL
+    ## # next block seems redundant 2sep2020
+    ## if (agg=="m") sel.col <- c("edon","ife","inegi")       # cols to merge when using municipios
+    ## if (agg=="s") sel.col <- c("edon","seccion","edosecn","ife","inegi") # when using secciones
+    ## tmp <- cbind(tmp, v00[,sel.col])
+    ## rm(sel.col)
     return(tmp)
 }
 

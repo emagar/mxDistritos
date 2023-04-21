@@ -1,0 +1,39 @@
+District 5-yr estimates that can be computed before 2024 
+|      | map    |        |        |       |
+| vhat | 1979   | 1997   | 2006   | 2018  |
+|------+--------+--------+--------+-------|
+| 1988 | *back* |   XX   |   XX   |   XX  |
+| 1991 | *back* |  back  |  back  |  back |
+| 1994 | *back* |  back  |  back  |  back |
+| 1997 |  back  | *back* |  back  |  back |
+| 2000 |  back  | *back* |  back  |  back |
+| 2003 | *BOTH* | *back* |  back  |  back |
+| 2006 | *BOTH* |  back  | *back* |  back |
+| 2009 |  fwd   |  fwd   | *fwd*  |  fwd  |
+| 2012 |  fwd   |  fwd   | *fwd*  |  fwd  |
+| 2015 |  fwd   |  fwd   | *fwd*  |  fwd  |
+| 2018 |  fwd   |  fwd   |  fwd   | *fwd* |
+| 2021 |  fwd   |  fwd   |  fwd   | *fwd* |
+| 2024 |  fwd   |  fwd   |  fwd   | *fwd* |
+Notes:
+- Starred are needed
+- get 2006 estimates backwards 
+- use 1979 BOTH to compare 2003 and 2006 fwd/backwd vhats
+# defaults
+if (sel.map==1979 & is.na(yr.to.estim)){
+    yr.to.estim <- c(1988,1991,1994); 
+    dbackwards <- 1
+}
+if (sel.map==1997 & is.na(yr.to.estim)){
+    yr.to.estim <- c(1997,2000,2003); 
+    dbackwards <- 1
+}
+if (sel.map==2006 & is.na(yr.to.estim)){
+    yr.to.estim <- c(2006,2009,2012,2015); 
+    dbackwards <- c(1,0,0,0)
+}
+if (sel.map==2018 & is.na(yr.to.estim)){
+    yr.to.estim <- c(2018,2021,2024); 
+    dbackwards <- 0
+}
+
