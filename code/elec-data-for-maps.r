@@ -10,12 +10,17 @@ options(width = 110)
 #
 dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
 wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
-
-# cambiar por cartografía 2017 en /home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/shp/disfed2018
-# también preparé cartografía 2020   <---  OJO
-md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
 setwd(dd)
 
+## ## cuando use mapas deberé cambiar por cartografía 2017 en
+## ## /home/eric/Downloads/Desktop/MXelsCalendGovt/redistrict/ife.ine/mapasComparados/fed/shp/disfed2018
+## ## o cartografía 2020   <---  OJO
+## md <- c("/home/eric/Dropbox/data/mapas/cartografia28feb2013rojano/")
+
+##############################
+## Define several functions ##
+##############################
+##
 ##################################################################
 ## function to aggregate casilla-level votes into higher levels ##
 ##################################################################
@@ -56,7 +61,6 @@ to.num <- function(d = d, sel.c = sel.c){
     d[,sel.c] <- tmp.d;       # return manipulated data
     return(d)
 }
-#
 ##################################################################################
 ## function splitting coalition vote in proportion to votes won by each in unit ##
 ##################################################################################
@@ -75,7 +79,6 @@ apportion_v <- function(dat=NA, members=NA, joint=NA){
     dat[sel.r,joint] <- 0     # joint vote to zero
     return(dat)
 }
-#
 ###############################################
 ## function to fill sel.c column NAs to zero ##
 ###############################################
@@ -85,10 +88,16 @@ na2zero <- function(dat=NA, sel.c){
     dat[,sel.c] <- tmp # return manipulation to data
     return(dat)
 }
-# handy function to sort one data frame by order of another, matching data frame
+##############################################################################
+## function to sort one data frame by order of another, matching data frame ##
+##############################################################################
 source("/home/eric/Dropbox/data/useful-functions/sortBy.r")
-# 'not in' function
+#######################
+## 'not in' function ##
+#######################
 source("/home/eric/Dropbox/data/useful-functions/notin.r")
+
+
 
 ###################################
 ## ############################# ##
@@ -899,6 +908,7 @@ rm(d,d_agg,d_split,sel.c,sel.r,to.num,apportion_v,na2zero)
 ## #
 ## write.csv(windis, file = paste(dd, "dfdf2006-on-winners.csv", sep = ""))
 
+
 ###############################################################################
 ## keep split vote objects only for analysis                                 ##
 ## OJO: 2000, 2003, and 2006 have joint coalition vote only                  ##
@@ -928,7 +938,7 @@ rm(
     v15_split, v15_agg,
     v18_split, v18_agg,
     v21_split, v21_agg
-   )
+)
 
 ##############################################################################
 ## OJO: Script code/manip-dis1979-dis2018-to-assign-dropped-secciones.r     ##
@@ -946,10 +956,12 @@ eq <- read.csv(tmp, stringsAsFactors = FALSE)
 # drop secciones whose numbers have never been used
 sel <- which(eq$baja==1992); eq <- eq[-sel,]; rm(sel)
 # check: any secciones missing from eq?
+library(crayon)
 miss_secc <- function(dat=v21_split){ # defaults to 2021
     tmp <- deparse(substitute(dat)) # extract object's name
     sel <- which(as.factor(dat$edon+dat$seccion/10000) %notin% as.factor(eq$edon+eq$seccion/10000))
     if (length(sel)>0){
+        cat(red("Some secciones not in eq object\n"))
         dat$edon[sel]+dat$seccion[sel]/10000
 #        print(c(tmp, ": ", dat$edon[sel]+dat$seccion[sel]/10000))
     } else {
@@ -1092,7 +1104,7 @@ v15 <- add.edon.secn(v15)
 v18 <- add.edon.secn(v18)
 v21 <- add.edon.secn(v21)
 # clean
-rm(add.edon.secn,tmp.all.sec)
+rm(add.edon.secn,tmp.all.sec,tmp)
 
 ## #########################
 ## ## READ/PREP pop>18yrs ##
@@ -2083,6 +2095,7 @@ d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
 d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
 d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
 v21m <- d                                      # rename object  
+rm(sel.drop,sel.c)
 
 # rename seccion vote objects
 v91s <- v91; v94s <- v94; v97s <- v97; v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18; v21s <- v21;
@@ -2093,7 +2106,13 @@ table(
     c(nrow(v91d), nrow(v94d), nrow(v97d), nrow(v00d), nrow(v03d), nrow(v06d), nrow(v09d), nrow(v12d), nrow(v15d), nrow(v18d), nrow(v21d), nrow(v97d79), nrow(v00d79), nrow(v03d79), nrow(v06d79), nrow(v09d79), nrow(v12d79), nrow(v15d79), nrow(v18d79), nrow(v21d79), nrow(v94d97), nrow(v06d97), nrow(v09d97), nrow(v12d97), nrow(v15d97), nrow(v18d97), nrow(v21d97), nrow(v94d06), nrow(v97d06), nrow(v00d06), nrow(v03d06), nrow(v18d06), nrow(v21d06), nrow(v94d18), nrow(v97d18), nrow(v00d18), nrow(v03d18), nrow(v06d18), nrow(v09d18), nrow(v12d18), nrow(v15d18))
 )
 
-19abr23: now prep all to re run dis and mun regressions
+################################################################################
+## Run script code/alpha-regs-etc-districts to estimate DISTRICT regressions. ##
+## Preferable to open/run script by hand...                                   ##
+################################################################################
+source("../../../redistrict/ife.ine/code/alpha-regs-etc-districts.r")
+
+
 
 ## ####################################################################################
 ## ## TEMPORARY: 1991 secciones miss proper identifier and aggregate incorrectly     ##

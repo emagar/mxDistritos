@@ -8,6 +8,12 @@
 ## Last modified: 20apr2023                                       ##
 ####################################################################
 
+###################################################################
+## Note: Search function estim_dis below, that wraps estimation. ##
+## Script above that preps time-series data.                     ##
+## Script below that saves output and cleans.                    ##
+###################################################################
+
 ############################################################################
 ## # backwards estimation/prediction, unit = districts                    ##
 ## 1988d <- 1991d   1994d   1997d79 2000d79 2003d79                       ##
@@ -1459,8 +1465,8 @@ for (j in 1:4){
 }
 
 # clean, all this is saved in extendCoal, mean.regs, regs.1988 ... regs.2024
-ls()
-rm(alphahat, betahat, cs, estim_dis, new.d, per.means, yr.means,
+#ls()
+rm(alphahat, betahat, cs, estim_dis, per.means, yr.means,
    vhat.1988, vhat.1991, vhat.1994,
    vhat.1997, vhat.2000, vhat.2003,
    vhat.2006, vhat.2009, vhat.2012, vhat.2015,
@@ -1475,7 +1481,7 @@ rm(v94d97, v94d06, v94d18,
    v15d79, v15d97, v15d18,
    v18d79, v18d97, v18d06,
    v21d79, v21d97, v21d06)
-rm(i, j, sel.map)
+rm(i, j, sel.map, d, d2)
 
 
 ##########################################################################
@@ -1508,60 +1514,60 @@ tmp.func <- function(year) {
     return(tmp.out)
 }
 
-out.extendCoal.y1988 <- tmp.func(year=1988)
-out.extendCoal.y1991 <- tmp.func(year=1991)
-out.extendCoal.y1994 <- tmp.func(year=1994)
-out.extendCoal.y1997 <- tmp.func(year=1997)
-out.extendCoal.y2000 <- tmp.func(year=2000)
-out.extendCoal.y2003 <- tmp.func(year=2003)
-out.extendCoal.y2006 <- tmp.func(year=2006)
-out.extendCoal.y2009 <- tmp.func(year=2009)
-out.extendCoal.y2012 <- tmp.func(year=2012)
-out.extendCoal.y2015 <- tmp.func(year=2015)
-out.extendCoal.y2018 <- tmp.func(year=2018)
-out.extendCoal.y2021 <- tmp.func(year=2021)
-out.extendCoal.y2024 <- tmp.func(year=2024)
+out.y1988 <- tmp.func(year=1988)
+out.y1991 <- tmp.func(year=1991)
+out.y1994 <- tmp.func(year=1994)
+out.y1997 <- tmp.func(year=1997)
+out.y2000 <- tmp.func(year=2000)
+out.y2003 <- tmp.func(year=2003)
+out.y2006 <- tmp.func(year=2006)
+out.y2009 <- tmp.func(year=2009)
+out.y2012 <- tmp.func(year=2012)
+out.y2015 <- tmp.func(year=2015)
+out.y2018 <- tmp.func(year=2018)
+out.y2021 <- tmp.func(year=2021)
+out.y2024 <- tmp.func(year=2024)
 
 ##################
 ## save to disk ##
 ##################
-write.csv(out.extendCoal.y1988,
+write.csv(out.y1988,
           file = paste(wd, "data/dipfed-distrito-vhat-1988.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y1991,
+write.csv(out.y1991,
           file = paste(wd, "data/dipfed-distrito-vhat-1991.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y1994,
+write.csv(out.y1994,
           file = paste(wd, "data/dipfed-distrito-vhat-1994.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y1997,
+write.csv(out.y1997,
           file = paste(wd, "data/dipfed-distrito-vhat-1997.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y2000,
+write.csv(out.y2000,
           file = paste(wd, "data/dipfed-distrito-vhat-2000.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y2003,
+write.csv(out.y2003,
           file = paste(wd, "data/dipfed-distrito-vhat-2003.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y2006,
+write.csv(out.y2006,
           file = paste(wd, "data/dipfed-distrito-vhat-2006.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y2009,
+write.csv(out.y2009,
           file = paste(wd, "data/dipfed-distrito-vhat-2009.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y2012,
+write.csv(out.y2012,
           file = paste(wd, "data/dipfed-distrito-vhat-2012.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y2015,
+write.csv(out.y2015,
           file = paste(wd, "data/dipfed-distrito-vhat-2015.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y2018,
+write.csv(out.y2018,
           file = paste(wd, "data/dipfed-distrito-vhat-2018.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y2021,
+write.csv(out.y2021,
           file = paste(wd, "data/dipfed-distrito-vhat-2021.csv", sep = ""), row.names = FALSE)
 #
-write.csv(out.extendCoal.y2024,
+write.csv(out.y2024,
           file = paste(wd, "data/dipfed-distrito-vhat-2024.csv", sep = ""), row.names = FALSE)
 #
 
@@ -1584,11 +1590,60 @@ save(regs.2018, file = paste(wd, "data/dipfed-distrito-regs-2018.RData", sep = "
 save(regs.2021, file = paste(wd, "data/dipfed-distrito-regs-2021.RData", sep = ""), compress = "gzip")
 save(regs.2024, file = paste(wd, "data/dipfed-distrito-regs-2024.RData", sep = ""), compress = "gzip")
 
-# load regression object
-load(file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""))
-ls()
-summary(regs.2015)
-summary.lm(regs.2015$oth[[1]])$coef[2,1]
+###########
+## clean ##
+###########
+rm(
+    out.y1988,
+    out.y1991,
+    out.y1994,
+    out.y1997,
+    out.y2000,
+    out.y2003,
+    out.y2006,
+    out.y2009,
+    out.y2012,
+    out.y2015,
+    out.y2018,
+    out.y2021,
+    out.y2024
+)
+rm(
+    regs.1988,
+    regs.1991,
+    regs.1994,
+    regs.1997,
+    regs.2000,
+    regs.2003,
+    regs.2006,
+    regs.2009,
+    regs.2012,
+    regs.2015,
+    regs.2018,
+    regs.2021,
+    regs.2024
+)
+rm(
+    mean.regs.d79,
+    mean.regs.d97,
+    mean.regs.d06,
+    mean.regs.d18
+    )
+rm(
+    extendCoald79,
+    extendCoald97,
+    extendCoald06,
+    extendCoald18
+)
+
+## ###########################
+## ## inspect saved objects ##
+## ###########################
+## # load regression object
+## load(file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""))
+## ls()
+## summary(regs.2015)
+## summary.lm(regs.2015$oth[[1]])$coef[2,1]
 
 
 
