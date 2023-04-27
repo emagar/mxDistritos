@@ -137,10 +137,9 @@ v91_agg <- v91_split <- d
 ##########
 ## 1994 ##
 ##########
-
-OJO: 1994 has inegi instead of ife municipal codes
-
 d <- read.csv("dip1994.csv", header=TRUE, stringsAsFactors=FALSE)
+## OJO: 1994 has inegi instead of ife municipal codes
+d$ife <- inegi2ife(d$inegi)
 d <- d[order(d$edon, d$seccion),] # sort
 # vote columns selector
 sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","lisnom")
@@ -968,7 +967,7 @@ miss_secc <- function(dat=v21_split){ # defaults to 2021
     tmp <- deparse(substitute(dat)) # extract object's name
     sel <- which(as.factor(dat$edon+dat$seccion/10000) %notin% as.factor(eq$edon+eq$seccion/10000))
     if (length(sel)>0){
-        cat(red("Some secciones not in eq object\n"))
+        cat(magenta("Some secciones not in eq object\n"))
         dat$edon[sel]+dat$seccion[sel]/10000
 #        print(c(tmp, ": ", dat$edon[sel]+dat$seccion[sel]/10000))
     } else {
