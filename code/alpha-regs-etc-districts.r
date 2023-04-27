@@ -33,6 +33,702 @@
 ##          2009d18 2012d18 2015d18 2018d   2021d   -> 2024d18            ##
 ############################################################################
 
+################################
+## aggregate district returns ##
+################################
+##########
+## 1991 ## OJO: 1991 seccion identifiers are wrong, can aggregate with disn/ife, but no info for counterfactuals
+##########
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec","lisnom","dextra")
+# actual districts
+d <- v91s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=TRUE) # use aggregating function
+#d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+#d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+#d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v91d <- d                                      # rename object  
+
+##########
+## 1994 ##
+##########
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","lisnom","dextra")
+# actual districts
+d <- v94s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v94d <- d                                      # rename object  
+# 1997 counterfactual districts
+d <- v94s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v94d97 <- d                                    # rename object  
+# 2006 counterfactual districts
+d <- v94s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2006                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v94d06 <- d                                    # rename object  
+# 2018 counterfactual districts
+d <- v94s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2018                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v94d18 <- d                                    # rename object  
+
+##########
+## 1997 ##
+##########
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","lisnom","dextra")
+# actual districts
+d <- v97s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v97d <- d                                      # rename object  
+# 1979 counterfactual districts
+d <- v97s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1979                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v97d79 <- d                                    # rename object  
+# 2006 counterfactual districts
+d <- v97s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2006                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v97d06 <- d                                    # rename object  
+# 2018 counterfactual districts
+d <- v97s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2018                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v97d18 <- d                                    # rename object  
+
+##########
+## 2000 ##
+##########
+sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","lisnom","dpanc","dprdc","dextra")
+# actual districts
+d <- v00s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v00d <- d                                      # rename object  
+# 1979 counterfactual districts
+d <- v00s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1979                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v00d79 <- d                                    # rename object  
+# 2006 counterfactual districts
+d <- v00s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2006                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v00d06 <- d                                    # rename object  
+# 2018 counterfactual districts
+d <- v00s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2018                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v00d18 <- d                                    # rename object  
+
+##########
+## 2003 ##
+##########
+sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","lisnom","dpric","dextra")
+# actual districts
+d <- v03s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v03d <- d                                      # rename object  
+# 1979 counterfactual districts
+d <- v03s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1979                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v03d79 <- d                                    # rename object  
+# 2006 counterfactual districts
+d <- v03s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2006                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v03d06 <- d                                    # rename object  
+# 2018 counterfactual districts
+d <- v03s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2018                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v03d18 <- d                                    # rename object  
+
+##########
+## 2006 ##
+##########
+sel.c <- c("pan","pric","prdc","pna","asdc","efec","lisnom","dpric","dprdc","dextra")
+# actual districts
+d <- v06s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v06d <- d                                      # rename object  
+# 1979 counterfactual districts
+d <- v06s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1979                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v06d79 <- d                                    # rename object  
+# 1997 counterfactual districts
+d <- v06s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v06d97 <- d                                    # rename object  
+# 2018 counterfactual districts
+d <- v06s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2018                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v06d18 <- d                                    # rename object  
+
+##########
+## 2009 ##
+##########
+sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc","dextra")
+# actual districts
+d <- v09s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v09d <- d                                      # rename object  
+# 1979 counterfactual districts
+d <- v09s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1979                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v09d79 <- d                                    # rename object  
+# 1997 counterfactual districts
+d <- v09s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v09d97 <- d                                    # rename object  
+# 2018 counterfactual districts
+d <- v09s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2018                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v09d18 <- d                                    # rename object  
+
+##########
+## 2012 ##
+##########
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc","dextra")
+# actual districts
+d <- v12s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v12d <- d                                      # rename object  
+# 1979 counterfactual districts
+d <- v12s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v12d79 <- d                                    # rename object  
+# 1997 counterfactual districts
+d <- v12s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v12d97 <- d                                    # rename object  
+# 2018 counterfactual districts
+d <- v12s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2018                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v12d18 <- d                                    # rename object  
+
+##########
+## 2015 ##
+##########
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc","dextra")
+# actual districts
+d <- v15s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v15d <- d                                      # rename object  
+# 1979 counterfactual districts
+d <- v15s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1979                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v15d79 <- d                                    # rename object  
+# 1997 counterfactual districts
+d <- v15s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v15d97 <- d                                    # rename object  
+# 2018 counterfactual districts
+d <- v15s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2018", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2018                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v15d18 <- d                                    # rename object  
+
+##########
+## 2018 ##
+##########
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac","dextra")
+# actual districts
+d <- v18s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v18d <- d                                      # rename object  
+# 1979 counterfactual districts
+d <- v18s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1979                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v18d79 <- d                                    # rename object  
+# 1997 counterfactual districts
+d <- v18s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v18d97 <- d                                    # rename object  
+# 2006 counterfactual districts
+d <- v18s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2006                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v18d06 <- d                                    # rename object  
+
+##########
+## 2021 ##
+##########
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac","dextra")
+# actual districts
+d <- v21s; d[is.na(d)] <- 0
+sel.drop <- which(d$disn==0)                   # drop secciones added to keep v.. objects square
+if (length(sel.drop)>0) d <- d[-sel.drop,]     # drop secciones added to keep v.. objects square
+d <- my_agg(d=d, sel.c=sel.c, by="disn", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v21d <- d                                      # rename object  
+# 1979 counterfactual districts
+d <- v21s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1979", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1979                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v21d79 <- d                                    # rename object  
+# 1997 counterfactual districts
+d <- v21s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis1997", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis1997                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v21d97 <- d                                    # rename object  
+# 2006 counterfactual districts
+d <- v21s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="dis2006", y1991=FALSE) # use aggregating function
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+d$disn <- d$dis2006                            # district ids for the historic map
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$ife <- d$inegi <- d$mun <- NULL              # drop municipio ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom")] # order columns
+d <- d[order(d$disn),]                         # sort districts
+v21d06 <- d                                    # rename object  
+#
+rm(sel.drop,sel.c)
+
+# verify nrow==300
+table(c(
+    nrow(v91d), nrow(v94d),
+    nrow(v97d), nrow(v00d), nrow(v03d),
+    nrow(v06d), nrow(v09d), nrow(v12d), nrow(v15d),
+    nrow(v18d), nrow(v21d), 
+    nrow(v97d79), nrow(v00d79), nrow(v03d79),
+    nrow(v06d79), nrow(v09d79), nrow(v12d79), nrow(v15d79),
+    nrow(v18d79), nrow(v21d79), 
+    nrow(v94d97),
+    nrow(v06d97), nrow(v09d97), nrow(v12d97), nrow(v15d97),
+    nrow(v18d97), nrow(v21d97), 
+    nrow(v94d06),
+    nrow(v97d06), nrow(v00d06), nrow(v03d06),
+    nrow(v18d06), nrow(v21d06), 
+    nrow(v94d18),
+    nrow(v97d18), nrow(v00d18), nrow(v03d18), nrow(v06d18),
+    nrow(v09d18), nrow(v12d18), nrow(v15d18)
+))
+
 ############################################
 ## prepare manipulated party objects      ##
 ## for time-series and alpha regressions  ##

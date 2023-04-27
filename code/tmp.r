@@ -1,3 +1,78 @@
+
+FUNCTION TO CONVERT IFE TO INEGI MUNICIPAL CODES AND VICE VERSA
+Input is a vector
+Output is a same-length same-order vector
+Problem: values not in i2i map remain unchanged (good) but mixed
+among changed values (bad); not a problem if all values are present.
+
+Usage:
+    inegi.ife(3008, inegi_to_ife=TRUE)
+    > 3004
+    inegi.ife(3008, inegi_to_ife=TRUE)
+
+
+inegi.ife <- function(v=NA, inegi_to_ife=TRUE, ife_to_inegi=FALSE){
+    require(plyr)
+    if (inegi_to_ife==ife_to_inegi) stop("Error: inegi_to_ife and ife_to_inegi can't be simultaneously TRUE or FALSE")
+    if (is.vector(v)==FALSE) stop("Error: v must be a vector")
+    ##
+    ## THE SOURCE MAP IS THIS:
+    tmp <- "/home/eric/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/ancillary/mun.yrs.csv"
+    i2i <- read.csv(file=tmp)
+    i2i <- i2i[,c("inegi","ife","mun","edon")] # drop unneded columns
+    ## Drop municipios with codes pending from map
+    ##table(is.na(i2i$ife))           # debug
+    ##table(is.na(i2i$inegi))         # debug
+    drop.r <- which(is.na(i2i$ife))
+    ##i2i[drop.r,]                    # debug
+    if (length(drop.r)>0) i2i <- i2i[-drop.r,]
+                                        #
+    #v <- d$ife # debug
+        zdata <- data.frame(inp=v)
+        zdata$ord <- 1:nrow(zdata) # keep original order
+    if (inegi_to_ife==TRUE){
+        zdata$outp <-     mapvalues(zdata$inp, from = i2i$inegi, to = i2i$ife,   warn_missing=FALSE)
+    }
+    if (ife_to_inegi==TRUE){
+        zdata$outp <- mapvalues(zdata$inp, from = i2i$ife,   to = i2i$inegi, warn_missing=FALSE)
+    }
+    zdata <- zdata[order(zdata$ord),] # re-sort into original order 
+    outp <- zdata$outp
+    return(outp)
+}
+
+inegi.ife(3008)
+
+ls()
+
+v94$inegi <- mapvalues(v94$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+
+
+
+v94$ife <- v94$ife1994
+v94$inegi <- mapvalues(v94$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v97$ife <- v97$ife1997
+v97$inegi <- mapvalues(v97$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v00$ife <- v00$ife2000
+v00$inegi <- mapvalues(v00$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v03$ife <- v03$ife2003
+v03$inegi <- mapvalues(v03$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v06$ife <- v06$ife2006
+v06$inegi <- mapvalues(v06$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v09$ife <- v09$ife2009
+v09$inegi <- mapvalues(v09$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v12$ife <- v12$ife2012
+v12$inegi <- mapvalues(v12$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v15$ife <- v15$ife2015
+v15$inegi <- mapvalues(v15$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v18$ife <- v18$ife2018
+v18$inegi <- mapvalues(v18$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v21$ife <- v21$ife2021
+v21$inegi <- mapvalues(v21$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+rm(ife.inegi)
+
+
+
 if (sel.map==1979){
     tmp <- extendCoald79                                                       # duplicate for manipulation
     add1988 <- function(x) rbind(v88=c(1988,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA), x) # add empty row to each data frame in list

@@ -27,12 +27,12 @@
 ##          1991d06 1994d06 1997d06 2000d06 2003d06 -> 2006d # no 1991d06 ##
 ############################################################################
 
-#################################################################
-## Determine level of aggregation to work with here by         ##
-## choosing s, m, d. Creates v.. objects matching chosen unit. ##
-#################################################################
-agg <- c("s","m","d")[3]
-if (agg %notin% c("m","s","d")) print("Error: Unit must be s, m, or d")
+## #################################################################
+## ## Determine level of aggregation to work with here by         ##
+## ## choosing s, m, d. Creates v.. objects matching chosen unit. ##
+## #################################################################
+## agg <- c("s","m","d")[3]
+## if (agg %notin% c("m","s","d")) print("Error: Unit must be s, m, or d")
 
 ## # 15abr23 this looks droppable: work with original factual/counter vote objects
 ## # duplicate relevant vote objects for manipulation
