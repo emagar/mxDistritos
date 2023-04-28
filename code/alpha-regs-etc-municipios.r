@@ -7,7 +7,13 @@
 ## Date: 17apr2023                                                ##
 ## Last modified: 18apr2023                                       ##
 ####################################################################
-    
+
+###################################################################
+## Note: Search function estim_dis below, that wraps estimation. ##
+## Script above that preps time-series data.                     ##
+## Script below that saves output and cleans.                    ##
+###################################################################
+
 ############################################################################
 ## # backwards estimation, unit = districts                               ##
 ## 1988d <- 1991d   1994d   1997d79 2000d79 2003d79                       ##
@@ -27,432 +33,2783 @@
 ##          1991d06 1994d06 1997d06 2000d06 2003d06 -> 2006d # no 1991d06 ##
 ############################################################################
 
-## #################################################################
-## ## Determine level of aggregation to work with here by         ##
-## ## choosing s, m, d. Creates v.. objects matching chosen unit. ##
-## #################################################################
-## agg <- c("s","m","d")[3]
-## if (agg %notin% c("m","s","d")) print("Error: Unit must be s, m, or d")
+#################################
+## aggregate municipio returns ##
+#################################
+##########################################################################
+## Function to square d by adding municipios absent frim that election  ##
+##########################################################################
+add.miss.mun <- function(d){
+    ## get vector of all municipios in eq 
+    all.ife <- eq[,grep("^ife", colnames(eq))]
+    all.ife <- as.vector(unlist(all.ife))
+    all.ife <- unique(all.ife)
+    all.ife <- all.ife[order(all.ife)]
+    tail(all.ife)
+    ## any municipios missing?
+    mis.ife <- all.ife[which(all.ife %notin% d$ife)]
+    if (length(mis.ife)>0){
+        tmp <- d[1:length(mis.ife),]
+        tmp[] <- NA
+        tmp$ife <- mis.ife
+        tmp$edon <- as.integer(tmp$ife/1000)
+        ## if so, add empty rows to d
+        d <- rbind(d, tmp)
+    }
+    return(d)
+}
 
-## # 15abr23 this looks droppable: work with original factual/counter vote objects
-## # duplicate relevant vote objects for manipulation
-## if (agg=="s") {
-##     v91 <- v91s;
-##     v94 <- v94s; v97 <- v97s; 
-##     v00 <- v00s; v03 <- v03s; v06 <- v06s; v09 <- v09s; v12 <- v12s; v15 <- v15s; v18 <- v18s; v21 <- v21s;
-## }
-## if (agg=="m") {
-##     v91 <- v91m;
-##     v94 <- v94m; v97 <- v97m; 
-##     v00 <- v00m; v03 <- v03m; v06 <- v06m; v09 <- v09m; v12 <- v12m; v15 <- v15m; v18 <- v18m; v21 <- v21m;
-## }
-## if (agg=="d") {
-##     v91 <- v91d;
-##     v94 <- v94d; v97 <- v97d; 
-##     v00 <- v00d; v03 <- v03d; v06 <- v06d; v09 <- v09d; v12 <- v12d; v15 <- v15d; v18 <- v18d; v21 <- v21d;
-## }
+##########
+## 1991 ## OJO: 1991 seccion identifiers are wrong, can aggregate with ife, but no info for counterfactuals
+##########
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec","lisnom","dextra")
+# actual municipalities
+d <- v91s; d[is.na(d)] <- 0
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+#d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+#d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop ife-yr vars
+#d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; mun after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v91m <- d                                      # rename object  
 
-############################################
-## prepare manipulated party objects      ##
-## for time-series and alpha regressions  ##
-## After 2024 election, uncheck/add lines ##
-############################################
+##########
+## 1994 ##
+##########
+sel.c <- c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","lisnom","dextra")
+# actual 1994 municipalities
+d <- v94s; d[is.na(d)] <- 0
+#d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m <- d                                      # rename object  
+# 1997 municipalities
+d <- v94s; d[is.na(d)] <- 0
+d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m97 <- d                                    # rename object  
+# 2000 municipalities
+d <- v94s; d[is.na(d)] <- 0
+d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m00 <- d                                    # rename object  
+# 2003 municipalities
+d <- v94s; d[is.na(d)] <- 0
+d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m03 <- d                                    # rename object  
+# 2006 municipalities
+d <- v94s; d[is.na(d)] <- 0
+d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m06 <- d                                    # rename object  
+# 2009 municipalities
+d <- v94s; d[is.na(d)] <- 0
+d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m09 <- d                                    # rename object  
+# 2012 municipalities
+d <- v94s; d[is.na(d)] <- 0
+d$ife <- d$ife2012                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m12 <- d                                    # rename object  
+# 2015 municipalities
+d <- v94s; d[is.na(d)] <- 0
+d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m15 <- d                                    # rename object  
+# 2018 municipalities
+d <- v94s; d[is.na(d)] <- 0
+d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m18 <- d                                    # rename object  
+# 2021 municipalities
+d <- v94s; d[is.na(d)] <- 0
+d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v94m21 <- d                                    # rename object  
+
+##########
+## 1997 ##
+##########
+sel.c <- c("pan","pri","prd","pc","pt","pvem","pps","pdm","efec","lisnom","dextra")
+# 1994 municipalities
+d <- v97s; d[is.na(d)] <- 0
+d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m94 <- d                                    # rename object  
+# actual 1997 municipalities
+d <- v97s; d[is.na(d)] <- 0
+#d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m <- d                                      # rename object  
+# 2000 municipalities
+d <- v97s; d[is.na(d)] <- 0
+d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m00 <- d                                    # rename object  
+# 2003 municipalities
+d <- v97s; d[is.na(d)] <- 0
+d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m03 <- d                                    # rename object  
+# 2006 municipalities
+d <- v97s; d[is.na(d)] <- 0
+d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m06 <- d                                    # rename object  
+# 2009 municipalities
+d <- v97s; d[is.na(d)] <- 0
+d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m09 <- d                                    # rename object  
+# 2012 municipalities
+d <- v97s; d[is.na(d)] <- 0
+d$ife <- d$ife2012                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m12 <- d                                    # rename object  
+# 2015 municipalities
+d <- v97s; d[is.na(d)] <- 0
+d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m15 <- d                                    # rename object  
+# 2018 municipalities
+d <- v97s; d[is.na(d)] <- 0
+d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m18 <- d                                    # rename object  
+# 2021 municipalities
+d <- v97s; d[is.na(d)] <- 0
+d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v97m21 <- d                                    # rename object  
+
+##########
+## 2000 ##
+##########
+sel.c <- c("panc","pri","prdc","pcd","parm","dsppn","efec","lisnom","dpanc","dprdc","dextra")
+# 1994 municipalities
+d <- v00s; d[is.na(d)] <- 0
+d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m94 <- d                                    # rename object  
+# 1997 municipalities
+d <- v00s; d[is.na(d)] <- 0
+d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m97 <- d                                    # rename object  
+# actual 2000 municipalities
+d <- v00s; d[is.na(d)] <- 0
+#d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m <- d                                      # rename object  
+# 2003 municipalities
+d <- v00s; d[is.na(d)] <- 0
+d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m03 <- d                                    # rename object  
+# 2006 municipalities
+d <- v00s; d[is.na(d)] <- 0
+d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m06 <- d                                    # rename object  
+# 2009 municipalities
+d <- v00s; d[is.na(d)] <- 0
+d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m09 <- d                                    # rename object  
+# 2012 municipalities
+d <- v00s; d[is.na(d)] <- 0
+d$ife <- d$ife2012                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m12 <- d                                    # rename object  
+# 2015 municipalities
+d <- v00s; d[is.na(d)] <- 0
+d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m15 <- d                                    # rename object  
+# 2018 municipalities
+d <- v00s; d[is.na(d)] <- 0
+d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m18 <- d                                    # rename object  
+# 2021 municipalities
+d <- v00s; d[is.na(d)] <- 0
+d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v00m21 <- d                                    # rename object  
+
+##########
+## 2003 ##
+##########
+sel.c <- c("pan","pri","pric","prd","pt","pvem","conve","psn","pas","mp","plm","fc","efec","lisnom","dpric","dextra")
+# 1994 municipalities
+d <- v03s; d[is.na(d)] <- 0
+d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m94 <- d                                    # rename object  
+# 1997 municipalities
+d <- v03s; d[is.na(d)] <- 0
+d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m97 <- d                                    # rename object  
+# 2000 municipalities
+d <- v03s; d[is.na(d)] <- 0
+d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m00 <- d                                    # rename object  
+# 2003 actual municipalities
+d <- v03s; d[is.na(d)] <- 0
+#d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m <- d                                      # rename object  
+# 2006 municipalities
+d <- v03s; d[is.na(d)] <- 0
+d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m06 <- d                                    # rename object  
+# 2009 municipalities
+d <- v03s; d[is.na(d)] <- 0
+d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m09 <- d                                    # rename object  
+# 2012 municipalities
+d <- v03s; d[is.na(d)] <- 0
+d$ife <- d$ife2012                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m12 <- d                                    # rename object  
+# 2015 municipalities
+d <- v03s; d[is.na(d)] <- 0
+d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m15 <- d                                    # rename object  
+# 2018 municipalities
+d <- v03s; d[is.na(d)] <- 0
+d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m18 <- d                                    # rename object  
+# 2021 municipalities
+d <- v03s; d[is.na(d)] <- 0
+d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v03m21 <- d                                    # rename object  
+
+##########
+## 2006 ##
+##########
+sel.c <- c("pan","pric","prdc","pna","asdc","efec","lisnom","dpric","dprdc","dextra")
+# 1994 municipalities
+d <- v06s; d[is.na(d)] <- 0
+d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m94 <- d                                    # rename object  
+# 1997 municipalities
+d <- v06s; d[is.na(d)] <- 0
+d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m97 <- d                                    # rename object  
+# 2000 municipalities
+d <- v06s; d[is.na(d)] <- 0
+d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m00 <- d                                    # rename object  
+# 2003 municipalities
+d <- v06s; d[is.na(d)] <- 0
+d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m03 <- d                                    # rename object  
+# 2006 actual municipalities
+d <- v06s; d[is.na(d)] <- 0
+#d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m <- d                                      # rename object  
+# 2009 municipalities
+d <- v06s; d[is.na(d)] <- 0
+d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m09 <- d                                    # rename object  
+# 2012 municipalities
+d <- v06s; d[is.na(d)] <- 0
+d$ife <- d$ife2012                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m12 <- d                                    # rename object  
+# 2015 municipalities
+d <- v06s; d[is.na(d)] <- 0
+d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m15 <- d                                    # rename object  
+# 2018 municipalities
+d <- v06s; d[is.na(d)] <- 0
+d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m18 <- d                                    # rename object  
+# 2021 municipalities
+d <- v06s; d[is.na(d)] <- 0
+d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0)               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v06m21 <- d                                    # rename object  
+
+##########
+## 2009 ##
+##########
+sel.c <- c("pan","pri","pric","prd","pvem","pt","ptc","conve","pna","psd","efec","lisnom","dpric","dptc","dextra")
+# 1994 municipalities
+d <- v09s; d[is.na(d)] <- 0
+d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m94 <- d                                    # rename object  
+# 1997 municipalities
+d <- v09s; d[is.na(d)] <- 0
+d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m97 <- d                                    # rename object  
+# 2000 municipalities
+d <- v09s; d[is.na(d)] <- 0
+d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m00 <- d                                    # rename object  
+# 2003 municipalities
+d <- v09s; d[is.na(d)] <- 0
+d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m03 <- d                                    # rename object  
+# 2006 municipalities
+d <- v09s; d[is.na(d)] <- 0
+d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m06 <- d                                    # rename object  
+# 2009 actual municipalities
+d <- v09s; d[is.na(d)] <- 0
+#d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m <- d                                      # rename object  
+# 2012 municipalities
+d <- v09s; d[is.na(d)] <- 0
+d$ife <- d$ife2012                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m12 <- d                                    # rename object  
+# 2015 municipalities
+d <- v09s; d[is.na(d)] <- 0
+d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m15 <- d                                    # rename object  
+# 2018 municipalities
+d <- v09s; d[is.na(d)] <- 0
+d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m18 <- d                                    # rename object  
+# 2021 municipalities
+d <- v09s; d[is.na(d)] <- 0
+d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dptc  <- as.numeric(d$dptc>0 )               # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v09m21 <- d                                    # rename object  
+
+##########
+## 2012 ##
+##########
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","pric","prdc","efec","lisnom","dpric","dprdc","dextra")
+# 1994 municipalities
+d <- v12s; d[is.na(d)] <- 0
+d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m94 <- d                                    # rename object  
+# 1997 municipalities
+d <- v12s; d[is.na(d)] <- 0
+d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m97 <- d                                    # rename object  
+# 2000 municipalities
+d <- v12s; d[is.na(d)] <- 0
+d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m00 <- d                                    # rename object  
+# 2003 municipalities
+d <- v12s; d[is.na(d)] <- 0
+d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m03 <- d                                    # rename object  
+# 2006 municipalities
+d <- v12s; d[is.na(d)] <- 0
+d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m06 <- d                                    # rename object  
+# 2009 municipalities
+d <- v12s; d[is.na(d)] <- 0
+d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m09 <- d                                    # rename object  
+# 2012 municipalities
+d <- v12s; d[is.na(d)] <- 0
+#d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m <- d                                      # rename object  
+# 2015 municipalities
+d <- v12s; d[is.na(d)] <- 0
+d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m15 <- d                                    # rename object  
+# 2018 municipalities
+d <- v12s; d[is.na(d)] <- 0
+d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m18 <- d                                    # rename object  
+# 2021 municipalities
+d <- v12s; d[is.na(d)] <- 0
+d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v12m21 <- d                                    # rename object  
+
+##########
+## 2015 ##
+##########
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","ph","pes","pric","prdc","indep1","indep2","efec","lisnom","dpric","dprdc","dextra")
+# 1994 municipalities
+d <- v15s; d[is.na(d)] <- 0
+d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m94 <- d                                    # rename object  
+# 1997 municipalities
+d <- v15s; d[is.na(d)] <- 0
+d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m97 <- d                                    # rename object  
+# 2000 municipalities
+d <- v15s; d[is.na(d)] <- 0
+d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m00 <- d                                    # rename object  
+# 2003 municipalities
+d <- v15s; d[is.na(d)] <- 0
+d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m03 <- d                                    # rename object  
+# 2006 municipalities
+d <- v15s; d[is.na(d)] <- 0
+d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m06 <- d                                    # rename object  
+# 2009 municipalities
+d <- v15s; d[is.na(d)] <- 0
+d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m09 <- d                                    # rename object  
+# 2012 municipalities
+d <- v15s; d[is.na(d)] <- 0
+d$ife <- d$ife2012                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m12 <- d                                    # rename object  
+# 2015 actual municipalities
+d <- v15s; d[is.na(d)] <- 0
+#d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m <- d                                      # rename object  
+# 2018 municipalities
+d <- v15s; d[is.na(d)] <- 0
+d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m18 <- d                                    # rename object  
+# 2021 municipalities
+d <- v15s; d[is.na(d)] <- 0
+d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc <- as.numeric(d$dpanc>0)               # fix coalition dummies
+d$dpric <- as.numeric(d$dpric>0)               # fix coalition dummies
+d$dprdc <- as.numeric(d$dprdc>0 )              # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v15m21 <- d                                    # rename object  
+
+##########
+## 2018 ##
+##########
+sel.c <- c("pan","pri","prd","pvem","pt","mc","pna","morena","pes","panc","pric","morenac","indep1","indep2","efec","lisnom","dpanc","dpric","dmorenac","dextra")
+# 1994 municipalities
+d <- v18s; d[is.na(d)] <- 0
+d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m94 <- d                                    # rename object  
+# 1997 municipalities
+d <- v18s; d[is.na(d)] <- 0
+d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m97 <- d                                    # rename object  
+# 2000 municipalities
+d <- v18s; d[is.na(d)] <- 0
+d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m00 <- d                                    # rename object  
+# 2003 municipalities
+d <- v18s; d[is.na(d)] <- 0
+d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m03 <- d                                    # rename object  
+# 2006 municipalities
+d <- v18s; d[is.na(d)] <- 0
+d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m06 <- d                                    # rename object  
+# 2009 municipalities
+d <- v18s; d[is.na(d)] <- 0
+d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m09 <- d                                    # rename object  
+# 2012 municipalities
+d <- v18s; d[is.na(d)] <- 0
+d$ife <- d$ife2012                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m12 <- d                                    # rename object  
+# 2015 municipalities
+d <- v18s; d[is.na(d)] <- 0
+d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m15 <- d                                    # rename object  
+# 2018 municipalities
+d <- v18s; d[is.na(d)] <- 0
+#d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m <- d                                      # rename object  
+# 2021 municipalities
+d <- v18s; d[is.na(d)] <- 0
+d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+#d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife; mun after inegi")] # order columns
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v18m21 <- d                                    # rename object  
+
+##########
+## 2021 ##
+##########
+sel.c <- c("pan","pri","prd","pvem","pt","mc","morena","pes","rsp","fxm","indep","panc","pric","morenac","efec","lisnom","dpanc","dpric","dmorenac","dextra")
+# 1994 municipalities
+d <- v21s; d[is.na(d)] <- 0
+d$ife <- d$ife1994                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m94 <- d                                    # rename object
+# 1997 municipalities
+d <- v21s; d[is.na(d)] <- 0
+d$ife <- d$ife1997                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m97 <- d                                    # rename object  
+# 2000 municipalities
+d <- v21s; d[is.na(d)] <- 0
+d$ife <- d$ife2000                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m00 <- d                                    # rename object  
+# 2003 municipalities
+d <- v21s; d[is.na(d)] <- 0
+d$ife <- d$ife2003                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m03 <- d                                    # rename object  
+# 2006 municipalities
+d <- v21s; d[is.na(d)] <- 0
+d$ife <- d$ife2006                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m06 <- d                                    # rename object  
+# 2009 municipalities
+d <- v21s; d[is.na(d)] <- 0
+d$ife <- d$ife2009                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m09 <- d                                    # rename object  
+# 2012 municipalities
+d <- v21s; d[is.na(d)] <- 0
+d$ife <- d$ife2012                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m12 <- d                                    # rename object  
+# 2015 municipalities
+d <- v21s; d[is.na(d)] <- 0
+d$ife <- d$ife2015                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m15 <- d                                    # rename object  
+# 2018 municipalities
+d <- v21s; d[is.na(d)] <- 0
+d$ife <- d$ife2018                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m18 <- d                                    # rename object  
+# 2021 actual municipalities
+d <- v21s; d[is.na(d)] <- 0
+#d$ife <- d$ife2021                             # municipio ids from the historic map
+d <- d[,-grep("^ife[0-9]{4}$", colnames(d))]   # drop historic ife-yr vars
+d <- d[,-grep("^dis[0-9]{4}$", colnames(d))]   # drop counterfactual districts
+d <- d[,-grep("^d[0-9]{2}$", colnames(d))]     # drop seccion-yr dummies
+d <- my_agg(d=d, sel.c=sel.c, by="ife", y1991=FALSE) # use aggregating function
+d$disn <- NULL                                 # drop actual distric ids
+d$edosecn <- d$seccion    <- NULL              # drop seccion ids
+d$dextra <- as.numeric(d$dextra>0)             # fix special elec dummy
+d$dpanc    <- as.numeric(d$dpanc>0)            # fix coalition dummies
+d$dpric    <- as.numeric(d$dpric>0)            # fix coalition dummies
+d$dmorenac <- as.numeric(d$dmorenac>0 )        # fix coalition dummies
+d <- d[moveme(names(d), "efec before lisnom; ife after edon; inegi after ife")] # order columns
+d <- add.miss.mun(d)                           # add missing municipios, if any
+d <- d[order(d$ife),]                          # sort
+v21m <- d                                      # rename object  
+#
+rm(sel.drop,sel.c,add.miss.mun)
+
+# verify nrow==2469
+table(c(
+    nrow(v91m), nrow(v94m),
+    nrow(v97m), nrow(v00m), nrow(v03m),
+    nrow(v06m), nrow(v09m), nrow(v12m), nrow(v15m),
+    nrow(v18m), nrow(v21m),
+##
+##
+    nrow(v97m94), nrow(v00m94), nrow(v03m94),
+    nrow(v06m94), nrow(v09m94), nrow(v12m94), nrow(v15m94),
+    nrow(v18m94), nrow(v21m94),
+##
+    nrow(v94m97),
+                  nrow(v00m97), nrow(v03m97),
+    nrow(v06m97), nrow(v09m97), nrow(v12m97), nrow(v15m97),
+    nrow(v18m97), nrow(v21m97),
+##
+    nrow(v94m00),
+    nrow(v97m00),               nrow(v03m00),
+    nrow(v06m00), nrow(v09m00), nrow(v12m00), nrow(v15m00),
+    nrow(v18m00), nrow(v21m00),
+##
+    nrow(v94m03),
+    nrow(v97m03), nrow(v00m03), 
+    nrow(v06m03), nrow(v09m03), nrow(v12m03), nrow(v15m03),
+    nrow(v18m03), nrow(v21m03),
+##
+    nrow(v94m06),
+    nrow(v97m06), nrow(v00m06), nrow(v03m06),
+                  nrow(v09m06), nrow(v12m06), nrow(v15m06),
+    nrow(v18m06), nrow(v21m06),
+##
+    nrow(v94m09),
+    nrow(v97m09), nrow(v00m09), nrow(v03m09),
+    nrow(v06m09),               nrow(v12m09), nrow(v15m09),
+    nrow(v18m09), nrow(v21m09),
+##
+    nrow(v94m12),
+    nrow(v97m12), nrow(v00m12), nrow(v03m12),
+    nrow(v06m12), nrow(v09m12),               nrow(v15m12),
+    nrow(v18m12), nrow(v21m12),
+##
+    nrow(v94m15),
+    nrow(v97m15), nrow(v00m15), nrow(v03m15),
+    nrow(v06m15), nrow(v09m15), nrow(v12m15), 
+    nrow(v18m15), nrow(v21m15),
+##
+    nrow(v94m18),
+    nrow(v97m18), nrow(v00m18), nrow(v03m18),
+    nrow(v06m18), nrow(v09m18), nrow(v12m18), nrow(v15m18),
+                  nrow(v21m18),
+    ##
+    nrow(v94m21),
+    nrow(v97m21), nrow(v00m21), nrow(v03m21),
+    nrow(v06m21), nrow(v09m21), nrow(v12m21), nrow(v15m21),
+    nrow(v18m21) 
+))
+##
+nmun <- nrow(v00m)  ## n municipalities in square data
+
+
+###############################################################################
+## Prepare manipulated party objects for time-series and alpha regressions   ##
+## After 2024 election, uncheck/add lines                                    ##
+##                *** One object per municipio map ***                       ##
+## *** Map changes almost every year, so one per federal election  ***       ##
+###############################################################################
 #
 # version 1: extend partial coalitions across the board
 # shares
-pand18 <- data.frame(
-    #v91 =  with(v91d18, ifelse(efec==0, NA,  pan                    / efec)), #comment if agg=="s"
-    v94 =  with(v94d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v97 =  with(v97d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v00 =  with(v00d18, ifelse(efec==0, NA,  panc                   / efec)),
-    v03 =  with(v03d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v06 =  with(v06d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v09 =  with(v09d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v12 =  with(v12d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v15 =  with(v15d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v18 =  with(v18d,   ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),   # drop mc?
-    v21 =  with(v21d,   ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
+panm21 <- data.frame(
+    #v91 =  with(v91m21, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m21, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m21, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m21, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m21, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m21, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m21, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m21, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m21, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m21, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m,   ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
-pand06 <- data.frame(
-    #v91 =  with(v91d06, ifelse(efec==0, NA,  pan                    / efec)), #comment if agg=="s"
-    v94 =  with(v94d06, ifelse(efec==0, NA,  pan                    / efec)),
-    v97 =  with(v97d06, ifelse(efec==0, NA,  pan                    / efec)),
-    v00 =  with(v00d06, ifelse(efec==0, NA,  panc                   / efec)),
-    v03 =  with(v03d06, ifelse(efec==0, NA,  pan                    / efec)),
-    v06 =  with(v06d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v09 =  with(v09d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v12 =  with(v12d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v15 =  with(v15d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v18 =  with(v18d06, ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),   # drop mc?
-    v21 =  with(v21d06, ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
+panm18 <- data.frame(
+    #v91 =  with(v91m18, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m18, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m18, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m18, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m18, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m18, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m18, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m18, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m18, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m,   ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m18, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
-pand97 <- data.frame(
-    #v91 =  with(v91d97, ifelse(efec==0, NA,  pan                    / efec)), # comment if agg=="s"
-    v94 =  with(v94d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v97 =  with(v97d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v00 =  with(v00d,   ifelse(efec==0, NA,  panc                   / efec)),
-    v03 =  with(v03d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v06 =  with(v06d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v09 =  with(v09d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v12 =  with(v12d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v15 =  with(v15d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v18 =  with(v18d97, ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),  # drop mc?
-    v21 =  with(v21d97, ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
+panm15 <- data.frame(
+    #v91 =  with(v91m15, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m15, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m15, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m15, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m15, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m15, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m15, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m15, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m,   ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m15, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m15, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
-pand79 <- data.frame(
-    v91 =  with(v91d,   ifelse(efec==0, NA,  pan                    / efec)), # comment if agg=="s"
-    v94 =  with(v94d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v97 =  with(v97d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v00 =  with(v00d79, ifelse(efec==0, NA,  panc                   / efec)),
-    v03 =  with(v03d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v06 =  with(v06d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v09 =  with(v09d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v12 =  with(v12d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v15 =  with(v15d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v18 =  with(v18d79, ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),  # drop mc?
-    v21 =  with(v21d79, ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
+panm12 <- data.frame(
+    #v91 =  with(v91m12, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m12, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m12, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m12, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m12, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m12, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m12, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m,   ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m12, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m12, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m12, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
-pand18 <- round(pand18, 3)
-pand06 <- round(pand06, 3)
-pand97 <- round(pand97, 3)
-pand79 <- round(pand79, 3)
+panm09 <- data.frame(
+    #v91 =  with(v91m09, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m09, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m09, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m09, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m09, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m09, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m,   ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m09, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m09, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m09, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m09, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
+)
+panm06 <- data.frame(
+    #v91 =  with(v91m06, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m06, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m06, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m06, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m06, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m,   ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m06, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m06, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m06, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m06, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m06, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
+)
+panm03 <- data.frame(
+    #v91 =  with(v91m03, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m03, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m03, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m03, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m,   ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m03, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m03, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m03, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m03, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m03, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m03, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
+)
+panm00 <- data.frame(
+    #v91 =  with(v91m00, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m00, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m00, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m,   ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m00, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m00, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m00, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m00, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m00, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m00, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m00, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
+)
+panm97 <- data.frame(
+    #v91 =  with(v91m97, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m97, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m,   ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m97, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m97, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m97, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m97, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m97, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m97, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m97, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m97, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
+)
+panm94 <- data.frame(
+    #v91 =  with(v91m94, ifelse(efec==0, NA,  pan               / efec)), 
+    v94 =  with(v94m,   ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97m94, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00m94, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03m94, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06m94, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09m94, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12m94, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15m94, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18m94, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21m94, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
+)
+## panm91 <- data.frame(
+##     v91 =  with(v91m,   ifelse(efec==0, NA,  pan               / efec)), 
+##     v94 =  with(v94m91, ifelse(efec==0, NA,  pan               / efec)),
+##     v97 =  with(v97m91, ifelse(efec==0, NA,  pan               / efec)),
+##     v00 =  with(v00m91, ifelse(efec==0, NA,  panc              / efec)),
+##     v03 =  with(v03m91, ifelse(efec==0, NA,  pan               / efec)),
+##     v06 =  with(v06m91, ifelse(efec==0, NA,  pan               / efec)),
+##     v09 =  with(v09m91, ifelse(efec==0, NA,  pan               / efec)),
+##     v12 =  with(v12m91, ifelse(efec==0, NA,  pan               / efec)),
+##     v15 =  with(v15m91, ifelse(efec==0, NA,  pan               / efec)),
+##     v18 =  with(v18m91, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+##     v21 =  with(v21m91, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
+## )
 #
-prid18 <- data.frame(
-    #v91 =  with(v91d18, ifelse(efec==0, NA,  pri                      / efec)),
-    v94 =  with(v94d18, ifelse(efec==0, NA,  pri                      / efec)),
-    v97 =  with(v97d18, ifelse(efec==0, NA,  pri                      / efec)),
-    v00 =  with(v00d18, ifelse(efec==0, NA,  pri                      / efec)),
-    v03 =  with(v03d18, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v06 =  with(v06d18, ifelse(efec==0, NA,  pric                     / efec)),
-    v09 =  with(v09d18, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v12 =  with(v12d18, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v15 =  with(v15d18, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v18 =  with(v18d,   ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
-    v21 =  with(v21d,   ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
-)
-prid06 <- data.frame(
-    #v91 =  with(v91d06, ifelse(efec==0, NA,  pri                      / efec)),
-    v94 =  with(v94d06, ifelse(efec==0, NA,  pri                      / efec)),
-    v97 =  with(v97d06, ifelse(efec==0, NA,  pri                      / efec)),
-    v00 =  with(v00d06, ifelse(efec==0, NA,  pri                      / efec)),
-    v03 =  with(v03d06, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v06 =  with(v06d,   ifelse(efec==0, NA,  pric                     / efec)),
-    v09 =  with(v09d,   ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v12 =  with(v12d,   ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v15 =  with(v15d,   ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v18 =  with(v18d06, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
-    v21 =  with(v21d06, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
-)
-prid97 <- data.frame(
-    #v91 =  with(v91d97, ifelse(efec==0, NA,  pri                      / efec)),
-    v94 =  with(v94d97, ifelse(efec==0, NA,  pri                      / efec)),
-    v97 =  with(v97d,   ifelse(efec==0, NA,  pri                      / efec)),
-    v00 =  with(v00d,   ifelse(efec==0, NA,  pri                      / efec)),
-    v03 =  with(v03d,   ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v06 =  with(v06d97, ifelse(efec==0, NA,  pric                     / efec)),
-    v09 =  with(v09d97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v12 =  with(v12d97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v15 =  with(v15d97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v18 =  with(v18d97, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
-    v21 =  with(v21d97, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
-)
-prid79 <- data.frame(
-    v91 =  with(v91d,   ifelse(efec==0, NA,  pri                      / efec)),
-    v94 =  with(v94d,   ifelse(efec==0, NA,  pri                      / efec)),
-    v97 =  with(v97d79, ifelse(efec==0, NA,  pri                      / efec)),
-    v00 =  with(v00d79, ifelse(efec==0, NA,  pri                      / efec)),
-    v03 =  with(v03d79, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v06 =  with(v06d79, ifelse(efec==0, NA,  pric                     / efec)),
-    v09 =  with(v09d79, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v12 =  with(v12d79, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v15 =  with(v15d79, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
-    v18 =  with(v18d79, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
-    v21 =  with(v21d79, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
-)
-prid79 <- round(prid79, 3)
-prid97 <- round(prid97, 3)
-prid06 <- round(prid06, 3)
-prid18 <- round(prid18, 3)
+panm21 <- round(panm21, 3)
+panm18 <- round(panm18, 3)
+panm15 <- round(panm15, 3)
+panm12 <- round(panm12, 3)
+panm09 <- round(panm09, 3)
+panm06 <- round(panm06, 3)
+panm03 <- round(panm03, 3)
+panm00 <- round(panm00, 3)
+panm97 <- round(panm97, 3)
+panm94 <- round(panm94, 3)
+## panm91 <- round(panm91, 3)
 #
-leftd18 <- data.frame(
-    #v91 = with(v91d18, ifelse(efec==0, NA,  prd                             / efec)),
-    v94 = with(v94d18, ifelse(efec==0, NA,  prd                             / efec)),
-    v97 = with(v97d18, ifelse(efec==0, NA,  prd                             / efec)),
-    v00 = with(v00d18, ifelse(efec==0, NA,  prdc                            / efec)),
-    v03 = with(v03d18, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
-    v06 = with(v06d18, ifelse(efec==0, NA,  prdc                            / efec)),
-    v09 = with(v09d18, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
-    v12 = with(v12d18, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
-    v15 = with(v15d18, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
-    v18 = with(v18d,   ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
-    v21 = with(v21d,   ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+prim21 <- data.frame(
+    #v91 =  with(v91m21, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m21, ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m21, ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m21, ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m21, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m21, ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m21, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m21, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m21, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m21, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m,   ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
-leftd06 <- data.frame(
-    #v91 = with(v91d06, ifelse(efec==0, NA,  prd                             / efec)),
-    v94 = with(v94d06, ifelse(efec==0, NA,  prd                             / efec)),
-    v97 = with(v97d06, ifelse(efec==0, NA,  prd                             / efec)),
-    v00 = with(v00d06, ifelse(efec==0, NA,  prdc                            / efec)),
-    v03 = with(v03d06, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
-    v06 = with(v06d,   ifelse(efec==0, NA,  prdc                            / efec)),
-    v09 = with(v09d,   ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
-    v12 = with(v12d,   ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
-    v15 = with(v15d,   ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
-    v18 = with(v18d06, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
-    v21 = with(v21d06, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+prim18 <- data.frame(
+    #v91 =  with(v91m18, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m18, ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m18, ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m18, ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m18, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m18, ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m18, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m18, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m18, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m,   ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m18, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
-leftd97 <- data.frame(
-    #v91 = with(v91d97, ifelse(efec==0, NA,  prd                             / efec)),
-    v94 = with(v94d97, ifelse(efec==0, NA,  prd                             / efec)),
-    v97 = with(v97d,   ifelse(efec==0, NA,  prd                             / efec)),
-    v00 = with(v00d,   ifelse(efec==0, NA,  prdc                            / efec)),
-    v03 = with(v03d,   ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
-    v06 = with(v06d97, ifelse(efec==0, NA,  prdc                            / efec)),
-    v09 = with(v09d97, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
-    v12 = with(v12d97, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
-    v15 = with(v15d97, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
-    v18 = with(v18d97, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
-    v21 = with(v21d97, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+prim15 <- data.frame(
+    #v91 =  with(v91m15, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m15, ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m15, ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m15, ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m15, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m15, ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m15, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m15, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m,   ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m15, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m15, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
-leftd79 <- data.frame(
-    v91 = with(v91d,   ifelse(efec==0, NA,  prd                             / efec)),
-    v94 = with(v94d,   ifelse(efec==0, NA,  prd                             / efec)),
-    v97 = with(v97d79, ifelse(efec==0, NA,  prd                             / efec)),
-    v00 = with(v00d79, ifelse(efec==0, NA,  prdc                            / efec)),
-    v03 = with(v03d79, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
-    v06 = with(v06d79, ifelse(efec==0, NA,  prdc                            / efec)),
-    v09 = with(v09d79, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
-    v12 = with(v12d79, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
-    v15 = with(v15d79, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
-    v18 = with(v18d79, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
-    v21 = with(v21d79, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+prim12 <- data.frame(
+    #v91 =  with(v91m12, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m12, ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m12, ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m12, ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m12, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m12, ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m12, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m,   ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m12, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m12, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m12, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
-leftd79 <- round(leftd79, 3)
-leftd97 <- round(leftd97, 3)
-leftd06 <- round(leftd06, 3)
-leftd18 <- round(leftd18, 3)
+prim09 <- data.frame(
+    #v91 =  with(v91m09, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m09, ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m09, ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m09, ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m09, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m09, ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m,   ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m09, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m09, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m09, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m09, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
+)
+prim06 <- data.frame(
+    #v91 =  with(v91m06, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m06, ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m06, ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m06, ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m06, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m,   ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m06, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m06, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m06, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m06, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m06, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
+)
+prim03 <- data.frame(
+    #v91 =  with(v91m03, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m03, ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m03, ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m03, ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m,   ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m03, ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m03, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m03, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m03, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m03, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m03, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
+)
+prim00 <- data.frame(
+    #v91 =  with(v91m00, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m00, ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m00, ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m,   ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m00, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m00, ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m00, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m00, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m00, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m00, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m00, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
+)
+prim97 <- data.frame(
+    #v91 =  with(v91m97, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m97, ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m,   ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m97, ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m97, ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m97, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m97, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m97, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
+)
+prim94 <- data.frame(
+    #v91 =  with(v91m94, ifelse(efec==0, NA,  pri                      / efec)),
+    v94 =  with(v94m,   ifelse(efec==0, NA,  pri                      / efec)),
+    v97 =  with(v97m94, ifelse(efec==0, NA,  pri                      / efec)),
+    v00 =  with(v00m94, ifelse(efec==0, NA,  pri                      / efec)),
+    v03 =  with(v03m94, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v06 =  with(v06m94, ifelse(efec==0, NA,  pric                     / efec)),
+    v09 =  with(v09m94, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v12 =  with(v12m94, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v15 =  with(v15m94, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+    v18 =  with(v18m94, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+    v21 =  with(v21m94, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
+)
+## prim91 <- data.frame(
+##     v91 =  with(v91m,   ifelse(efec==0, NA,  pri                      / efec)),
+##     v94 =  with(v94m91, ifelse(efec==0, NA,  pri                      / efec)),
+##     v97 =  with(v97m91, ifelse(efec==0, NA,  pri                      / efec)),
+##     v00 =  with(v00m91, ifelse(efec==0, NA,  pri                      / efec)),
+##     v03 =  with(v03m91, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+##     v06 =  with(v06m91, ifelse(efec==0, NA,  pric                     / efec)),
+##     v09 =  with(v09m91, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+##     v12 =  with(v12m91, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+##     v15 =  with(v15m91, ifelse(efec==0, NA, (pri + pric + pvem)       / efec)), # drop pvem?
+##     v18 =  with(v18m91, ifelse(efec==0, NA, (pri + pric + pvem + pna) / efec)), # drop pvem + pna?
+##     v21 =  with(v21m91, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
+## )
 #
-othd18 <- data.frame(
-    #v91 =  with(v91d18, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
-    v94 =  with(v94d18, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
-    v97 =  with(v97d18, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
-    v00 =  with(v00d18, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
-    v03 =  with(v03d18, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
-    v06 =  with(v06d18, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
-    v09 =  with(v09d18, ifelse(efec==0, NA, (pna + psd)                                / efec)),
-    v12 =  with(v12d18, ifelse(efec==0, NA,  pna                                       / efec)),
-    v15 =  with(v15d18, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
-    v18 =  with(v18d,   ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
-    v21 =  with(v21d,   ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
-)
-othd06 <- data.frame(
-    #v91 =  with(v91d06, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
-    v94 =  with(v94d06, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
-    v97 =  with(v97d06, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
-    v00 =  with(v00d06, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
-    v03 =  with(v03d06, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
-    v06 =  with(v06d,   ifelse(efec==0, NA, (pna + asdc)                               / efec)),
-    v09 =  with(v09d,   ifelse(efec==0, NA, (pna + psd)                                / efec)),
-    v12 =  with(v12d,   ifelse(efec==0, NA,  pna                                       / efec)),
-    v15 =  with(v15d,   ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
-    v18 =  with(v18d06, ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
-    v21 =  with(v21d06, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
-)
-othd97 <- data.frame(
-    #v91 =  with(v91d97, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
-    v94 =  with(v94d97, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
-    v97 =  with(v97d,   ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
-    v00 =  with(v00d,   ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
-    v03 =  with(v03d,   ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
-    v06 =  with(v06d97, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
-    v09 =  with(v09d97, ifelse(efec==0, NA, (pna + psd)                                / efec)),
-    v12 =  with(v12d97, ifelse(efec==0, NA,  pna                                       / efec)),
-    v15 =  with(v15d97, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
-    v18 =  with(v18d97, ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
-    v21 =  with(v21d97, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
-)
-othd79 <- data.frame(
-    v91 =  with(v91d,   ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
-    v94 =  with(v94d,   ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
-    v97 =  with(v97d79, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
-    v00 =  with(v00d79, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
-    v03 =  with(v03d79, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
-    v06 =  with(v06d79, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
-    v09 =  with(v09d79, ifelse(efec==0, NA, (pna + psd)                                / efec)),
-    v12 =  with(v12d79, ifelse(efec==0, NA,  pna                                       / efec)),
-    v15 =  with(v15d79, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
-    v18 =  with(v18d79, ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
-    v21 =  with(v21d79, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
-)
-othd79 <- round(othd79, 3)
-othd97 <- round(othd97, 3)
-othd06 <- round(othd06, 3)
-othd18 <- round(othd18, 3)
+prim21 <- round(prim21, 3)
+prim18 <- round(prim18, 3)
+prim15 <- round(prim15, 3)
+prim12 <- round(prim12, 3)
+prim09 <- round(prim09, 3)
+prim06 <- round(prim06, 3)
+prim03 <- round(prim03, 3)
+prim00 <- round(prim00, 3)
+prim97 <- round(prim97, 3)
+prim94 <- round(prim94, 3)
+## prim91 <- round(prim91, 3)
 #
-efecd18 <- data.frame(
-    #v91 = v91d18$efec,
-    v94 = v94d18$efec,
-    v97 = v97d18$efec,
-    v00 = v00d18$efec,
-    v03 = v03d18$efec,
-    v06 = v06d18$efec,
-    v09 = v09d18$efec,
-    v12 = v12d18$efec,
-    v15 = v15d18$efec,
-    v18 = v18d  $efec,
-    v21 = v21d  $efec
+leftm21 <- data.frame(
+    #v91 = with(v91m21, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m21, ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m21, ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m21, ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m21, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m21, ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m21, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m21, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m21, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m21, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m,   ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
-efecd06 <- data.frame(
-    #v91 = v91d06$efec,
-    v94 = v94d06$efec,
-    v97 = v97d06$efec,
-    v00 = v00d06$efec,
-    v03 = v03d06$efec,
-    v06 = v06d  $efec,
-    v09 = v09d  $efec,
-    v12 = v12d  $efec,
-    v15 = v15d  $efec,
-    v18 = v18d06$efec,
-    v21 = v21d06$efec
+leftm18 <- data.frame(
+    #v91 = with(v91m18, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m18, ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m18, ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m18, ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m18, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m18, ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m18, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m18, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m18, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m,   ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m18, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
-efecd97 <- data.frame(
-    #v91 = v91d97$efec,
-    v94 = v94d97$efec,
-    v97 = v97d  $efec,
-    v00 = v00d  $efec,
-    v03 = v03d  $efec,
-    v06 = v06d97$efec,
-    v09 = v09d97$efec,
-    v12 = v12d97$efec,
-    v15 = v15d97$efec,
-    v18 = v18d97$efec,
-    v21 = v21d97$efec
+leftm15 <- data.frame(
+    #v91 = with(v91m15, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m15, ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m15, ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m15, ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m15, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m15, ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m15, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m15, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m,   ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m15, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m15, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
-efecd79 <- data.frame(
-    v91 = v91d  $efec,
-    v94 = v94d  $efec,
-    v97 = v97d79$efec,
-    v00 = v00d79$efec,
-    v03 = v03d79$efec,
-    v06 = v06d79$efec,
-    v09 = v09d79$efec,
-    v12 = v12d79$efec,
-    v15 = v15d79$efec,
-    v18 = v18d79$efec,
-    v21 = v21d79$efec
+leftm12 <- data.frame(
+    #v91 = with(v91m12, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m12, ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m12, ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m12, ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m12, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m12, ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m12, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m,   ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m12, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m12, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m12, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
+leftm09 <- data.frame(
+    #v91 = with(v91m09, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m09, ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m09, ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m09, ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m09, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m09, ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m,   ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m09, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m09, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m09, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m09, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+)
+leftm06 <- data.frame(
+    #v91 = with(v91m06, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m06, ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m06, ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m06, ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m06, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m,   ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m06, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m06, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m06, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m06, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m06, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+)
+leftm03 <- data.frame(
+    #v91 = with(v91m03, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m03, ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m03, ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m03, ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m,   ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m03, ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m03, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m03, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m03, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m03, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m03, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+)
+leftm00 <- data.frame(
+    #v91 = with(v91m00, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m00, ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m00, ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m,   ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m00, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m00, ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m00, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m00, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m00, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m00, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m00, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+)
+leftm97 <- data.frame(
+    #v91 = with(v91m97, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m97, ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m,   ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m97, ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m97, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m97, ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m97, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m97, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m97, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m97, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m97, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+)
+leftm94 <- data.frame(
+    #v91 = with(v91m94, ifelse(efec==0, NA,  prd                             / efec)),
+    v94 = with(v94m,   ifelse(efec==0, NA,  prd                             / efec)),
+    v97 = with(v97m94, ifelse(efec==0, NA,  prd                             / efec)),
+    v00 = with(v00m94, ifelse(efec==0, NA,  prdc                            / efec)),
+    v03 = with(v03m94, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+    v06 = with(v06m94, ifelse(efec==0, NA,  prdc                            / efec)),
+    v09 = with(v09m94, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+    v12 = with(v12m94, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+    v15 = with(v15m94, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+    v18 = with(v18m94, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+    v21 = with(v21m94, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+)
+## leftm91 <- data.frame(
+##     v91 = with(v91m,   ifelse(efec==0, NA,  prd                             / efec)),
+##     v94 = with(v94m91, ifelse(efec==0, NA,  prd                             / efec)),
+##     v97 = with(v97m91, ifelse(efec==0, NA,  prd                             / efec)),
+##     v00 = with(v00m91, ifelse(efec==0, NA,  prdc                            / efec)),
+##     v03 = with(v03m91, ifelse(efec==0, NA, (prd + pt + conve)               / efec)),
+##     v06 = with(v06m91, ifelse(efec==0, NA,  prdc                            / efec)),
+##     v09 = with(v09m91, ifelse(efec==0, NA, (prd + pt + ptc + conve)         / efec)),
+##     v12 = with(v12m91, ifelse(efec==0, NA, (prd + prdc + pt + mc)           / efec)),
+##     v15 = with(v15m91, ifelse(efec==0, NA, (prd + prdc + pt + morena + pes) / efec)), 
+##     v18 = with(v18m91, ifelse(efec==0, NA, (morena + morenac + pt + pes)    / efec)),
+##     v21 = with(v21m91, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
+## )
 #
-lisnomd18 <- data.frame(
-    #v91 = v91d18$lisnom,
-    v94 = v94d18$lisnom,
-    v97 = v97d18$lisnom,
-    v00 = v00d18$lisnom,
-    v03 = v03d18$lisnom,
-    v06 = v06d18$lisnom,
-    v09 = v09d18$lisnom,
-    v12 = v12d18$lisnom,
-    v15 = v15d18$lisnom,
-    v18 = v18d  $lisnom,
-    v21 = v21d  $lisnom
-)
-lisnomd06 <- data.frame(
-    #v91 = v91d06$lisnom,
-    v94 = v94d06$lisnom,
-    v97 = v97d06$lisnom,
-    v00 = v00d06$lisnom,
-    v03 = v03d06$lisnom,
-    v06 = v06d  $lisnom,
-    v09 = v09d  $lisnom,
-    v12 = v12d  $lisnom,
-    v15 = v15d  $lisnom,
-    v18 = v18d06$lisnom,
-    v21 = v21d06$lisnom
-)
-lisnomd97 <- data.frame(
-    #v91 = v91d97$lisnom,
-    v94 = v94d97$lisnom,
-    v97 = v97d  $lisnom,
-    v00 = v00d  $lisnom,
-    v03 = v03d  $lisnom,
-    v06 = v06d97$lisnom,
-    v09 = v09d97$lisnom,
-    v12 = v12d97$lisnom,
-    v15 = v15d97$lisnom,
-    v18 = v18d97$lisnom,
-    v21 = v21d97$lisnom
-)
-lisnomd79 <- data.frame(
-    v91 = v91d  $lisnom,
-    v94 = v94d  $lisnom,
-    v97 = v97d79$lisnom,
-    v00 = v00d79$lisnom,
-    v03 = v03d79$lisnom,
-    v06 = v06d79$lisnom,
-    v09 = v09d79$lisnom,
-    v12 = v12d79$lisnom,
-    v15 = v15d79$lisnom,
-    v18 = v18d79$lisnom,
-    v21 = v21d79$lisnom
-)
+leftm21 <- round(leftm21, 3)
+leftm18 <- round(leftm18, 3)
+leftm15 <- round(leftm15, 3)
+leftm12 <- round(leftm12, 3)
+leftm09 <- round(leftm09, 3)
+leftm06 <- round(leftm06, 3)
+leftm03 <- round(leftm03, 3)
+leftm00 <- round(leftm00, 3)
+leftm97 <- round(leftm97, 3)
+leftm94 <- round(leftm94, 3)
+## leftm91 <- round(leftm91, 3)
 #
+othm21 <- data.frame(
+    #v91 =  with(v91m21, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m21, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m21, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m21, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m21, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m21, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m21, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m21, ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m21, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m21, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m,   ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+othm18 <- data.frame(
+    #v91 =  with(v91m18, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m18, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m18, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m18, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m18, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m18, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m18, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m18, ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m18, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m,   ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m18, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+othm15 <- data.frame(
+    #v91 =  with(v91m15, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m15, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m15, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m15, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m15, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m15, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m15, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m15, ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m,   ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m15, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m15, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+othm12 <- data.frame(
+    #v91 =  with(v91m12, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m12, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m12, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m12, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m12, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m12, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m12, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m,   ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m12, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m12, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m12, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+othm09 <- data.frame(
+    #v91 =  with(v91m09, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m09, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m09, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m09, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m09, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m09, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m,   ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m09, ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m09, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m09, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m09, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+othm06 <- data.frame(
+    #v91 =  with(v91m06, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m06, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m06, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m06, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m06, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m,   ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m06, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m06, ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m06, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m06, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m06, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+othm03 <- data.frame(
+    #v91 =  with(v91m03, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m03, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m03, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m03, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m,   ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m03, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m03, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m03, ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m03, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m03, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m03, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+othm00 <- data.frame(
+    #v91 =  with(v91m00, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m00, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m00, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m,   ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m00, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m00, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m00, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m00, ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m00, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m00, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m00, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+othm97 <- data.frame(
+    #v91 =  with(v91m97, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m97, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m,   ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m97, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m97, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m97, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m97, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m97, ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m97, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m97, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m97, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+othm94 <- data.frame(
+    #v91 =  with(v91m94, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v94 =  with(v94m,   ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+    v97 =  with(v97m94, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+    v00 =  with(v00m94, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+    v03 =  with(v03m94, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+    v06 =  with(v06m94, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+    v09 =  with(v09m94, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+    v12 =  with(v12m94, ifelse(efec==0, NA,  pna                                       / efec)),
+    v15 =  with(v15m94, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+    v18 =  with(v18m94, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+    v21 =  with(v21m94, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+)
+## othm91 <- data.frame(
+##     v91 =  with(v91m,   ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+##     v94 =  with(v94m91, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
+##     v97 =  with(v97m91, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
+##     v00 =  with(v00m91, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
+##     v03 =  with(v03m91, ifelse(efec==0, NA, (psn + pas + mp + plm + fc)                / efec)),
+##     v06 =  with(v06m91, ifelse(efec==0, NA, (pna + asdc)                               / efec)),
+##     v09 =  with(v09m91, ifelse(efec==0, NA, (pna + psd)                                / efec)),
+##     v12 =  with(v12m91, ifelse(efec==0, NA,  pna                                       / efec)),
+##     v15 =  with(v15m91, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
+##     v18 =  with(v18m91, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
+##     v21 =  with(v21m91, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
+## )
+#
+othm21 <- round(othm21, 3)
+othm18 <- round(othm18, 3)
+othm15 <- round(othm15, 3)
+othm12 <- round(othm12, 3)
+othm09 <- round(othm09, 3)
+othm06 <- round(othm06, 3)
+othm03 <- round(othm03, 3)
+othm00 <- round(othm00, 3)
+othm97 <- round(othm97, 3)
+othm94 <- round(othm94, 3)
+## othm91 <- round(othm91, 3)
+#
+efecm21 <- data.frame(
+    #v91 = v91m21$efec,
+    v94 = v94m21$efec,
+    v97 = v97m21$efec,
+    v00 = v00m21$efec,
+    v03 = v03m21$efec,
+    v06 = v06m21$efec,
+    v09 = v09m21$efec,
+    v12 = v12m21$efec,
+    v15 = v15m21$efec,
+    v18 = v18m21$efec,
+    v21 = v21m  $efec
+)
+efecm18 <- data.frame(
+    #v91 = v91m18$efec,
+    v94 = v94m18$efec,
+    v97 = v97m18$efec,
+    v00 = v00m18$efec,
+    v03 = v03m18$efec,
+    v06 = v06m18$efec,
+    v09 = v09m18$efec,
+    v12 = v12m18$efec,
+    v15 = v15m18$efec,
+    v18 = v18m  $efec,
+    v21 = v21m18$efec
+)
+efecm15 <- data.frame(
+    #v91 = v91m15$efec,
+    v94 = v94m15$efec,
+    v97 = v97m15$efec,
+    v00 = v00m15$efec,
+    v03 = v03m15$efec,
+    v06 = v06m15$efec,
+    v09 = v09m15$efec,
+    v12 = v12m15$efec,
+    v15 = v15m  $efec,
+    v18 = v18m15$efec,
+    v21 = v21m15$efec
+)
+efecm12 <- data.frame(
+    #v91 = v91m12$efec,
+    v94 = v94m12$efec,
+    v97 = v97m12$efec,
+    v00 = v00m12$efec,
+    v03 = v03m12$efec,
+    v06 = v06m12$efec,
+    v09 = v09m12$efec,
+    v12 = v12m  $efec,
+    v15 = v15m12$efec,
+    v18 = v18m12$efec,
+    v21 = v21m12$efec
+)
+efecm09 <- data.frame(
+    #v91 = v91m09$efec,
+    v94 = v94m09$efec,
+    v97 = v97m09$efec,
+    v00 = v00m09$efec,
+    v03 = v03m09$efec,
+    v06 = v06m09$efec,
+    v09 = v09m  $efec,
+    v12 = v12m09$efec,
+    v15 = v15m09$efec,
+    v18 = v18m09$efec,
+    v21 = v21m09$efec
+)
+efecm06 <- data.frame(
+    #v91 = v91m06$efec,
+    v94 = v94m06$efec,
+    v97 = v97m06$efec,
+    v00 = v00m06$efec,
+    v03 = v03m06$efec,
+    v06 = v06m  $efec,
+    v09 = v09m06$efec,
+    v12 = v12m06$efec,
+    v15 = v15m06$efec,
+    v18 = v18m06$efec,
+    v21 = v21m06$efec
+)
+efecm03 <- data.frame(
+    #v91 = v91m03$efec,
+    v94 = v94m03$efec,
+    v97 = v97m03$efec,
+    v00 = v00m03$efec,
+    v03 = v03m  $efec,
+    v06 = v06m03$efec,
+    v09 = v09m03$efec,
+    v12 = v12m03$efec,
+    v15 = v15m03$efec,
+    v18 = v18m03$efec,
+    v21 = v21m03$efec
+)
+efecm00 <- data.frame(
+    #v91 = v91m00$efec,
+    v94 = v94m00$efec,
+    v97 = v97m00$efec,
+    v00 = v00m  $efec,
+    v03 = v03m00$efec,
+    v06 = v06m00$efec,
+    v09 = v09m00$efec,
+    v12 = v12m00$efec,
+    v15 = v15m00$efec,
+    v18 = v18m00$efec,
+    v21 = v21m00$efec
+)
+efecm97 <- data.frame(
+    #v91 = v91m97$efec,
+    v94 = v94m97$efec,
+    v97 = v97m  $efec,
+    v00 = v00m97$efec,
+    v03 = v03m97$efec,
+    v06 = v06m97$efec,
+    v09 = v09m97$efec,
+    v12 = v12m97$efec,
+    v15 = v15m97$efec,
+    v18 = v18m97$efec,
+    v21 = v21m97$efec
+)
+efecm94 <- data.frame(
+    #v91 = v91m94$efec,
+    v94 = v94m  $efec,
+    v97 = v97m94$efec,
+    v00 = v00m94$efec,
+    v03 = v03m94$efec,
+    v06 = v06m94$efec,
+    v09 = v09m94$efec,
+    v12 = v12m94$efec,
+    v15 = v15m94$efec,
+    v18 = v18m94$efec,
+    v21 = v21m94$efec
+)
+## efecm91 <- data.frame(
+##     v91 = v91m  $efec,
+##     v94 = v94m91$efec,
+##     v97 = v97m91$efec,
+##     v00 = v00m91$efec,
+##     v03 = v03m91$efec,
+##     v06 = v06m91$efec,
+##     v09 = v09m91$efec,
+##     v12 = v12m91$efec,
+##     v15 = v15m91$efec,
+##     v18 = v18m91$efec,
+##     v21 = v21m91$efec
+## )
+#
+lisnomm21 <- data.frame(
+    #v91 = v91m21$lisnom,
+    v94 = v94m21$lisnom,
+    v97 = v97m21$lisnom,
+    v00 = v00m21$lisnom,
+    v03 = v03m21$lisnom,
+    v06 = v06m21$lisnom,
+    v09 = v09m21$lisnom,
+    v12 = v12m21$lisnom,
+    v15 = v15m21$lisnom,
+    v18 = v18m21$lisnom,
+    v21 = v21m  $lisnom
+)
+lisnomm18 <- data.frame(
+    #v91 = v91m18$lisnom,
+    v94 = v94m18$lisnom,
+    v97 = v97m18$lisnom,
+    v00 = v00m18$lisnom,
+    v03 = v03m18$lisnom,
+    v06 = v06m18$lisnom,
+    v09 = v09m18$lisnom,
+    v12 = v12m18$lisnom,
+    v15 = v15m18$lisnom,
+    v18 = v18m  $lisnom,
+    v21 = v21m18$lisnom
+)
+lisnomm15 <- data.frame(
+    #v91 = v91m15$lisnom,
+    v94 = v94m15$lisnom,
+    v97 = v97m15$lisnom,
+    v00 = v00m15$lisnom,
+    v03 = v03m15$lisnom,
+    v06 = v06m15$lisnom,
+    v09 = v09m15$lisnom,
+    v12 = v12m15$lisnom,
+    v15 = v15m  $lisnom,
+    v18 = v18m15$lisnom,
+    v21 = v21m15$lisnom
+)
+lisnomm12 <- data.frame(
+    #v91 = v91m12$lisnom,
+    v94 = v94m12$lisnom,
+    v97 = v97m12$lisnom,
+    v00 = v00m12$lisnom,
+    v03 = v03m12$lisnom,
+    v06 = v06m12$lisnom,
+    v09 = v09m12$lisnom,
+    v12 = v12m  $lisnom,
+    v15 = v15m12$lisnom,
+    v18 = v18m12$lisnom,
+    v21 = v21m12$lisnom
+)
+lisnomm09 <- data.frame(
+    #v91 = v91m09$lisnom,
+    v94 = v94m09$lisnom,
+    v97 = v97m09$lisnom,
+    v00 = v00m09$lisnom,
+    v03 = v03m09$lisnom,
+    v06 = v06m09$lisnom,
+    v09 = v09m  $lisnom,
+    v12 = v12m09$lisnom,
+    v15 = v15m09$lisnom,
+    v18 = v18m09$lisnom,
+    v21 = v21m09$lisnom
+)
+lisnomm06 <- data.frame(
+    #v91 = v91m06$lisnom,
+    v94 = v94m06$lisnom,
+    v97 = v97m06$lisnom,
+    v00 = v00m06$lisnom,
+    v03 = v03m06$lisnom,
+    v06 = v06m  $lisnom,
+    v09 = v09m06$lisnom,
+    v12 = v12m06$lisnom,
+    v15 = v15m06$lisnom,
+    v18 = v18m06$lisnom,
+    v21 = v21m06$lisnom
+)
+lisnomm03 <- data.frame(
+    #v91 = v91m03$lisnom,
+    v94 = v94m03$lisnom,
+    v97 = v97m03$lisnom,
+    v00 = v00m03$lisnom,
+    v03 = v03m  $lisnom,
+    v06 = v06m03$lisnom,
+    v09 = v09m03$lisnom,
+    v12 = v12m03$lisnom,
+    v15 = v15m03$lisnom,
+    v18 = v18m03$lisnom,
+    v21 = v21m03$lisnom
+)
+lisnomm00 <- data.frame(
+    #v91 = v91m00$lisnom,
+    v94 = v94m00$lisnom,
+    v97 = v97m00$lisnom,
+    v00 = v00m  $lisnom,
+    v03 = v03m00$lisnom,
+    v06 = v06m00$lisnom,
+    v09 = v09m00$lisnom,
+    v12 = v12m00$lisnom,
+    v15 = v15m00$lisnom,
+    v18 = v18m00$lisnom,
+    v21 = v21m00$lisnom
+)
+lisnomm97 <- data.frame(
+    #v91 = v91m97$lisnom,
+    v94 = v94m97$lisnom,
+    v97 = v97m  $lisnom,
+    v00 = v00m97$lisnom,
+    v03 = v03m97$lisnom,
+    v06 = v06m97$lisnom,
+    v09 = v09m97$lisnom,
+    v12 = v12m97$lisnom,
+    v15 = v15m97$lisnom,
+    v18 = v18m97$lisnom,
+    v21 = v21m97$lisnom
+)
+lisnomm94 <- data.frame(
+    #v91 = v91m94$lisnom,
+    v94 = v94m  $lisnom,
+    v97 = v97m94$lisnom,
+    v00 = v00m94$lisnom,
+    v03 = v03m94$lisnom,
+    v06 = v06m94$lisnom,
+    v09 = v09m94$lisnom,
+    v12 = v12m94$lisnom,
+    v15 = v15m94$lisnom,
+    v18 = v18m94$lisnom,
+    v21 = v21m94$lisnom
+)
+## lisnomm91 <- data.frame(
+##     v91 = v91m  $lisnom,
+##     v94 = v94m91$lisnom,
+##     v97 = v97m91$lisnom,
+##     v00 = v00m91$lisnom,
+##     v03 = v03m91$lisnom,
+##     v06 = v06m91$lisnom,
+##     v09 = v09m91$lisnom,
+##     v12 = v12m91$lisnom,
+##     v15 = v15m91$lisnom,
+##     v18 = v18m91$lisnom,
+##     v21 = v21m91$lisnom
+## )
+#
+
 # transpose to plug columns (units) into new data.frames
-pand79    <- t(pand79)
-pand97    <- t(pand97)
-pand06    <- t(pand06)
-pand18    <- t(pand18)
-prid79    <- t(prid79)
-prid97    <- t(prid97)
-prid06    <- t(prid06)
-prid18    <- t(prid18)
-leftd79   <- t(leftd79)
-leftd97   <- t(leftd97)
-leftd06   <- t(leftd06)
-leftd18   <- t(leftd18)
-othd79    <- t(othd79)
-othd97    <- t(othd97)
-othd06    <- t(othd06)
-othd18    <- t(othd18)
-efecd79   <- t(efecd79)
-efecd97   <- t(efecd97)
-efecd06   <- t(efecd06)
-efecd18   <- t(efecd18)
-lisnomd79 <- t(lisnomd79)
-lisnomd97 <- t(lisnomd97)
-lisnomd06 <- t(lisnomd06)
-lisnomd18 <- t(lisnomd18)
+panm21    <- t(panm21)
+panm18    <- t(panm18)
+panm15    <- t(panm15)
+panm12    <- t(panm12)
+panm09    <- t(panm09)
+panm06    <- t(panm06)
+panm03    <- t(panm03)
+panm00    <- t(panm00)
+panm97    <- t(panm97)
+panm94    <- t(panm94)
+## panm91    <- t(panm91)
+#
+prim21    <- t(prim21)
+prim18    <- t(prim18)
+prim15    <- t(prim15)
+prim12    <- t(prim12)
+prim09    <- t(prim09)
+prim06    <- t(prim06)
+prim03    <- t(prim03)
+prim00    <- t(prim00)
+prim97    <- t(prim97)
+prim94    <- t(prim94)
+## prim91    <- t(prim91)
+#
+leftm21    <- t(leftm21)
+leftm18    <- t(leftm18)
+leftm15    <- t(leftm15)
+leftm12    <- t(leftm12)
+leftm09    <- t(leftm09)
+leftm06    <- t(leftm06)
+leftm03    <- t(leftm03)
+leftm00    <- t(leftm00)
+leftm97    <- t(leftm97)
+leftm94    <- t(leftm94)
+## leftm91    <- t(leftm91)
+#
+othm21    <- t(othm21)
+othm18    <- t(othm18)
+othm15    <- t(othm15)
+othm12    <- t(othm12)
+othm09    <- t(othm09)
+othm06    <- t(othm06)
+othm03    <- t(othm03)
+othm00    <- t(othm00)
+othm97    <- t(othm97)
+othm94    <- t(othm94)
+## othm91    <- t(othm91)
+#
+efecm21    <- t(efecm21)
+efecm18    <- t(efecm18)
+efecm15    <- t(efecm15)
+efecm12    <- t(efecm12)
+efecm09    <- t(efecm09)
+efecm06    <- t(efecm06)
+efecm03    <- t(efecm03)
+efecm00    <- t(efecm00)
+efecm97    <- t(efecm97)
+efecm94    <- t(efecm94)
+## efecm91    <- t(efecm91)
+#
+lisnomm21    <- t(lisnomm21)
+lisnomm18    <- t(lisnomm18)
+lisnomm15    <- t(lisnomm15)
+lisnomm12    <- t(lisnomm12)
+lisnomm09    <- t(lisnomm09)
+lisnomm06    <- t(lisnomm06)
+lisnomm03    <- t(lisnomm03)
+lisnomm00    <- t(lisnomm00)
+lisnomm97    <- t(lisnomm97)
+lisnomm94    <- t(lisnomm94)
+## lisnomm91    <- t(lisnomm91)
 #
 
-## if (agg=="m"){
-##     extendCoal <- as.list(rep(NA, nrow(v00m))) # empty list will receive one data.frame per unit
-##     names(extendCoal) <- v00m$ife
-##     # replicate counterfactual units for regressions
-##     extendCoal.cf06 <- extendCoal.cf09 <- extendCoal.cf12 <- extendCoal.cf15 <- extendCoal.cf18 <- extendCoal.cf21 <- extendCoal
-## }
-
-if (agg=="d"){
-    tmp <- as.list(rep(NA, nrow(v00d))) # empty list will receive one data.frame per unit (v00d same-dim as all other vote objects)
-    # replicate counterfactual units for regressions
-    extendCoald79 <- extendCoald97 <- extendCoald06 <- extendCoald18 <- tmp
-}
+#################################################################
+## extendCoal.. will receive data for regressions, one per map ##
+#################################################################
+tmp <-     as.list(rep(NA, nmun)) # empty list will receive one data.frame per unit
+names(tmp) <- v00m$ife
+#
+extendCoalm21 <- extendCoalm18 <- 
+extendCoalm15 <- extendCoalm12 <- extendCoalm09 <- extendCoalm06 <- 
+extendCoalm03 <- extendCoalm00 <- extendCoalm97 <- 
+extendCoalm94 <-
+##extendCoalm91 <- 
+    tmp
+rm(tmp)
 
 ## if (agg=="s"){
 ##     extendCoal <- as.list(rep(NA, nrow(v00s))) # empty list will receive one data.frame per unit
 ##     names(extendCoal) <- v00s$edon*10000 + v00s$seccion # untested
 ## }
-# loop over municipios/secciones
-for (i in 1:nrow(v00d)){
+
+# loop over municipios
+for (i in 1:nmun){
     #i <- 81 # debug
-    message(sprintf("loop %s of %s", i, nrow(v00d)))
+    message(sprintf("loop %s of %s", i, nmun))
     #########################
-    ## votes with 1979 map ##
+    ## votes with 2021 map ##
     #########################
-    tmp <- data.frame(yr   = seq(from=1991, to=2021, by=3),
-                      pan  = pand79[,i],
-                      pri  = prid79[,i],
-                      left = leftd79[,i],
-                      oth  = othd79[,i],
-                      efec = efecd79[,i],
-                      lisnom = lisnomd79[,i])
-    #tmp <- rbind(v91=c(1988,NA,NA,NA,NA,NA,NA), tmp) # add 1988 with no votes in dataset
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm21[,i],
+                      pri    = prim21[,i],
+                      left   = leftm21[,i],
+                      oth    = othm21[,i],
+                      efec   = efecm21[,i],
+                      lisnom = lisnomm21[,i])
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
@@ -470,97 +2827,22 @@ for (i in 1:nrow(v00d)){
     # re-compute shares to add to 1
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
     # add id
-    if (agg=="m") tmp$ife     <- v00m$ife[i]
-    if (agg=="d") tmp$disn    <- v94d$disn[i]
-    if (agg=="s") tmp$edosecn <- v00s$edon[i]*10000 + v00s$seccion[i] # untested
+    tmp$ife    <- v00m$ife[i]
     # fill info to new list
-    extendCoald79[[i]] <- tmp
+    extendCoalm21[[i]] <- tmp
     # name list object
-    if (agg=="d") names(extendCoald79)[i] <- tmp$disn[1]
-    #
-    #########################
-    ## votes with 1997 map ##
-    #########################
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3),
-                      pan  = pand97[,i],
-                      pri  = prid97[,i],
-                      left = leftd97[,i],
-                      oth  = othd97[,i],
-                      efec = efecd97[,i],
-                      lisnom = lisnomd97[,i])
-    tmp <- rbind(v91=c(1991,NA,NA,NA,NA,NA,NA), tmp) # add 1991 with no counterfactuals
-    # replace NAs with period's mean
-    if (length(tmp[is.na(tmp)])>0){
-        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
-        tmp$pan   [is.na(tmp$pan)]   <- per.means["pan"];
-        tmp$pri   [is.na(tmp$pri)]   <- per.means["pri"];
-        tmp$left  [is.na(tmp$left)]  <- per.means["left"];
-        tmp$oth   [is.na(tmp$oth)]   <- per.means["oth"];
-        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
-        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
-    }
-    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
-    if (length(tmp[tmp==0])>0){
-        tmp[tmp==0] <- 0.001;
-    }
-    # re-compute shares to add to 1
-    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
-    # add id
-    if (agg=="m") tmp$ife     <- v00m$ife[i]
-    if (agg=="d") tmp$disn    <- v97d$disn[i]
-    if (agg=="s") tmp$edosecn <- v00s$edon[i]*10000 + v00s$seccion[i] # untested
-    # fill info to new list
-    extendCoald97[[i]] <- tmp
-    # name list object
-    if (agg=="d") names(extendCoald97)[i] <- tmp$disn[1]
-    #
-    #########################
-    ## votes with 2006 map ##
-    #########################
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3),
-                      pan  = pand06[,i],
-                      pri  = prid06[,i],
-                      left = leftd06[,i],
-                      oth  = othd06[,i],
-                      efec = efecd06[,i],
-                      lisnom = lisnomd06[,i])
-    tmp <- rbind(v91=c(1991,NA,NA,NA,NA,NA,NA), tmp) # add 1991 with no counterfactuals
-    # replace NAs with period's mean
-    if (length(tmp[is.na(tmp)])>0){
-        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
-        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
-        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
-        tmp$left  [is.na(tmp$left)] <- per.means["left"];
-        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
-        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
-        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
-    }
-    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
-    if (length(tmp[tmp==0])>0){
-        tmp[tmp==0] <- 0.001;
-    }
-    # re-compute shares to add to 1
-    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
-    # add id
-    if (agg=="m") tmp$ife     <- v00m$ife[i]
-    if (agg=="d") tmp$disn    <- v06d$disn[i]
-    if (agg=="s") tmp$edosecn <- v00s$edon[i]*10000 + v00s$seccion[i] # untested
-    # fill info to new list
-    extendCoald06[[i]] <- tmp
-    # name list object
-    if (agg=="d") names(extendCoald06)[i] <- tmp$disn[1]
+    names(extendCoalm21)[i] <- tmp$ife[1]
     #
     #########################
     ## votes with 2018 map ##
     #########################
-    tmp <- data.frame(yr   = seq(from=1994, to=2021, by=3),
-                      pan  = pand18[,i],
-                      pri  = prid18[,i],
-                      left = leftd18[,i],
-                      oth  = othd18[,i],
-                      efec = efecd18[,i],
-                      lisnom = lisnomd18[,i])
-    tmp <- rbind(v91=c(1991,NA,NA,NA,NA,NA,NA), tmp) # add 1991 with no counterfactuals
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm18[,i],
+                      pri    = prim18[,i],
+                      left   = leftm18[,i],
+                      oth    = othm18[,i],
+                      efec   = efecm18[,i],
+                      lisnom = lisnomm18[,i])
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
@@ -578,15 +2860,310 @@ for (i in 1:nrow(v00d)){
     # re-compute shares to add to 1
     tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
     # add id
-    if (agg=="m") tmp$ife     <- v00m$ife[i]
-    if (agg=="d") tmp$disn    <- v18d$disn[i]
-    if (agg=="s") tmp$edosecn <- v00s$edon[i]*10000 + v00$seccion[i] # untested
+    tmp$ife    <- v00m$ife[i]
     # fill info to new list
-    extendCoald18[[i]] <- tmp
+    extendCoalm18[[i]] <- tmp
     # name list object
-    if (agg=="d") names(extendCoald18)[i] <- tmp$disn[1]
+    names(extendCoalm18)[i] <- tmp$ife[1]
+    #
+    #########################
+    ## votes with 2015 map ##
+    #########################
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm15[,i],
+                      pri    = prim15[,i],
+                      left   = leftm15[,i],
+                      oth    = othm15[,i],
+                      efec   = efecm15[,i],
+                      lisnom = lisnomm15[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    tmp$ife    <- v00m$ife[i]
+    # fill info to new list
+    extendCoalm15[[i]] <- tmp
+    # name list object
+    names(extendCoalm15)[i] <- tmp$ife[1]
+    #
+    #########################
+    ## votes with 2012 map ##
+    #########################
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm12[,i],
+                      pri    = prim12[,i],
+                      left   = leftm12[,i],
+                      oth    = othm12[,i],
+                      efec   = efecm12[,i],
+                      lisnom = lisnomm12[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    tmp$ife    <- v00m$ife[i]
+    # fill info to new list
+    extendCoalm12[[i]] <- tmp
+    # name list object
+    names(extendCoalm12)[i] <- tmp$ife[1]
+    #
+    #########################
+    ## votes with 2009 map ##
+    #########################
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm09[,i],
+                      pri    = prim09[,i],
+                      left   = leftm09[,i],
+                      oth    = othm09[,i],
+                      efec   = efecm09[,i],
+                      lisnom = lisnomm09[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    tmp$ife    <- v00m$ife[i]
+    # fill info to new list
+    extendCoalm09[[i]] <- tmp
+    # name list object
+    names(extendCoalm09)[i] <- tmp$ife[1]
+    #
+    #########################
+    ## votes with 2006 map ##
+    #########################
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm06[,i],
+                      pri    = prim06[,i],
+                      left   = leftm06[,i],
+                      oth    = othm06[,i],
+                      efec   = efecm06[,i],
+                      lisnom = lisnomm06[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    tmp$ife    <- v00m$ife[i]
+    # fill info to new list
+    extendCoalm06[[i]] <- tmp
+    # name list object
+    names(extendCoalm06)[i] <- tmp$ife[1]
+    #
+    #########################
+    ## votes with 2003 map ##
+    #########################
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm03[,i],
+                      pri    = prim03[,i],
+                      left   = leftm03[,i],
+                      oth    = othm03[,i],
+                      efec   = efecm03[,i],
+                      lisnom = lisnomm03[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    tmp$ife    <- v00m$ife[i]
+    # fill info to new list
+    extendCoalm03[[i]] <- tmp
+    # name list object
+    names(extendCoalm03)[i] <- tmp$ife[1]
+    #
+    #########################
+    ## votes with 2000 map ##
+    #########################
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm00[,i],
+                      pri    = prim00[,i],
+                      left   = leftm00[,i],
+                      oth    = othm00[,i],
+                      efec   = efecm00[,i],
+                      lisnom = lisnomm00[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    tmp$ife    <- v00m$ife[i]
+    # fill info to new list
+    extendCoalm00[[i]] <- tmp
+    # name list object
+    names(extendCoalm00)[i] <- tmp$ife[1]
+    #
+    #########################
+    ## votes with 1997 map ##
+    #########################
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm97[,i],
+                      pri    = prim97[,i],
+                      left   = leftm97[,i],
+                      oth    = othm97[,i],
+                      efec   = efecm97[,i],
+                      lisnom = lisnomm97[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    tmp$ife    <- v00m$ife[i]
+    # fill info to new list
+    extendCoalm97[[i]] <- tmp
+    # name list object
+    names(extendCoalm97)[i] <- tmp$ife[1]
+    #
+    #########################
+    ## votes with 1994 map ##
+    #########################
+    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+                      pan    = panm94[,i],
+                      pri    = prim94[,i],
+                      left   = leftm94[,i],
+                      oth    = othm94[,i],
+                      efec   = efecm94[,i],
+                      lisnom = lisnomm94[,i])
+    # replace NAs with period's mean
+    if (length(tmp[is.na(tmp)])>0){
+        per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+        tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+        tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+        tmp$left  [is.na(tmp$left)] <- per.means["left"];
+        tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+        tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+        tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
+    }
+    # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    if (length(tmp[tmp==0])>0){
+        tmp[tmp==0] <- 0.001;
+    }
+    # re-compute shares to add to 1
+    tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    # add id
+    tmp$ife    <- v00m$ife[i]
+    # fill info to new list
+    extendCoalm94[[i]] <- tmp
+    # name list object
+    names(extendCoalm94)[i] <- tmp$ife[1]
+    #
+    ## #########################
+    ## ## votes with map 1991 ##
+    ## #########################
+    ## tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    ##                   pan    = panm91[,i],
+    ##                   pri    = prim91[,i],
+    ##                   left   = leftm91[,i],
+    ##                   oth    = othm91[,i],
+    ##                   efec   = efecm91[,i],
+    ##                   lisnom = lisnomm91[,i])
+    ## # replace NAs with period's mean
+    ## if (length(tmp[is.na(tmp)])>0){
+    ##     per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
+    ##     tmp$pan   [is.na(tmp$pan)]  <- per.means["pan"];
+    ##     tmp$pri   [is.na(tmp$pri)]  <- per.means["pri"];
+    ##     tmp$left  [is.na(tmp$left)] <- per.means["left"];
+    ##     tmp$oth   [is.na(tmp$oth)]  <- per.means["oth"];
+    ##     tmp$efec  [is.na(tmp$efec)   | tmp$efec==0]   <- 1
+    ##     tmp$lisnom[is.na(tmp$lisnom) | tmp$lisnom==0] <- 2
+    ## }
+    ## # add epsilon = 2*max(rounding error) to zeroes to avoid indeterminate logs
+    ## if (length(tmp[tmp==0])>0){
+    ##     tmp[tmp==0] <- 0.001;
+    ## }
+    ## # re-compute shares to add to 1
+    ## tmp[,2:5] <- round(tmp[,2:5] / rowSums(tmp[,2:5]),3)
+    ## # add id
+    ## tmp$ife    <- v00m$ife[i]
+    ## # fill info to new list
+    ## extendCoalm91[[i]] <- tmp
+    ## # name list object
+    ## names(extendCoalm91)[i] <- tmp$ife[1]
 }
-
+    
 ##################################
 ## datos para regresión de alfa ##
 ##################################

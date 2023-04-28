@@ -100,6 +100,10 @@ source("/home/eric/Dropbox/data/useful-functions/notin.r")
 ## 'inegi2ife' function ##
 ##########################
 source("/home/eric/Dropbox/data/useful-functions/inegi2ife.r")
+#################################
+## function to sort df columns ##
+#################################
+source("/home/eric/Dropbox/data/useful-functions/moveme.r")
 
 
 
@@ -140,6 +144,8 @@ v91_agg <- v91_split <- d
 d <- read.csv("dip1994.csv", header=TRUE, stringsAsFactors=FALSE)
 ## OJO: 1994 has inegi instead of ife municipal codes
 d$ife <- inegi2ife(d$inegi)
+d <- d[moveme(names(d), "ife before inegi")]
+d$inegi <- NULL
 d <- d[order(d$edon, d$seccion),] # sort
 # vote columns selector
 sel.c <-            c("pan","pri","pps","prd","pfcrn","parm","uno.pdm","pt","pvem","efec","lisnom")
@@ -1229,8 +1235,6 @@ v18 <- d # return to data
 ## eg. 1979 map federal election counterfactuals        ##
 ## to post-dict 1988 vote (cf. cantú, but longitudinal) ##
 ##########################################################
-# function to sort df columns
-source("/home/eric/Dropbox/data/useful-functions/moveme.r")
 #
 mundis$edosecn <- mundis$edon*10000 + mundis$seccion
 # add counterfactual district and municipios to votes
@@ -1252,35 +1256,35 @@ rm(mundis)
 ####################################################
 ## fill ife codes in secciones that changed munic ##
 ####################################################
-ife.inegi <- eq[,c("inegi","ife")] # correct inegi where ife changed
-ife.inegi <- ife.inegi[duplicated(ife.inegi$ife)==FALSE,]
-library(plyr)
-
-OJO 26apr2023: check
-table(v94$ife==v94$ife1994)
-v94[which(v94$ife!=v94$ife1994)[1],]
-
 v94$ife <- v94$ife1994
-v94$inegi <- mapvalues(v94$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v94$inegi <- inegi2ife(v94$ife)
+                                        #
 v97$ife <- v97$ife1997
-v97$inegi <- mapvalues(v97$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v97$inegi <- inegi2ife(v97$ife)
+                                        #
 v00$ife <- v00$ife2000
-v00$inegi <- mapvalues(v00$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v00$inegi <- inegi2ife(v00$ife)
+                                        #
 v03$ife <- v03$ife2003
-v03$inegi <- mapvalues(v03$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v03$inegi <- inegi2ife(v03$ife)
+                                        #
 v06$ife <- v06$ife2006
-v06$inegi <- mapvalues(v06$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v06$inegi <- inegi2ife(v06$ife)
+                                        #
 v09$ife <- v09$ife2009
-v09$inegi <- mapvalues(v09$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v09$inegi <- inegi2ife(v09$ife)
+                                        #
 v12$ife <- v12$ife2012
-v12$inegi <- mapvalues(v12$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v12$inegi <- inegi2ife(v12$ife)
+                                        #
 v15$ife <- v15$ife2015
-v15$inegi <- mapvalues(v15$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v15$inegi <- inegi2ife(v15$ife)
+                                        #
 v18$ife <- v18$ife2018
-v18$inegi <- mapvalues(v18$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
+v18$inegi <- inegi2ife(v18$ife)
+                                        #
 v21$ife <- v21$ife2021
-v21$inegi <- mapvalues(v21$ife, from = ife.inegi$ife, to = ife.inegi$inegi, warn_missing=FALSE)
-rm(ife.inegi)
+v21$inegi <- inegi2ife(v21$ife)
 
 # save all to restore after manipulating district/munic aggregates
 save.image("../../datosBrutos/not-in-git/tmp-restore.RData")

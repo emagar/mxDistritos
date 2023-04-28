@@ -36,6 +36,7 @@
 ################################
 ## aggregate district returns ##
 ################################
+
 ##########
 ## 1991 ## OJO: 1991 seccion identifiers are wrong, can aggregate with disn/ife, but no info for counterfactuals
 ##########
@@ -732,61 +733,62 @@ table(c(
 ############################################
 ## prepare manipulated party objects      ##
 ## for time-series and alpha regressions  ##
+## *** One object per district map ***    ##
 ############################################
 #
 # version 1: extend partial coalitions across the board
 # shares
 pand18 <- data.frame(
-    #v91 =  with(v91d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v94 =  with(v94d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v97 =  with(v97d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v00 =  with(v00d18, ifelse(efec==0, NA,  panc                   / efec)),
-    v03 =  with(v03d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v06 =  with(v06d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v09 =  with(v09d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v12 =  with(v12d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v15 =  with(v15d18, ifelse(efec==0, NA,  pan                    / efec)),
-    v18 =  with(v18d,   ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),   # drop mc?
-    v21 =  with(v21d,   ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
+    #v91 =  with(v91d18, ifelse(efec==0, NA,  pan               / efec)),
+    v94 =  with(v94d18, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97d18, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00d18, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03d18, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06d18, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09d18, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12d18, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15d18, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18d,   ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21d,   ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 pand06 <- data.frame(
-    #v91 =  with(v91d06, ifelse(efec==0, NA,  pan                    / efec)), #comment if agg=="s"
-    v94 =  with(v94d06, ifelse(efec==0, NA,  pan                    / efec)),
-    v97 =  with(v97d06, ifelse(efec==0, NA,  pan                    / efec)),
-    v00 =  with(v00d06, ifelse(efec==0, NA,  panc                   / efec)),
-    v03 =  with(v03d06, ifelse(efec==0, NA,  pan                    / efec)),
-    v06 =  with(v06d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v09 =  with(v09d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v12 =  with(v12d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v15 =  with(v15d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v18 =  with(v18d06, ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),   # drop mc?
-    v21 =  with(v21d06, ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
+    #v91 =  with(v91d06, ifelse(efec==0, NA,  pan               / efec)), #comment if agg=="s"
+    v94 =  with(v94d06, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97d06, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00d06, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03d06, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06d,   ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09d,   ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12d,   ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15d,   ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18d06, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21d06, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 pand97 <- data.frame(
-    #v91 =  with(v91d97, ifelse(efec==0, NA,  pan                    / efec)), # comment if agg=="s"
-    v94 =  with(v94d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v97 =  with(v97d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v00 =  with(v00d,   ifelse(efec==0, NA,  panc                   / efec)),
-    v03 =  with(v03d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v06 =  with(v06d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v09 =  with(v09d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v12 =  with(v12d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v15 =  with(v15d97, ifelse(efec==0, NA,  pan                    / efec)),
-    v18 =  with(v18d97, ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),  # drop mc?
-    v21 =  with(v21d97, ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
+    #v91 =  with(v91d97, ifelse(efec==0, NA,  pan               / efec)), # comment if agg=="s"
+    v94 =  with(v94d97, ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97d,   ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00d,   ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03d,   ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06d97, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09d97, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12d97, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15d97, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18d97, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21d97, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 pand79 <- data.frame(
-    v91 =  with(v91d,   ifelse(efec==0, NA,  pan                    / efec)), # comment if agg=="s"
-    v94 =  with(v94d,   ifelse(efec==0, NA,  pan                    / efec)),
-    v97 =  with(v97d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v00 =  with(v00d79, ifelse(efec==0, NA,  panc                   / efec)),
-    v03 =  with(v03d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v06 =  with(v06d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v09 =  with(v09d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v12 =  with(v12d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v15 =  with(v15d79, ifelse(efec==0, NA,  pan                    / efec)),
-    v18 =  with(v18d79, ifelse(efec==0, NA, (pan + panc + prd + mc) / efec)),  # drop mc?
-    v21 =  with(v21d79, ifelse(efec==0, NA, (pan + panc + prd)      / efec))   # drop prd?
+    v91 =  with(v91d,   ifelse(efec==0, NA,  pan               / efec)), # comment if agg=="s"
+    v94 =  with(v94d,   ifelse(efec==0, NA,  pan               / efec)),
+    v97 =  with(v97d79, ifelse(efec==0, NA,  pan               / efec)),
+    v00 =  with(v00d79, ifelse(efec==0, NA,  panc              / efec)),
+    v03 =  with(v03d79, ifelse(efec==0, NA,  pan               / efec)),
+    v06 =  with(v06d79, ifelse(efec==0, NA,  pan               / efec)),
+    v09 =  with(v09d79, ifelse(efec==0, NA,  pan               / efec)),
+    v12 =  with(v12d79, ifelse(efec==0, NA,  pan               / efec)),
+    v15 =  with(v15d79, ifelse(efec==0, NA,  pan               / efec)),
+    v18 =  with(v18d79, ifelse(efec==0, NA, (pan + panc + prd) / efec)),  # dropped mc
+    v21 =  with(v21d79, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 pand18 <- round(pand18, 3)
 pand06 <- round(pand06, 3)
@@ -917,7 +919,7 @@ othd18 <- data.frame(
     v09 =  with(v09d18, ifelse(efec==0, NA, (pna + psd)                                / efec)),
     v12 =  with(v12d18, ifelse(efec==0, NA,  pna                                       / efec)),
     v15 =  with(v15d18, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
-    v18 =  with(v18d,   ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
+    v18 =  with(v18d,   ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
     v21 =  with(v21d,   ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othd06 <- data.frame(
@@ -930,7 +932,7 @@ othd06 <- data.frame(
     v09 =  with(v09d,   ifelse(efec==0, NA, (pna + psd)                                / efec)),
     v12 =  with(v12d,   ifelse(efec==0, NA,  pna                                       / efec)),
     v15 =  with(v15d,   ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
-    v18 =  with(v18d06, ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
+    v18 =  with(v18d06, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
     v21 =  with(v21d06, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othd97 <- data.frame(
@@ -943,7 +945,7 @@ othd97 <- data.frame(
     v09 =  with(v09d97, ifelse(efec==0, NA, (pna + psd)                                / efec)),
     v12 =  with(v12d97, ifelse(efec==0, NA,  pna                                       / efec)),
     v15 =  with(v15d97, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
-    v18 =  with(v18d97, ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
+    v18 =  with(v18d97, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
     v21 =  with(v21d97, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othd79 <- data.frame(
@@ -956,7 +958,7 @@ othd79 <- data.frame(
     v09 =  with(v09d79, ifelse(efec==0, NA, (pna + psd)                                / efec)),
     v12 =  with(v12d79, ifelse(efec==0, NA,  pna                                       / efec)),
     v15 =  with(v15d79, ifelse(efec==0, NA, (mc + pna + ph + indep1 + indep2)          / efec)),
-    v18 =  with(v18d79, ifelse(efec==0, NA, (indep1 + indep2)                          / efec)),
+    v18 =  with(v18d79, ifelse(efec==0, NA, (mc + indep1 + indep2)                     / efec)),
     v21 =  with(v21d79, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othd79 <- round(othd79, 3)
