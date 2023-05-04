@@ -1327,9 +1327,9 @@ yr.means$pri [11] <-  cs(v21s)["pri"]                                           
 yr.means$left[11] <- (cs(v21s)["morena"] + cs(v21s)["morenac"] + cs(v21s)["pt"]  + cs(v21s)["pvem"]) / cs(v21s)["efec"]
 yr.means$oth [11] <-  with(yr.means[11,], 1 - pan - pri - left)
 #
-################################
-## votes in relation to pri's ##
-################################
+#############################
+## votes relative to pri's ##
+#############################
 yr.means <- within(yr.means, mean.rpan    <- pan  / pri)
 yr.means <- within(yr.means, mean.rleft   <- left / pri)
 yr.means <- within(yr.means, mean.roth    <- oth  / pri)
@@ -1353,7 +1353,7 @@ for (i in 1:300){
 ###############################
 ## código de las regresiones ##
 ###############################
-vhat.2024 <-                 # <--- OJO 19abr21: assumes no redistricting in 2024 change when 2024 map available
+vhat.2024 <-                 # <--- prospective, with up-to 2021 returns, assumes no redistricting in 2024
 vhat.2021 <- vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <- vhat.2006 <- 
 vhat.2003 <- vhat.2000 <- vhat.1997 <- vhat.1994 <-
 vhat.1991 <- vhat.1988 <-
@@ -1370,10 +1370,10 @@ betahat <- data.frame (pan    = rep(NA, 300),
                        oth    = rep(NA, 300)) # will receive municipio's betas (none for pri)
 #
 tmp <- as.list(rep(NA, 300)) # empty list will receive one time-series
-                                    # regression per municipio, each used to
+                                    # regression per unit, each used to
                                     # predict votes in 2006:2024
-# add district names---must be done yearly basis due to redistricting
-tmp18 <- tmp06 <- tmp97 <- tmp79 <- tmp # each map will receive district names
+# add district names---must be done by map due to redistricting
+tmp18 <- tmp06 <- tmp97 <- tmp79 <- tmp
 names(tmp79) <- v94d$disn
 names(tmp97) <- v97d$disn
 names(tmp06) <- v06d$disn
@@ -1527,9 +1527,9 @@ estim_dis <- function(sel.map){
         if (sel.map==1979){
             tmp.back <- 1 # will indicate backwards prediction
             year <- 1988
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
             #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1569,9 +1569,9 @@ estim_dis <- function(sel.map){
         if (sel.map==1979){
             tmp.back <- 1 # will indicate backwards prediction
             year <- 1991
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
             #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1611,9 +1611,9 @@ estim_dis <- function(sel.map){
         if (sel.map==1979){
             tmp.back <- 1 # will indicate backwards prediction
             year <- 1994
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
             #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1653,9 +1653,9 @@ estim_dis <- function(sel.map){
         if (sel.map==1997){
             tmp.back <- 1 # will indicate backwards prediction
             year <- 1997
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
             #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1695,9 +1695,9 @@ estim_dis <- function(sel.map){
         if (sel.map==1997){
             tmp.back <- 1 # will indicate backwards prediction
             year <- 2000
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
             #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1737,9 +1737,9 @@ estim_dis <- function(sel.map){
         if (sel.map==1997){
             tmp.back <- 1 # will indicate backwards prediction
             year <- 2003
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
             #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1773,15 +1773,15 @@ estim_dis <- function(sel.map){
             data.tmp$dbackward  [data.tmp$yr==year] <- tmp.back   # input fwd/back
         }
                                         #
-############################################
+        ############################################
         ## backwards-predict 2006 with next 5 els ##
-############################################
+        ############################################
         if (sel.map==2006){
             tmp.back <- 1 # will indicate backwards prediction
             year <- 2006
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
                                         #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1815,15 +1815,15 @@ estim_dis <- function(sel.map){
             data.tmp$dbackward  [data.tmp$yr==year] <- tmp.back   # input fwd/back
         }
                                         #
-##################################
+        ##################################
         ## predict 2009 with last 5 els ##
-##################################
+        ##################################
         if (sel.map==2006){
             tmp.back <- 0 # will indicate forward prediction
             year <- 2009
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
                                         #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1857,15 +1857,15 @@ estim_dis <- function(sel.map){
             data.tmp$dbackward  [data.tmp$yr==year] <- tmp.back   # input fwd/back
         }
                                         #
-##################################
+        ##################################
         ## predict 2012 with last 5 els ##
-##################################
+        ##################################
         if (sel.map==2006){
             tmp.back <- 0 # will indicate forward prediction
             year <- 2012
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
                                         #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1899,15 +1899,15 @@ estim_dis <- function(sel.map){
             data.tmp$dbackward  [data.tmp$yr==year] <- tmp.back   # input fwd/back
         }
                                         #
-##################################
+        ##################################
         ## predict 2015 with last 5 els ##
-##################################
+        ##################################
         if (sel.map==2006){
             tmp.back <- 0 # will indicate forward prediction
             year <- 2015
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
                                         #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1941,15 +1941,15 @@ estim_dis <- function(sel.map){
             data.tmp$dbackward  [data.tmp$yr==year] <- tmp.back   # input fwd/back
         }
                                         #
-##################################
+        ##################################
         ## predict 2018 with last 5 els ##
-##################################
+        ##################################
         if (sel.map==2018){
             tmp.back <- 0 # will indicate forward prediction
             year <- 2018
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
                                         #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -1983,15 +1983,15 @@ estim_dis <- function(sel.map){
             data.tmp$dbackward  [data.tmp$yr==year] <- tmp.back   # input fwd/back
         }
                                         #
-##################################
+        ##################################
         ## predict 2021 with last 5 els ##
-##################################
+        ##################################
         if (sel.map==2018){
             tmp.back <- 0 # will indicate forward prediction
             year <- 2021
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
                                         #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -2025,15 +2025,15 @@ estim_dis <- function(sel.map){
             data.tmp$dbackward  [data.tmp$yr==year] <- tmp.back   # input fwd/back
         }
                                         #
-##################################
+        ##################################
         ## predict 2024 with last 5 els ##
-##################################
+        ##################################
         if (sel.map==2018){
             tmp.back <- 0 # will indicate forward prediction
             year <- 2024
-            reg.pan  <-    lm(formula = log(pan/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.left <-    lm(formula = log(left/pri)   ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
-            reg.oth  <-    lm(formula = log(oth/pri)    ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year-15 & yr <= year-3))
                                         #
             new.d <- data.frame(yr = year)
             rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
@@ -2068,7 +2068,7 @@ estim_dis <- function(sel.map){
         }
         #
         # ALTERNATIVE: exp(predict.lm(reg.pan,    newdata = new.d, interval = "confidence"))
-        # #########################################################################
+        #########################################################################
         ## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
         #########################################################################
         reg.pan   <-  lm(formula = log(pan /pri)  ~  mean.rpan,  data = data.tmp)
@@ -2078,13 +2078,13 @@ estim_dis <- function(sel.map){
         # point prediction alpha with mean at zero 
         new.d <- data.frame(mean.rpan = 0)
         rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
-        new.d <- data.frame(mean.rleft   = 0)
+        new.d <- data.frame(mean.rleft = 0)
         rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
         new.d <- data.frame(mean.roth = 0)
         rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
-        vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
-        vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
-        vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+        vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+        vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+        vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left + rhat.oth), 3)
         #
         #c(vhat.pan, vhat.pri, vhat.left, 1-vhat.pan-vhat.pri-vhat.left)
         alphahat[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
