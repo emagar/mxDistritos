@@ -240,3 +240,4 @@ for (i in yes.nas.2021){  # loop over nas
 }
 
     
+rm(yes.nas.2009, yes.nas.2012, yes.nas.2015, yes.nas.2018, yes.nas.2021)

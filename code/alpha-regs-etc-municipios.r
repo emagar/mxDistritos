@@ -4083,16 +4083,15 @@ for (j in 5:10){
     if (sel.map==2021) extendCoalm21 <- estim_dis(sel.map)
 }
 
-
-save.image("../../datosBrutos/not-in-git/tmp2-restore.RData")
-
-# load image
-rm(list=ls())
-options(width = 110)
-dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-setwd(dd)
-load(file="../../datosBrutos/not-in-git/tmp2-restore.RData")
-
+## ## debug
+## save.image("../../datosBrutos/not-in-git/tmp2-restore.RData")
+## 
+## ## load image
+## rm(list=ls())
+## options(width = 110)
+## dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+## setwd(dd)
+## load(file="../../datosBrutos/not-in-git/tmp2-restore.RData")
 
 # clean, all this is saved in extendCoal, mean.regs, regs.1988 ... regs.2024
 ls()
@@ -4114,6 +4113,7 @@ v15m94, v15m97, v15m00, v15m03, v15m06, v15m09, v15m12,         v15m18, v15m21,
 v18m94, v18m97, v18m00, v18m03, v18m06, v18m09, v18m12, v18m15,         v18m21,
 v21m94, v21m97, v21m00, v21m03, v21m06, v21m09, v21m12, v21m15, v21m18
 )
+rm(sel.r, sel.row, tmp.dat, tmp.out, data.tmp, year)
 rm(i, j, sel.map, sel.drop, d, d2, tmp, non.nas)
 
 ##########################################################################
@@ -4297,7 +4297,9 @@ rm(
     extendCoalm18,
     extendCoalm21
 )
+ls()
 
+        
 ## ###########################
 ## ## inspect saved objects ##
 ## ###########################
