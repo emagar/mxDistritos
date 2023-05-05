@@ -16,21 +16,21 @@
 
 ############################################################################
 ## # backwards estimation, unit = districts                               ##
-## 1988d <- 1991d   1994d   1997d79 2000d79 2003d79                       ##
-## 1991d <- 1994d   1997d79 2000d79 2003d79 2006d79                       ##
-## 1994d <- 1997d79 2000d79 2003d79 2006d79 2009d79                       ##
-## 1997d <- 2000d   2003d   2006d97 2009d97 2012d97                       ##
-## 2000d <- 2003d   2006d97 2009d97 2012d97 2015d97                       ##
-## 2003d <- 2006d97 2009d97 2012d97 2015d97 2018d97                       ##
-## 2006d <- 2009d   2012d   2015d   2018d06 2021d06                       ##
+## 1988m <- 1991m   1994m   1997m79 2000m79 2003m79                       ##
+## 1991m <- 1994m   1997m79 2000m79 2003m79 2006m79                       ##
+## 1994m <- 1997m79 2000m79 2003m79 2006m79 2009m79                       ##
+## 1997m <- 2000m   2003m   2006m97 2009m97 2012m97                       ##
+## 2000m <- 2003m   2006m97 2009m97 2012m97 2015m97                       ##
+## 2003m <- 2006m97 2009m97 2012m97 2015m97 2018m97                       ##
+## 2006m <- 2009m   2012m   2015m   2018m06 2021m06                       ##
 ## # forward estimation, unit = districts                                 ##
-##          2009d18 2012d18 2015d18 2018d   2021d   -> 2024d18            ##
-##          2006d18 2009d18 2012d18 2015d18 2018d   -> 2021d              ##
-##          2003d18 2006d18 2009d18 2012d18 2015d18 -> 2018d              ##
-##          2000d06 2003d06 2006d   2009d   2012d   -> 2015d              ##
-##          1997d06 2000d06 2003d06 2006d   2009d   -> 2012d              ##
-##          1994d06 1997d06 2000d06 2003d06 2006d   -> 2009d              ##
-##          1991d06 1994d06 1997d06 2000d06 2003d06 -> 2006d # no 1991d06 ##
+##          2009m18 2012m18 2015m18 2018m   2021m   -> 2024m18            ##
+##          2006m18 2009m18 2012m18 2015m18 2018m   -> 2021m              ##
+##          2003m18 2006m18 2009m18 2012m18 2015m18 -> 2018m              ##
+##          2000m06 2003m06 2006m   2009m   2012m   -> 2015m              ##
+##          1997m06 2000m06 2003m06 2006m   2009m   -> 2012m              ##
+##          1994m06 1997m06 2000m06 2003m06 2006m   -> 2009m              ##
+##          1991m06 1994m06 1997m06 2000m06 2003m06 -> 2006m # no 1991m06 ##
 ############################################################################
 
 #################################
@@ -1718,7 +1718,7 @@ d <- add.miss.mun(d)                           # add missing municipios, if any
 d <- d[order(d$ife),]                          # sort
 v21m <- d                                      # rename object  
 #
-rm(sel.drop,sel.c,add.miss.mun)
+rm(sel.c,add.miss.mun)
 
 # verify nrow==2469
 table(c(
@@ -2702,7 +2702,6 @@ lisnomm94 <- data.frame(
 ##     v21 = v21m91$lisnom
 ## )
 #
-
 # transpose to plug columns (units) into new data.frames
 panm21    <- t(panm21)
 panm18    <- t(panm18)
@@ -3268,7 +3267,8 @@ yr.means <- within(yr.means, mean.roth    <- oth  / pri)
 yr.means[,2:8] <- round(yr.means[,2:8], 3)
 #
 ## Drop 1991, not used now ##
-yr.means <- yr.means[-1,]
+sel.r <- which(yr.means==1991)
+if (length(sel.r>0)) yr.means <- yr.means[-sel.r,]
 #
 # plug into data
 for (i in 1:nmun){
@@ -3284,7 +3284,6 @@ for (i in 1:nmun){
     extendCoalm97[[i]] <- cbind(extendCoalm97[[i]], yr.means[,6:8])
     extendCoalm94[[i]] <- cbind(extendCoalm94[[i]], yr.means[,6:8])
 }
-
 
 
 #################################################################################################
@@ -3358,7 +3357,8 @@ non.nas <- function(sel.map){
     #length(nn)
     return(nn)
 }
-#non.nas(2000)[1:18] # debug
+non.nas(2000)[1:18] # debug
+setdiff(1:nmun, non.nas(2000)) # one year's complement
 #    
 #########################################################################################
 ## District 5-yr estimates that can be computed before 2024                            ##
@@ -3379,16 +3379,14 @@ non.nas <- function(sel.map){
 ## | 2024 |      |      |      |      |      |       |       |       |       | *fwd* | ##
 #########################################################################################
 
-## municipal estimates are contingent on chosen map (pre-2006 not used)
-##              1    2    3    4    5    6    7    8    9    0    1 
-sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[6]
-#
+
 #############################################
 ## wrap district estimations in a function ##
 #############################################
 estim_dis <- function(sel.map){
     #
     ## if map is 1994 will estimate 1991 backwards, add row in data frames
+    if (sel.map==1994){
         add1991 <- function(x) rbind(v91=c(1991,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA), x)
         tmp <- extendCoalm94 # duplicate for manipulation
         ## OJO: should replace NAs above with 1988 district returns in file
@@ -3917,59 +3915,59 @@ estim_dis <- function(sel.map){
         betahat[i,3] <- coef(reg.oth)   [2]
         #
         if (sel.map==1994){
-            mean.regs.d94$pan   [[i]] <- reg.pan
-            mean.regs.d94$left  [[i]] <- reg.left  
-            mean.regs.d94$oth   [[i]] <- reg.oth
+            mean.regs.m94$pan   [[i]] <- reg.pan
+            mean.regs.m94$left  [[i]] <- reg.left  
+            mean.regs.m94$oth   [[i]] <- reg.oth
         }
         if (sel.map==1997){
-            mean.regs.d97$pan   [[i]] <- reg.pan
-            mean.regs.d97$left  [[i]] <- reg.left  
-            mean.regs.d97$oth   [[i]] <- reg.oth
+            mean.regs.m97$pan   [[i]] <- reg.pan
+            mean.regs.m97$left  [[i]] <- reg.left  
+            mean.regs.m97$oth   [[i]] <- reg.oth
         }
         if (sel.map==2000){
-            mean.regs.d00$pan   [[i]] <- reg.pan
-            mean.regs.d00$left  [[i]] <- reg.left  
-            mean.regs.d00$oth   [[i]] <- reg.oth
+            mean.regs.m00$pan   [[i]] <- reg.pan
+            mean.regs.m00$left  [[i]] <- reg.left  
+            mean.regs.m00$oth   [[i]] <- reg.oth
         }
         if (sel.map==2003){
-            mean.regs.d03$pan   [[i]] <- reg.pan
-            mean.regs.d03$left  [[i]] <- reg.left  
-            mean.regs.d03$oth   [[i]] <- reg.oth
+            mean.regs.m03$pan   [[i]] <- reg.pan
+            mean.regs.m03$left  [[i]] <- reg.left  
+            mean.regs.m03$oth   [[i]] <- reg.oth
         }
         if (sel.map==2006){
-            mean.regs.d06$pan   [[i]] <- reg.pan
-            mean.regs.d06$left  [[i]] <- reg.left  
-            mean.regs.d06$oth   [[i]] <- reg.oth
+            mean.regs.m06$pan   [[i]] <- reg.pan
+            mean.regs.m06$left  [[i]] <- reg.left  
+            mean.regs.m06$oth   [[i]] <- reg.oth
         }
         if (sel.map==2009){
-            mean.regs.d09$pan   [[i]] <- reg.pan
-            mean.regs.d09$left  [[i]] <- reg.left  
-            mean.regs.d09$oth   [[i]] <- reg.oth
+            mean.regs.m09$pan   [[i]] <- reg.pan
+            mean.regs.m09$left  [[i]] <- reg.left  
+            mean.regs.m09$oth   [[i]] <- reg.oth
         }
         if (sel.map==2012){
-            mean.regs.d12$pan   [[i]] <- reg.pan
-            mean.regs.d12$left  [[i]] <- reg.left  
-            mean.regs.d12$oth   [[i]] <- reg.oth
+            mean.regs.m12$pan   [[i]] <- reg.pan
+            mean.regs.m12$left  [[i]] <- reg.left  
+            mean.regs.m12$oth   [[i]] <- reg.oth
         }
         if (sel.map==2015){
-            mean.regs.d15$pan   [[i]] <- reg.pan
-            mean.regs.d15$left  [[i]] <- reg.left  
-            mean.regs.d15$oth   [[i]] <- reg.oth
+            mean.regs.m15$pan   [[i]] <- reg.pan
+            mean.regs.m15$left  [[i]] <- reg.left  
+            mean.regs.m15$oth   [[i]] <- reg.oth
         }
         if (sel.map==2018){
-            mean.regs.d18$pan   [[i]] <- reg.pan
-            mean.regs.d18$left  [[i]] <- reg.left  
-            mean.regs.d18$oth   [[i]] <- reg.oth
+            mean.regs.m18$pan   [[i]] <- reg.pan
+            mean.regs.m18$left  [[i]] <- reg.left  
+            mean.regs.m18$oth   [[i]] <- reg.oth
         }
         if (sel.map==2021){
-            mean.regs.d21$pan   [[i]] <- reg.pan
-            mean.regs.d21$left  [[i]] <- reg.left  
-            mean.regs.d21$oth   [[i]] <- reg.oth
+            mean.regs.m21$pan   [[i]] <- reg.pan
+            mean.regs.m21$left  [[i]] <- reg.left  
+            mean.regs.m21$oth   [[i]] <- reg.oth
         }
         #
         # add alphas and betas for whole period
         data.tmp$alphahat.left  <- data.tmp$alphahat.pri <- data.tmp$alphahat.pan <- NA # open slots for alphas
-        data.tmp$betahat.left   <- data.tmp$betahat.pan <- NA # open slots for betas
+        data.tmp$betahat.left   <- data.tmp$betahat.pan <- NA                           # open slots for betas
         data.tmp$alphahat.pan   <- alphahat$pan [i]
         data.tmp$alphahat.pri   <- alphahat$pri [i]
         data.tmp$alphahat.left  <- alphahat$left[i]
@@ -4003,7 +4001,55 @@ estim_dis <- function(sel.map){
     ##############################################################################################
     ## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
     ##############################################################################################
-    # function will return this:
+    ##
+    ######################################################################
+    ## Add missing columns to unmanipulated list items (for squareness) ##
+    ######################################################################
+    for (i in setdiff(1:nmun, non.nas(sel.map))){  # loop over nas
+    ## subset data to single unit
+    if (sel.map==1994) data.tmp <- extendCoalm94[[i]]
+    if (sel.map==1997) data.tmp <- extendCoalm97[[i]]
+    if (sel.map==2000) data.tmp <- extendCoalm00[[i]]
+    if (sel.map==2003) data.tmp <- extendCoalm03[[i]]
+    if (sel.map==2006) data.tmp <- extendCoalm06[[i]]
+    if (sel.map==2009) data.tmp <- extendCoalm09[[i]]
+    if (sel.map==2012) data.tmp <- extendCoalm12[[i]]
+    if (sel.map==2015) data.tmp <- extendCoalm15[[i]]
+    if (sel.map==2018) data.tmp <- extendCoalm18[[i]]
+    if (sel.map==2021) data.tmp <- extendCoalm21[[i]]
+    data.tmp <- within(data.tmp, {
+        d.pan         <- NA;
+        d.pri         <- NA;
+        d.left        <- NA;
+        vhat.pan      <- NA;
+        vhat.pri      <- NA;
+        vhat.left     <- NA;
+        bhat.pan      <- NA;
+        bhat.left     <- NA;
+        dbackward     <- NA;
+        alphahat.left <- NA;
+        betahat.left  <- NA;
+        alphahat.pan  <- NA;
+        alphahat.pri  <- NA;
+        alphahat.left <- NA;
+        betahat.pan   <- NA;
+        betahat.left  <- NA;
+        betahat.oth   <- NA;
+        # return estimates to data object
+        if (sel.map==1994) extendCoalm94[[i]] <- data.tmp
+        if (sel.map==1997) extendCoalm97[[i]] <- data.tmp
+        if (sel.map==2000) extendCoalm00[[i]] <- data.tmp
+        if (sel.map==2003) extendCoalm03[[i]] <- data.tmp
+        if (sel.map==2006) extendCoalm06[[i]] <- data.tmp
+        if (sel.map==2009) extendCoalm09[[i]] <- data.tmp
+        if (sel.map==2012) extendCoalm12[[i]] <- data.tmp
+        if (sel.map==2015) extendCoalm15[[i]] <- data.tmp
+        if (sel.map==2018) extendCoalm18[[i]] <- data.tmp
+        if (sel.map==2021) extendCoalm21[[i]] <- data.tmp
+    }
+    ################################
+    ## function will return this: ##
+    ################################
     if (sel.map==1994) return(extendCoalm94)
     if (sel.map==1997) return(extendCoalm97)
     if (sel.map==2000) return(extendCoalm00)
@@ -4016,10 +4062,13 @@ estim_dis <- function(sel.map){
     if (sel.map==2021) return(extendCoalm21)
 }
 
-#######################################################################################
-## district estimates are contingent on chosen map, run each once for full estimates ##
-#######################################################################################
-for (j in 1:10){
+## municipal estimates are contingent on chosen map (pre-2006 not used)
+##              1    2    3    4    5    6    7    8    9    0    1 
+sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[8]
+########################################################################################
+## municipal estimates are contingent on chosen map, run each once for full estimates ##
+########################################################################################
+for (j in 5:10){
     sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021)[j]
     #
     if (sel.map==1994) extendCoalm94 <- estim_dis(sel.map)
@@ -4034,44 +4083,55 @@ for (j in 1:10){
     if (sel.map==2021) extendCoalm21 <- estim_dis(sel.map)
 }
 
+
+save.image("../../datosBrutos/not-in-git/tmp2-restore.RData")
+
+# load image
+rm(list=ls())
+options(width = 110)
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load(file="../../datosBrutos/not-in-git/tmp2-restore.RData")
+
+
 # clean, all this is saved in extendCoal, mean.regs, regs.1988 ... regs.2024
-#ls()
+ls()
 rm(alphahat, betahat, cs, estim_dis, per.means, yr.means,
-   vhat.1988, vhat.1991, vhat.1994,
-   vhat.1997, vhat.2000, vhat.2003,
-   vhat.2006, vhat.2009, vhat.2012, vhat.2015,
-   vhat.2018, vhat.2021, vhat.2024)
-rm(v94d97, v94d06, v94d18,
-   v97d79, v97d06, v97d18,
-   v00d79, v00d06, v00d18,
-   v03d79, v03d06, v03d18,
-   v06d79, v06d97, v06d18,
-   v09d79, v09d97, v09d18,
-   v12d79, v12d97, v12d18,
-   v15d79, v15d97, v15d18,
-   v18d79, v18d97, v18d06,
-   v21d79, v21d97, v21d06)
-rm(i, j, sel.map, d, d2)
+##   vhat.1988, vhat.1991, vhat.1994,
+##   vhat.1997, vhat.2000, vhat.2003,
+##   vhat.2006,
+vhat.2009, vhat.2012, vhat.2015,
+vhat.2018, vhat.2021, vhat.2024
+)
+rm(     v94m97, v94m00, v94m03, v94m06, v94m09, v94m12, v94m15, v94m18, v94m21,
+v97m94,         v97m00, v97m03, v97m06, v97m09, v97m12, v97m15, v97m18, v97m21,
+v00m94, v00m97,         v00m03, v00m06, v00m09, v00m12, v00m15, v00m18, v00m21,
+v03m94, v03m97, v03m00,         v03m06, v03m09, v03m12, v03m15, v03m18, v03m21,
+v06m94, v06m97, v06m00, v06m03,         v06m09, v06m12, v06m15, v06m18, v06m21,
+v09m94, v09m97, v09m00, v09m03, v09m06,         v09m12, v09m15, v09m18, v09m21,
+v12m94, v12m97, v12m00, v12m03, v12m06, v12m09,         v12m15, v12m18, v12m21,
+v15m94, v15m97, v15m00, v15m03, v15m06, v15m09, v15m12,         v15m18, v15m21,
+v18m94, v18m97, v18m00, v18m03, v18m06, v18m09, v18m12, v18m15,         v18m21,
+v21m94, v21m97, v21m00, v21m03, v21m06, v21m09, v21m12, v21m15, v21m18
+)
+rm(i, j, sel.map, sel.drop, d, d2, tmp, non.nas)
 
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
 ##########################################################################
 
-d <- add.miss.mun(d)                           # add missing municipios, if any
-
-ls()
 for.export <- function(year) {
     #year <- 2009         # debug
-    #X <- extendCoal[[1]] # debug
+    #X <- extendCoalm09[[1]] # debug
     ## select relevant results object
-    if (year %notit% c(2006,2009,2012,2015,2018,2021,2024)) stop("Year unavailable")
+    if (year %notin% c(2006,2009,2012,2015,2018,2021,2024)) stop("Year unavailable")
     if (year==2024) tmp.dat <- extendCoalm21
     if (year==2021) tmp.dat <- extendCoalm21
     if (year==2018) tmp.dat <- extendCoalm18
     if (year==2015) tmp.dat <- extendCoalm15
     if (year==2012) tmp.dat <- extendCoalm12
     if (year==2009) tmp.dat <- extendCoalm09
-    if (year==2006) tmp.dat <- extendCoalm06
+#    if (year==2006) tmp.dat <- extendCoalm06
 #    if (year==2003) tmp.dat <- extendCoalm03
 #    if (year==2000) tmp.dat <- extendCoalm00
 #    if (year==1997) tmp.dat <- extendCoalm97
@@ -4099,11 +4159,11 @@ for.export <- function(year) {
 
 #out.y1988 <- for.export(year=1988)
 #out.y1991 <- for.export(year=1991)
-out.y1994 <- for.export(year=1994)
-out.y1997 <- for.export(year=1997)
-out.y2000 <- for.export(year=2000)
-out.y2003 <- for.export(year=2003)
-out.y2006 <- for.export(year=2006)
+#out.y1994 <- for.export(year=1994)
+#out.y1997 <- for.export(year=1997)
+#out.y2000 <- for.export(year=2000)
+#out.y2003 <- for.export(year=2003)
+#out.y2006 <- for.export(year=2006)
 out.y2009 <- for.export(year=2009)
 out.y2012 <- for.export(year=2012)
 out.y2015 <- for.export(year=2015)
@@ -4115,64 +4175,64 @@ out.y2024 <- for.export(year=2024)
 ## save to disk ##
 ##################
 ## write.csv(out.y1988,
-##           file = paste(wd, "data/dipfed-distrito-vhat-1988.csv", sep = ""), row.names = FALSE)
+##           file = paste(wd, "data/dipfed-municipio-vhat-1988.csv", sep = ""), row.names = FALSE)
 ## #
 ## write.csv(out.y1991,
-##           file = paste(wd, "data/dipfed-distrito-vhat-1991.csv", sep = ""), row.names = FALSE)
+##           file = paste(wd, "data/dipfed-municipio-vhat-1991.csv", sep = ""), row.names = FALSE)
 ## #
-write.csv(out.y1994,
-          file = paste(wd, "data/dipfed-distrito-vhat-1994.csv", sep = ""), row.names = FALSE)
-#
-write.csv(out.y1997,
-          file = paste(wd, "data/dipfed-distrito-vhat-1997.csv", sep = ""), row.names = FALSE)
-#
-write.csv(out.y2000,
-          file = paste(wd, "data/dipfed-distrito-vhat-2000.csv", sep = ""), row.names = FALSE)
-#
-write.csv(out.y2003,
-          file = paste(wd, "data/dipfed-distrito-vhat-2003.csv", sep = ""), row.names = FALSE)
-#
-write.csv(out.y2006,
-          file = paste(wd, "data/dipfed-distrito-vhat-2006.csv", sep = ""), row.names = FALSE)
-#
+## write.csv(out.y1994,
+##           file = paste(wd, "data/dipfed-municipio-vhat-1994.csv", sep = ""), row.names = FALSE)
+## #
+## write.csv(out.y1997,
+##           file = paste(wd, "data/dipfed-municipio-vhat-1997.csv", sep = ""), row.names = FALSE)
+## #
+## write.csv(out.y2000,
+##           file = paste(wd, "data/dipfed-municipio-vhat-2000.csv", sep = ""), row.names = FALSE)
+## #
+## write.csv(out.y2003,
+##           file = paste(wd, "data/dipfed-municipio-vhat-2003.csv", sep = ""), row.names = FALSE)
+## #
+## write.csv(out.y2006,
+##           file = paste(wd, "data/dipfed-municipio-vhat-2006.csv", sep = ""), row.names = FALSE)
+## #
 write.csv(out.y2009,
-          file = paste(wd, "data/dipfed-distrito-vhat-2009.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/dipfed-municipio-vhat-2009.csv", sep = ""), row.names = FALSE)
 #
 write.csv(out.y2012,
-          file = paste(wd, "data/dipfed-distrito-vhat-2012.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/dipfed-municipio-vhat-2012.csv", sep = ""), row.names = FALSE)
 #
 write.csv(out.y2015,
-          file = paste(wd, "data/dipfed-distrito-vhat-2015.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/dipfed-municipio-vhat-2015.csv", sep = ""), row.names = FALSE)
 #
 write.csv(out.y2018,
-          file = paste(wd, "data/dipfed-distrito-vhat-2018.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), row.names = FALSE)
 #
 write.csv(out.y2021,
-          file = paste(wd, "data/dipfed-distrito-vhat-2021.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), row.names = FALSE)
 #
 write.csv(out.y2024,
-          file = paste(wd, "data/dipfed-distrito-vhat-2024.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/dipfed-municipio-vhat-2024.csv", sep = ""), row.names = FALSE)
 #
 
-# save district regression objects
-save(mean.regs.d94, file = paste(wd, "data/dipfed-municipio-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d97, file = paste(wd, "data/dipfed-municipio-mean-regs-1997.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d00, file = paste(wd, "data/dipfed-municipio-mean-regs-2000.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d03, file = paste(wd, "data/dipfed-municipio-mean-regs-2003.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d06, file = paste(wd, "data/dipfed-municipio-mean-regs-2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d09, file = paste(wd, "data/dipfed-municipio-mean-regs-2009.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d12, file = paste(wd, "data/dipfed-municipio-mean-regs-2012.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d15, file = paste(wd, "data/dipfed-municipio-mean-regs-2015.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d18, file = paste(wd, "data/dipfed-municipio-mean-regs-2018.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d21, file = paste(wd, "data/dipfed-municipio-mean-regs-2021.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.d21, file = paste(wd, "data/dipfed-municipio-mean-regs-2024.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+## # save district regression objects
+## save(mean.regs.m94, file = paste(wd, "data/dipfed-municipio-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+## save(mean.regs.m97, file = paste(wd, "data/dipfed-municipio-mean-regs-1997.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+## save(mean.regs.m00, file = paste(wd, "data/dipfed-municipio-mean-regs-2000.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+## save(mean.regs.m03, file = paste(wd, "data/dipfed-municipio-mean-regs-2003.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+## save(mean.regs.m06, file = paste(wd, "data/dipfed-municipio-mean-regs-2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m09, file = paste(wd, "data/dipfed-municipio-mean-regs-2009.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m12, file = paste(wd, "data/dipfed-municipio-mean-regs-2012.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m15, file = paste(wd, "data/dipfed-municipio-mean-regs-2015.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m18, file = paste(wd, "data/dipfed-municipio-mean-regs-2018.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m21, file = paste(wd, "data/dipfed-municipio-mean-regs-2021.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m21, file = paste(wd, "data/dipfed-municipio-mean-regs-2024.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 ## save(regs.1988, file = paste(wd, "data/dipfed-municipio-regs-1988.RData", sep = ""), compress = "gzip")
 ## save(regs.1991, file = paste(wd, "data/dipfed-municipio-regs-1991.RData", sep = ""), compress = "gzip")
-save(regs.1994, file = paste(wd, "data/dipfed-municipio-regs-1994.RData", sep = ""), compress = "gzip")
-save(regs.1997, file = paste(wd, "data/dipfed-municipio-regs-1997.RData", sep = ""), compress = "gzip")
-save(regs.2000, file = paste(wd, "data/dipfed-municipio-regs-2000.RData", sep = ""), compress = "gzip")
-save(regs.2003, file = paste(wd, "data/dipfed-municipio-regs-2003.RData", sep = ""), compress = "gzip")
-save(regs.2006, file = paste(wd, "data/dipfed-municipio-regs-2006.RData", sep = ""), compress = "gzip")
+## save(regs.1994, file = paste(wd, "data/dipfed-municipio-regs-1994.RData", sep = ""), compress = "gzip")
+## save(regs.1997, file = paste(wd, "data/dipfed-municipio-regs-1997.RData", sep = ""), compress = "gzip")
+## save(regs.2000, file = paste(wd, "data/dipfed-municipio-regs-2000.RData", sep = ""), compress = "gzip")
+## save(regs.2003, file = paste(wd, "data/dipfed-municipio-regs-2003.RData", sep = ""), compress = "gzip")
+## save(regs.2006, file = paste(wd, "data/dipfed-municipio-regs-2006.RData", sep = ""), compress = "gzip")
 save(regs.2009, file = paste(wd, "data/dipfed-municipio-regs-2009.RData", sep = ""), compress = "gzip")
 save(regs.2012, file = paste(wd, "data/dipfed-municipio-regs-2012.RData", sep = ""), compress = "gzip")
 save(regs.2015, file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""), compress = "gzip")
@@ -4184,13 +4244,13 @@ save(regs.2024, file = paste(wd, "data/dipfed-municipio-regs-2024.RData", sep = 
 ## clean ##
 ###########
 rm(
-    out.y1988,
-    out.y1991,
-    out.y1994,
-    out.y1997,
-    out.y2000,
-    out.y2003,
-    out.y2006,
+    ## out.y1988,
+    ## out.y1991,
+    ## out.y1994,
+    ## out.y1997,
+    ## out.y2000,
+    ## out.y2003,
+    ## out.y2006,
     out.y2009,
     out.y2012,
     out.y2015,
@@ -4199,13 +4259,13 @@ rm(
     out.y2024
 )
 rm(
-    regs.1988,
-    regs.1991,
-    regs.1994,
-    regs.1997,
-    regs.2000,
-    regs.2003,
-    regs.2006,
+    ## regs.1988,
+    ## regs.1991,
+    ## regs.1994,
+    ## regs.1997,
+    ## regs.2000,
+    ## regs.2003,
+    ## regs.2006,
     regs.2009,
     regs.2012,
     regs.2015,
@@ -4214,16 +4274,28 @@ rm(
     regs.2024
 )
 rm(
-    mean.regs.d79,
-    mean.regs.d97,
-    mean.regs.d06,
-    mean.regs.d18
+    mean.regs.m94,
+    mean.regs.m97,
+    mean.regs.m00,
+    mean.regs.m03,
+    mean.regs.m06,
+    mean.regs.m09,
+    mean.regs.m12,
+    mean.regs.m15,
+    mean.regs.m18,
+    mean.regs.m21
     )
 rm(
-    extendCoalm79,
+    extendCoalm94,
     extendCoalm97,
+    extendCoalm00,
+    extendCoalm03,
     extendCoalm06,
-    extendCoalm18
+    extendCoalm09,
+    extendCoalm12,
+    extendCoalm15,
+    extendCoalm18,
+    extendCoalm21
 )
 
 ## ###########################

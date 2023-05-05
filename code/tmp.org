@@ -1,37 +1,37 @@
-District 5-yr estimates that can be computed before 2024 
-|      |      |      |      |      |      |       |       |       |       |       |
-| vhat | 1994 | 1997 | 2000 | 2003 | 2006 |  2009 |  2012 |  2015 |  2018 | 2021  |
-|------+------+------+------+------+------+-------+-------+-------+-------+-------|
-| 1991 | back |      |      |      |      |       |       |       |       |       |
-| 1994 | back |      |      |      |      |       |       |       |       |       |
-| 1997 |      | back |      |      |      |       |       |       |       |       |
-| 2000 |      |      | back |      |      |       |       |       |       |       |
-| 2003 |      |      |      | back |      |       |       |       |       |       |
-| 2006 |      |      |      |      | back |       |       |       |       |       |
-| 2009 |      |      |      |      |      | *fwd* |       |       |       |       |
-| 2012 |      |      |      |      |      |       | *fwd* |       |       |       |
-| 2015 |      |      |      |      |      |       |       | *fwd* |       |       |
-| 2018 |      |      |      |      |      |       |       |       | *fwd* |       |
-| 2021 |      |      |      |      |      |       |       |       |       | *fwd* |
-| 2024 |      |      |      |      |      |       |       |       |       | *fwd* |
-Notes:
-- 1991 map unavailable, but 1991 election can be backwards estimated with 1994 map
-- starred will be estimated
-# defaults
-if (sel.map==1979 & is.na(yr.to.estim)){
-    yr.to.estim <- c(1988,1991,1994); 
-    dbackwards <- 1
-}
-if (sel.map==1997 & is.na(yr.to.estim)){
-    yr.to.estim <- c(1997,2000,2003); 
-    dbackwards <- 1
-}
-if (sel.map==2006 & is.na(yr.to.estim)){
-    yr.to.estim <- c(2006,2009,2012,2015); 
-    dbackwards <- c(1,0,0,0)
-}
-if (sel.map==2018 & is.na(yr.to.estim)){
-    yr.to.estim <- c(2018,2021,2024); 
-    dbackwards <- 0
-}
-
+* Haynes manual or Owner's manual
+* Spare parts
+** Accelerator Cable & Barrel Nut
+** Fan belt
+** Fuses
+** Fuel Filter Hose & Clamps
+** Set of spark plugs
+** Points, distributor, rotor arm and dizzy cap
+** Plug leads
+** Clutch Cable & Wingnut
+** Coil
+** Generator/Alternator Pulley, Shims & Keyway
+** Vacuum Hose (if you have a vacuum advance distributor)
+* Tools for roadside maintenance
+** Wheel brace or long breaker bar
+** Impact sockets
+** Jack
+** Lug nuts
+** Spark plug tool
+** Vice Grips
+** Metric Wrench Set
+** Metric Socket Set with Ratchets & Extensions
+** Metric Allen Key Set
+** Screwdriver Set (large, medium & small, Phillips & flathead)
+** Large Crescent/Adjustable Wrench
+** Pliers (Bullnose, needle nose, snips/side cutters & electrical)
+** T handle tool
+** Electrical Terminal Crimp Ends
+** Spool of wire
+** Safety Wire
+** Zip Ties
+** Electrical Tape
+** Duct Tape
+* Replacement fluids
+** Can of oil
+** Extra fuel
+** As well as a funnel and rags
