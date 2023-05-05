@@ -3285,6 +3285,16 @@ for (i in 1:nmun){
     extendCoalm94[[i]] <- cbind(extendCoalm94[[i]], yr.means[,6:8])
 }
 
+## debug
+save.image("../../datosBrutos/not-in-git/tmp3-restore.RData")
+
+## load image
+rm(list=ls())
+options(width = 110)
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load(file="../../datosBrutos/not-in-git/tmp3-restore.RData")
+
 
 #################################################################################################
 ## - should also try jags estimation to get post-sample of vhats and alphas                    ##
@@ -3427,7 +3437,7 @@ estim_dis <- function(sel.map){
         data.tmp <- within(data.tmp, {
             oth <- NULL;
             mean.rpan <- mean.rleft <- mean.roth <- NULL;
-            betahat.oth   <- NA;
+            ## betahat.oth   <- NA;
             betahat.left  <- NA;
             betahat.pan   <- NA;
             alphahat.left <- NA;
@@ -3819,11 +3829,11 @@ estim_dis <- function(sel.map){
             data.tmp$bhat.pan [data.tmp$yr==year] <- bhat.pan   # input slope estimates
             data.tmp$bhat.left[data.tmp$yr==year] <- bhat.left
             data.tmp$dbackward[data.tmp$yr==year] <- tmp.back   # input fwd/back
-    }
-    #
-    ##################################
-    ## predict 2018 with last 5 els ##
-    ##################################
+        }
+        ##
+        ##################################
+        ## predict 2018 with last 5 els ##
+        ##################################
         if (sel.map==2018){
             tmp.back <- 0 # will indicate backwards prediction
             year <- 2018  # redundant for secciones/municipios, retained to keep code similar to distritos
@@ -3861,11 +3871,11 @@ estim_dis <- function(sel.map){
             data.tmp$bhat.pan [data.tmp$yr==year] <- bhat.pan   # input slope estimates
             data.tmp$bhat.left[data.tmp$yr==year] <- bhat.left
             data.tmp$dbackward[data.tmp$yr==year] <- tmp.back   # input fwd/back
-    }
-    #
-    ##################################
-    ## predict 2021 with last 5 els ##
-    ##################################
+        }
+        ##
+        ##################################
+        ## predict 2021 with last 5 els ##
+        ##################################
         if (sel.map==2021){
             tmp.back <- 0 # will indicate backwards prediction
             year <- 2021  # redundant for secciones/municipios, retained to keep code similar to distritos
@@ -3903,11 +3913,11 @@ estim_dis <- function(sel.map){
             data.tmp$bhat.pan [data.tmp$yr==year] <- bhat.pan   # input slope estimates
             data.tmp$bhat.left[data.tmp$yr==year] <- bhat.left
             data.tmp$dbackward[data.tmp$yr==year] <- tmp.back   # input fwd/back
-    }
-    #
-    ##################################
-    ## predict 2024 with last 5 els ## OJO: IN 2024 CHANGE sel.map==2024
-    ##################################
+        }
+        ##
+        ##################################
+        ## predict 2024 with last 5 els ## OJO: IN 2024 CHANGE sel.map==2024
+        ##################################
         if (sel.map==2021){
             tmp.back <- 0 # will indicate backwards prediction
             year <- 2024  # redundant for secciones/municipios, retained to keep code similar to distritos
@@ -4081,7 +4091,7 @@ sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[5]
 ########################################################################################
 ## municipal estimates are contingent on chosen map, run each once for full estimates ##
 ########################################################################################
-for (j in 5:10){
+for (j in 5){
     ##              1    2    3    4    5    6    7    8    9    0    1 
     sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024)[j]
     #
@@ -4315,14 +4325,14 @@ rm(
 ls()
 
         
-## ###########################
-## ## inspect saved objects ##
-## ###########################
-## # load regression object
-## load(file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""))
-## ls()
-## summary(regs.2015)
-## summary.lm(regs.2015$oth[[1]])$coef[2,1]
+###########################
+## inspect saved objects ##
+###########################
+# load regression object
+load(file = paste(wd, "data/dipfed-municipio-regs-2006.RData", sep = ""))
+ls()
+summary(regs.2006)
+summary.lm(regs.2006$pan[[2]])$coef[2,1]
 
 
 
