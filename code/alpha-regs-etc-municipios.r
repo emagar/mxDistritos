@@ -1778,7 +1778,7 @@ table(c(
     nrow(v18m21) 
 ))
 ##
-nmun <- nrow(v00m)  ## n municipalities in square data
+nmun <- nrow(v21m)  ## n municipalities in square data
 
 
 ###############################################################################
@@ -2803,12 +2803,12 @@ for (i in 1:nmun){
     ## votes with 2021 map ##
     #########################
     tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
-                      pan    = panm21[,i],
-                      pri    = prim21[,i],
-                      left   = leftm21[,i],
-                      oth    = othm21[,i],
-                      efec   = efecm21[,i],
-                      lisnom = lisnomm21[,i])
+                      pan    = panm21   [,i] ,
+                      pri    = prim21   [,i] ,
+                      left   = leftm21  [,i] ,
+                      oth    = othm21   [,i] ,
+                      efec   = efecm21  [,i] ,
+                      lisnom = lisnomm21[,i] )
     # replace NAs with period's mean
     if (length(tmp[is.na(tmp)])>0){
         per.means <- round(apply(tmp, 2, function(x) mean(x, na.rm = TRUE)), 3)
@@ -3296,7 +3296,7 @@ for (i in 1:nmun){
 ###############################
 vhat.2024 <-                 # <--- prospective, with up-to 2021 returns
 vhat.2021 <- vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <-
-#vhat.2006 <- 
+vhat.2006 <- 
     data.frame(pan  = rep(NA, nmun),
                pri  = rep(NA, nmun),
                left = rep(NA, nmun)) # will receive vote estimates
@@ -3317,7 +3317,7 @@ names(tmp) <- v00m$ife
 #
 regs.2024 <- regs.2021 <- regs.2018 <- 
 regs.2015 <- regs.2012 <- regs.2009 <-
-# regs.2006 <- 
+regs.2006 <- 
     list(pan    = tmp,
          left   = tmp,
          oth    = tmp,
@@ -3332,7 +3332,6 @@ mean.regs.m94 <-
              left   = tmp,
              oth    = tmp,
              readme = "No pri regs bec DVs are pri-ratios")
-
 #
 # drop list elements that still have NAs from loop
 # (happens with new municipios before birth)
@@ -3383,6 +3382,10 @@ setdiff(1:nmun, non.nas(2000)) # one year's complement
 #############################################
 ## wrap district estimations in a function ##
 #############################################
+##              1    2    3    4    5    6    7    8    9    0    1 
+sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[5]
+#
+progb <- txtProgressBar(min = 0, max = nmun, initial = 0) # for progress bar
 estim_dis <- function(sel.map){
     #
     ## if map is 1994 will estimate 1991 backwards, add row in data frames
@@ -3404,11 +3407,65 @@ estim_dis <- function(sel.map){
         extendCoalm21 <- tmp
         rm(add2024,tmp)
     }
-    #
+    ##
+    ######################################################################
+    ## Add missing columns to unmanipulated list items (for squareness) ##
+    ######################################################################
+    for (i in setdiff(1:nmun, non.nas(sel.map))){  # loop over nas
+        ## subset data to single unit
+        if (sel.map==1994) data.tmp <- extendCoalm94[[i]]
+        if (sel.map==1997) data.tmp <- extendCoalm97[[i]]
+        if (sel.map==2000) data.tmp <- extendCoalm00[[i]]
+        if (sel.map==2003) data.tmp <- extendCoalm03[[i]]
+        if (sel.map==2006) data.tmp <- extendCoalm06[[i]]
+        if (sel.map==2009) data.tmp <- extendCoalm09[[i]]
+        if (sel.map==2012) data.tmp <- extendCoalm12[[i]]
+        if (sel.map==2015) data.tmp <- extendCoalm15[[i]]
+        if (sel.map==2018) data.tmp <- extendCoalm18[[i]]
+        if (sel.map==2021) data.tmp <- extendCoalm21[[i]]
+        ##
+        data.tmp <- within(data.tmp, {
+            oth <- NULL;
+            mean.rpan <- mean.rleft <- mean.roth <- NULL;
+            betahat.oth   <- NA;
+            betahat.left  <- NA;
+            betahat.pan   <- NA;
+            alphahat.left <- NA;
+            alphahat.pri  <- NA;
+            alphahat.pan  <- NA;
+            betahat.left  <- NA;
+            alphahat.left <- NA;
+            dbackward     <- NA;
+            bhat.left     <- NA;
+            bhat.pan      <- NA;
+            vhat.left     <- NA;
+            vhat.pri      <- NA;
+            vhat.pan      <- NA;
+            d.left        <- NA;
+            d.pri         <- NA;
+            d.pan         <- NA;
+        })
+        ## return estimates to data object
+        if (sel.map==1994) extendCoalm94[[i]] <- data.tmp
+        if (sel.map==1997) extendCoalm97[[i]] <- data.tmp
+        if (sel.map==2000) extendCoalm00[[i]] <- data.tmp
+        if (sel.map==2003) extendCoalm03[[i]] <- data.tmp
+        if (sel.map==2006) extendCoalm06[[i]] <- data.tmp
+        if (sel.map==2009) extendCoalm09[[i]] <- data.tmp
+        if (sel.map==2012) extendCoalm12[[i]] <- data.tmp
+        if (sel.map==2015) extendCoalm15[[i]] <- data.tmp
+        if (sel.map==2018) extendCoalm18[[i]] <- data.tmp
+        if (sel.map==2021) extendCoalm21[[i]] <- data.tmp
+    }
+    ## 
+    ###############
+    ## MAIN LOOP ##
+    ###############
     for (i in non.nas(sel.map)){
         #i <- 81 # debug
         #i <- 44508 # debug
-        message(sprintf("loop %s of %s", i, max(non.nas(sel.map))))
+        ## message(sprintf("loop %s of %s", i, max(non.nas(sel.map))))
+        setTxtProgressBar(progb,i)
         # subset data to single unit
         if (sel.map==1994) data.tmp <- extendCoalm94[[i]]
         if (sel.map==1997) data.tmp <- extendCoalm97[[i]]
@@ -3997,56 +4054,12 @@ estim_dis <- function(sel.map){
         if (sel.map==2018) extendCoalm18[[i]] <- data.tmp
         if (sel.map==2021) extendCoalm21[[i]] <- data.tmp
         #extendCoal[[i]] <- data.tmp
+        close(progb)
     }
     ##############################################################################################
     ## warnings correspond to units with no variance (eg. period mean in new municipio in 2017) ##
     ##############################################################################################
-    ##
-    ######################################################################
-    ## Add missing columns to unmanipulated list items (for squareness) ##
-    ######################################################################
-    for (i in setdiff(1:nmun, non.nas(sel.map))){  # loop over nas
-    ## subset data to single unit
-    if (sel.map==1994) data.tmp <- extendCoalm94[[i]]
-    if (sel.map==1997) data.tmp <- extendCoalm97[[i]]
-    if (sel.map==2000) data.tmp <- extendCoalm00[[i]]
-    if (sel.map==2003) data.tmp <- extendCoalm03[[i]]
-    if (sel.map==2006) data.tmp <- extendCoalm06[[i]]
-    if (sel.map==2009) data.tmp <- extendCoalm09[[i]]
-    if (sel.map==2012) data.tmp <- extendCoalm12[[i]]
-    if (sel.map==2015) data.tmp <- extendCoalm15[[i]]
-    if (sel.map==2018) data.tmp <- extendCoalm18[[i]]
-    if (sel.map==2021) data.tmp <- extendCoalm21[[i]]
-    data.tmp <- within(data.tmp, {
-        d.pan         <- NA;
-        d.pri         <- NA;
-        d.left        <- NA;
-        vhat.pan      <- NA;
-        vhat.pri      <- NA;
-        vhat.left     <- NA;
-        bhat.pan      <- NA;
-        bhat.left     <- NA;
-        dbackward     <- NA;
-        alphahat.left <- NA;
-        betahat.left  <- NA;
-        alphahat.pan  <- NA;
-        alphahat.pri  <- NA;
-        alphahat.left <- NA;
-        betahat.pan   <- NA;
-        betahat.left  <- NA;
-        betahat.oth   <- NA;
-        # return estimates to data object
-        if (sel.map==1994) extendCoalm94[[i]] <- data.tmp
-        if (sel.map==1997) extendCoalm97[[i]] <- data.tmp
-        if (sel.map==2000) extendCoalm00[[i]] <- data.tmp
-        if (sel.map==2003) extendCoalm03[[i]] <- data.tmp
-        if (sel.map==2006) extendCoalm06[[i]] <- data.tmp
-        if (sel.map==2009) extendCoalm09[[i]] <- data.tmp
-        if (sel.map==2012) extendCoalm12[[i]] <- data.tmp
-        if (sel.map==2015) extendCoalm15[[i]] <- data.tmp
-        if (sel.map==2018) extendCoalm18[[i]] <- data.tmp
-        if (sel.map==2021) extendCoalm21[[i]] <- data.tmp
-    }
+    ## 
     ################################
     ## function will return this: ##
     ################################
@@ -4064,12 +4077,13 @@ estim_dis <- function(sel.map){
 
 ## municipal estimates are contingent on chosen map (pre-2006 not used)
 ##              1    2    3    4    5    6    7    8    9    0    1 
-sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[8]
+sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[5]
 ########################################################################################
 ## municipal estimates are contingent on chosen map, run each once for full estimates ##
 ########################################################################################
 for (j in 5:10){
-    sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021)[j]
+    ##              1    2    3    4    5    6    7    8    9    0    1 
+    sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024)[j]
     #
     if (sel.map==1994) extendCoalm94 <- estim_dis(sel.map)
     if (sel.map==1997) extendCoalm97 <- estim_dis(sel.map)
@@ -4083,15 +4097,15 @@ for (j in 5:10){
     if (sel.map==2021) extendCoalm21 <- estim_dis(sel.map)
 }
 
-## ## debug
-## save.image("../../datosBrutos/not-in-git/tmp2-restore.RData")
-## 
-## ## load image
-## rm(list=ls())
-## options(width = 110)
-## dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-## setwd(dd)
-## load(file="../../datosBrutos/not-in-git/tmp2-restore.RData")
+## debug
+save.image("../../datosBrutos/not-in-git/tmp2-restore.RData")
+
+## load image
+rm(list=ls())
+options(width = 110)
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load(file="../../datosBrutos/not-in-git/tmp2-restore.RData")
 
 # clean, all this is saved in extendCoal, mean.regs, regs.1988 ... regs.2024
 ls()
@@ -4121,8 +4135,8 @@ rm(i, j, sel.map, sel.drop, d, d2, tmp, non.nas)
 ##########################################################################
 
 for.export <- function(year) {
-    #year <- 2009         # debug
-    #X <- extendCoalm09[[1]] # debug
+    #year <- 2006         # debug
+    #X <- extendCoalm06[[1]] # debug
     ## select relevant results object
     if (year %notin% c(2006,2009,2012,2015,2018,2021,2024)) stop("Year unavailable")
     if (year==2024) tmp.dat <- extendCoalm21
@@ -4131,7 +4145,7 @@ for.export <- function(year) {
     if (year==2015) tmp.dat <- extendCoalm15
     if (year==2012) tmp.dat <- extendCoalm12
     if (year==2009) tmp.dat <- extendCoalm09
-#    if (year==2006) tmp.dat <- extendCoalm06
+    if (year==2006) tmp.dat <- extendCoalm06
 #    if (year==2003) tmp.dat <- extendCoalm03
 #    if (year==2000) tmp.dat <- extendCoalm00
 #    if (year==1997) tmp.dat <- extendCoalm97
@@ -4163,7 +4177,7 @@ for.export <- function(year) {
 #out.y1997 <- for.export(year=1997)
 #out.y2000 <- for.export(year=2000)
 #out.y2003 <- for.export(year=2003)
-#out.y2006 <- for.export(year=2006)
+out.y2006 <- for.export(year=2006)
 out.y2009 <- for.export(year=2009)
 out.y2012 <- for.export(year=2012)
 out.y2015 <- for.export(year=2015)
@@ -4192,9 +4206,9 @@ out.y2024 <- for.export(year=2024)
 ## write.csv(out.y2003,
 ##           file = paste(wd, "data/dipfed-municipio-vhat-2003.csv", sep = ""), row.names = FALSE)
 ## #
-## write.csv(out.y2006,
-##           file = paste(wd, "data/dipfed-municipio-vhat-2006.csv", sep = ""), row.names = FALSE)
-## #
+write.csv(out.y2006,
+          file = paste(wd, "data/dipfed-municipio-vhat-2006.csv", sep = ""), row.names = FALSE)
+#
 write.csv(out.y2009,
           file = paste(wd, "data/dipfed-municipio-vhat-2009.csv", sep = ""), row.names = FALSE)
 #
@@ -4213,26 +4227,27 @@ write.csv(out.y2021,
 write.csv(out.y2024,
           file = paste(wd, "data/dipfed-municipio-vhat-2024.csv", sep = ""), row.names = FALSE)
 #
-
-## # save district regression objects
+######################################
+## save district regression objects ##
+######################################
 ## save(mean.regs.m94, file = paste(wd, "data/dipfed-municipio-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 ## save(mean.regs.m97, file = paste(wd, "data/dipfed-municipio-mean-regs-1997.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 ## save(mean.regs.m00, file = paste(wd, "data/dipfed-municipio-mean-regs-2000.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 ## save(mean.regs.m03, file = paste(wd, "data/dipfed-municipio-mean-regs-2003.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-## save(mean.regs.m06, file = paste(wd, "data/dipfed-municipio-mean-regs-2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m06, file = paste(wd, "data/dipfed-municipio-mean-regs-2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 save(mean.regs.m09, file = paste(wd, "data/dipfed-municipio-mean-regs-2009.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 save(mean.regs.m12, file = paste(wd, "data/dipfed-municipio-mean-regs-2012.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 save(mean.regs.m15, file = paste(wd, "data/dipfed-municipio-mean-regs-2015.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 save(mean.regs.m18, file = paste(wd, "data/dipfed-municipio-mean-regs-2018.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 save(mean.regs.m21, file = paste(wd, "data/dipfed-municipio-mean-regs-2021.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m21, file = paste(wd, "data/dipfed-municipio-mean-regs-2024.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+## save(mean.regs.m24, file = paste(wd, "data/dipfed-municipio-mean-regs-2024.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 ## save(regs.1988, file = paste(wd, "data/dipfed-municipio-regs-1988.RData", sep = ""), compress = "gzip")
 ## save(regs.1991, file = paste(wd, "data/dipfed-municipio-regs-1991.RData", sep = ""), compress = "gzip")
 ## save(regs.1994, file = paste(wd, "data/dipfed-municipio-regs-1994.RData", sep = ""), compress = "gzip")
 ## save(regs.1997, file = paste(wd, "data/dipfed-municipio-regs-1997.RData", sep = ""), compress = "gzip")
 ## save(regs.2000, file = paste(wd, "data/dipfed-municipio-regs-2000.RData", sep = ""), compress = "gzip")
 ## save(regs.2003, file = paste(wd, "data/dipfed-municipio-regs-2003.RData", sep = ""), compress = "gzip")
-## save(regs.2006, file = paste(wd, "data/dipfed-municipio-regs-2006.RData", sep = ""), compress = "gzip")
+save(regs.2006, file = paste(wd, "data/dipfed-municipio-regs-2006.RData", sep = ""), compress = "gzip")
 save(regs.2009, file = paste(wd, "data/dipfed-municipio-regs-2009.RData", sep = ""), compress = "gzip")
 save(regs.2012, file = paste(wd, "data/dipfed-municipio-regs-2012.RData", sep = ""), compress = "gzip")
 save(regs.2015, file = paste(wd, "data/dipfed-municipio-regs-2015.RData", sep = ""), compress = "gzip")
