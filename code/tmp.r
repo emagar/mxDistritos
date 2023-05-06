@@ -1,243 +1,84 @@
-######################################################################
-## Add missing columns to unmanipulated list items (for squareness) ##
-######################################################################
-## yes.nas.2009 <- setdiff(1:nmun, non.nas(2009))
-## yes.nas.2012 <- setdiff(1:nmun, non.nas(2012))
-## yes.nas.2015 <- setdiff(1:nmun, non.nas(2015))
-## yes.nas.2018 <- setdiff(1:nmun, non.nas(2018))
-## yes.nas.2021 <- setdiff(1:nmun, non.nas(2021))
 
-yes.nas.2009 <- c(17,34,35,195,196,197,198,199,200,201,202,203,204,205,206,207,665,937,938,1825)
-yes.nas.2012 <- c(17,34,35,195,196,197,198,199,200,201,202,203,204,205,206,207,937,938,1825)
-yes.nas.2015 <- c(17,34,35,195,196,197,198,199,200,201,202,203,204,205,206,207,937,938,1825)
-yes.nas.2018 <- c(17,34,35,202,203,204,205,206,207,937,938)
-yes.nas.2021 <- c(17)
-
-
-sel.map <- 2009
-for (i in yes.nas.2009){  # loop over nas
-    ## subset data to single unit
-    if (sel.map==1994) data.tmp <- extendCoalm94[[i]]
-    if (sel.map==1997) data.tmp <- extendCoalm97[[i]]
-    if (sel.map==2000) data.tmp <- extendCoalm00[[i]]
-    if (sel.map==2003) data.tmp <- extendCoalm03[[i]]
-    if (sel.map==2006) data.tmp <- extendCoalm06[[i]]
-    if (sel.map==2009) data.tmp <- extendCoalm09[[i]]
-    if (sel.map==2012) data.tmp <- extendCoalm12[[i]]
-    if (sel.map==2015) data.tmp <- extendCoalm15[[i]]
-    if (sel.map==2018) data.tmp <- extendCoalm18[[i]]
-    if (sel.map==2021) data.tmp <- extendCoalm21[[i]]
-    data.tmp <- within(data.tmp, {
-        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
-        oth <- NULL
-        betahat.left  <- NA;
-        betahat.pan   <- NA;
-        alphahat.left <- NA;
-        alphahat.pri  <- NA;
-        alphahat.pan  <- NA;
-        dbackward     <- NA;
-        bhat.left     <- NA;
-        bhat.pan      <- NA;
-        vhat.left     <- NA;
-        vhat.pri      <- NA;
-        vhat.pan      <- NA;
-        d.left        <- NA;
-        d.pri         <- NA;
-        d.pan         <- NA;
-        }
-    )
-    ## return estimates to data object
-    if (sel.map==1994) extendCoalm94[[i]] <- data.tmp
-    if (sel.map==1997) extendCoalm97[[i]] <- data.tmp
-    if (sel.map==2000) extendCoalm00[[i]] <- data.tmp
-    if (sel.map==2003) extendCoalm03[[i]] <- data.tmp
-    if (sel.map==2006) extendCoalm06[[i]] <- data.tmp
-    if (sel.map==2009) extendCoalm09[[i]] <- data.tmp
-    if (sel.map==2012) extendCoalm12[[i]] <- data.tmp
-    if (sel.map==2015) extendCoalm15[[i]] <- data.tmp
-    if (sel.map==2018) extendCoalm18[[i]] <- data.tmp
-    if (sel.map==2021) extendCoalm21[[i]] <- data.tmp
+if (sel.map==1994){
+    res.tmp <-
+        list(ec = extendCoalm94,
+             rgs = regs.94,
+             m.rgs = mean.regs.m94
+             )
+    return(res.tmp)
+}
+if (sel.map==1997){
+    res.tmp <-
+        list(ec = extendCoalm97,
+             rgs = regs.97,
+             m.rgs = mean.regs.m97
+             )
+    return(res.tmp)
+}
+if (sel.map==2000){
+    res.tmp <-
+        list(ec = extendCoalm00,
+             rgs = regs.00,
+             m.rgs = mean.regs.m00
+             )
+    return(res.tmp)
+}
+if (sel.map==2003){
+    res.tmp <-
+        list(ec = extendCoalm03,
+             rgs = regs.03,
+             m.rgs = mean.regs.m03
+             )
+    return(res.tmp)
+}
+if (sel.map==2006){
+    res.tmp <-
+        list(ec = extendCoalm06,
+             rgs = regs.06,
+             m.rgs = mean.regs.m06
+             )
+    return(res.tmp)
+}
+if (sel.map==2009){
+    res.tmp <-
+        list(ec = extendCoalm09,
+             rgs = regs.09,
+             m.rgs = mean.regs.m09
+             )
+    return(res.tmp)
+}
+if (sel.map==2012){
+    res.tmp <-
+        list(ec = extendCoalm12,
+             rgs = regs.12,
+             m.rgs = mean.regs.m12
+             )
+    return(res.tmp)
+}
+if (sel.map==2015){
+    res.tmp <-
+        list(ec = extendCoalm15,
+             rgs = regs.15,
+             m.rgs = mean.regs.m15
+             )
+    return(res.tmp)
+}
+if (sel.map==2018){
+    res.tmp <-
+        list(ec = extendCoalm18,
+             rgs = regs.18,
+             m.rgs = mean.regs.m18
+             )
+    return(res.tmp)
+}
+if (sel.map==2021){
+    res.tmp <-
+        list(ec = extendCoalm21,
+             rgs = regs.21,
+             m.rgs = mean.regs.m21
+             )
+    return(res.tmp)
 }
 
-sel.map <- 2012
-for (i in yes.nas.2012){  # loop over nas
-    ## subset data to single unit
-    if (sel.map==1994) data.tmp <- extendCoalm94[[i]]
-    if (sel.map==1997) data.tmp <- extendCoalm97[[i]]
-    if (sel.map==2000) data.tmp <- extendCoalm00[[i]]
-    if (sel.map==2003) data.tmp <- extendCoalm03[[i]]
-    if (sel.map==2006) data.tmp <- extendCoalm06[[i]]
-    if (sel.map==2009) data.tmp <- extendCoalm09[[i]]
-    if (sel.map==2012) data.tmp <- extendCoalm12[[i]]
-    if (sel.map==2015) data.tmp <- extendCoalm15[[i]]
-    if (sel.map==2018) data.tmp <- extendCoalm18[[i]]
-    if (sel.map==2021) data.tmp <- extendCoalm21[[i]]
-    data.tmp <- within(data.tmp, {
-        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
-        oth <- NULL
-        betahat.left  <- NA;
-        betahat.pan   <- NA;
-        alphahat.left <- NA;
-        alphahat.pri  <- NA;
-        alphahat.pan  <- NA;
-        dbackward     <- NA;
-        bhat.left     <- NA;
-        bhat.pan      <- NA;
-        vhat.left     <- NA;
-        vhat.pri      <- NA;
-        vhat.pan      <- NA;
-        d.left        <- NA;
-        d.pri         <- NA;
-        d.pan         <- NA;
-        }
-    )
-    ## return estimates to data object
-    if (sel.map==1994) extendCoalm94[[i]] <- data.tmp
-    if (sel.map==1997) extendCoalm97[[i]] <- data.tmp
-    if (sel.map==2000) extendCoalm00[[i]] <- data.tmp
-    if (sel.map==2003) extendCoalm03[[i]] <- data.tmp
-    if (sel.map==2006) extendCoalm06[[i]] <- data.tmp
-    if (sel.map==2009) extendCoalm09[[i]] <- data.tmp
-    if (sel.map==2012) extendCoalm12[[i]] <- data.tmp
-    if (sel.map==2015) extendCoalm15[[i]] <- data.tmp
-    if (sel.map==2018) extendCoalm18[[i]] <- data.tmp
-    if (sel.map==2021) extendCoalm21[[i]] <- data.tmp
-}
 
-sel.map <- 2015
-for (i in yes.nas.2015){  # loop over nas
-    ## subset data to single unit
-    if (sel.map==1994) data.tmp <- extendCoalm94[[i]]
-    if (sel.map==1997) data.tmp <- extendCoalm97[[i]]
-    if (sel.map==2000) data.tmp <- extendCoalm00[[i]]
-    if (sel.map==2003) data.tmp <- extendCoalm03[[i]]
-    if (sel.map==2006) data.tmp <- extendCoalm06[[i]]
-    if (sel.map==2009) data.tmp <- extendCoalm09[[i]]
-    if (sel.map==2012) data.tmp <- extendCoalm12[[i]]
-    if (sel.map==2015) data.tmp <- extendCoalm15[[i]]
-    if (sel.map==2018) data.tmp <- extendCoalm18[[i]]
-    if (sel.map==2021) data.tmp <- extendCoalm21[[i]]
-    data.tmp <- within(data.tmp, {
-        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
-        oth <- NULL
-        betahat.left  <- NA;
-        betahat.pan   <- NA;
-        alphahat.left <- NA;
-        alphahat.pri  <- NA;
-        alphahat.pan  <- NA;
-        dbackward     <- NA;
-        bhat.left     <- NA;
-        bhat.pan      <- NA;
-        vhat.left     <- NA;
-        vhat.pri      <- NA;
-        vhat.pan      <- NA;
-        d.left        <- NA;
-        d.pri         <- NA;
-        d.pan         <- NA;
-        }
-    )
-    ## return estimates to data object
-    if (sel.map==1994) extendCoalm94[[i]] <- data.tmp
-    if (sel.map==1997) extendCoalm97[[i]] <- data.tmp
-    if (sel.map==2000) extendCoalm00[[i]] <- data.tmp
-    if (sel.map==2003) extendCoalm03[[i]] <- data.tmp
-    if (sel.map==2006) extendCoalm06[[i]] <- data.tmp
-    if (sel.map==2009) extendCoalm09[[i]] <- data.tmp
-    if (sel.map==2012) extendCoalm12[[i]] <- data.tmp
-    if (sel.map==2015) extendCoalm15[[i]] <- data.tmp
-    if (sel.map==2018) extendCoalm18[[i]] <- data.tmp
-    if (sel.map==2021) extendCoalm21[[i]] <- data.tmp
-}
-
-sel.map <- 2018
-for (i in yes.nas.2018){  # loop over nas
-    ## subset data to single unit
-    if (sel.map==1994) data.tmp <- extendCoalm94[[i]]
-    if (sel.map==1997) data.tmp <- extendCoalm97[[i]]
-    if (sel.map==2000) data.tmp <- extendCoalm00[[i]]
-    if (sel.map==2003) data.tmp <- extendCoalm03[[i]]
-    if (sel.map==2006) data.tmp <- extendCoalm06[[i]]
-    if (sel.map==2009) data.tmp <- extendCoalm09[[i]]
-    if (sel.map==2012) data.tmp <- extendCoalm12[[i]]
-    if (sel.map==2015) data.tmp <- extendCoalm15[[i]]
-    if (sel.map==2018) data.tmp <- extendCoalm18[[i]]
-    if (sel.map==2021) data.tmp <- extendCoalm21[[i]]
-    data.tmp <- within(data.tmp, {
-        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
-        oth <- NULL
-        betahat.left  <- NA;
-        betahat.pan   <- NA;
-        alphahat.left <- NA;
-        alphahat.pri  <- NA;
-        alphahat.pan  <- NA;
-        dbackward     <- NA;
-        bhat.left     <- NA;
-        bhat.pan      <- NA;
-        vhat.left     <- NA;
-        vhat.pri      <- NA;
-        vhat.pan      <- NA;
-        d.left        <- NA;
-        d.pri         <- NA;
-        d.pan         <- NA;
-        }
-    )
-    ## return estimates to data object
-    if (sel.map==1994) extendCoalm94[[i]] <- data.tmp
-    if (sel.map==1997) extendCoalm97[[i]] <- data.tmp
-    if (sel.map==2000) extendCoalm00[[i]] <- data.tmp
-    if (sel.map==2003) extendCoalm03[[i]] <- data.tmp
-    if (sel.map==2006) extendCoalm06[[i]] <- data.tmp
-    if (sel.map==2009) extendCoalm09[[i]] <- data.tmp
-    if (sel.map==2012) extendCoalm12[[i]] <- data.tmp
-    if (sel.map==2015) extendCoalm15[[i]] <- data.tmp
-    if (sel.map==2018) extendCoalm18[[i]] <- data.tmp
-    if (sel.map==2021) extendCoalm21[[i]] <- data.tmp
-}
-
-sel.map <- 2021
-for (i in yes.nas.2021){  # loop over nas
-    ## subset data to single unit
-    if (sel.map==1994) data.tmp <- extendCoalm94[[i]]
-    if (sel.map==1997) data.tmp <- extendCoalm97[[i]]
-    if (sel.map==2000) data.tmp <- extendCoalm00[[i]]
-    if (sel.map==2003) data.tmp <- extendCoalm03[[i]]
-    if (sel.map==2006) data.tmp <- extendCoalm06[[i]]
-    if (sel.map==2009) data.tmp <- extendCoalm09[[i]]
-    if (sel.map==2012) data.tmp <- extendCoalm12[[i]]
-    if (sel.map==2015) data.tmp <- extendCoalm15[[i]]
-    if (sel.map==2018) data.tmp <- extendCoalm18[[i]]
-    if (sel.map==2021) data.tmp <- extendCoalm21[[i]]
-    data.tmp <- within(data.tmp, {
-        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
-        oth <- NULL
-        betahat.left  <- NA;
-        betahat.pan   <- NA;
-        alphahat.left <- NA;
-        alphahat.pri  <- NA;
-        alphahat.pan  <- NA;
-        dbackward     <- NA;
-        bhat.left     <- NA;
-        bhat.pan      <- NA;
-        vhat.left     <- NA;
-        vhat.pri      <- NA;
-        vhat.pan      <- NA;
-        d.left        <- NA;
-        d.pri         <- NA;
-        d.pan         <- NA;
-        }
-    )
-    ## return estimates to data object
-    if (sel.map==1994) extendCoalm94[[i]] <- data.tmp
-    if (sel.map==1997) extendCoalm97[[i]] <- data.tmp
-    if (sel.map==2000) extendCoalm00[[i]] <- data.tmp
-    if (sel.map==2003) extendCoalm03[[i]] <- data.tmp
-    if (sel.map==2006) extendCoalm06[[i]] <- data.tmp
-    if (sel.map==2009) extendCoalm09[[i]] <- data.tmp
-    if (sel.map==2012) extendCoalm12[[i]] <- data.tmp
-    if (sel.map==2015) extendCoalm15[[i]] <- data.tmp
-    if (sel.map==2018) extendCoalm18[[i]] <- data.tmp
-    if (sel.map==2021) extendCoalm21[[i]] <- data.tmp
-}
-
-    
-rm(yes.nas.2009, yes.nas.2012, yes.nas.2015, yes.nas.2018, yes.nas.2021)
+     

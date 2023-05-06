@@ -1513,14 +1513,14 @@ estim_dis <- function(sel.map){
         if (sel.map==2006) data.tmp <- extendCoald06[[i]]
         if (sel.map==2018) data.tmp <- extendCoald18[[i]]
         #data.tmp <- extendCoal[[i]]
-        #
-        # add first-differences
+        ##
+        ## add first-differences
         tmp.ln <- nrow(data.tmp)
         data.tmp$d.pan    <- data.tmp$pan    - c(NA, data.tmp$pan   [-tmp.ln])
         data.tmp$d.pri    <- data.tmp$pri    - c(NA, data.tmp$pri   [-tmp.ln])
         data.tmp$d.left   <- data.tmp$left   - c(NA, data.tmp$left  [-tmp.ln])
         rm(tmp.ln)
-        #
+        ##
         ############################################
         ## backwards-predict 1988 with next 5 els ##
         ############################################
@@ -2067,15 +2067,14 @@ estim_dis <- function(sel.map){
             data.tmp$dbackward  [data.tmp$yr==year] <- tmp.back   # input fwd/back
         }
         #
-        # ALTERNATIVE: exp(predict.lm(reg.pan,    newdata = new.d, interval = "confidence"))
-        #########################################################################
+        ## ######################################################################
         ## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
-        #########################################################################
+        ## ######################################################################
         reg.pan   <-  lm(formula = log(pan /pri)  ~  mean.rpan,  data = data.tmp)
         reg.left  <-  lm(formula = log(left/pri)  ~  mean.rleft, data = data.tmp)
         reg.oth   <-  lm(formula = log(oth /pri)  ~  mean.roth,  data = data.tmp)
-                                        #
-        # point prediction alpha with mean at zero 
+        ##
+        ## point prediction alpha with mean at zero 
         new.d <- data.frame(mean.rpan = 0)
         rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
         new.d <- data.frame(mean.rleft = 0)
@@ -2112,10 +2111,10 @@ estim_dis <- function(sel.map){
             mean.regs.d18$left  [[i]] <- reg.left  
             mean.regs.d18$oth   [[i]] <- reg.oth
         }
-        #
-        # add alphas and betas for whole period
+        ##
+        ## add alphas and betas for whole period
         data.tmp$alphahat.left  <- data.tmp$alphahat.pri <- data.tmp$alphahat.pan <- NA # open slots for alphas
-        data.tmp$betahat.left   <- data.tmp$betahat.pan <- NA # open slots for betas
+        data.tmp$betahat.left   <- data.tmp$betahat.pan <- NA                           # open slots for betas
         data.tmp$alphahat.pan   <- alphahat$pan [i]
         data.tmp$alphahat.pri   <- alphahat$pri [i]
         data.tmp$alphahat.left  <- alphahat$left[i]
@@ -2133,7 +2132,7 @@ estim_dis <- function(sel.map){
             betahat.oth <- NULL; # drop this beta
             #betahat.pan <- betahat.left   <- betahat.oth <- NULL; # drop betas
         })
-        # plug estimates into data object
+        # return estimates to data object
         if (sel.map==1979) extendCoald79[[i]] <- data.tmp
         if (sel.map==1997) extendCoald97[[i]] <- data.tmp
         if (sel.map==2006) extendCoald06[[i]] <- data.tmp
@@ -2144,23 +2143,89 @@ estim_dis <- function(sel.map){
     ## (eg. period mean in new municipio in 2017)    ##
     ###################################################
     # function will return this:
-    if (sel.map==1979) return(extendCoald79)
-    if (sel.map==1997) return(extendCoald97)
-    if (sel.map==2006) return(extendCoald06)
-    if (sel.map==2018) return(extendCoald18)
+    if (sel.map==1979){
+        res.tmp <-
+            list(ec = extendCoald79,
+                 rgs88 = regs.1988,
+                 rgs91 = regs.1991,
+                 rgs94 = regs.1994,
+                 m.rgs = mean.regs.d79
+                 )
+        return(res.tmp)
+    }
+    if (sel.map==1997){
+         res.tmp <-
+            list(ec = extendCoald97,
+                 rgs97 = regs.1997,
+                 rgs00 = regs.2000,
+                 rgs03 = regs.2003,
+                 m.rgs = mean.regs.d97
+                 )
+        return(res.tmp)
+    }
+    if (sel.map==2006){
+        res.tmp <-
+            list(ec = extendCoald06,
+                 rgs06 = regs.2006,
+                 rgs09 = regs.2009,
+                 rgs12 = regs.2012,
+                 rgs15 = regs.2015,
+                 m.rgs = mean.regs.d06
+                 )
+        return(res.tmp)
+    }
+    if (sel.map==2018){
+        res.tmp <-
+            list(ec = extendCoald18,
+                 rgs18 = regs.2018,
+                 rgs21 = regs.2021,
+                 rgs24 = regs.2024,
+                 m.rgs = mean.regs.d18
+                 )
+        return(res.tmp)
+    }
 }
 
-#######################################################################################
-## district estimates are contingent on chosen map, run each once for full estimates ##
-#######################################################################################
+#########################################################################################
+## REGRESSIONS ESTIMATION ROUTINE HERE                                                 ##
+## district estimates are contingent on chosen map, run each once for full estimates   ##
+#########################################################################################
 for (j in 1:4){
     sel.map <- c(1979,1997,2006,2018)[j]
+    res.tmp <- estim_dis(sel.map)
     #
-    if (sel.map==1979) extendCoald79 <- estim_dis(sel.map)
-    if (sel.map==1997) extendCoald97 <- estim_dis(sel.map)
-    if (sel.map==2006) extendCoald06 <- estim_dis(sel.map)
-    if (sel.map==2018) extendCoald18 <- estim_dis(sel.map)
+    if (sel.map==1979){
+        extendCoald79 <- res.tmp$ec
+        regs.1988     <- res.tmp$rgs88
+        regs.1991     <- res.tmp$rgs91
+        regs.1994     <- res.tmp$rgs94
+        mean.regs.d79 <- res.tmp$m.rgs
+    }
+    if (sel.map==1997){
+        extendCoald97 <- res.tmp$ec
+        regs.1997     <- res.tmp$rgs97
+        regs.2000     <- res.tmp$rgs00
+        regs.2003     <- res.tmp$rgs03
+        mean.regs.d97 <- res.tmp$m.rgs
+    }
+    if (sel.map==2006){
+        extendCoald06 <- res.tmp$ec
+        regs.2006     <- res.tmp$rgs06
+        regs.2009     <- res.tmp$rgs09
+        regs.2012     <- res.tmp$rgs12
+        regs.2015     <- res.tmp$rgs15
+        mean.regs.d06 <- res.tmp$m.rgs
+    }
+    if (sel.map==2018){
+        extendCoald18 <- res.tmp$ec
+        regs.2018     <- res.tmp$rgs18
+        regs.2021     <- res.tmp$rgs21
+        regs.2024     <- res.tmp$rgs24
+        mean.regs.d18 <- res.tmp$m.rgs
+    }
 }
+
+rm(res.tmp)
 
 # clean, all this is saved in extendCoal, mean.regs, regs.1988 ... regs.2024
 #ls()
@@ -2231,49 +2296,50 @@ out.y2024 <- tmp.func(year=2024)
 ##################
 write.csv(out.y1988,
           file = paste(wd, "data/dipfed-distrito-vhat-1988.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y1991,
           file = paste(wd, "data/dipfed-distrito-vhat-1991.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y1994,
           file = paste(wd, "data/dipfed-distrito-vhat-1994.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y1997,
           file = paste(wd, "data/dipfed-distrito-vhat-1997.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y2000,
           file = paste(wd, "data/dipfed-distrito-vhat-2000.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y2003,
           file = paste(wd, "data/dipfed-distrito-vhat-2003.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y2006,
           file = paste(wd, "data/dipfed-distrito-vhat-2006.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y2009,
           file = paste(wd, "data/dipfed-distrito-vhat-2009.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y2012,
           file = paste(wd, "data/dipfed-distrito-vhat-2012.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y2015,
           file = paste(wd, "data/dipfed-distrito-vhat-2015.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y2018,
           file = paste(wd, "data/dipfed-distrito-vhat-2018.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y2021,
           file = paste(wd, "data/dipfed-distrito-vhat-2021.csv", sep = ""), row.names = FALSE)
-#
+##
 write.csv(out.y2024,
           file = paste(wd, "data/dipfed-distrito-vhat-2024.csv", sep = ""), row.names = FALSE)
-#
+##
 
-# save district regression objects
+## save district regression objects
 save(mean.regs.d79, file = paste(wd, "data/dipfed-distrito-mean-regs-map1979.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 save(mean.regs.d97, file = paste(wd, "data/dipfed-distrito-mean-regs-map1997.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 save(mean.regs.d06, file = paste(wd, "data/dipfed-distrito-mean-regs-map2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 save(mean.regs.d18, file = paste(wd, "data/dipfed-distrito-mean-regs-map2018.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+##
 save(regs.1988, file = paste(wd, "data/dipfed-distrito-regs-1988.RData", sep = ""), compress = "gzip")
 save(regs.1991, file = paste(wd, "data/dipfed-distrito-regs-1991.RData", sep = ""), compress = "gzip")
 save(regs.1994, file = paste(wd, "data/dipfed-distrito-regs-1994.RData", sep = ""), compress = "gzip")
