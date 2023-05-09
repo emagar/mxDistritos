@@ -17,7 +17,7 @@
 #######################################
 
 ##########################################################################
-## Function to square d by adding municipios absent frim that election  ##
+## Function to square d by adding municipios absent from that election  ##
 ##########################################################################
 add.miss.mun <- function(d){
     ## get vector of all municipios in eq 

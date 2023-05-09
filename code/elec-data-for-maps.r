@@ -1300,9 +1300,9 @@ load(file="../../datosBrutos/not-in-git/tmp-restore.RData")
 v91s <- v91; v94s <- v94; v97s <- v97; v00s <- v00; v03s <- v03; v06s <- v06; v09s <- v09; v12s <- v12; v15s <- v15; v18s <- v18; v21s <- v21;
 rm(v91,v94, v97, v00, v03, v06, v09, v12, v15, v18, v21)
 
-###########################################################################################################
-## Run script code/aggregates-mun-dis-from-sec.r to produce municipio- and seccion-level vote aggregates ##
-###########################################################################################################
+#####################################################################################################
+## Script code/aggregates-mun-dis-from-sec.r produces municipio- and seccion-level vote aggregates ##
+#####################################################################################################
 source("../../../redistrict/ife.ine/code/aggregates-mun-dis-from-sec.r")
 
 
@@ -1330,190 +1330,64 @@ setwd(dd)
 load(file="../../datosBrutos/not-in-git/tmp3-restore.RData")
 
 
+## drop unnecessary columns from seccion-level objects
+v94s <- within(v94s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v94s <- within(v94s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v94s <- within(v94s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
+v97s <- within(v97s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v97s <- within(v97s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v97s <- within(v97s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
+v00s <- within(v00s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v00s <- within(v00s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v00s <- within(v00s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
+v03s <- within(v03s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v03s <- within(v03s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v03s <- within(v03s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
+v06s <- within(v06s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v06s <- within(v06s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v06s <- within(v06s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
+v09s <- within(v09s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v09s <- within(v09s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v09s <- within(v09s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
+v12s <- within(v12s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v12s <- within(v12s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v12s <- within(v12s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
+v15s <- within(v15s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v15s <- within(v15s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v15s <- within(v15s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
+v18s <- within(v18s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v18s <- within(v18s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v18s <- within(v18s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
+v21s <- within(v21s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
+v21s <- within(v21s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
+v21s <- within(v21s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
 
-# for future cleaning
-tmp.ls <- ls()
-#tmp <- ls()
-#setdiff(tmp, tmp.ls)
 
-
-
-# drop columns before saving raw vote municipio files
-ls()
-colnames(v94m)
-v91m <-  within(v91m,  ord <- munn <- NULL)
-v94m <-  within(v94m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
-v97m <-  within(v97m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
-v00m <-  within(v00m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
-v03m <-  within(v03m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
-v06m <-  within(v06m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
-v09m <-  within(v09m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- dptc <- NULL)
-v12m <-  within(v12m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- NULL)
-v15m <-  within(v15m,  disn <- NULL) #  <- dpanc <- dpric <- dprdc <- dmorenac <- NULL)
-v18m <-  within(v18m,  disn <- NULL) #  <- dpanc <- dpric <- dmorenac <- NULL)
-v21m <-  within(v21m,  disn <- NULL) #  <- dpanc <- dpric <- dmorenac <- NULL)
-v21mw <- within(v21mw, disn <- NULL) #  <- dpanc <- dpric <- dmorenac <- NULL)
-
-# add missing municipios to v..m objects to get same dimensionality
-tmp <- c(v91m$ife, v94m$ife, v97m$ife, v00m$ife, v03m$ife, v06m$ife, v09m$ife, v12m$ife, v15m$ife, v18m$ife, v21m$ife)
-tmp <- c(tmp, v94m.cf06$ife, v94m.cf09$ife, v94m.cf12$ife, v94m.cf15$ife, v94m.cf18$ife, v94m.cf21$ife)
-tmp <- unique(tmp)
-tmp <- tmp[order(tmp)]
-tmp <- data.frame(ife=tmp)
-#head(tmp)
-homog <- function(x){
-    x <- merge(x, tmp, by = "ife", all = TRUE, sort = TRUE)
-    return(x)
-}
-v91m <- homog(v91m)
-v94m <- homog(v94m)
-v97m <- homog(v97m)
-v00m <- homog(v00m)
-v03m <- homog(v03m)
-v06m <- homog(v06m)
-v09m <- homog(v09m)
-v12m <- homog(v12m)
-v15m <- homog(v15m)
-v18m <- homog(v18m)
-v21m <- homog(v21m)
-v21mw <- homog(v21mw)
-tmp.w  <- homog(tmp.w)
-tmp.w2 <- homog(tmp.w2)
-#
-#v91m.cf06 <- homog(v91m.cf06)
-#v91m.cf09 <- homog(v91m.cf09)
-#v91m.cf12 <- homog(v91m.cf12)
-#v91m.cf15 <- homog(v91m.cf15)
-#v91m.cf18 <- homog(v91m.cf18)
-#v91m.cf21 <- homog(v91m.cf21)
-#
-v94m.cf06 <- homog(v94m.cf06)
-v94m.cf09 <- homog(v94m.cf09)
-v94m.cf12 <- homog(v94m.cf12)
-v94m.cf15 <- homog(v94m.cf15)
-v94m.cf18 <- homog(v94m.cf18)
-v94m.cf21 <- homog(v94m.cf21)
-#
-v97m.cf06 <- homog(v97m.cf06)
-v97m.cf09 <- homog(v97m.cf09)
-v97m.cf12 <- homog(v97m.cf12)
-v97m.cf15 <- homog(v97m.cf15)
-v97m.cf18 <- homog(v97m.cf18)
-v97m.cf21 <- homog(v97m.cf21)
-#
-v00m.cf06 <- homog(v00m.cf06)
-v00m.cf09 <- homog(v00m.cf09)
-v00m.cf12 <- homog(v00m.cf12)
-v00m.cf15 <- homog(v00m.cf15)
-v00m.cf18 <- homog(v00m.cf18)
-v00m.cf21 <- homog(v00m.cf21)
-#
-v03m.cf06 <- homog(v03m.cf06)
-v03m.cf09 <- homog(v03m.cf09)
-v03m.cf12 <- homog(v03m.cf12)
-v03m.cf15 <- homog(v03m.cf15)
-v03m.cf18 <- homog(v03m.cf18)
-v03m.cf21 <- homog(v03m.cf21)
-#
-# v06m.cf06 <- homog(v06m.cf06) # UNNEEDED
-v06m.cf09 <- homog(v06m.cf09)
-v06m.cf12 <- homog(v06m.cf12)
-v06m.cf15 <- homog(v06m.cf15)
-v06m.cf18 <- homog(v06m.cf18)
-v06m.cf21 <- homog(v06m.cf21)
-#
-v09m.cf06 <- homog(v09m.cf06)
-# v09m.cf09 <- homog(v09m.cf09) # UNNEEDED
-v09m.cf12 <- homog(v09m.cf12)
-v09m.cf15 <- homog(v09m.cf15)
-v09m.cf18 <- homog(v09m.cf18)
-v09m.cf21 <- homog(v09m.cf21)
-#
-v12m.cf06 <- homog(v12m.cf06)
-v12m.cf09 <- homog(v12m.cf09)
-# v12m.cf12 <- homog(v12m.cf12) # UNNEEDED
-v12m.cf15 <- homog(v12m.cf15)
-v12m.cf18 <- homog(v12m.cf18)
-v12m.cf21 <- homog(v12m.cf21)
-#
-v15m.cf06 <- homog(v15m.cf06)
-v15m.cf09 <- homog(v15m.cf09)
-v15m.cf12 <- homog(v15m.cf12)
-# v15m.cf15 <- homog(v15m.cf15) # UNNEEDED
-v15m.cf18 <- homog(v15m.cf18)
-v15m.cf21 <- homog(v15m.cf21)
-#
-v18m.cf06 <- homog(v18m.cf06)
-v18m.cf09 <- homog(v18m.cf09)
-v18m.cf12 <- homog(v18m.cf12)
-v18m.cf15 <- homog(v18m.cf15)
-# v18m.cf18 <- homog(v18m.cf18) # UNNEEDED
-v18m.cf21 <- homog(v18m.cf21)
-#
-v21m.cf06 <- homog(v21m.cf06)
-v21m.cf09 <- homog(v21m.cf09)
-v21m.cf12 <- homog(v21m.cf12)
-v21m.cf15 <- homog(v21m.cf15)
-v21m.cf18 <- homog(v21m.cf18)
-# v21m.cf21 <- homog(v21m.cf21) # UNNEEDED
-
-# verify
-tmp <- c(
-nrow(v91m), nrow(v94m), nrow(v97m), nrow(v00m), nrow(v03m), nrow(v06m), nrow(v09m), nrow(v12m), nrow(v15m), nrow(v18m), nrow(v21m),
-nrow(v21mw), nrow(tmp.w),
-#nrow(v91m.cf06),
-nrow(v94m.cf06), nrow(v94m.cf09), nrow(v94m.cf12), nrow(v94m.cf15), nrow(v94m.cf18), nrow(v94m.cf21), 
-nrow(v97m.cf06), nrow(v97m.cf09), nrow(v97m.cf12), nrow(v97m.cf15), nrow(v97m.cf18), nrow(v97m.cf21), 
-nrow(v00m.cf06), nrow(v00m.cf09), nrow(v00m.cf12), nrow(v00m.cf15), nrow(v00m.cf18), nrow(v00m.cf21), 
-nrow(v03m.cf06), nrow(v03m.cf09), nrow(v03m.cf12), nrow(v03m.cf15), nrow(v03m.cf18), nrow(v03m.cf21), 
-                 nrow(v06m.cf09), nrow(v06m.cf12), nrow(v06m.cf15), nrow(v06m.cf18), nrow(v06m.cf21),
-nrow(v09m.cf06),                  nrow(v09m.cf12), nrow(v09m.cf15), nrow(v09m.cf18), nrow(v09m.cf21), 
-nrow(v12m.cf06), nrow(v12m.cf09),                  nrow(v12m.cf15), nrow(v12m.cf18), nrow(v12m.cf21), 
-nrow(v15m.cf06), nrow(v15m.cf09), nrow(v15m.cf12),                  nrow(v15m.cf18), nrow(v15m.cf21), 
-nrow(v18m.cf06), nrow(v18m.cf09), nrow(v18m.cf12), nrow(v18m.cf15),                  nrow(v18m.cf21), 
-nrow(v21m.cf06), nrow(v21m.cf09), nrow(v21m.cf12), nrow(v21m.cf15), nrow(v21m.cf18))
-#
-if (min(tmp)==max(tmp)){
-    print("OK, v..ms ALL HAVE SAME DIMENSIONALITY")
-} else {
-    print("ERROR: SOME v..m HAS DIFFERENT DIMENSIONALITY")
-}
-rm(homog)
 
 # drop columns before saving raw vote seccion files
 #v91s <- within(v91, munn <- NULL)
-v94s <- within(v94, edosecn <- dpanc <- dpric <- dprdc <- NULL)
-v97s <- within(v97, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- dpanc <- dpric <- dprdc <- NULL)
-v00s <- within(v00, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v03s <- within(v03, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v06s <- within(v06, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v09s <- within(v09, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v12s <- within(v12, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v15s <- within(v15, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v18s <- within(v18, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v21s <- within(v21, edosecn <- d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
-v94s <- within(v94s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-v97s <- within(v97s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-v00s <- within(v00s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-v03s <- within(v03s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-v06s <- within(v06s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-v09s <- within(v09s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-v12s <- within(v12s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-v15s <- within(v15s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-v18s <- within(v18s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-v21s <- within(v21s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
-#
 #write.csv(v91s, file = paste(wd, "data/dipfed-seccion-vraw-1991.csv", sep = ""), row.names = FALSE)
-write.csv(v94s, file = paste(wd, "data/dipfed-seccion-vraw-1994.csv", sep = ""), row.names = FALSE)
-write.csv(v97s, file = paste(wd, "data/dipfed-seccion-vraw-1997.csv", sep = ""), row.names = FALSE)
-write.csv(v00s, file = paste(wd, "data/dipfed-seccion-vraw-2000.csv", sep = ""), row.names = FALSE)
-write.csv(v03s, file = paste(wd, "data/dipfed-seccion-vraw-2003.csv", sep = ""), row.names = FALSE)
-write.csv(v06s, file = paste(wd, "data/dipfed-seccion-vraw-2006.csv", sep = ""), row.names = FALSE)
-write.csv(v09s, file = paste(wd, "data/dipfed-seccion-vraw-2009.csv", sep = ""), row.names = FALSE)
-write.csv(v12s, file = paste(wd, "data/dipfed-seccion-vraw-2012.csv", sep = ""), row.names = FALSE)
-write.csv(v15s, file = paste(wd, "data/dipfed-seccion-vraw-2015.csv", sep = ""), row.names = FALSE)
-write.csv(v18s, file = paste(wd, "data/dipfed-seccion-vraw-2018.csv", sep = ""), row.names = FALSE)
-write.csv(v21s, file = paste(wd, "data/dipfed-seccion-vraw-2021.csv", sep = ""), row.names = FALSE)
+tmp <- within(v94s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-1994.csv", sep = ""), row.names = FALSE)
+tmp <- within(v97s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-1997.csv", sep = ""), row.names = FALSE)
+tmp <- within(v00s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-2000.csv", sep = ""), row.names = FALSE)
+tmp <- within(v03s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-2003.csv", sep = ""), row.names = FALSE)
+tmp <- within(v06s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-2006.csv", sep = ""), row.names = FALSE)
+tmp <- within(v09s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-2009.csv", sep = ""), row.names = FALSE)
+tmp <- within(v12s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-2012.csv", sep = ""), row.names = FALSE)
+tmp <- within(v15s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-2015.csv", sep = ""), row.names = FALSE)
+tmp <- within(v18s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-2018.csv", sep = ""), row.names = FALSE)
+tmp <- within(v21s, edosecn <- NULL)
+write.csv(tmp, file = paste(wd, "data/dipfed-seccion-vraw-2021.csv", sep = ""), row.names = FALSE)
+rm(tmp)
 
 
 # save municipal winners with correct manipulated data for new municipalities
@@ -1532,7 +1406,7 @@ rm(tmp,tmp.w,tmp.w2) # drop to avoid confusion
 
 
 # saves fixed mun raw aggregates
-#write.csv(v91m, file = paste(wd, "data/dipfed-municipio-vraw-1991.csv", sep = ""), row.names = FALSE)
+write.csv(v91m,  file = paste(wd, "data/dipfed-municipio-vraw-1991.csv", sep = ""), row.names = FALSE)
 write.csv(v94m,  file = paste(wd, "data/dipfed-municipio-vraw-1994.csv", sep = ""), row.names = FALSE)
 write.csv(v97m,  file = paste(wd, "data/dipfed-municipio-vraw-1997.csv", sep = ""), row.names = FALSE)
 write.csv(v00m,  file = paste(wd, "data/dipfed-municipio-vraw-2000.csv", sep = ""), row.names = FALSE)
@@ -1544,8 +1418,22 @@ write.csv(v15m,  file = paste(wd, "data/dipfed-municipio-vraw-2015.csv", sep = "
 write.csv(v18m,  file = paste(wd, "data/dipfed-municipio-vraw-2018.csv", sep = ""), row.names = FALSE)
 write.csv(v21m,  file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), row.names = FALSE)
 
+# saves fixed district raw aggregates
+write.csv(v91d,  file = paste(wd, "data/dipfed-distrito-vraw-1991.csv", sep = ""), row.names = FALSE)
+write.csv(v94d,  file = paste(wd, "data/dipfed-distrito-vraw-1994.csv", sep = ""), row.names = FALSE)
+write.csv(v97d,  file = paste(wd, "data/dipfed-distrito-vraw-1997.csv", sep = ""), row.names = FALSE)
+write.csv(v00d,  file = paste(wd, "data/dipfed-distrito-vraw-2000.csv", sep = ""), row.names = FALSE)
+write.csv(v03d,  file = paste(wd, "data/dipfed-distrito-vraw-2003.csv", sep = ""), row.names = FALSE)
+write.csv(v06d,  file = paste(wd, "data/dipfed-distrito-vraw-2006.csv", sep = ""), row.names = FALSE)
+write.csv(v09d,  file = paste(wd, "data/dipfed-distrito-vraw-2009.csv", sep = ""), row.names = FALSE)
+write.csv(v12d,  file = paste(wd, "data/dipfed-distrito-vraw-2012.csv", sep = ""), row.names = FALSE)
+write.csv(v15d,  file = paste(wd, "data/dipfed-distrito-vraw-2015.csv", sep = ""), row.names = FALSE)
+write.csv(v18d,  file = paste(wd, "data/dipfed-distrito-vraw-2018.csv", sep = ""), row.names = FALSE)
+write.csv(v21d,  file = paste(wd, "data/dipfed-distrito-vraw-2021.csv", sep = ""), row.names = FALSE)
+
+
 # clean
-rm(ag.mun,ag.sec,d,sel,sel.c,sel.drop,sel.r,to.num)
+rm(tmp.func,tmp.ls)
 
 ToDo jul2021:
 1)  [x] push reload and seccion data manip for later
