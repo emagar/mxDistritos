@@ -1,4 +1,4 @@
-#estim_dis###################################################################
+####################################################################
 ## Script for autoregressive vote estimates and alpha regressions ##
 ## invoked from code/elec-data-for-maps.r                         ##
 ##                                                                ##
@@ -3411,7 +3411,7 @@ estim_mun <- function(sel.map){
     ## if map is 1994 will estimate 1991 and 1988 backwards, add row in data frames
     if (sel.map==1994){
         add1988 <- function(x){
-            rbind(v88=x[1,], x) # repeat 1st row
+            x <- rbind(v88=x[1,], x) # repeat 1st row
             x$yr[1] <- 1988
             x[1,c(2:7,9:11)] <- NA # all NAs except ife
             return(x)
@@ -4468,18 +4468,18 @@ write.csv(out.y2024,
 #############################################################
 ## save district regression objects (one mean.reg per map) ##
 #############################################################
-##save(mean.regs.m91, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-1991.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m94, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m97, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-1997.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m00, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2000.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m03, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2003.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m06, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m09, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2009.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m12, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2012.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m15, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2015.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m18, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2018.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m21, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2021.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-## save(mean.regs.m24, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2024.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+##save(mean.regs.m91, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-1991.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m94, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m97, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-1997.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m00, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2000.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m03, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2003.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m06, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m09, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2009.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m12, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2012.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m15, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2015.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m18, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2018.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m21, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2021.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+## save(mean.regs.m24, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2024.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 ##
 save(regs.1988, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1988.RData", sep = ""), compress = "gzip")
 save(regs.1991, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1991.RData", sep = ""), compress = "gzip")

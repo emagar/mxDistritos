@@ -1,3 +1,5 @@
+wd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/redistrict/ife.ine/")
+
 ##################
 ## party colors ##
 ##################
@@ -22,14 +24,21 @@ col.oth    <- rgb(.55,.55,.55, alpha = .2) # gray 59
 ## municipio-level ##
 #####################
 pty <- "PRI"
-yr <- 2018
+yr <- 1991
 alfa <- "PRI" # what alpha in x-axis?
 ##
-if (yr==2009) dat <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2009.csv", sep = ""), stringsAsFactors = FALSE)
-if (yr==2012) dat <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2012.csv", sep = ""), stringsAsFactors = FALSE)
-if (yr==2015) dat <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2015.csv", sep = ""), stringsAsFactors = FALSE)
-if (yr==2018) dat <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), stringsAsFactors = FALSE)
-if (yr==2021) dat <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==1988) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-1988.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==1991) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-1991.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==1994) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-1994.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==1997) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-1997.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==2000) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-2000.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==2003) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-2003.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==2006) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-2006.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==2009) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-2009.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==2012) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-2012.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==2015) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-2015.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==2018) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-2018.csv", sep = ""), stringsAsFactors = FALSE)
+if (yr==2021) dat <- read.csv(file = paste(wd, "data/municipio/dipfed-municipio-vhat-2021.csv", sep = ""), stringsAsFactors = FALSE)
 ##
 dat <- within(dat, {
     res.pan <- pan - vhat.pan;
