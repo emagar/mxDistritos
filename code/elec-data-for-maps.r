@@ -1432,8 +1432,6 @@ write.csv(v18d,  file = paste(wd, "data/dipfed-distrito-vraw-2018.csv", sep = ""
 write.csv(v21d,  file = paste(wd, "data/dipfed-distrito-vraw-2021.csv", sep = ""), row.names = FALSE)
 
 
-# clean
-rm(tmp.func,tmp.ls)
 
 ToDo jul2021:
 1)  [x] push reload and seccion data manip for later
@@ -1450,7 +1448,6 @@ ToDo jul2021:
 12) [x] Ya puedo generar vhat.2024 (con municipios 21)
 Cuando haya codificado historia de AMGE:
 13) [X] Fix seccion action and to.from
-14) [ ] Fix pob18 missing secciones in order to project inter-census years for turnout
 
 ## TEMPORARY FOR DEBUGGING
 #save.image("../../datosBrutos/not-in-git/tmp.RData")

@@ -19,7 +19,7 @@ tern2cart <- function(coord){
     return(c(x1,y1))
     }
 # function to add vértice labels
-add.lab <- function(labels, add.sign=TRUE){
+add.lab <- function(labels=c("no","label","defined"), add.sign=TRUE){
     left  <- labels[2];
     right <- labels[1];
     up    <- labels[3];
@@ -32,7 +32,7 @@ add.lab <- function(labels, add.sign=TRUE){
 ###############################
 ## function wrapping triplot ##
 ###############################
-la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .15, main = NA, labs=c("PAN","PRI","Morena"), left.right.up=c("pri","pan","morena"), add.sign=TRUE){
+la.ternera <- function(datos, color = rgb(.55,.27,.07, alpha = .2), cex.pts = .15, main = NA, labs=c("PAN","PRI","Morena"), left.right.up=c("pri","pan","left"), add.sign=TRUE){
     # Prepare data: re-arrange so pan is lower right, pri lower left, morena is above 
     datos <- datos[,left.right.up] # subset
     #Then transformed into cartesian coordinates:
@@ -122,27 +122,30 @@ col.oth    <- rgb(.55,.55,.55, alpha = .2) # gray 59
 #####################
 ## municipio-level ##
 #####################
+ls()
 extendCoal.2015 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2015.csv", sep = ""), stringsAsFactors = FALSE)
 extendCoal.2018 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), stringsAsFactors = FALSE)
 extendCoal.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), stringsAsFactors = FALSE)
+
 
 # for pan/pri/morena
 raw.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), stringsAsFactors = FALSE)
 raw.2021 <- within(raw.2021, {
     pan <- pan + panc + prd;
-    pri <- pri + pric;
+    #pri <- pri + pric; 
     left <- morena + morenac + pt;
-    pvem <- pvem + pvemc;
+    #pvem <- pvem + pvemc;
     oth <- pes + rsp + fxm + indep;
     panc <- pric <- morena <- morenac <- pvemc <- prd <- pt <- pes <- rsp <- fxm <- indep <- NULL;
 })
 
 # alianzas/oth
 raw.2021 <- read.csv(file = paste(wd, "data/dipfed-municipio-vraw-2021.csv", sep = ""), stringsAsFactors = FALSE)
-raw.2021[1,]
 raw.2021 <- within(raw.2021, {
-    vxm <- pan + panc + pri + pric + prd;
-    left <- morena + morenac + pt + pvem + pvemc;
+    #vxm <- pan + panc + pri + pric + prd;
+    vxm <- pan + panc + pri + prd;
+    #left <- morena + morenac + pt + pvem + pvemc;
+    left <- morena + morenac + pt + pvem;
     oth <- efec - vxm - left;
 })
 

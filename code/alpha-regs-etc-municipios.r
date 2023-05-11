@@ -1,37 +1,37 @@
-####################################################################
+#estim_dis###################################################################
 ## Script for autoregressive vote estimates and alpha regressions ##
 ## invoked from code/elec-data-for-maps.r                         ##
 ##                                                                ##
 ## Author: Eric Magar                                             ##
 ## emagar at itam dot mx                                          ##
 ## Date: 17apr2023                                                ##
-## Last modified: 18apr2023                                       ##
+## Last modified:  9may2023                                       ##
 ####################################################################
 
 ###################################################################
-## Note: Search function estim_dis below, that wraps estimation. ##
+## Note: Search function estim_mun below, that wraps estimation. ##
 ## Script above that preps time-series data.                     ##
 ## Script below that saves output and cleans.                    ##
 ###################################################################
 
-############################################################################
-## # backwards estimation, unit = districts                               ##
-## 1988m <- 1991m   1994m   1997m79 2000m79 2003m79                       ##
-## 1991m <- 1994m   1997m79 2000m79 2003m79 2006m79                       ##
-## 1994m <- 1997m79 2000m79 2003m79 2006m79 2009m79                       ##
-## 1997m <- 2000m   2003m   2006m97 2009m97 2012m97                       ##
-## 2000m <- 2003m   2006m97 2009m97 2012m97 2015m97                       ##
-## 2003m <- 2006m97 2009m97 2012m97 2015m97 2018m97                       ##
-## 2006m <- 2009m   2012m   2015m   2018m06 2021m06                       ##
-## # forward estimation, unit = districts                                 ##
-##          2009m18 2012m18 2015m18 2018m   2021m   -> 2024m18            ##
-##          2006m18 2009m18 2012m18 2015m18 2018m   -> 2021m              ##
-##          2003m18 2006m18 2009m18 2012m18 2015m18 -> 2018m              ##
-##          2000m06 2003m06 2006m   2009m   2012m   -> 2015m              ##
-##          1997m06 2000m06 2003m06 2006m   2009m   -> 2012m              ##
-##          1994m06 1997m06 2000m06 2003m06 2006m   -> 2009m              ##
-##          1991m06 1994m06 1997m06 2000m06 2003m06 -> 2006m # no 1991m06 ##
-############################################################################
+#########################################################################################
+## Municipio 5-yr estimates that can be computed before 2024                           ##
+## |      | map  |      |      |      |      |       |       |       |       |       | ##
+## | vhat | 1994 | 1997 | 2000 | 2003 | 2006 |  2009 |  2012 |  2015 |  2018 | 2021  | ##
+## |------+------+------+------+------+------+-------+-------+-------+-------+-------| ##
+## | 1991 | back |      |      |      |      |       |       |       |       |       | ##
+## | 1994 | back |      |      |      |      |       |       |       |       |       | ##
+## | 1997 |      | back |      |      |      |       |       |       |       |       | ##
+## | 2000 |      |      | back |      |      |       |       |       |       |       | ##
+## | 2003 |      |      |      | back |      |       |       |       |       |       | ##
+## | 2006 |      |      |      |      |back* |       |       |       |       |       | ##
+## | 2009 |      |      |      |      |      | *fwd* |       |       |       |       | ##
+## | 2012 |      |      |      |      |      |       | *fwd* |       |       |       | ##
+## | 2015 |      |      |      |      |      |       |       | *fwd* |       |       | ##
+## | 2018 |      |      |      |      |      |       |       |       | *fwd* |       | ##
+## | 2021 |      |      |      |      |      |       |       |       |       | *fwd* | ##
+## | 2024 |      |      |      |      |      |       |       |       |       | *fwd* | ##
+#########################################################################################
 
 #################################
 ## aggregate municipio returns ##
@@ -77,6 +77,9 @@ d <- d[moveme(names(d), "efec before lisnom; ife after edon; mun after ife")] # 
 d <- add.miss.mun(d)                           # add missing municipios, if any
 d <- d[order(d$ife),]                          # sort
 v91m <- d                                      # rename object  
+# for estimation, will force 1991 into 1994 municipalities 
+v91m94 <- v91m
+
 
 ##########
 ## 1994 ##
@@ -1728,6 +1731,7 @@ table(c(
     nrow(v18m), nrow(v21m),
 ##
 ##
+    nrow(v91m94), 
     nrow(v97m94), nrow(v00m94), nrow(v03m94),
     nrow(v06m94), nrow(v09m94), nrow(v12m94), nrow(v15m94),
     nrow(v18m94), nrow(v21m94),
@@ -1780,6 +1784,10 @@ table(c(
 ##
 nmun <- nrow(v21m)  ## n municipalities in square data
 
+## empty 91 counterfactual maps to fill in below
+v91mXX <- v91m
+v91mXX[, c("pan","pri","pps","prd","pfcrn","parm","pdm","prt","pem","pt","efec","lisnom","dextra")] <- NA
+
 
 ###############################################################################
 ## Prepare manipulated party objects for time-series and alpha regressions   ##
@@ -1791,7 +1799,7 @@ nmun <- nrow(v21m)  ## n municipalities in square data
 # version 1: extend partial coalitions across the board
 # shares
 panm21 <- data.frame(
-    #v91 =  with(v91m21, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m21, ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m21, ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m21, ifelse(efec==0, NA,  panc              / efec)),
@@ -1804,7 +1812,7 @@ panm21 <- data.frame(
     v21 =  with(v21m,   ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 panm18 <- data.frame(
-    #v91 =  with(v91m18, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m18, ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m18, ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m18, ifelse(efec==0, NA,  panc              / efec)),
@@ -1817,7 +1825,7 @@ panm18 <- data.frame(
     v21 =  with(v21m18, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 panm15 <- data.frame(
-    #v91 =  with(v91m15, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m15, ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m15, ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m15, ifelse(efec==0, NA,  panc              / efec)),
@@ -1830,7 +1838,7 @@ panm15 <- data.frame(
     v21 =  with(v21m15, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 panm12 <- data.frame(
-    #v91 =  with(v91m12, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m12, ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m12, ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m12, ifelse(efec==0, NA,  panc              / efec)),
@@ -1843,7 +1851,7 @@ panm12 <- data.frame(
     v21 =  with(v21m12, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 panm09 <- data.frame(
-    #v91 =  with(v91m09, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m09, ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m09, ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m09, ifelse(efec==0, NA,  panc              / efec)),
@@ -1856,7 +1864,7 @@ panm09 <- data.frame(
     v21 =  with(v21m09, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 panm06 <- data.frame(
-    #v91 =  with(v91m06, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m06, ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m06, ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m06, ifelse(efec==0, NA,  panc              / efec)),
@@ -1869,7 +1877,7 @@ panm06 <- data.frame(
     v21 =  with(v21m06, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 panm03 <- data.frame(
-    #v91 =  with(v91m03, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m03, ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m03, ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m03, ifelse(efec==0, NA,  panc              / efec)),
@@ -1882,7 +1890,7 @@ panm03 <- data.frame(
     v21 =  with(v21m03, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 panm00 <- data.frame(
-    #v91 =  with(v91m00, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m00, ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m00, ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m,   ifelse(efec==0, NA,  panc              / efec)),
@@ -1895,7 +1903,7 @@ panm00 <- data.frame(
     v21 =  with(v21m00, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 panm97 <- data.frame(
-    #v91 =  with(v91m97, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m97, ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m,   ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m97, ifelse(efec==0, NA,  panc              / efec)),
@@ -1908,7 +1916,7 @@ panm97 <- data.frame(
     v21 =  with(v21m97, ifelse(efec==0, NA, (pan + panc + prd) / efec))   # drop prd?
 )
 panm94 <- data.frame(
-    #v91 =  with(v91m94, ifelse(efec==0, NA,  pan               / efec)), 
+    v91 =  with(v91m94, ifelse(efec==0, NA,  pan               / efec)), 
     v94 =  with(v94m,   ifelse(efec==0, NA,  pan               / efec)),
     v97 =  with(v97m94, ifelse(efec==0, NA,  pan               / efec)),
     v00 =  with(v00m94, ifelse(efec==0, NA,  panc              / efec)),
@@ -1947,7 +1955,7 @@ panm94 <- round(panm94, 3)
 ## panm91 <- round(panm91, 3)
 #
 prim21 <- data.frame(
-    #v91 =  with(v91m21, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m21, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m21, ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m21, ifelse(efec==0, NA,  pri                      / efec)),
@@ -1960,7 +1968,7 @@ prim21 <- data.frame(
     v21 =  with(v21m,   ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prim18 <- data.frame(
-    #v91 =  with(v91m18, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m18, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m18, ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m18, ifelse(efec==0, NA,  pri                      / efec)),
@@ -1973,7 +1981,7 @@ prim18 <- data.frame(
     v21 =  with(v21m18, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prim15 <- data.frame(
-    #v91 =  with(v91m15, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m15, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m15, ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m15, ifelse(efec==0, NA,  pri                      / efec)),
@@ -1986,7 +1994,7 @@ prim15 <- data.frame(
     v21 =  with(v21m15, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prim12 <- data.frame(
-    #v91 =  with(v91m12, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m12, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m12, ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m12, ifelse(efec==0, NA,  pri                      / efec)),
@@ -1999,7 +2007,7 @@ prim12 <- data.frame(
     v21 =  with(v21m12, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prim09 <- data.frame(
-    #v91 =  with(v91m09, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m09, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m09, ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m09, ifelse(efec==0, NA,  pri                      / efec)),
@@ -2012,7 +2020,7 @@ prim09 <- data.frame(
     v21 =  with(v21m09, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prim06 <- data.frame(
-    #v91 =  with(v91m06, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m06, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m06, ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m06, ifelse(efec==0, NA,  pri                      / efec)),
@@ -2025,7 +2033,7 @@ prim06 <- data.frame(
     v21 =  with(v21m06, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prim03 <- data.frame(
-    #v91 =  with(v91m03, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m03, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m03, ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m03, ifelse(efec==0, NA,  pri                      / efec)),
@@ -2038,7 +2046,7 @@ prim03 <- data.frame(
     v21 =  with(v21m03, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prim00 <- data.frame(
-    #v91 =  with(v91m00, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m00, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m00, ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m,   ifelse(efec==0, NA,  pri                      / efec)),
@@ -2051,7 +2059,7 @@ prim00 <- data.frame(
     v21 =  with(v21m00, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prim97 <- data.frame(
-    #v91 =  with(v91m97, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m97, ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m,   ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m97, ifelse(efec==0, NA,  pri                      / efec)),
@@ -2064,7 +2072,7 @@ prim97 <- data.frame(
     v21 =  with(v21m97, ifelse(efec==0, NA,  pri                      / efec))  # coal vote to pan+prd ok?
 )
 prim94 <- data.frame(
-    #v91 =  with(v91m94, ifelse(efec==0, NA,  pri                      / efec)),
+    v91 =  with(v91m94, ifelse(efec==0, NA,  pri                      / efec)),
     v94 =  with(v94m,   ifelse(efec==0, NA,  pri                      / efec)),
     v97 =  with(v97m94, ifelse(efec==0, NA,  pri                      / efec)),
     v00 =  with(v00m94, ifelse(efec==0, NA,  pri                      / efec)),
@@ -2103,7 +2111,7 @@ prim94 <- round(prim94, 3)
 ## prim91 <- round(prim91, 3)
 #
 leftm21 <- data.frame(
-    #v91 = with(v91m21, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91mXX, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m21, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m21, ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m21, ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2116,7 +2124,7 @@ leftm21 <- data.frame(
     v21 = with(v21m,   ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftm18 <- data.frame(
-    #v91 = with(v91m18, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91mXX, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m18, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m18, ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m18, ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2129,7 +2137,7 @@ leftm18 <- data.frame(
     v21 = with(v21m18, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftm15 <- data.frame(
-    #v91 = with(v91m15, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91mXX, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m15, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m15, ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m15, ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2142,7 +2150,7 @@ leftm15 <- data.frame(
     v21 = with(v21m15, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftm12 <- data.frame(
-    #v91 = with(v91m12, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91mXX, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m12, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m12, ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m12, ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2155,7 +2163,7 @@ leftm12 <- data.frame(
     v21 = with(v21m12, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftm09 <- data.frame(
-    #v91 = with(v91m09, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91mXX, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m09, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m09, ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m09, ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2168,7 +2176,7 @@ leftm09 <- data.frame(
     v21 = with(v21m09, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftm06 <- data.frame(
-    #v91 = with(v91m06, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91mXX, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m06, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m06, ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m06, ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2181,7 +2189,7 @@ leftm06 <- data.frame(
     v21 = with(v21m06, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftm03 <- data.frame(
-    #v91 = with(v91m03, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91mXX, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m03, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m03, ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m03, ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2194,7 +2202,7 @@ leftm03 <- data.frame(
     v21 = with(v21m03, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftm00 <- data.frame(
-    #v91 = with(v91m00, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91mXX, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m00, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m00, ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m,   ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2207,7 +2215,7 @@ leftm00 <- data.frame(
     v21 = with(v21m00, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftm97 <- data.frame(
-    #v91 = with(v91m97, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91mXX, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m97, ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m,   ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m97, ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2220,7 +2228,7 @@ leftm97 <- data.frame(
     v21 = with(v21m97, ifelse(efec==0, NA, (morena + morenac + pt + pvem)   / efec))  # drop pt + pvem?
 )
 leftm94 <- data.frame(
-    #v91 = with(v91m94, ifelse(efec==0, NA,  prd                             / efec)),
+    v91 = with(v91m94, ifelse(efec==0, NA,  prd                             / efec)),
     v94 = with(v94m,   ifelse(efec==0, NA,  prd                             / efec)),
     v97 = with(v97m94, ifelse(efec==0, NA,  prd                             / efec)),
     v00 = with(v00m94, ifelse(efec==0, NA,  prdc                            / efec)),
@@ -2259,7 +2267,7 @@ leftm94 <- round(leftm94, 3)
 ## leftm91 <- round(leftm91, 3)
 #
 othm21 <- data.frame(
-    #v91 =  with(v91m21, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m21, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m21, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m21, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2272,7 +2280,7 @@ othm21 <- data.frame(
     v21 =  with(v21m,   ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othm18 <- data.frame(
-    #v91 =  with(v91m18, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m18, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m18, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m18, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2285,7 +2293,7 @@ othm18 <- data.frame(
     v21 =  with(v21m18, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othm15 <- data.frame(
-    #v91 =  with(v91m15, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m15, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m15, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m15, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2298,7 +2306,7 @@ othm15 <- data.frame(
     v21 =  with(v21m15, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othm12 <- data.frame(
-    #v91 =  with(v91m12, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m12, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m12, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m12, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2311,7 +2319,7 @@ othm12 <- data.frame(
     v21 =  with(v21m12, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othm09 <- data.frame(
-    #v91 =  with(v91m09, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m09, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m09, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m09, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2324,7 +2332,7 @@ othm09 <- data.frame(
     v21 =  with(v21m09, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othm06 <- data.frame(
-    #v91 =  with(v91m06, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m06, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m06, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m06, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2337,7 +2345,7 @@ othm06 <- data.frame(
     v21 =  with(v21m06, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othm03 <- data.frame(
-    #v91 =  with(v91m03, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m03, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m03, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m03, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2350,7 +2358,7 @@ othm03 <- data.frame(
     v21 =  with(v21m03, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othm00 <- data.frame(
-    #v91 =  with(v91m00, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m00, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m00, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m,   ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2363,7 +2371,7 @@ othm00 <- data.frame(
     v21 =  with(v21m00, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othm97 <- data.frame(
-    #v91 =  with(v91m97, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91mXX, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m97, ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m,   ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m97, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2376,7 +2384,7 @@ othm97 <- data.frame(
     v21 =  with(v21m97, ifelse(efec==0, NA, (mc + pes + rsp + fxm + indep)             / efec))
 )
 othm94 <- data.frame(
-    #v91 =  with(v91m94, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
+    v91 =  with(v91m94, ifelse(efec==0, NA, (parm + pdm + pfcrn + pps + pem + prt)     / efec)),
     v94 =  with(v94m,   ifelse(efec==0, NA, (pps + pfcrn + parm + uno.pdm + pt + pvem) / efec)),
     v97 =  with(v97m94, ifelse(efec==0, NA, (pc + pt + pvem + pps + pdm)               / efec)),
     v00 =  with(v00m94, ifelse(efec==0, NA, (pcd + parm + dsppn)                       / efec)),
@@ -2415,7 +2423,7 @@ othm94 <- round(othm94, 3)
 ## othm91 <- round(othm91, 3)
 #
 efecm21 <- data.frame(
-    #v91 = v91m21$efec,
+    v91 = v91mXX$efec,
     v94 = v94m21$efec,
     v97 = v97m21$efec,
     v00 = v00m21$efec,
@@ -2428,7 +2436,7 @@ efecm21 <- data.frame(
     v21 = v21m  $efec
 )
 efecm18 <- data.frame(
-    #v91 = v91m18$efec,
+    v91 = v91mXX$efec,
     v94 = v94m18$efec,
     v97 = v97m18$efec,
     v00 = v00m18$efec,
@@ -2441,7 +2449,7 @@ efecm18 <- data.frame(
     v21 = v21m18$efec
 )
 efecm15 <- data.frame(
-    #v91 = v91m15$efec,
+    v91 = v91mXX$efec,
     v94 = v94m15$efec,
     v97 = v97m15$efec,
     v00 = v00m15$efec,
@@ -2454,7 +2462,7 @@ efecm15 <- data.frame(
     v21 = v21m15$efec
 )
 efecm12 <- data.frame(
-    #v91 = v91m12$efec,
+    v91 = v91mXX$efec,
     v94 = v94m12$efec,
     v97 = v97m12$efec,
     v00 = v00m12$efec,
@@ -2467,7 +2475,7 @@ efecm12 <- data.frame(
     v21 = v21m12$efec
 )
 efecm09 <- data.frame(
-    #v91 = v91m09$efec,
+    v91 = v91mXX$efec,
     v94 = v94m09$efec,
     v97 = v97m09$efec,
     v00 = v00m09$efec,
@@ -2480,7 +2488,7 @@ efecm09 <- data.frame(
     v21 = v21m09$efec
 )
 efecm06 <- data.frame(
-    #v91 = v91m06$efec,
+    v91 = v91mXX$efec,
     v94 = v94m06$efec,
     v97 = v97m06$efec,
     v00 = v00m06$efec,
@@ -2493,7 +2501,7 @@ efecm06 <- data.frame(
     v21 = v21m06$efec
 )
 efecm03 <- data.frame(
-    #v91 = v91m03$efec,
+    v91 = v91mXX$efec,
     v94 = v94m03$efec,
     v97 = v97m03$efec,
     v00 = v00m03$efec,
@@ -2506,7 +2514,7 @@ efecm03 <- data.frame(
     v21 = v21m03$efec
 )
 efecm00 <- data.frame(
-    #v91 = v91m00$efec,
+    v91 = v91mXX$efec,
     v94 = v94m00$efec,
     v97 = v97m00$efec,
     v00 = v00m  $efec,
@@ -2519,7 +2527,7 @@ efecm00 <- data.frame(
     v21 = v21m00$efec
 )
 efecm97 <- data.frame(
-    #v91 = v91m97$efec,
+    v91 = v91mXX$efec,
     v94 = v94m97$efec,
     v97 = v97m  $efec,
     v00 = v00m97$efec,
@@ -2532,7 +2540,7 @@ efecm97 <- data.frame(
     v21 = v21m97$efec
 )
 efecm94 <- data.frame(
-    #v91 = v91m94$efec,
+    v91 = v91m94$efec,
     v94 = v94m  $efec,
     v97 = v97m94$efec,
     v00 = v00m94$efec,
@@ -2559,7 +2567,7 @@ efecm94 <- data.frame(
 ## )
 #
 lisnomm21 <- data.frame(
-    #v91 = v91m21$lisnom,
+    v91 = v91mXX$lisnom,
     v94 = v94m21$lisnom,
     v97 = v97m21$lisnom,
     v00 = v00m21$lisnom,
@@ -2572,7 +2580,7 @@ lisnomm21 <- data.frame(
     v21 = v21m  $lisnom
 )
 lisnomm18 <- data.frame(
-    #v91 = v91m18$lisnom,
+    v91 = v91mXX$lisnom,
     v94 = v94m18$lisnom,
     v97 = v97m18$lisnom,
     v00 = v00m18$lisnom,
@@ -2585,7 +2593,7 @@ lisnomm18 <- data.frame(
     v21 = v21m18$lisnom
 )
 lisnomm15 <- data.frame(
-    #v91 = v91m15$lisnom,
+    v91 = v91mXX$lisnom,
     v94 = v94m15$lisnom,
     v97 = v97m15$lisnom,
     v00 = v00m15$lisnom,
@@ -2598,7 +2606,7 @@ lisnomm15 <- data.frame(
     v21 = v21m15$lisnom
 )
 lisnomm12 <- data.frame(
-    #v91 = v91m12$lisnom,
+    v91 = v91mXX$lisnom,
     v94 = v94m12$lisnom,
     v97 = v97m12$lisnom,
     v00 = v00m12$lisnom,
@@ -2611,7 +2619,7 @@ lisnomm12 <- data.frame(
     v21 = v21m12$lisnom
 )
 lisnomm09 <- data.frame(
-    #v91 = v91m09$lisnom,
+    v91 = v91mXX$lisnom,
     v94 = v94m09$lisnom,
     v97 = v97m09$lisnom,
     v00 = v00m09$lisnom,
@@ -2624,7 +2632,7 @@ lisnomm09 <- data.frame(
     v21 = v21m09$lisnom
 )
 lisnomm06 <- data.frame(
-    #v91 = v91m06$lisnom,
+    v91 = v91mXX$lisnom,
     v94 = v94m06$lisnom,
     v97 = v97m06$lisnom,
     v00 = v00m06$lisnom,
@@ -2637,7 +2645,7 @@ lisnomm06 <- data.frame(
     v21 = v21m06$lisnom
 )
 lisnomm03 <- data.frame(
-    #v91 = v91m03$lisnom,
+    v91 = v91mXX$lisnom,
     v94 = v94m03$lisnom,
     v97 = v97m03$lisnom,
     v00 = v00m03$lisnom,
@@ -2650,7 +2658,7 @@ lisnomm03 <- data.frame(
     v21 = v21m03$lisnom
 )
 lisnomm00 <- data.frame(
-    #v91 = v91m00$lisnom,
+    v91 = v91mXX$lisnom,
     v94 = v94m00$lisnom,
     v97 = v97m00$lisnom,
     v00 = v00m  $lisnom,
@@ -2663,7 +2671,7 @@ lisnomm00 <- data.frame(
     v21 = v21m00$lisnom
 )
 lisnomm97 <- data.frame(
-    #v91 = v91m97$lisnom,
+    v91 = v91mXX$lisnom,
     v94 = v94m97$lisnom,
     v97 = v97m  $lisnom,
     v00 = v00m97$lisnom,
@@ -2676,7 +2684,7 @@ lisnomm97 <- data.frame(
     v21 = v21m97$lisnom
 )
 lisnomm94 <- data.frame(
-    #v91 = v91m94$lisnom,
+    v91 = v91m94$lisnom,
     v94 = v94m  $lisnom,
     v97 = v97m94$lisnom,
     v00 = v00m94$lisnom,
@@ -2775,6 +2783,7 @@ lisnomm97    <- t(lisnomm97)
 lisnomm94    <- t(lisnomm94)
 ## lisnomm91    <- t(lisnomm91)
 #
+rm(v91mXX)
 
 #################################################################
 ## extendCoal.. will receive data for regressions, one per map ##
@@ -2802,7 +2811,7 @@ for (i in 1:nmun){
     #########################
     ## votes with 2021 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm21   [,i] ,
                       pri    = prim21   [,i] ,
                       left   = leftm21  [,i] ,
@@ -2835,7 +2844,7 @@ for (i in 1:nmun){
     #########################
     ## votes with 2018 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm18[,i],
                       pri    = prim18[,i],
                       left   = leftm18[,i],
@@ -2868,7 +2877,7 @@ for (i in 1:nmun){
     #########################
     ## votes with 2015 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm15[,i],
                       pri    = prim15[,i],
                       left   = leftm15[,i],
@@ -2901,7 +2910,7 @@ for (i in 1:nmun){
     #########################
     ## votes with 2012 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm12[,i],
                       pri    = prim12[,i],
                       left   = leftm12[,i],
@@ -2934,7 +2943,7 @@ for (i in 1:nmun){
     #########################
     ## votes with 2009 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm09[,i],
                       pri    = prim09[,i],
                       left   = leftm09[,i],
@@ -2967,7 +2976,7 @@ for (i in 1:nmun){
     #########################
     ## votes with 2006 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm06[,i],
                       pri    = prim06[,i],
                       left   = leftm06[,i],
@@ -3000,7 +3009,7 @@ for (i in 1:nmun){
     #########################
     ## votes with 2003 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm03[,i],
                       pri    = prim03[,i],
                       left   = leftm03[,i],
@@ -3033,7 +3042,7 @@ for (i in 1:nmun){
     #########################
     ## votes with 2000 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm00[,i],
                       pri    = prim00[,i],
                       left   = leftm00[,i],
@@ -3066,7 +3075,7 @@ for (i in 1:nmun){
     #########################
     ## votes with 1997 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm97[,i],
                       pri    = prim97[,i],
                       left   = leftm97[,i],
@@ -3099,7 +3108,8 @@ for (i in 1:nmun){
     #########################
     ## votes with 1994 map ##
     #########################
-    tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    ##tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
+    tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
                       pan    = panm94[,i],
                       pri    = prim94[,i],
                       left   = leftm94[,i],
@@ -3128,11 +3138,11 @@ for (i in 1:nmun){
     extendCoalm94[[i]] <- tmp
     # name list object
     names(extendCoalm94)[i] <- tmp$ife[1]
-    #
+    ##
     ## #########################
     ## ## votes with map 1991 ##
     ## #########################
-    ## tmp <- data.frame(yr     = seq(from=1994, to=2021, by=3),
+    ## tmp <- data.frame(yr     = seq(from=1991, to=2021, by=3),
     ##                   pan    = panm91[,i],
     ##                   pri    = prim91[,i],
     ##                   left   = leftm91[,i],
@@ -3163,6 +3173,7 @@ for (i in 1:nmun){
     ## names(extendCoalm91)[i] <- tmp$ife[1]
 }
 # clean
+##rm(panm91,prim91,leftm91,othm91,efecm91,lisnomm91)
 rm(panm94,prim94,leftm94,othm94,efecm94,lisnomm94)
 rm(panm97,prim97,leftm97,othm97,efecm97,lisnomm97)
 rm(panm00,prim00,leftm00,othm00,efecm00,lisnomm00)
@@ -3266,9 +3277,9 @@ yr.means <- within(yr.means, mean.roth    <- oth  / pri)
 #
 yr.means[,2:8] <- round(yr.means[,2:8], 3)
 #
-## Drop 1991, not used now ##
-sel.r <- which(yr.means==1991)
-if (length(sel.r>0)) yr.means <- yr.means[-sel.r,]
+## ## Drop 1991, not used now ##
+## sel.r <- which(yr.means==1991)
+## if (length(sel.r>0)) yr.means <- yr.means[-sel.r,]
 #
 # plug into data
 for (i in 1:nmun){
@@ -3286,14 +3297,14 @@ for (i in 1:nmun){
 }
 
 ## ## debug
-## save.image("../../datosBrutos/not-in-git/tmp3-restore.RData")
+save.image("../../datosBrutos/not-in-git/tmp3-restore.RData")
 
-## ## load image
-## rm(list=ls())
-## options(width = 110)
-## dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-## setwd(dd)
-## load(file="../../datosBrutos/not-in-git/tmp3-restore.RData")
+## load image
+rm(list=ls())
+options(width = 110)
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load(file="../../datosBrutos/not-in-git/tmp3-restore.RData")
 
 
 #################################################################################################
@@ -3306,7 +3317,7 @@ for (i in 1:nmun){
 ###############################
 vhat.2024 <-                 # <--- prospective, with up-to 2021 returns
 vhat.2021 <- vhat.2018 <- vhat.2015 <- vhat.2012 <- vhat.2009 <-
-vhat.2006 <- 
+vhat.2006 <- vhat.2003 <- vhat.2000 <- vhat.1997 <- vhat.1994 <- vhat.1991 <- vhat.1988 <- 
     data.frame(pan  = rep(NA, nmun),
                pri  = rep(NA, nmun),
                left = rep(NA, nmun)) # will receive vote estimates
@@ -3325,9 +3336,8 @@ tmp <- as.list(rep(NA, nmun)) # empty list will receive one time-series
 names(tmp) <- v00m$ife
 ## if (agg=="s") names(tmp) <- v00d$edon*10000 + v00d$seccion # untested
 #
-regs.2024 <- regs.2021 <- regs.2018 <- 
-regs.2015 <- regs.2012 <- regs.2009 <-
-regs.2006 <- 
+regs.2024 <- regs.2021 <- regs.2018 <- regs.2015 <- regs.2012 <- regs.2009 <-
+regs.2006 <- regs.2003 <- regs.2000 <- regs.1997 <- regs.1994 <- regs.1991 <- regs.1988 <-         
     list(pan    = tmp,
          left   = tmp,
          oth    = tmp,
@@ -3335,9 +3345,8 @@ regs.2006 <-
 # one mean.reg per map
 mean.regs.m21 <- mean.regs.m18 <-
 mean.regs.m15 <- mean.regs.m12 <- mean.regs.m09 <- mean.regs.m06 <-
-mean.regs.m03 <- mean.regs.m00 <- mean.regs.m97 <-
-mean.regs.m94 <-
-#mean.regs.m91 <-
+mean.regs.m03 <- mean.regs.m00 <- mean.regs.m97 <- mean.regs.m94 <-
+##mean.regs.m91 <- mean.regs.m88 <-
         list(pan    = tmp,
              left   = tmp,
              oth    = tmp,
@@ -3370,8 +3379,8 @@ non.nas(2000)[1:18] # debug
 setdiff(1:nmun, non.nas(2000)) # one year's complement
 #    
 #########################################################################################
-## District 5-yr estimates that can be computed before 2024                            ##
-## |      |      |      |      |      |      |       |       |       |       |       | ##
+## Municipio 5-yr estimates that can be computed before 2024                           ##
+## |      | map  |      |      |      |      |       |       |       |       |       | ##
 ## | vhat | 1994 | 1997 | 2000 | 2003 | 2006 |  2009 |  2012 |  2015 |  2018 | 2021  | ##
 ## |------+------+------+------+------+------+-------+-------+-------+-------+-------| ##
 ## | 1991 | back |      |      |      |      |       |       |       |       |       | ##
@@ -3389,24 +3398,39 @@ setdiff(1:nmun, non.nas(2000)) # one year's complement
 #########################################################################################
 
 
-#############################################
-## wrap district estimations in a function ##
-#############################################
+##############################################
+## wrap municipio estimations in a function ##
+##############################################
 ## ##              1    2    3    4    5    6    7    8    9    0    1 
 ## sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[5]
 ## ##
 pb <- txtProgressBar(min = 0, max = nmun, initial = 0) # for progress bar
-estim_dis <- function(sel.map){
+estim_mun <- function(sel.map){
     message("Estimating ", sel.map)
     #
-    ## if map is 1994 will estimate 1991 backwards, add row in data frames
+    ## if map is 1994 will estimate 1991 and 1988 backwards, add row in data frames
     if (sel.map==1994){
-        add1991 <- function(x) rbind(v91=c(1991,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA), x)
+        add1988 <- function(x){
+            rbind(v88=x[1,], x) # repeat 1st row
+            x$yr[1] <- 1988
+            x[1,c(2:7,9:11)] <- NA # all NAs except ife
+            return(x)
+        }
+        ## OJO: should replace NAs above with 1988 mun returns, if I have them
         tmp <- extendCoalm94 # duplicate for manipulation
-        ## OJO: should replace NAs above with 1988 district returns in file
-        tmp <- lapply(extendCoalm94, add1991) # add row for 1991 to each data frame in list
+        tmp <- lapply(extendCoalm94, add1988) # add row for 1991 to each data frame in list
         extendCoalm94 <- tmp
-        rm(add1991,tmp)
+        add1991 <- function(x){
+            rbind(v91=x[1,], x) # repeat 1st row
+            x$yr[1] <- 1991
+            x[1,c(2:7,9:11)] <- NA # all NAs except ife
+            return(x)
+        }
+        ## ## OJO: should replace NAs above with 1991 mun returns in file
+        ## tmp <- extendCoalm94 # duplicate for manipulation
+        ## tmp <- lapply(extendCoalm94, add1991) # add row for 1991 to each data frame in list
+        ## extendCoalm94 <- tmp
+        rm(add1988,add1991,tmp)
     }
     #
     if (sel.map==2021){
@@ -3497,6 +3521,90 @@ estim_dis <- function(sel.map){
         data.tmp$d.left   <- data.tmp$left   - c(NA, data.tmp$left  [-tmp.ln])
         rm(tmp.ln)
         ##
+        ############################################
+        ## backwards-predict 1988 with next 5 els ##
+        ############################################
+        if (sel.map==1994){
+            tmp.back <- 1 # will indicate backwards prediction
+            year <- 1988  # redundant for secciones/municipios, retained to keep code similar to distritos
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            #
+            new.d <- data.frame(yr = year)
+            rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+            rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
+            rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+            vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+            vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+            vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+            bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+            bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
+            #
+            ## plug into results objects ##
+            vhat.1988[i,] <- c(vhat.pan, vhat.pri, vhat.left)
+            regs.1988$pan [[i]]   <- reg.pan
+            regs.1988$left[[i]]   <- reg.left
+            regs.1988$oth [[i]]   <- reg.oth
+            #
+            # add slot for projections/estimates if absent
+            if ("vhat.pan"  %notin% colnames(data.tmp)) data.tmp$vhat.pan  <- NA  
+            if ("vhat.pri"  %notin% colnames(data.tmp)) data.tmp$vhat.pri  <- NA  
+            if ("vhat.left" %notin% colnames(data.tmp)) data.tmp$vhat.left <- NA 
+            if ("bhat.pan"  %notin% colnames(data.tmp)) data.tmp$bhat.pan  <- NA  
+            if ("bhat.left" %notin% colnames(data.tmp)) data.tmp$bhat.left <- NA 
+            if ("dbackward" %notin% colnames(data.tmp)) data.tmp$dbackward <- NA
+            #
+            data.tmp$vhat.pan [data.tmp$yr==year] <- vhat.pan   # input vote estimates
+            data.tmp$vhat.pri [data.tmp$yr==year] <- vhat.pri
+            data.tmp$vhat.left[data.tmp$yr==year] <- vhat.left
+            data.tmp$bhat.pan [data.tmp$yr==year] <- bhat.pan   # input slope estimates
+            data.tmp$bhat.left[data.tmp$yr==year] <- bhat.left
+            data.tmp$dbackward[data.tmp$yr==year] <- tmp.back   # input fwd/back
+        }
+        #
+        ############################################
+        ## backwards-predict 1991 with next 5 els ##
+        ############################################
+        if (sel.map==1994){
+            tmp.back <- 1 # will indicate backwards prediction
+            year <- 1991  # redundant for secciones/municipios, retained to keep code similar to distritos
+            reg.pan  <- lm(formula = log(pan/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.left <- lm(formula = log(left/pri) ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            reg.oth  <- lm(formula = log(oth/pri)  ~ yr, data = data.tmp, subset = (yr >= year+3 & yr <= year+15))
+            #
+            new.d <- data.frame(yr = year)
+            rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+            rhat.left   <- exp(predict.lm(reg.left,   newdata = new.d))#, interval = "confidence")
+            rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+            vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+            vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+            vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left   + rhat.oth), 3)
+            bhat.pan    <- round(summary.lm(reg.pan)   $coef[2,1], 3)
+            bhat.left   <- round(summary.lm(reg.left)  $coef[2,1], 3)
+            #
+            ## plug into results objects ##
+            vhat.1991[i,] <- c(vhat.pan, vhat.pri, vhat.left)
+            regs.1991$pan [[i]]   <- reg.pan
+            regs.1991$left[[i]]   <- reg.left
+            regs.1991$oth [[i]]   <- reg.oth
+            #
+            # add slot for projections/estimates if absent
+            if ("vhat.pan"  %notin% colnames(data.tmp)) data.tmp$vhat.pan  <- NA  
+            if ("vhat.pri"  %notin% colnames(data.tmp)) data.tmp$vhat.pri  <- NA  
+            if ("vhat.left" %notin% colnames(data.tmp)) data.tmp$vhat.left <- NA 
+            if ("bhat.pan"  %notin% colnames(data.tmp)) data.tmp$bhat.pan  <- NA  
+            if ("bhat.left" %notin% colnames(data.tmp)) data.tmp$bhat.left <- NA 
+            if ("dbackward" %notin% colnames(data.tmp)) data.tmp$dbackward <- NA
+            #
+            data.tmp$vhat.pan [data.tmp$yr==year] <- vhat.pan   # input vote estimates
+            data.tmp$vhat.pri [data.tmp$yr==year] <- vhat.pri
+            data.tmp$vhat.left[data.tmp$yr==year] <- vhat.left
+            data.tmp$bhat.pan [data.tmp$yr==year] <- bhat.pan   # input slope estimates
+            data.tmp$bhat.left[data.tmp$yr==year] <- bhat.left
+            data.tmp$dbackward[data.tmp$yr==year] <- tmp.back   # input fwd/back
+        }
+        #
         ############################################
         ## backwards-predict 1994 with next 5 els ##
         ############################################
@@ -4077,7 +4185,9 @@ estim_dis <- function(sel.map){
     if (sel.map==1994){
         res.tmp <-
             list(ec = extendCoalm94,
-                 rgs = regs.1994,
+                 rgs94 = regs.1994,
+                 rgs91 = regs.1991,
+                 rgs88 = regs.1988,
                  m.rgs = mean.regs.m94
                  )
         return(res.tmp)
@@ -4149,7 +4259,8 @@ estim_dis <- function(sel.map){
     if (sel.map==2021){
         res.tmp <-
             list(ec = extendCoalm21,
-                 rgs = regs.2021,
+                 rgs21 = regs.2021,
+                 rgs24 = regs.2024,
                  m.rgs = mean.regs.m21
                  )
         return(res.tmp)
@@ -4161,16 +4272,18 @@ estim_dis <- function(sel.map){
 ## REGRESSIONS ESTIMATION ROUTINE HERE                                                 ##
 ## municipal estimates are contingent on chosen map, run each once for full estimates  ##
 #########################################################################################
-##              1    2    3    4    5    6    7    8    9    0    1 
-sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[10] # EITHER CHOOSE SINGLE YEAR HERE
-for (j in 5:10){                                                              # OR RUN WHOLE LOOP
-    sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[j]
-    res.tmp <- estim_dis(sel.map)
+##              1    2    3    4    5    6    7    8    9    0 
+sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,by=3)[1] # EITHER CHOOSE SINGLE YEAR HERE
+for (j in 1:10){                                                              # OR RUN WHOLE LOOP
+    sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,by=3)[j]
+    res.tmp <- estim_mun(sel.map)
     ##
     ## UNPACK OUTPUT
     if (sel.map==1994){
         extendCoalm94 <- res.tmp$ec
-        regs.1994     <- res.tmp$rgs
+        regs.1994     <- res.tmp$rgs94
+        regs.1991     <- res.tmp$rgs91
+        regs.1988     <- res.tmp$rgs88
         mean.regs.m94 <- res.tmp$m.rgs
     }
     if (sel.map==1997){
@@ -4215,7 +4328,8 @@ for (j in 5:10){                                                              # 
     }
     if (sel.map==2021){
         extendCoalm21 <- res.tmp$ec
-        regs.2021     <- res.tmp$rgs
+        regs.2021     <- res.tmp$rgs21
+        regs.2024     <- res.tmp$rgs24
         mean.regs.m21 <- res.tmp$m.rgs
     }
 }
@@ -4234,10 +4348,10 @@ rm(res.tmp)
 
 ## clean (all this is saved in extendCoal, mean.regs, regs.1988 ... regs.2024)
 ##ls()
-rm(alphahat, betahat, cs, estim_dis, per.means, yr.means,
-##   vhat.1988, vhat.1991, vhat.1994,
-##   vhat.1997, vhat.2000, vhat.2003,
-##   vhat.2006,
+rm(alphahat, betahat, cs, estim_mun, per.means, yr.means,
+vhat.1988, vhat.1991, vhat.1994,
+vhat.1997, vhat.2000, vhat.2003,
+vhat.2006,
 vhat.2009, vhat.2012, vhat.2015,
 vhat.2018, vhat.2021, vhat.2024
 )
@@ -4252,8 +4366,7 @@ v15m94, v15m97, v15m00, v15m03, v15m06, v15m09, v15m12,         v15m18, v15m21,
 v18m94, v18m97, v18m00, v18m03, v18m06, v18m09, v18m12, v18m15,         v18m21,
 v21m94, v21m97, v21m00, v21m03, v21m06, v21m09, v21m12, v21m15, v21m18
 )
-rm(sel.drop, sel.map, sel.r, tmp)
-rm(i, j, d, d2, non.nas)
+rm(sel.map, tmp, i, j, d, d2, non.nas)
 
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
@@ -4261,9 +4374,9 @@ rm(i, j, d, d2, non.nas)
 
 for.export <- function(year) {
     #year <- 2006         # debug
-    #X <- extendCoalm06[[1]] # debug
+    #X <- extendCoalm94[[1]] # debug
     ## select relevant results object
-    if (year %notin% c(2006,2009,2012,2015,2018,2021,2024)) stop("Year unavailable")
+    if (year %notin% seq(1988,2024,by=3)) stop("Year unavailable")
     if (year==2024) tmp.dat <- extendCoalm21
     if (year==2021) tmp.dat <- extendCoalm21
     if (year==2018) tmp.dat <- extendCoalm18
@@ -4271,12 +4384,12 @@ for.export <- function(year) {
     if (year==2012) tmp.dat <- extendCoalm12
     if (year==2009) tmp.dat <- extendCoalm09
     if (year==2006) tmp.dat <- extendCoalm06
-#    if (year==2003) tmp.dat <- extendCoalm03
-#    if (year==2000) tmp.dat <- extendCoalm00
-#    if (year==1997) tmp.dat <- extendCoalm97
-#    if (year==1994) tmp.dat <- extendCoalm94
-#    if (year==1991) tmp.dat <- extendCoalm91
-#    if (year==1988) tmp.dat <- extendCoalm88
+    if (year==2003) tmp.dat <- extendCoalm03
+    if (year==2000) tmp.dat <- extendCoalm00
+    if (year==1997) tmp.dat <- extendCoalm97
+    if (year==1994) tmp.dat <- extendCoalm94
+    if (year==1991) tmp.dat <- extendCoalm94
+    if (year==1988) tmp.dat <- extendCoalm94
     sel.row <- which(tmp.dat[[1]]$yr==year) # which row reports year sought (symmetric across objects in list)
     # generate list with selected row only in every district
     tmp.out <- lapply(tmp.dat, FUN = function(X) {
@@ -4296,12 +4409,12 @@ for.export <- function(year) {
     return(tmp.out)
 }
 
-#out.y1988 <- for.export(year=1988)
-#out.y1991 <- for.export(year=1991)
-#out.y1994 <- for.export(year=1994)
-#out.y1997 <- for.export(year=1997)
-#out.y2000 <- for.export(year=2000)
-#out.y2003 <- for.export(year=2003)
+out.y1988 <- for.export(year=1988)
+out.y1991 <- for.export(year=1991)
+out.y1994 <- for.export(year=1994)
+out.y1997 <- for.export(year=1997)
+out.y2000 <- for.export(year=2000)
+out.y2003 <- for.export(year=2003)
 out.y2006 <- for.export(year=2006)
 out.y2009 <- for.export(year=2009)
 out.y2012 <- for.export(year=2012)
@@ -4313,65 +4426,67 @@ out.y2024 <- for.export(year=2024)
 ##################
 ## save to disk ##
 ##################
-## write.csv(out.y1988,
-##           file = paste(wd, "data/dipfed-municipio-vhat-1988.csv", sep = ""), row.names = FALSE)
-## #
-## write.csv(out.y1991,
-##           file = paste(wd, "data/dipfed-municipio-vhat-1991.csv", sep = ""), row.names = FALSE)
-## #
-## write.csv(out.y1994,
-##           file = paste(wd, "data/dipfed-municipio-vhat-1994.csv", sep = ""), row.names = FALSE)
-## #
-## write.csv(out.y1997,
-##           file = paste(wd, "data/dipfed-municipio-vhat-1997.csv", sep = ""), row.names = FALSE)
-## #
-## write.csv(out.y2000,
-##           file = paste(wd, "data/dipfed-municipio-vhat-2000.csv", sep = ""), row.names = FALSE)
-## #
-## write.csv(out.y2003,
-##           file = paste(wd, "data/dipfed-municipio-vhat-2003.csv", sep = ""), row.names = FALSE)
-## #
+write.csv(out.y1988,
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1988.csv", sep = ""), row.names = FALSE)
+##
+write.csv(out.y1991,
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1991.csv", sep = ""), row.names = FALSE)
+##
+write.csv(out.y1994,
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1994.csv", sep = ""), row.names = FALSE)
+##
+write.csv(out.y1997,
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1997.csv", sep = ""), row.names = FALSE)
+##
+write.csv(out.y2000,
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2000.csv", sep = ""), row.names = FALSE)
+##
+write.csv(out.y2003,
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2003.csv", sep = ""), row.names = FALSE)
+##
 write.csv(out.y2006,
-          file = paste(wd, "data/dipfed-municipio-vhat-2006.csv", sep = ""), row.names = FALSE)
-#
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2006.csv", sep = ""), row.names = FALSE)
+##
 write.csv(out.y2009,
-          file = paste(wd, "data/dipfed-municipio-vhat-2009.csv", sep = ""), row.names = FALSE)
-#
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2009.csv", sep = ""), row.names = FALSE)
+##
 write.csv(out.y2012,
-          file = paste(wd, "data/dipfed-municipio-vhat-2012.csv", sep = ""), row.names = FALSE)
-#
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2012.csv", sep = ""), row.names = FALSE)
+##
 write.csv(out.y2015,
-          file = paste(wd, "data/dipfed-municipio-vhat-2015.csv", sep = ""), row.names = FALSE)
-#
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2015.csv", sep = ""), row.names = FALSE)
+##
 write.csv(out.y2018,
-          file = paste(wd, "data/dipfed-municipio-vhat-2018.csv", sep = ""), row.names = FALSE)
-#
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2018.csv", sep = ""), row.names = FALSE)
+##
 write.csv(out.y2021,
-          file = paste(wd, "data/dipfed-municipio-vhat-2021.csv", sep = ""), row.names = FALSE)
-#
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2021.csv", sep = ""), row.names = FALSE)
+##
 write.csv(out.y2024,
-          file = paste(wd, "data/dipfed-municipio-vhat-2024.csv", sep = ""), row.names = FALSE)
-#
-######################################
-## save district regression objects ##
-######################################
-## save(mean.regs.m94, file = paste(wd, "data/dipfed-municipio-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-## save(mean.regs.m97, file = paste(wd, "data/dipfed-municipio-mean-regs-1997.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-## save(mean.regs.m00, file = paste(wd, "data/dipfed-municipio-mean-regs-2000.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-## save(mean.regs.m03, file = paste(wd, "data/dipfed-municipio-mean-regs-2003.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m06, file = paste(wd, "data/dipfed-municipio-mean-regs-2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m09, file = paste(wd, "data/dipfed-municipio-mean-regs-2009.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m12, file = paste(wd, "data/dipfed-municipio-mean-regs-2012.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m15, file = paste(wd, "data/dipfed-municipio-mean-regs-2015.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m18, file = paste(wd, "data/dipfed-municipio-mean-regs-2018.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m21, file = paste(wd, "data/dipfed-municipio-mean-regs-2021.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-## save(mean.regs.m24, file = paste(wd, "data/dipfed-municipio-mean-regs-2024.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-## save(regs.1988, file = paste(wd, "data/dipfed-municipio-regs-1988.RData", sep = ""), compress = "gzip")
-## save(regs.1991, file = paste(wd, "data/dipfed-municipio-regs-1991.RData", sep = ""), compress = "gzip")
-## save(regs.1994, file = paste(wd, "data/dipfed-municipio-regs-1994.RData", sep = ""), compress = "gzip")
-## save(regs.1997, file = paste(wd, "data/dipfed-municipio-regs-1997.RData", sep = ""), compress = "gzip")
-## save(regs.2000, file = paste(wd, "data/dipfed-municipio-regs-2000.RData", sep = ""), compress = "gzip")
-## save(regs.2003, file = paste(wd, "data/dipfed-municipio-regs-2003.RData", sep = ""), compress = "gzip")
+          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2024.csv", sep = ""), row.names = FALSE)
+##
+#############################################################
+## save district regression objects (one mean.reg per map) ##
+#############################################################
+##save(mean.regs.m91, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-1991.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m94, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m97, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-1997.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m00, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2000.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m03, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2003.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m06, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m09, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2009.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m12, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2012.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m15, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2015.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m18, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2018.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.m21, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2021.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+## save(mean.regs.m24, file = paste(wd, "data/municipio/dipfed-municipio-mean-regs-2024.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+##
+save(regs.1988, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1988.RData", sep = ""), compress = "gzip")
+save(regs.1991, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1991.RData", sep = ""), compress = "gzip")
+save(regs.1994, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1994.RData", sep = ""), compress = "gzip")
+save(regs.1997, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1997.RData", sep = ""), compress = "gzip")
+save(regs.2000, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2000.RData", sep = ""), compress = "gzip")
+save(regs.2003, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2003.RData", sep = ""), compress = "gzip")
 save(regs.2006, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2006.RData", sep = ""), compress = "gzip")
 save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2009.RData", sep = ""), compress = "gzip")
 save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2012.RData", sep = ""), compress = "gzip")
@@ -4379,18 +4494,18 @@ save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-20
 save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2018.RData", sep = ""), compress = "gzip")
 save(regs.2021, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2021.RData", sep = ""), compress = "gzip")
 save(regs.2024, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2024.RData", sep = ""), compress = "gzip")
-## save(regs.2027, file = paste(wd, "data/dipfed-municipio-regs-2027.RData", sep = ""), compress = "gzip")
+## save(regs.2027, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2027.RData", sep = ""), compress = "gzip")
 
 ###########
 ## clean ##
 ###########
 rm(
-    ## out.y1988,
-    ## out.y1991,
-    ## out.y1994,
-    ## out.y1997,
-    ## out.y2000,
-    ## out.y2003,
+    out.y1988,
+    out.y1991,
+    out.y1994,
+    out.y1997,
+    out.y2000,
+    out.y2003,
     out.y2006,
     out.y2009,
     out.y2012,
@@ -4400,12 +4515,12 @@ rm(
     out.y2024
 )
 rm(
-    ## regs.1988,
-    ## regs.1991,
-    ## regs.1994,
-    ## regs.1997,
-    ## regs.2000,
-    ## regs.2003,
+    regs.1988,
+    regs.1991,
+    regs.1994,
+    regs.1997,
+    regs.2000,
+    regs.2003,
     regs.2006,
     regs.2009,
     regs.2012,
