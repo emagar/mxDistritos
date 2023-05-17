@@ -1331,6 +1331,7 @@ load(file="../../datosBrutos/not-in-git/tmp3-restore.RData")
 
 
 ## drop unnecessary columns from seccion-level objects
+v94s[1,]
 v94s <- within(v94s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
 v94s <- within(v94s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
 v94s <- within(v94s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)

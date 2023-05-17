@@ -1,17 +1,39 @@
-        add1988 <- function(x){
-            rbind(v88=x[1,], x) # repeat 1st row
-            x$yr[1] <- 1988
-            x[1,c(2:7,9:11)] <- NA # all NAs except ife
-            }
-        ## OJO: should replace NAs above with 1988 mun returns, if I have them
-        tmp <- extendCoalm94 # duplicate for manipulation
-        tmp <- lapply(extendCoalm94, add1988) # add row for 1991 to each data frame in list
-        extendCoalm94 <- tmp
 
 
-        add1991 <- function(x){
-            rbind(v91=x[1,], x) # repeat 1st row
-            x$yr[1] <- 1991
-            x[1,c(2:7,9:11)] <- NA # all NAs except ife
-            return(x)
-        }
+
+
+
+
+
+SPLITS
+
+###########
+##   1   ##
+###########
+
+###########
+## 6 # 7 ##
+###########
+
+ahora hago split.to en 2006: a sección 1 le pongo 6+7 de 2009 en adelante (que no me sirve para autorregresión fwd de sección 1); serviría para autorregresión backward de sección 1
+
+necesito manipular split.from en 2006: que a secciones 6 y 7 les ponga votos de sección 1 en años < 2006
+
+
+
+
+MERGE
+
+###########
+## 2 # 3 ##
+###########
+
+###########
+##   3   ##
+###########
+
+no hay que hacerle nada para regresiones
+
+
+
+
