@@ -5,7 +5,9 @@
 ## ####################################################### ##
 #############################################################
 
-## change orig.dest with non-adjacent seccion nums to vector notation
+########################################################################
+## change orig.dest with non-adjacent seccion nums to vector notation ##
+########################################################################
 sel <- grep("[|]", eq$orig.dest)
 #eq$orig.dest[sel]
 if (length(sel)>0){
@@ -14,8 +16,10 @@ if (length(sel)>0){
     eq$orig.dest[sel] <- tmp
 }
 
-## change seccion to edosecn to avoid need to specify edon
-## add dummies indicating a manipulation
+#############################################################
+## change seccion to edosecn to avoid need to specify edon ##
+## add dummy dunbaja indicating a manipulation             ##
+#############################################################
 eq$seccion <- eq$edon * 10000 + eq$seccion
 v94s <- within(v94s, {
     seccion <- edon * 10000 + seccion;
@@ -50,13 +54,9 @@ v21s <- within(v21s, {
 
 
 
-
-##########################################
-## manipulate secciones that were split ##
-##########################################
-# handle split cases --- since sección "dada de baja", can easily reaggregate votes after 
-# split's year w/o causing trouble, sección unused afterwards
-# (adds-up new secciones to add votes to split seccion after it was dropped)
+##############################################################
+## manipulate secciones that suffered some reseccionamiento ##
+##############################################################
 sum.split <- function(year.var = NA) {
     #
     #year.var <- 2015 # debug
@@ -72,15 +72,15 @@ sum.split <- function(year.var = NA) {
     if (year.var==2018) d <- v18s
     if (year.var==2021) d <- v21s
     #
-    #d <- v15s # debug
+    #d <- v03s # debug
     #
     sel.agg <- which(d$seccion %in% sel.to)
     sel.col <- setdiff(colnames(d),
-                       c("edosecn", "edon", "seccion", "disn", "ife", "inegi", "mun", "dunbaja" 
-                       , "d94", "d97", "d00", "d03", "d06", "d09", "d12", "d15", "d18", "d21"
-                       , "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021"
-                       , "dis1979", "dis1997", "dis2006", "dis2013", "dis2018"
-                         )) # exclude ids (order-dependent)
+                       c("edosecn", "edon", "seccion", "disn", "ife", "inegi", "mun", "dunbaja", "nota"
+                       ## , "d94", "d97", "d00", "d03", "d06", "d09", "d12", "d15", "d18", "d21"
+                       ## , "ife1994", "ife1997", "ife2000", "ife2003", "ife2006", "ife2009", "ife2012", "ife2015", "ife2018", "ife2021"
+                       ## , "dis1979", "dis1997", "dis2006", "dis2013", "dis2018"
+                         )) # exclude non-numeric columns that needn't sum-up
     #
     # sum votes
     totals <- colSums(d[sel.agg, sel.col], na.rm = TRUE)
@@ -89,6 +89,7 @@ sum.split <- function(year.var = NA) {
     if (!is.na(totals["dpric"])    & totals["dpric"]>0   )  totals["dpric"]    <- 1
     if (!is.na(totals["dprdc"])    & totals["dprdc"]>0   )  totals["dprdc"]    <- 1
     if (!is.na(totals["dmorenac"]) & totals["dmorenac"]>0)  totals["dmorenac"] <- 1
+    if (!is.na(totals["dptc"])     & totals["dptc"]>0    )  totals["dptc"]     <- 1
     # paste them into eliminated sección
     sel.target <- which(d$seccion==info$seccion)
     d[sel.target,sel.col] <- totals;
@@ -98,20 +99,27 @@ sum.split <- function(year.var = NA) {
     return(d)
 }
 
+# handle split cases --- since sección "dada de baja", can easily reaggregate votes after 
+# split's year w/o causing trouble, sección unused afterwards
+# (sums-up new secciones to add votes to split seccion after it was dropped)
+
 
 #####################################################################
 ## Will sum-up offsprings' vote for years after these parents      ##
 ## were removed (needed for backwards autoregressive prediction)   ##
 #####################################################################
 for (rnd in 1:3){ ## loop over three possible succesive reseccionamiento actions in each seccion in eq
+    #rnd <- 1 # debug
     if (rnd==1) sel.resec <- which(eq$action== "split.to")
     if (rnd==2) sel.resec <- which(eq$action2=="split.to")
     if (rnd==3) sel.resec <- which(eq$action3=="split.to")
     ##table(eq$when[sel.resec])
+    ## stop if empty
+    if (length(sel.resec)==0) next
     for (i in sel.resec){
         ##i <- sel.resec[626] # debug
         ## get basic info to re-aggregate post-split seccciones
-        info <- eq[i, c("edon","seccion","orig.dest","when","orig.dest2","when2","orig.dest3","when3")]
+        info <- eq[i, c("edon","seccion","action","orig.dest","when","action2","orig.dest2","when2","action3","orig.dest3","when3")]
         if (rnd==1) {
             year <- info$when  # reseccionamiento year (modify data in subsequent years only)
             sel.to <- eval(str2expression(info$orig.dest )) # turn string w vector def into vector of target secciones to sum-up
@@ -125,19 +133,19 @@ for (rnd in 1:3){ ## loop over three possible succesive reseccionamiento actions
             sel.to <- eval(str2expression(info$orig.dest3)) # turn string w vector def into vector of target secciones to sum-up
         }
         ## use edosecn to single-out state and match seccion
-        sel.to <- info$edon*10000 + sel.to               
+        sel.to <- info$edon*10000 + sel.to
         ##
         ## now run function
-        if (year < 1994) v94s <- sum.split(1994);
-        if (year < 1997) v97s <- sum.split(1997);
-        if (year < 2000) v00s <- sum.split(2000);
-        if (year < 2003) v03s <- sum.split(2003);
-        if (year < 2006) v06s <- sum.split(2006);
-        if (year < 2009) v09s <- sum.split(2009);
-        if (year < 2012) v12s <- sum.split(2012);
-        if (year < 2015) v15s <- sum.split(2015);
-        if (year < 2018) v18s <- sum.split(2018);
-        if (year < 2021) v21s <- sum.split(2021);
+        if (year < 1994) v94s <- sum.split(1994); #debug: print("1994")
+        if (year < 1997) v97s <- sum.split(1997); #debug: print("1997")
+        if (year < 2000) v00s <- sum.split(2000); #debug: print("2000")
+        if (year < 2003) v03s <- sum.split(2003); #debug: print("2003")
+        if (year < 2006) v06s <- sum.split(2006); #debug: print("2006")
+        if (year < 2009) v09s <- sum.split(2009); #debug: print("2009")
+        if (year < 2012) v12s <- sum.split(2012); #debug: print("2012")
+        if (year < 2015) v15s <- sum.split(2015); #debug: print("2015")
+        if (year < 2018) v18s <- sum.split(2018); #debug: print("2018")
+        if (year < 2021) v21s <- sum.split(2021); #debug: print("2021")
     }
 }
 rm(rnd)
@@ -147,13 +155,17 @@ rm(rnd)
 ## Will use father's vote for years before these offspring created   ##
 #######################################################################
 for (rnd in 1:3){ ## loop over three possible succesive reseccionamiento actions in each seccion in eq
+    #rnd <- 1 # debug
     if (rnd==1) sel.resec <- which(eq$action== "split.from")
     if (rnd==2) sel.resec <- which(eq$action2=="split.from")
     if (rnd==3) sel.resec <- which(eq$action3=="split.from")
     ##table(eq$when[sel.resec])
+    ## stop if empty
+    if (length(sel.resec)==0) next
     for (i in sel.resec){
-        ##
-        info <- eq[i, c("edon","seccion","orig.dest","when","orig.dest2","when2","orig.dest3","when3")]
+        ##i <- sel.resec[1] # debug
+        ## get basic info to re-aggregate post-split seccciones
+        info <- eq[i, c("edon","seccion","action","orig.dest","when","action2","orig.dest2","when2","action3","orig.dest3","when3")]
         if (rnd==1) {
             year <- info$when  # reseccionamiento year (modify data in subsequent years only)
             sel.to <- eval(str2expression(info$orig.dest )) # turn string w vector def into vector of target secciones to sum-up
@@ -189,14 +201,17 @@ rm(rnd)
 ## disappeared (needed for backwards autoregressive prediction)  ##
 ###################################################################
 for (rnd in 1:3){ ## loop over three possible succesive reseccionamiento actions in each seccion in eq
+    #rnd <- 1 # debug
     if (rnd==1) sel.resec <- which(eq$action== "merged.to")
     if (rnd==2) sel.resec <- which(eq$action2=="merged.to")
     if (rnd==3) sel.resec <- which(eq$action3=="merged.to")
     ##table(eq$when[sel.resec])
+    ## stop if empty
+    if (length(sel.resec)==0) next
     for (i in sel.resec){
         ##i <- sel.resec[1] # debug
         ## get basic info to re-aggregate post-split seccciones
-        info <- eq[i, c("edon","seccion","orig.dest","when","orig.dest2","when2","orig.dest3","when3")]
+        info <- eq[i, c("edon","seccion","action","orig.dest","when","action2","orig.dest2","when2","action3","orig.dest3","when3")]
         if (rnd==1) {
             year <- info$when  # reseccionamiento year (modify data in subsequent years only)
             sel.to <- eval(str2expression(info$orig.dest )) # turn string w vector def into vector of target secciones to sum-up
@@ -211,8 +226,6 @@ for (rnd in 1:3){ ## loop over three possible succesive reseccionamiento actions
         }
         ## use edosecn to single-out state and match seccion
         sel.to <- info$edon*10000 + sel.to
-        ## kill if empty
-        
         ##
         ## now run function
         if (year < 1994) v94s <- sum.split(1994);
@@ -229,16 +242,4 @@ for (rnd in 1:3){ ## loop over three possible succesive reseccionamiento actions
 }
 rm(rnd)
 
-## subset secciones that were merged
-## sel.resec <- which(eq$action=="merged")
-## table(eq$when[sel.resec])
-####################################################################################################
-## will not manipulate secciones that were merged bec (a) must be very small to merit dissolution ##
-## and therefore have minimal effects on host seccion and (b) will not appear in newer shapefiles ##
-####################################################################################################
-
-########################################
-## rest of changes too hard to handle ##
-########################################
-## table(eq$action)
 
