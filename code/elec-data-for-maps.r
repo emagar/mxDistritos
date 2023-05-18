@@ -1319,21 +1319,11 @@ source("../../../redistrict/ife.ine/code/alpha-regs-etc-districts.r")
 source("../../../redistrict/ife.ine/code/alpha-regs-etc-municipios.r")
 
 
-####################################################
-## Save a copy to restore all after manipulating  ##
-## reseccionamiento for seccion-level regressions ##
-####################################################
-save.image("../../datosBrutos/not-in-git/tmp3-restore.RData")
-
-## load image
-rm(list=ls())
-options(width = 110)
-dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-setwd(dd)
-load(file="../../datosBrutos/not-in-git/tmp3-restore.RData")
 
 
-## drop unnecessary columns from seccion-level objects
+#########################################################
+## drop unnecessary columns from seccion-level objects ##
+#########################################################
 ##v09s[1,]
 v94s <- within(v94s, d94 <- d97 <- d00 <- d03 <- d06 <- d09 <- d12 <- d15 <- d18 <- d21 <- NULL)
 v94s <- within(v94s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2009 <- ife2012 <- ife2015 <- ife2018 <- ife2021 <- NULL)
@@ -1367,10 +1357,43 @@ v21s <- within(v21s, ife1994 <- ife1997 <- ife2000 <- ife2003 <- ife2006 <- ife2
 v21s <- within(v21s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL)
 
 
+####################################################
+## Save a copy to restore all after manipulating  ##
+## reseccionamiento for seccion-level regressions ##
+####################################################
+save.image("../../datosBrutos/not-in-git/tmp3-restore.RData")
+
+## load image
+rm(list=ls())
+options(width = 110)
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load(file="../../datosBrutos/not-in-git/tmp3-restore.RData")
+
+
+
+
 ##############################################################################
 ## script performs manipulation of secciones that suffered reseccionamiento ##
+## Preferable to open/run script by hand...                                 ##
 ##############################################################################
 source("../../../redistrict/ife.ine/code/resecc-deal-with-splits-and-merge-to.r")
+
+
+
+# save for debug
+save.image("../../datosBrutos/not-in-git/tmp-debug.RData")
+
+# load image
+rm(list=ls())
+options(width = 110)
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load(file="../../datosBrutos/not-in-git/tmp-debug.RData")
+
+
+
+
 
 
 # drop columns before saving raw vote seccion files

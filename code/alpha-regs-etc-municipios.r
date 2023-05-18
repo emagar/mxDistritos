@@ -3296,17 +3296,6 @@ for (i in 1:nmun){
     extendCoalm94[[i]] <- cbind(extendCoalm94[[i]], yr.means[,6:8])
 }
 
-## ## debug
-save.image("../../datosBrutos/not-in-git/tmp3-restore.RData")
-
-## load image
-rm(list=ls())
-options(width = 110)
-dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-setwd(dd)
-load(file="../../datosBrutos/not-in-git/tmp3-restore.RData")
-
-
 #################################################################################################
 ## - should also try jags estimation to get post-sample of vhats and alphas                    ##
 ## - report mg effect of unit change in bar(v) at year's level instead of betahat (cf. Linzer) ##

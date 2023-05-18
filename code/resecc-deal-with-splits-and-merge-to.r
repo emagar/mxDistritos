@@ -5,6 +5,7 @@
 ## ####################################################### ##
 #############################################################
 
+
 ########################################################################
 ## change orig.dest with non-adjacent seccion nums to vector notation ##
 ########################################################################
@@ -15,7 +16,7 @@ if (length(sel)>0){
     tmp <- paste0("c(", tmp, ")")
     eq$orig.dest[sel] <- tmp
 }
-
+##
 #############################################################
 ## change seccion to edosecn to avoid need to specify edon ##
 ## add dummy dunbaja indicating a manipulation             ##
@@ -148,7 +149,7 @@ for (rnd in 1:3){ ## loop over three possible succesive reseccionamiento actions
         if (year < 2021) v21s <- sum.split(2021); #debug: print("2021")
     }
 }
-rm(rnd)
+
 
 
 #######################################################################
@@ -194,7 +195,8 @@ for (rnd in 1:3){ ## loop over three possible succesive reseccionamiento actions
         if (year > 2021) v21s <- sum.split(2021);
     }
 }
-rm(rnd)
+
+
 
 ###################################################################
 ## Will use fagociter's vote for years after merged seccion      ##
@@ -240,6 +242,8 @@ for (rnd in 1:3){ ## loop over three possible succesive reseccionamiento actions
         if (year < 2021) v21s <- sum.split(2021);
     }
 }
-rm(rnd)
+
+## clean
+rm(d, i, info, sel, sel.resec, sel.to, sum.split, tmp, year, rnd)
 
 

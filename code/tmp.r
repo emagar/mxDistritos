@@ -1,4 +1,16 @@
 
+non.nas <- function(x=extendCoals){
+    nn <- lapply(x, sum)
+    ##nn <- lapply(extendCoals, sum)
+    nn <- unlist(nn)
+    ##table(is.na(nn))
+    ##nn                     # debug
+    ##extendCoals[[206]]     # debug: 20jul2021 NA due to unreported sole sección in cps municipio
+    ##which(is.na(nn)==TRUE) # debug
+    nn <- which(is.na(nn)==FALSE)
+    ##length(nn)
+    return(nn)
+}
 
 
 
