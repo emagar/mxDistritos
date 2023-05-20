@@ -4416,43 +4416,43 @@ out.y2024 <- for.export(year=2024)
 ## save to disk ##
 ##################
 write.csv(out.y1988,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1988.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-1988.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y1991,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1991.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-1991.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y1994,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1994.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-1994.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y1997,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1997.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-1997.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2000,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2000.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-2000.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2003,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2003.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-2003.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2006,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2006.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-2006.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2009,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2009.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-2009.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2012,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2012.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-2012.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2015,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2015.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-2015.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2018,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2018.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-2018.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2021,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2021.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-2021.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2024,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2024.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/mun/dipfed-municipio-vhat-2024.csv", sep = ""), row.names = FALSE)
 ##
 #############################################################
 ## save district regression objects (one mean.reg per map) ##

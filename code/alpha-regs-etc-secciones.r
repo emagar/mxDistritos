@@ -502,7 +502,6 @@ non.nas <- non.nas()
 non.nas[1:199] # debug
 setdiff(1:nsec, non.nas) # one year's complement
 ##extendCoals[[60108]] # appears to be a seccion unused
-x
 ##
 #############################################################
 ## Sección 5-yr estimates that can be computed before 2024 ##
@@ -528,14 +527,11 @@ x
 ##############################################
 ## wrap municipio estimations in a function ##
 ##############################################
-library(plyr) ## has rbind.fill() function that is faster and fills missing columns
-## ##              1    2    3    4    5    6    7    8    9    0    1 
-## sel.map <- c(1994,1997,2000,2003,2006,2009,2012,2015,2018,2021,2024,by=3)[5]
-## ##
+##
 pb <- txtProgressBar(min = 0, max = nsec, initial = 0) # for progress bar
 estim_sec <- function(){
     ## will estimate 2024 in 2021 municipal map, so add row in data frames
-    ## this block will change to 2027 after 24's election
+    ## this block will change to 2027 after 24's election, and so forth after each new election
     add2024 <- function(x){
         rbind(x, v24=c(2024,NA,NA,NA,NA,NA,NA,x$seccion[1],NA,NA,NA));
     }
@@ -1107,8 +1103,7 @@ estim_sec <- function(){
              rgs00 = regs.2000,
              rgs97 = regs.1997,
              rgs94 = regs.1994,
-             rgs91 = regs.1991,
-             rgs88 = regs.1988,
+#             rgs91 = regs.1991,
              m.rgs = mean.regs.s
              )
     return(res.tmp)
@@ -1120,29 +1115,30 @@ estim_sec <- function(){
 ## municipal estimates are contingent on chosen map, run each once for full estimates  ##
 #########################################################################################
 
-res.tmp <- estim_sec(sel.map)
+res.tmp <- estim_sec()
+
 ##
 ## UNPACK OUTPUT
 extendCoals <- res.tmp$ec
 regs.2024     <- res.tmp$rgs24
 regs.2021     <- res.tmp$rgs21
-regs.2018     <- res.tmp$rgs
-regs.2015     <- res.tmp$rgs
-regs.2012     <- res.tmp$rgs
-regs.2009     <- res.tmp$rgs
-regs.2006     <- res.tmp$rgs
-regs.2003     <- res.tmp$rgs
-regs.2000     <- res.tmp$rgs
-regs.1997     <- res.tmp$rgs
-regs.1994   <- res.tmp$rgs94
-regs.1991   <- res.tmp$rgs91
-regs.1988   <- res.tmp$rgs88
-mean.regs.s <- res.tmp$m.rgs
+regs.2018     <- res.tmp$rgs18
+regs.2015     <- res.tmp$rgs15
+regs.2012     <- res.tmp$rgs12
+regs.2009     <- res.tmp$rgs09
+regs.2006     <- res.tmp$rgs06
+regs.2003     <- res.tmp$rgs03
+regs.2000     <- res.tmp$rgs00
+regs.1997     <- res.tmp$rgs97
+regs.1994     <- res.tmp$rgs94
+regs.1991     <- res.tmp$rgs91
+regs.1988     <- res.tmp$rgs88
+mean.regs.s   <- res.tmp$m.rgs
 
 rm(res.tmp)
 
-## ## debug
-## save.image("../../datosBrutos/not-in-git/tmp2-restore.RData")
+## debug
+save.image("../../datosBrutos/not-in-git/tmp2-restore.RData")
 
 ## ## load image
 ## rm(list=ls())
@@ -1160,18 +1156,7 @@ vhat.2006,
 vhat.2009, vhat.2012, vhat.2015,
 vhat.2018, vhat.2021, vhat.2024
 )
-rm(     v94m97, v94m00, v94m03, v94m06, v94m09, v94m12, v94m15, v94m18, v94m21,
-v97m94,         v97m00, v97m03, v97m06, v97m09, v97m12, v97m15, v97m18, v97m21,
-v00m94, v00m97,         v00m03, v00m06, v00m09, v00m12, v00m15, v00m18, v00m21,
-v03m94, v03m97, v03m00,         v03m06, v03m09, v03m12, v03m15, v03m18, v03m21,
-v06m94, v06m97, v06m00, v06m03,         v06m09, v06m12, v06m15, v06m18, v06m21,
-v09m94, v09m97, v09m00, v09m03, v09m06,         v09m12, v09m15, v09m18, v09m21,
-v12m94, v12m97, v12m00, v12m03, v12m06, v12m09,         v12m15, v12m18, v12m21,
-v15m94, v15m97, v15m00, v15m03, v15m06, v15m09, v15m12,         v15m18, v15m21,
-v18m94, v18m97, v18m00, v18m03, v18m06, v18m09, v18m12, v18m15,         v18m21,
-v21m94, v21m97, v21m00, v21m03, v21m06, v21m09, v21m12, v21m15, v21m18
-)
-rm(sel.map, tmp, i, j, d, d2, non.nas)
+rm(tmp, i, j, d, d2, non.nas)
 
 ##########################################################################
 ## generate data frame with one year's predictions/estimates for export ##
@@ -1181,20 +1166,8 @@ for.export <- function(year) {
     #year <- 2006         # debug
     #X <- extendCoalm94[[1]] # debug
     ## select relevant results object
-    if (year %notin% seq(1988,2024,by=3)) stop("Year unavailable")
-    if (year==2024) tmp.dat <- extendCoalm21
-    if (year==2021) tmp.dat <- extendCoalm21
-    if (year==2018) tmp.dat <- extendCoalm18
-    if (year==2015) tmp.dat <- extendCoalm15
-    if (year==2012) tmp.dat <- extendCoalm12
-    if (year==2009) tmp.dat <- extendCoalm09
-    if (year==2006) tmp.dat <- extendCoalm06
-    if (year==2003) tmp.dat <- extendCoalm03
-    if (year==2000) tmp.dat <- extendCoalm00
-    if (year==1997) tmp.dat <- extendCoalm97
-    if (year==1994) tmp.dat <- extendCoalm94
-    if (year==1991) tmp.dat <- extendCoalm94
-    if (year==1988) tmp.dat <- extendCoalm94
+    if (year %notin% seq(1991,2024,by=3)) stop("Year unavailable")
+    tmp.dat <- extendCoals
     sel.row <- which(tmp.dat[[1]]$yr==year) # which row reports year sought (symmetric across objects in list)
     # generate list with selected row only in every district
     tmp.out <- lapply(tmp.dat, FUN = function(X) {
@@ -1214,8 +1187,7 @@ for.export <- function(year) {
     return(tmp.out)
 }
 
-out.y1988 <- for.export(year=1988)
-out.y1991 <- for.export(year=1991)
+## out.y1991 <- for.export(year=1991)
 out.y1994 <- for.export(year=1994)
 out.y1997 <- for.export(year=1997)
 out.y2000 <- for.export(year=2000)
@@ -1231,75 +1203,60 @@ out.y2024 <- for.export(year=2024)
 ##################
 ## save to disk ##
 ##################
-write.csv(out.y1988,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1988.csv", sep = ""), row.names = FALSE)
-##
-write.csv(out.y1991,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1991.csv", sep = ""), row.names = FALSE)
+## write.csv(out.y1991,
+##           file = paste(wd, "data/sec/dipfed-seccion-vhat-1991.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y1994,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1994.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-1994.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y1997,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-1997.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-1997.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2000,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2000.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-2000.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2003,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2003.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-2003.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2006,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2006.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-2006.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2009,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2009.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-2009.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2012,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2012.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-2012.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2015,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2015.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-2015.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2018,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2018.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-2018.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2021,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2021.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-2021.csv", sep = ""), row.names = FALSE)
 ##
 write.csv(out.y2024,
-          file = paste(wd, "data/municipio/dipfed-municipio-vhat-2024.csv", sep = ""), row.names = FALSE)
+          file = paste(wd, "data/sec/dipfed-seccion-vhat-2024.csv", sep = ""), row.names = FALSE)
 ##
 #############################################################
 ## save district regression objects (one mean.reg per map) ##
 #############################################################
-##save(mean.regs.m91, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-1991.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m94, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m97, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-1997.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m00, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2000.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m03, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2003.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m06, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2006.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m09, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2009.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m12, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2012.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m15, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2015.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m18, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2018.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-save(mean.regs.m21, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2021.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-## save(mean.regs.m24, file = paste(wd, "data/mun/dipfed-municipio-mean-regs-2024.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+save(mean.regs.s, file = paste(wd, "data/too-big-4-github/dipfed-seccion-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
 ##
-save(regs.1988, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1988.RData", sep = ""), compress = "gzip")
-save(regs.1991, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1991.RData", sep = ""), compress = "gzip")
-save(regs.1994, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1994.RData", sep = ""), compress = "gzip")
-save(regs.1997, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-1997.RData", sep = ""), compress = "gzip")
-save(regs.2000, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2000.RData", sep = ""), compress = "gzip")
-save(regs.2003, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2003.RData", sep = ""), compress = "gzip")
-save(regs.2006, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2006.RData", sep = ""), compress = "gzip")
-save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2009.RData", sep = ""), compress = "gzip")
-save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2012.RData", sep = ""), compress = "gzip")
-save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2015.RData", sep = ""), compress = "gzip")
-save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2018.RData", sep = ""), compress = "gzip")
-save(regs.2021, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2021.RData", sep = ""), compress = "gzip")
-save(regs.2024, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2024.RData", sep = ""), compress = "gzip")
-## save(regs.2027, file = paste(wd, "data/too-big-4-github/dipfed-municipio-regs-2027.RData", sep = ""), compress = "gzip")
+save(regs.1988, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1988.RData", sep = ""), compress = "gzip")
+save(regs.1991, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1991.RData", sep = ""), compress = "gzip")
+save(regs.1994, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1994.RData", sep = ""), compress = "gzip")
+save(regs.1997, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1997.RData", sep = ""), compress = "gzip")
+save(regs.2000, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2000.RData", sep = ""), compress = "gzip")
+save(regs.2003, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2003.RData", sep = ""), compress = "gzip")
+save(regs.2006, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2006.RData", sep = ""), compress = "gzip")
+save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2009.RData", sep = ""), compress = "gzip")
+save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2012.RData", sep = ""), compress = "gzip")
+save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2015.RData", sep = ""), compress = "gzip")
+save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2018.RData", sep = ""), compress = "gzip")
+save(regs.2021, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2021.RData", sep = ""), compress = "gzip")
+save(regs.2024, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2024.RData", sep = ""), compress = "gzip")
 
 ###########
 ## clean ##
@@ -1365,7 +1322,7 @@ rm(
 ## ## inspect saved objects ##
 ## ###########################
 ## # load regression object
-## load(file = paste(wd, "data/dipfed-municipio-regs-2006.RData", sep = ""))
+## load(file = paste(wd, "data/dipfed-seccion-regs-2006.RData", sep = ""))
 ## ls()
 ## summary(regs.2006$pan[[1]])
 ## summary.lm(regs.2009$pan[[1]])$coef[2,1]
