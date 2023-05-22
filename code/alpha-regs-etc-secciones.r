@@ -552,22 +552,19 @@ if (length(sel.r)>0){
     data.tmp <- extendCoals[sel.r]
     data.tmp <- lapply(data.tmp, FUN = function(X){
         X <- within(X, {
-            oth <- NULL;
+            ## oth <- NULL;
             mean.rpan <- mean.rleft <- mean.roth <- NULL;
-            ## betahat.oth   <- NA;
-            betahat.left  <- NA;
-            betahat.pan   <- NA;
-            alphahat.left <- NA;
-            alphahat.pri  <- NA;
-            alphahat.pan  <- NA;
-            betahat.left  <- NA;
-            alphahat.left <- NA;
             dbackward     <- NA;
             bhat.left     <- NA;
             bhat.pan      <- NA;
             vhat.left     <- NA;
             vhat.pri      <- NA;
             vhat.pan      <- NA;
+            betahat.left  <- NA;
+            betahat.pan   <- NA;
+            alphahat.left <- NA;
+            alphahat.pri  <- NA;
+            alphahat.pan  <- NA;
             d.left        <- NA;
             d.pri         <- NA;
             d.pan         <- NA;
@@ -576,6 +573,17 @@ if (length(sel.r)>0){
 }
 ## return estimates to data object
 extendCoals[sel.r] <- data.tmp
+
+## debug
+save.image("../../datosBrutos/not-in-git/tmp2-restore.RData")
+
+## load image
+rm(list=ls())
+options(width = 110)
+dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
+setwd(dd)
+load(file="../../datosBrutos/not-in-git/tmp2-restore.RData")
+
 
 ## ########## ##
 ## MAIN LOOPS ##
@@ -597,6 +605,103 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+
+
+## ######################################################################
+## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
+## Performs them first to include output across extendCoals. Then will ##
+## estimate yearly regs, saving output, to free mem before next year   ##
+## ######################################################################
+for (i in non.nas){
+    ##i <- 44508 # debug
+    message(sprintf("alpha: loop %s of %s", i, max(non.nas)))
+    ##
+    ## subset data to single unit
+    data.tmp <- extendCoals[[i]]
+    ##
+    reg.pan   <-  lm(formula = log(pan /pri)  ~  mean.rpan,  data = data.tmp)
+    reg.left  <-  lm(formula = log(left/pri)  ~  mean.rleft, data = data.tmp)
+    reg.oth   <-  lm(formula = log(oth /pri)  ~  mean.roth,  data = data.tmp)
+    ##
+    ## point prediction alpha with mean at zero 
+    new.d <- data.frame(mean.rpan = 0)
+    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
+    new.d <- data.frame(mean.rleft = 0)
+    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
+    new.d <- data.frame(mean.roth = 0)
+    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
+    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left + rhat.oth), 3)
+    ##
+    ##c(vhat.pan, vhat.pri, vhat.left, 1-vhat.pan-vhat.pri-vhat.left)
+    alphahat[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
+    betahat[i,1] <- coef(reg.pan)   [2]
+    betahat[i,2] <- coef(reg.left  )[2]
+    betahat[i,3] <- coef(reg.oth)   [2]
+    ##
+    mean.regs.s$pan   [[i]] <- reg.pan
+    mean.regs.s$left  [[i]] <- reg.left  
+    mean.regs.s$oth   [[i]] <- reg.oth
+    ##
+    ## add alphas and betas for whole period
+    data.tmp$alphahat.left  <- data.tmp$alphahat.pri <- data.tmp$alphahat.pan <- NA # open slots for alphas
+    data.tmp$betahat.left   <- data.tmp$betahat.pan <- NA                           # open slots for betas
+    data.tmp$alphahat.pan   <- alphahat$pan [i]
+    data.tmp$alphahat.pri   <- alphahat$pri [i]
+    data.tmp$alphahat.left  <- alphahat$left[i]
+    data.tmp$betahat.pan    <- betahat$pan  [i]
+    data.tmp$betahat.left   <- betahat$left [i]
+    data.tmp$betahat.oth    <- betahat$oth  [i]
+    data.tmp <- round(data.tmp,3)
+    ##
+    ## #####################################################
+    ## optional: plug vhats alphas betas back into data   ##
+    ## #####################################################
+    data.tmp <- within(data.tmp, {
+        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
+        ## oth <- NULL; # drop compositional vote complement
+        betahat.oth <- NULL; # drop this beta
+        ##betahat.pan <- betahat.left   <- betahat.oth <- NULL; # drop betas
+    })
+    ## return estimates to data object
+    extendCoals[[i]] <- data.tmp
+}
+##################################
+## save mean regression objects ##
+##################################
+save(mean.regs.s, file = paste(wd, "data/too-big-4-github/dipfed-seccion-mean-regs.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
+## clean mem
+rm(mean.regs.s)
+
+
+####################################################################################
+## function generates data frame with one year's predictions/estimates for export ##
+####################################################################################
+for.export <- function(year) {
+    #year <- 1991         # debug
+    #X <- extendCoals[[10000]] # debug
+    ## select relevant results object
+    if (year %notin% seq(1991,2024,by=3)) stop("Year unavailable")
+    sel.row <- which(extendCoals[[1]]$yr==year) # which row reports year sought (symmetric across objects in list)
+    # generate list with selected row only in every district
+    tmp.out <- lapply(extendCoals, FUN = function(X) {
+        prune <- X[sel.row,]
+        return(prune)
+    })
+    ## ## spot NAs in list
+    ## tmp.sel <- setdiff(1:length(extendCoal), non.nas(sel.map))
+    ## # fill with same-dim NA data.frame
+    ## tmp.manip <- tmp.out[[non.nas(sel.map)[1]]]
+    ## tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
+    ## if (length(tmp.sel)>0) tmp.out[tmp.sel] <- lapply(tmp.out[tmp.sel], function(x) tmp.manip)
+    # turn into one dataframe
+    # table(summary(tmp)) # debug
+    tmp.out <- do.call("rbind", tmp.out)
+    rownames(tmp.out) <- NULL
+    return(tmp.out)
+}
+
 
 ## #########################################
 ## backwards-predict 1991 with next 5 els ##
@@ -648,6 +753,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.1991, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1991.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.1991)
+
 
 ## #########################################
 ## backwards-predict 1994 with next 5 els ##
@@ -699,6 +811,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.1994, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1994.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.1994)
+
 
 ## #########################################
 ## backwards-predict 1997 with next 5 els ##
@@ -750,6 +869,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.1997, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1997.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.1997)
+
 
 ## #########################################
 ## backwards-predict 2000 with next 5 els ##
@@ -801,6 +927,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.2000, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2000.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.2000)
+
 
 ## #########################################
 ## backwards-predict 2003 with next 5 els ##
@@ -852,6 +985,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.2003, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2003.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.2003)
+
 
 ## #########################################
 ## backwards-predict 2006 with next 5 els ##
@@ -903,6 +1043,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.2006, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2006.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.2006)
+
 
 ## ###############################
 ## predict 2009 with last 5 els ##
@@ -954,6 +1101,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2009.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.2009)
+
 
 ## ###############################
 ## predict 2012 with last 5 els ##
@@ -1005,6 +1159,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2012.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.2012)
+
 
 ## ###############################
 ## predict 2015 with last 5 els ##
@@ -1056,6 +1217,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2015.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.2015)
+
 
 ## ###############################
 ## predict 2018 with last 5 els ##
@@ -1107,6 +1275,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2018.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.2018)
+
 
 ## ###############################
 ## predict 2021 with last 5 els ##
@@ -1158,6 +1333,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.2021, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2021.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.2021)
+
 
 ## ###############################
 ## predict 2024 with last 5 els ##
@@ -1208,65 +1390,13 @@ for (i in non.nas){
     ## return estimates to data object
     extendCoals[[i]] <- data.tmp
 }
+##################
+## save to disk ##
+##################
+save(regs.2024, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2024.RData", sep = ""), compress = "gzip")
+## clean memory
+rm(regs.2024)
 
-## ######################################################################
-## alpha regressions (cf. Díaz Cayeros, Estévez, Magaloni 2016, p. 90) ##
-## ######################################################################
-for (i in non.nas){
-    ##i <- 44508 # debug
-    message(sprintf("alpha: loop %s of %s", i, max(non.nas)))
-    ##
-    ## subset data to single unit
-    data.tmp <- extendCoals[[i]]
-    ##
-    reg.pan   <-  lm(formula = log(pan /pri)  ~  mean.rpan,  data = data.tmp)
-    reg.left  <-  lm(formula = log(left/pri)  ~  mean.rleft, data = data.tmp)
-    reg.oth   <-  lm(formula = log(oth /pri)  ~  mean.roth,  data = data.tmp)
-    ##
-    ## point prediction alpha with mean at zero 
-    new.d <- data.frame(mean.rpan = 0)
-    rhat.pan    <- exp(predict.lm(reg.pan,    newdata = new.d))#, interval = "confidence")
-    new.d <- data.frame(mean.rleft = 0)
-    rhat.left   <- exp(predict.lm(reg.left  , newdata = new.d))#, interval = "confidence")
-    new.d <- data.frame(mean.roth = 0)
-    rhat.oth    <- exp(predict.lm(reg.oth,    newdata = new.d))#, interval = "confidence")
-    vhat.pan    <- round(rhat.pan    / (1 + rhat.pan + rhat.left + rhat.oth), 3)
-    vhat.pri    <- round(1           / (1 + rhat.pan + rhat.left + rhat.oth), 3)
-    vhat.left   <- round(rhat.left   / (1 + rhat.pan + rhat.left + rhat.oth), 3)
-    ##
-    ##c(vhat.pan, vhat.pri, vhat.left, 1-vhat.pan-vhat.pri-vhat.left)
-    alphahat[i,] <- c(vhat.pan, vhat.pri, vhat.left  )
-    betahat[i,1] <- coef(reg.pan)   [2]
-    betahat[i,2] <- coef(reg.left  )[2]
-    betahat[i,3] <- coef(reg.oth)   [2]
-    ##
-    mean.regs.s$pan   [[i]] <- reg.pan
-    mean.regs.s$left  [[i]] <- reg.left  
-    mean.regs.s$oth   [[i]] <- reg.oth
-    ##
-    ## add alphas and betas for whole period
-    data.tmp$alphahat.left  <- data.tmp$alphahat.pri <- data.tmp$alphahat.pan <- NA # open slots for alphas
-    data.tmp$betahat.left   <- data.tmp$betahat.pan <- NA                           # open slots for betas
-    data.tmp$alphahat.pan   <- alphahat$pan [i]
-    data.tmp$alphahat.pri   <- alphahat$pri [i]
-    data.tmp$alphahat.left  <- alphahat$left[i]
-    data.tmp$betahat.pan    <- betahat$pan  [i]
-    data.tmp$betahat.left   <- betahat$left [i]
-    data.tmp$betahat.oth    <- betahat$oth  [i]
-    data.tmp <- round(data.tmp,3)
-    ##
-    ## #####################################################
-    ## optional: plug vhats alphas betas back into data   ##
-    ## #####################################################
-    data.tmp <- within(data.tmp, {
-        mean.rpan <- mean.rleft   <- mean.roth <- NULL; # drop mean ratios
-        oth <- NULL; # drop compositional vote complement
-        betahat.oth <- NULL; # drop this beta
-        ##betahat.pan <- betahat.left   <- betahat.oth <- NULL; # drop betas
-    })
-    ## return estimates to data object
-    extendCoals[[i]] <- data.tmp
-}
 
 ## #####################################################
 ## warnings correspond to units with no variance      ##
@@ -1275,54 +1405,33 @@ for (i in non.nas){
 ## 
 
 
-## debug
-save.image("../../datosBrutos/not-in-git/tmp2-restore.RData")
-
-## load image
-rm(list=ls())
-options(width = 110)
-dd <- c("~/Dropbox/data/elecs/MXelsCalendGovt/elecReturns/data/casillas/")
-setwd(dd)
-load(file="../../datosBrutos/not-in-git/tmp2-restore.RData")
-
 ## clean (all this is saved in extendCoal, mean.regs, regs.1988 ... regs.2024)
-##ls()
-
+ls()
 rm(alphahat, betahat, cs, per.means, yr.means,
 vhat.1991, vhat.1994,
 vhat.1997, vhat.2000, vhat.2003, vhat.2006,
 vhat.2009, vhat.2012, vhat.2015,
 vhat.2018, vhat.2021, vhat.2024
 )
-rm(i, d2, non.nas)
+rm(
+bhat.pan, bhat.left,
+reg.pan, reg.left, reg.oth,
+rhat.pan, rhat.left, rhat.oth,
+vhat.pan, vhat.pri, vhat.left,
+new.d, year
+)
+rm(i, d2, non.nas, pb, nsec, sel.c, sel.r)
 
-##########################################################################
-## generate data frame with one year's predictions/estimates for export ##
-##########################################################################
 
-for.export <- function(year) {
-    #year <- 2006         # debug
-    #X <- extendCoals[[1]] # debug
-    ## select relevant results object
-    if (year %notin% seq(1991,2024,by=3)) stop("Year unavailable")
-    sel.row <- which(extendCoals[[1]]$yr==year) # which row reports year sought (symmetric across objects in list)
-    # generate list with selected row only in every district
-    tmp.out <- lapply(extendCoals, FUN = function(X) {
-        prune <- X[sel.row,]
-        return(prune)
-    })
-    ## ## spot NAs in list
-    ## tmp.sel <- setdiff(1:length(extendCoal), non.nas(sel.map))
-    ## # fill with same-dim NA data.frame
-    ## tmp.manip <- tmp.out[[non.nas(sel.map)[1]]]
-    ## tmp.manip[,-1] <- NA # all but 1st col (yr) to NA
-    ## if (length(tmp.sel)>0) tmp.out[tmp.sel] <- lapply(tmp.out[tmp.sel], function(x) tmp.manip)
-    # turn into one dataframe
-    # table(summary(tmp)) # debug
-    tmp.out <- do.call("rbind", tmp.out)
-    rownames(tmp.out) <- NULL
-    return(tmp.out)
-}
+####################################################
+## sort/clean seccion standard columns for export ##
+####################################################
+tmp <- lapply(extendCoals, function(x) {
+    x$oth <- NULL;
+    x <- x[, c("yr", "pan", "pri", "left", "efec", "lisnom", "seccion", "d.pan", "d.pri", "d.left", "vhat.pan", "vhat.pri", "vhat.left", "bhat.pan", "bhat.left", "alphahat.pan", "alphahat.pri", "alphahat.left", "betahat.pan", "betahat.left", "dbackward")] # order
+    }
+)
+extendCoals <- tmp
 
 out.y1991 <- for.export(year=1991)
 out.y1994 <- for.export(year=1994)
@@ -1375,28 +1484,11 @@ write.csv(out.y2021,
 ##
 write.csv(out.y2024,
           file = paste(wd, "data/sec/dipfed-seccion-vhat-2024.csv", sep = ""), row.names = FALSE)
-##
-#############################################################
-## save district regression objects (one mean.reg per map) ##
-#############################################################
-save(mean.regs.s, file = paste(wd, "data/too-big-4-github/dipfed-seccion-mean-regs-1994.RData", sep = ""), compress = c("gzip", "bzip2", "xz")[3])
-##
-save(regs.1991, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1991.RData", sep = ""), compress = "gzip")
-save(regs.1994, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1994.RData", sep = ""), compress = "gzip")
-save(regs.1997, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-1997.RData", sep = ""), compress = "gzip")
-save(regs.2000, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2000.RData", sep = ""), compress = "gzip")
-save(regs.2003, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2003.RData", sep = ""), compress = "gzip")
-save(regs.2006, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2006.RData", sep = ""), compress = "gzip")
-save(regs.2009, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2009.RData", sep = ""), compress = "gzip")
-save(regs.2012, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2012.RData", sep = ""), compress = "gzip")
-save(regs.2015, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2015.RData", sep = ""), compress = "gzip")
-save(regs.2018, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2018.RData", sep = ""), compress = "gzip")
-save(regs.2021, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2021.RData", sep = ""), compress = "gzip")
-save(regs.2024, file = paste(wd, "data/too-big-4-github/dipfed-seccion-regs-2024.RData", sep = ""), compress = "gzip")
 
 ###########
 ## clean ##
 ###########
+ls()
 rm(
     out.y1988,
     out.y1991,
