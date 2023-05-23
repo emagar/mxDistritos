@@ -1490,7 +1490,7 @@ write.csv(out.y2024,
 ###########
 ls()
 rm(
-    out.y1988,
+##    out.y1988,
     out.y1991,
     out.y1994,
     out.y1997,
@@ -1502,25 +1502,12 @@ rm(
     out.y2015,
     out.y2018,
     out.y2021,
-    out.y2024
+    out.y2024,
+    for.export
 )
 rm(
-    regs.1991,
-    regs.1994,
-    regs.1997,
-    regs.2000,
-    regs.2003,
-    regs.2006,
-    regs.2009,
-    regs.2012,
-    regs.2015,
-    regs.2018,
-    regs.2021,
-    regs.2024
+    tmp, tmp.back
 )
-rm(
-    mean.regs.s,
-    )
 rm(
     extendCoals
 )
