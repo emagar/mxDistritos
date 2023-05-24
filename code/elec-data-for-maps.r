@@ -1363,6 +1363,7 @@ v21s <- within(v21s, dis1979 <- dis1997 <- dis2006 <- dis2013 <- dis2018 <- NULL
 ####################################################
 save.image("../../datosBrutos/not-in-git/tmp3-restore.RData")
 
+
 ## load image
 rm(list=ls())
 options(width = 110)
