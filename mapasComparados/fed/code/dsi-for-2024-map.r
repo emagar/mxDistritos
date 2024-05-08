@@ -99,7 +99,7 @@ for (e in 1:32){ # loop over states
     d <- d[,c("edon","dis","son","dsi")]
     d <- d[order(d$dis),]
     d$dis    <- d$dis    + e*100
-    d$father <- d$son + e*100
+    d$son <- d$son + e*100
     dsi2 <- rbind(dsi2, d)
 }
 
