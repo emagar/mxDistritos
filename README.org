@@ -1,6 +1,6 @@
 #+TITLE: Recent Mexican electoral geography
 #+AUTHOR: Eric Magar
-Last revision: 2024-05-08
+Last revision: 2024-10-17
 
 # Export to md: M-x org-md-export-to-markdown
 
@@ -11,6 +11,7 @@ Last revision: 2024-05-08
 - Citation for the data: see 'About' on the repository landing page
 The repository contains maps of Mexican districts used to elect representatives to various offices and code for data systematization and analysis. The primary source are shapefiles publicly distributed by INE (formerly IFE, Mexico's national election board, page [[https://cartografia.ife.org.mx/sige7/?cartografia][here]]). Data in this repo is prepared for mapping and statistical analysis.
 * Recent changes
+- 2024-10-17: Reseccionamiento 2023 is in! Hundreds of new secciones created from splitting overcrowded parents [[./equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv][here]].
 - 2024-05-08: Shapefiles for 2024 federal district map produced [[./mapasComparados/fed/shp/disfed2024/][here]].
 - 2024-02-15: New 2024 federal district map now in. The seccion--district relation is [[./equivSecc/tablaEquivalenciasSeccionalesDesde1994.csv][here]].
 - 2023-05-26: All code and files relate to v.hat and alpha regressions migrated away from this repository. They now inhabit [[https://github.com/emagar/elecRetrns]].
