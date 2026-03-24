@@ -9,6 +9,9 @@ redisProcess/ine-redistritacion-2024/
 redisProcess/ifeRedist2013/1erEscenarioComentariosPartidos/*/Escenarios/tmp/*.*
 redisProcess/ifeRedist2013/2oEscenarioComentariosPartidos/*/Escenarios/tmp/*.*
 
+# tmp files
+equivSecc/tmp-cab/
+
 # backups
 *.bak
 
